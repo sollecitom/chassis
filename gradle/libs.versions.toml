@@ -9,6 +9,9 @@ testcontainers = "1.18.3"
 assertk = "0.26.1"
 kotlinx-datetime = "0.4.0"
 ulid-creator = "5.2.0"
+org-json = "20230618"
+everit-json-schema = "1.14.2"
+guava = "32.1.1-jre"
 # plugin versions
 plugin-palantir-git = "3.0.0"
 plugin-version-catalog-report = "0.47.0"
@@ -29,6 +32,9 @@ http4k-core = { module = "org.http4k:http4k-core", version.ref = "http4k" }
 http4k-cloudnative = { module = "org.http4k:http4k-cloudnative", version.ref = "http4k" }
 http4k-format-jackson-yaml = { module = "org.http4k:http4k-format-jackson-yaml", version.ref = "http4k" }
 ulid-creator = { module = "com.github.f4b6a3:ulid-creator", version.ref = "ulid-creator" }
+org-json = { module = "org.json:json", version.ref = "org-json" }
+everit-json-schema = { module = "com.github.erosb:everit-json-schema", version.ref = "everit-json-schema" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
 
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
