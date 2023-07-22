@@ -2,6 +2,7 @@
 # library versions
 kotlin = "1.9.0"
 kotlinx-coroutines = "1.7.2"
+slf4j = "2.0.7"
 http4k = "5.3.0.0"
 junit-jupiter = "5.9.3"
 testcontainers = "1.18.3"
@@ -20,6 +21,8 @@ kotlinx-coroutines-jdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-j
 kotlinx-coroutines-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactive", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-debug = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-debug", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-slf4j = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j", version.ref = "kotlinx-coroutines" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 http4k-bom = { module = "org.http4k:http4k-bom", version.ref = "http4k" }
 http4k-core = { module = "org.http4k:http4k-core", version.ref = "http4k" }

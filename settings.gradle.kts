@@ -8,6 +8,9 @@ module("kotlin", "extensions")
 module("configuration", "utils")
 module("lens", "core", "extensions")
 module("core", "domain")
+module("logger", "core")
+module("logger", "slf4j", "adapter")
+module("logger", "slf4j", "example")
 
 fun module(vararg pathSegments: String) {
     val projectName = pathSegments.last()
