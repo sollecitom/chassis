@@ -1,5 +1,7 @@
 package org.sollecitom.chassis.logger.core
 
+import org.sollecitom.chassis.logger.core.appender.AppendLogEntry
+
 fun loggingFunction(customize: LoggingFunctionCustomizer.() -> Unit): Log {
 
     val appenders = mutableSetOf<AppendLogEntry>()

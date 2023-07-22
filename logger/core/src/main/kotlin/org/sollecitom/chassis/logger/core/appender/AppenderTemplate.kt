@@ -1,4 +1,6 @@
-package org.sollecitom.chassis.logger.core
+package org.sollecitom.chassis.logger.core.appender
+
+import org.sollecitom.chassis.logger.core.LogEntry
 
 abstract class AppenderTemplate<FORMAT : Any> : AppendLogEntry {
 

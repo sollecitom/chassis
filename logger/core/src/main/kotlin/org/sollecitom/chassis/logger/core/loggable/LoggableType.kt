@@ -1,4 +1,6 @@
-package org.sollecitom.chassis.logger.core
+package org.sollecitom.chassis.logger.core.loggable
+
+import org.sollecitom.chassis.logger.core.Logger
 
 interface LoggableType {
 

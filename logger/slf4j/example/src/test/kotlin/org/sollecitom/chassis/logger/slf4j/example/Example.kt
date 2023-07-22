@@ -3,6 +3,7 @@ package org.sollecitom.chassis.logger.slf4j.example
 import kotlinx.coroutines.runBlocking
 import org.sollecitom.chassis.logger.core.*
 import org.sollecitom.chassis.logger.core.LoggingLevel.*
+import org.sollecitom.chassis.logger.core.appender.PrintStreamAppender
 import org.sollecitom.chassis.logger.core.defaults.DefaultFormatToString
 
 fun main(): Unit = runBlocking {

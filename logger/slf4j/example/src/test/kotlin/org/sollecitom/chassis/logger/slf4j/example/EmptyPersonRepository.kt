@@ -1,6 +1,6 @@
 package org.sollecitom.chassis.logger.slf4j.example
 
-import org.sollecitom.chassis.logger.core.Loggable
+import org.sollecitom.chassis.logger.core.loggable.Loggable
 
 class EmptyPersonRepository : PersonRepository {
 
