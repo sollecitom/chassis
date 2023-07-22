@@ -27,7 +27,7 @@ private class ConfigurationTests {
         val databaseURIValue = "postgres://postgres:123456@127.0.0.1:5432/dummy".let(URI::create)
         val environment = Environment.from(
                 MyConfigurationAdapter.servicePortKey to "8080",
-                "${MyConfigurationAdapter.databaseSectionName}.${MyConfigurationAdapter.database.uriKey}" to databaseURIValue.toString() // TODO fix this
+                "${MyConfigurationAdapter.databaseSectionName}.${MyConfigurationAdapter.database.uriKey}" to databaseURIValue.toString()
         )
 
         val configuration = MyConfiguration.from(environment)
