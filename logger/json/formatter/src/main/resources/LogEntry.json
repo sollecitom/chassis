@@ -1,0 +1,64 @@
+{
+  "type": "object",
+  "properties": {
+    "level": {
+      "type": "string",
+      "enum": [
+        "TRACE",
+        "DEBUG",
+        "INFO",
+        "WARN",
+        "ERROR"
+      ]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "logger": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "stack_trace": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "message",
+        "stack_trace"
+      ]
+    },
+    "thread": {
+      "type": "string"
+    },
+    "context_map": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "context_stack": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "level",
+    "timestamp",
+    "logger",
+    "message",
+    "thread",
+    "context"
+  ]
+}

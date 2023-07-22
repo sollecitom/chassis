@@ -1,7 +1,8 @@
 dependencies {
     api(projects.chassisLoggerCore)
     implementation(projects.chassisJsonUtils)
+    implementation(projects.chassisResourceUtils)
 
-//    testImplementation(libs.google.guava)
     testImplementation(projects.chassisTestUtils)
+    testImplementation(projects.chassisJsonTestUtils)
 }
