@@ -39,3 +39,5 @@ abstract class SpecificCurrencyAmountTemplate<SELF : SpecificCurrencyAmountTempl
 
     override fun toString() = "${currency.symbol().value}${String.format("%.${currency.fractionalDigits.value}f", decimalValue)}"
 }
+
+internal fun BigDecimal.toUnits(currency: Currency): BigInteger = runCatching { movePointRight(currency.fractionalDigits.value).toBigIntegerExact() }.getOrElse { throw IllegalArgumentException(it) }
