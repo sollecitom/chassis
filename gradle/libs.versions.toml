@@ -1,0 +1,38 @@
+[versions]
+# library versions
+kotlin = "1.9.0"
+kotlinx-coroutines = "1.7.2"
+http4k = "5.3.0.0"
+junit-jupiter = "5.9.3"
+testcontainers = "1.18.3"
+assertk = "0.26.1"
+kotlinx-datetime = "0.4.0"
+ulid-creator = "5.2.0"
+# plugin versions
+plugin-palantir-git = "3.0.0"
+plugin-version-catalog-report = "0.47.0"
+plugin-version-catalog-update = "0.8.0"
+
+[libraries]
+kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-jdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactive", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-debug = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-debug", version.ref = "kotlinx-coroutines" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+http4k-bom = { module = "org.http4k:http4k-bom", version.ref = "http4k" }
+http4k-core = { module = "org.http4k:http4k-core", version.ref = "http4k" }
+http4k-cloudnative = { module = "org.http4k:http4k-cloudnative", version.ref = "http4k" }
+http4k-format-jackson-yaml = { module = "org.http4k:http4k-format-jackson-yaml", version.ref = "http4k" }
+ulid-creator = { module = "com.github.f4b6a3:ulid-creator", version.ref = "ulid-creator" }
+
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
+assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
+
+[plugins]
+com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "plugin-version-catalog-report" }
+com-palantir-git-version = { id = "com.palantir.git-version", version.ref = "plugin-palantir-git" }
+nl-littlerobots-version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "plugin-version-catalog-update" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
