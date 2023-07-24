@@ -3,7 +3,7 @@
 kotlin = "1.9.0"
 kotlinx-coroutines = "1.7.2"
 slf4j = "2.0.7"
-http4k = "5.3.0.0"
+http4k = "5.4.0.0"
 junit-jupiter = "5.9.3"
 testcontainers = "1.18.3"
 assertk = "0.26.1"
@@ -19,18 +19,21 @@ plugin-version-catalog-update = "0.8.0"
 
 [libraries]
 kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-jdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactive", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-debug = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-debug", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-slf4j = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" }
+kotlinx-coroutines-jdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8" }
+kotlinx-coroutines-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactive" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" }
+kotlinx-coroutines-debug = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-debug" }
+kotlinx-coroutines-slf4j = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j" }
+
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 http4k-bom = { module = "org.http4k:http4k-bom", version.ref = "http4k" }
-http4k-core = { module = "org.http4k:http4k-core", version.ref = "http4k" }
-http4k-cloudnative = { module = "org.http4k:http4k-cloudnative", version.ref = "http4k" }
-http4k-format-jackson-yaml = { module = "org.http4k:http4k-format-jackson-yaml", version.ref = "http4k" }
+http4k-core = { module = "org.http4k:http4k-core" }
+http4k-cloudnative = { module = "org.http4k:http4k-cloudnative" }
+http4k-format-jackson-yaml = { module = "org.http4k:http4k-format-jackson-yaml" }
+http4k-server-jetty = { module = "org.http4k:http4k-server-jetty" }
+http4k-client-apache = { module = "org.http4k:http4k-client-apache" }
 ulid-creator = { module = "com.github.f4b6a3:ulid-creator", version.ref = "ulid-creator" }
 org-json = { module = "org.json:json", version.ref = "org-json" }
 everit-json-schema = { module = "com.github.erosb:everit-json-schema", version.ref = "everit-json-schema" }
