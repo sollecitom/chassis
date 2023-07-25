@@ -1,5 +1,7 @@
 package org.sollecitom.chassis.http4k.jetty.utils
 
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status
@@ -13,9 +15,9 @@ fun main() {
 //    server.stop()
 }
 
-fun testApp(request: Request): Response {
+fun testApp(request: Request): Response = runBlocking {
 
-    Thread.sleep(50) // simulating some async operation without cpu load
-    return Response(Status.OK).body("Hello, ${request.query("name")}!")
+    delay(50)
+//    Thread.sleep(50) // simulating some async operation without cpu load
+    Response(Status.OK).body("Hello, ${request.query("name")}!")
 }
-
