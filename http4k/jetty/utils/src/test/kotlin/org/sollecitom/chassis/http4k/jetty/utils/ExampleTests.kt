@@ -8,12 +8,11 @@ import org.http4k.core.Method
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.OK
+import org.http4k.server.JettyLoom
 import org.http4k.server.asServer
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.http4k.jetty.utils.loom.JettyLoom
-import org.sollecitom.chassis.http4k.jetty.utils.loom.LoomThreadPool
 
 @TestInstance(PER_CLASS)
 private class ExampleTests {
@@ -30,7 +29,7 @@ private class ExampleTests {
             return Response(OK).body("Hello, ${request.query("name")}!")
         }
 
-        val server = ::testApp.asServer(JettyLoom(0, LoomThreadPool())).start()
+        val server = ::testApp.asServer(JettyLoom(0)).start()
         val client = ApacheClient()
         val request = Request(Method.GET, "http://localhost:${server.port()}").query("name", "John Doe")
 

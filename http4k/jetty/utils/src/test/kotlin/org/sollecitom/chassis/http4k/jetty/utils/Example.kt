@@ -5,13 +5,12 @@ import kotlinx.coroutines.runBlocking
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status
+import org.http4k.server.JettyLoom
 import org.http4k.server.asServer
-import org.sollecitom.chassis.http4k.jetty.utils.loom.JettyLoom
-import org.sollecitom.chassis.http4k.jetty.utils.loom.LoomThreadPool
 
 fun main() {
 
-    val server = ::testApp.asServer(JettyLoom(9000, LoomThreadPool())).start()
+    val server = ::testApp.asServer(JettyLoom(0)).start()
 //    server.stop()
 }
 
