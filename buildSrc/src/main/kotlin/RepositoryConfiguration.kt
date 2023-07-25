@@ -13,7 +13,7 @@ object RepositoryConfiguration {
 
     object Modules {
 
-        val internalGroup = "${ProjectSettings.rootGroupId}.*"
+        private const val internalGroup = "${ProjectSettings.rootGroupId}.*"
 
         fun apply(config: RepositoryHandler, project: Project) {
 
@@ -28,7 +28,7 @@ object RepositoryConfiguration {
                     includeGroupByRegex(internalGroup)
                 }
             }
-            
+
             config.maven {
                 url = URI.create("https://packages.confluent.io/maven")
                 content {
@@ -39,8 +39,10 @@ object RepositoryConfiguration {
             config.maven {
                 url = URI.create("https://maven.pkg.github.com/sollecitom/*")
                 credentials {
-                    username = project.findProperty("sollecitom.github.user") as String? ?: System.getenv("GITHUB_USERNAME")
-                    password = project.findProperty("sollecitom.github.token") as String? ?: System.getenv("GITHUB_TOKEN")
+                    username = project.findProperty("sollecitom.github.user") as String?
+                            ?: System.getenv("GITHUB_USERNAME")
+                    password = project.findProperty("sollecitom.github.token") as String?
+                            ?: System.getenv("GITHUB_TOKEN")
                 }
                 content {
                     includeGroupByRegex(internalGroup)
