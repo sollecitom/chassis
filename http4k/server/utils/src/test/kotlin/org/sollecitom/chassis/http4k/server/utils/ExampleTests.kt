@@ -1,8 +1,9 @@
-package org.sollecitom.chassis.http4k.jetty.utils
+package org.sollecitom.chassis.http4k.server.utils
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isTrue
+import kotlinx.coroutines.delay
 import org.http4k.client.ApacheClient
 import org.http4k.core.Method
 import org.http4k.core.Request
@@ -22,10 +23,10 @@ private class ExampleTests {
 
         var isServerThreadVirtual = false
 
-        fun testApp(request: Request): Response {
+        suspend fun testApp(request: Request): Response {
 
             isServerThreadVirtual = Thread.currentThread().isVirtual
-            Thread.sleep(1) // simulating some async operation without cpu load
+            delay(1) // simulating some async operation without cpu load
             return Response(OK).body("Hello, ${request.query("name")}!")
         }
 

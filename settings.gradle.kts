@@ -17,7 +17,7 @@ module("logger", "slf4j", "example")
 module("logger", "slf4j", "example")
 module("logger", "json", "formatter")
 module("http4k", "utils")
-module("http4k", "jetty", "utils")
+module("http4k", "server", "utils")
 module("http4k", "examples", "api")
 module("http4k", "examples", "htmx")
 
