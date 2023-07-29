@@ -1,5 +1,6 @@
 package org.sollecitom.chassis.logging.standard.configuration
 
+import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.MapEnvironment
 import org.sollecitom.chassis.logger.core.*
 import org.sollecitom.chassis.logger.core.appender.PrintStreamAppender
@@ -7,6 +8,24 @@ import org.sollecitom.chassis.logger.core.defaults.DefaultFormatToString
 import org.sollecitom.chassis.logger.json.formatter.DefaultFormatToJson
 
 object StandardLoggingConfiguration {
+
+    operator fun invoke(
+            environment: Environment,
+            minimumLoggingLevelEnvironmentVariableName: String = Properties.defaultMinimumLoggingLevelEnvironmentVariableName,
+            minimumLoggingLevelOverridesEnvironmentVariableName: String = Properties.defaultMinimumLoggingLevelOverridesEnvironmentVariableName,
+            logFormatEnvironmentVariableName: String = Properties.defaultLogFormatEnvironmentVariableName,
+            defaultMinimumLoggingLevel: LoggingLevel = LoggingLevel.INFO,
+            defaultMinimumLoggingLevelOverrides: Map<String, LoggingLevel> = emptyMap(),
+            defaultLogFormat: LogFormat = LogFormat.PLAIN
+    ) = invoke(
+            minimumLoggingLevelEnvironmentVariableName,
+            minimumLoggingLevelOverridesEnvironmentVariableName,
+            logFormatEnvironmentVariableName,
+            defaultMinimumLoggingLevel,
+            defaultMinimumLoggingLevelOverrides,
+            defaultLogFormat,
+            environment::get
+    )
 
     operator fun invoke(
             minimumLoggingLevelEnvironmentVariableName: String = Properties.defaultMinimumLoggingLevelEnvironmentVariableName,
