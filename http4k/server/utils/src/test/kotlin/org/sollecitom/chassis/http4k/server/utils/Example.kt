@@ -7,6 +7,7 @@ import org.http4k.core.Response
 import org.http4k.core.Status
 import org.http4k.server.JettyLoom
 
+// TODO remove
 fun main() {
 
     val server = ::suspendingTestApp.asServer(JettyLoom(9000)).start()
