@@ -15,12 +15,12 @@ import org.sollecitom.chassis.logging.standard.configuration.LogFormat.PLAIN
 import org.sollecitom.chassis.test.utils.standard.output.withCapturedStandardOutput
 
 @TestInstance(PER_CLASS)
-private class JSONLoggingTests {
+private class StandardLoggingTests {
 
     @Test
     fun `selecting the JSON format option explicitly`() {
 
-        StandardLoggingConfiguration(defaultLogFormat = JSON).let(JvmLoggerFactory::configure)
+        StandardLoggingConfiguration(defaultLogFormat = JSON).applyTo(JvmLoggerFactory)
         val logger = JvmLoggerFactory.logger("Some logger")
 
         val (_, logs) = withCapturedStandardOutput { logger.info { "Hello world" } }
@@ -33,7 +33,7 @@ private class JSONLoggingTests {
     fun `selecting the JSON format option by using the default log format property name`() {
 
         System.setProperty(StandardLoggingConfiguration.Properties.defaultLogFormatEnvironmentVariableName, StandardLoggingConfiguration.Properties.jsonFormatterEnabler)
-        StandardLoggingConfiguration(defaultLogFormat = PLAIN).let(JvmLoggerFactory::configure)
+        StandardLoggingConfiguration(defaultLogFormat = PLAIN).applyTo(JvmLoggerFactory)
         val logger = JvmLoggerFactory.logger("Some logger")
 
         val (_, logs) = withCapturedStandardOutput { logger.info { "Hello world" } }
@@ -47,7 +47,7 @@ private class JSONLoggingTests {
 
         val customPropertyName = "CUSTOM_LOG_FORMAT_PROPERTY_NAME"
         System.setProperty(customPropertyName, StandardLoggingConfiguration.Properties.jsonFormatterEnabler)
-        StandardLoggingConfiguration(defaultLogFormat = PLAIN, logFormatEnvironmentVariableName = customPropertyName).let(JvmLoggerFactory::configure)
+        StandardLoggingConfiguration(defaultLogFormat = PLAIN, logFormatEnvironmentVariableName = customPropertyName).applyTo(JvmLoggerFactory)
         val logger = JvmLoggerFactory.logger("Some logger")
 
         val (_, logs) = withCapturedStandardOutput { logger.info { "Hello world" } }

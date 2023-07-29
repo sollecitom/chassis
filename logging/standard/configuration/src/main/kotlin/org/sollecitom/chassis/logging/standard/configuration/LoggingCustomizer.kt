@@ -16,3 +16,5 @@ interface LoggingCustomizer : (LoggerFactory.Customizer) -> Unit {
 
     companion object : Loggable()
 }
+
+fun LoggingCustomizer.applyTo(loggerFactory: LoggerFactory) = loggerFactory.configure(this)
