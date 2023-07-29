@@ -20,8 +20,13 @@ module("logging", "standard", "configuration")
 module("logging", "standard", "slf4j", "configuration")
 module("http4k", "utils")
 module("http4k", "server", "utils")
-module("http4k", "examples", "api")
-module("http4k", "examples", "htmx")
+
+module("example", "service", "write-endpoint", "configuration")
+module("example", "service", "write-endpoint", "domain")
+module("example", "service", "write-endpoint", "application")
+module("example", "service", "write-endpoint", "adapters", "driving", "web")
+module("example", "service", "write-endpoint", "adapters", "driven", "pulsar")
+module("example", "service", "write-endpoint", "starter")
 
 fun module(vararg pathSegments: String) {
     val projectName = pathSegments.last()
