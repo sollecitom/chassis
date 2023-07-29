@@ -1,5 +1,6 @@
 package org.sollecitom.chassis.logging.standard.configuration
 
+import org.http4k.cloudnative.env.MapEnvironment
 import org.sollecitom.chassis.logger.core.*
 import org.sollecitom.chassis.logger.core.appender.PrintStreamAppender
 import org.sollecitom.chassis.logger.core.defaults.DefaultFormatToString
@@ -51,10 +52,8 @@ object StandardLoggingConfiguration {
 }
 
 private fun defaultReadConfigurationValue(key: String): String? {
-
-    val fromSystemProps = System.getProperty(key) // TODO lowercase and replace `_` with `.`?
-    val fromEnv = System.getenv()[key]
-    return fromSystemProps ?: fromEnv
+    val environment = MapEnvironment.from(System.getProperties()) overrides MapEnvironment.from(System.getenv().toProperties())
+    return environment[key]
 }
 
 private class CombinedLoggingCustomizer(override val minimumLoggingLevel: LoggingLevel, override val minimumLoggingLevelOverrides: Map<String, LoggingLevel>, override val format: FormatLogEntry<String>) : LoggingCustomizer {
