@@ -34,6 +34,7 @@ http4k-cloudnative = { module = "org.http4k:http4k-cloudnative" }
 http4k-format-jackson-yaml = { module = "org.http4k:http4k-format-jackson-yaml" }
 http4k-server-jetty = { module = "org.http4k:http4k-server-jetty" }
 http4k-client-apache = { module = "org.http4k:http4k-client-apache" }
+http4k-client-apache-async = { module = "org.http4k:http4k-client-apache-async" }
 ulid-creator = { module = "com.github.f4b6a3:ulid-creator", version.ref = "ulid-creator" }
 org-json = { module = "org.json:json", version.ref = "org-json" }
 everit-json-schema = { module = "com.github.erosb:everit-json-schema", version.ref = "everit-json-schema" }

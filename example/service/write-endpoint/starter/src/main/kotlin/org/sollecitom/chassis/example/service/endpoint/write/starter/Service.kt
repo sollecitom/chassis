@@ -3,36 +3,42 @@ package org.sollecitom.chassis.example.service.endpoint.write.starter
 import kotlinx.coroutines.coroutineScope
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
+import org.sollecitom.chassis.core.domain.lifecycle.Startable
+import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
+import org.sollecitom.chassis.core.domain.networking.SpecifiedPort
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.WebApp
 import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.loggable.Loggable
-import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration
 
 suspend fun main(): Unit = coroutineScope {
 
     val environment = rawConfiguration()
-    StandardLoggingConfiguration.invoke(environment)
+    configureLogging(environment)
     Service(environment).start()
 }
 
-class Service(private val environment: Environment) {
+class Service(private val environment: Environment) : Startable, Stoppable {
 
-    suspend fun start(): Stoppable {
+    private lateinit var webApp: WebApp
+
+    val port: Int get() = webApp.servicePort
+    val healthPort: Int get() = webApp.healthPort
+
+    override suspend fun start() {
+        // TODO should this be encapsulated into a module?
         val webAppConfiguration = with(WebApp.Configuration.Parser) { WebApp.Configuration.from(environment) }
-        return object : Stoppable {
-            override suspend fun stop() {
+        webApp = WebApp(webAppConfiguration)
+        webApp.start()
+        logger.info { "Started" }
+    }
 
-            }
-        }
+    override suspend fun stop() {
+        webApp.stop()
+        logger.info { "Stopped" }
     }
 
     companion object : Loggable()
-}
-
-interface Stoppable {
-
-    suspend fun stop()
 }
 
 // TODO move
