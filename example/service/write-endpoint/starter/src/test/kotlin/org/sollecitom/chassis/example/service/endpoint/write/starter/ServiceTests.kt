@@ -39,7 +39,7 @@ private class ServiceTest {
     @Test
     fun `main app request`() = runTest(timeout = timeout) {
 
-        val serviceRequest = Request(GET, "http://localhost:${service.port}/something")
+        val serviceRequest = Request(GET, service.path("something"))
 
         val serviceResponse = client(serviceRequest)
 
@@ -49,8 +49,8 @@ private class ServiceTest {
     @Test
     fun `monitoring endpoints are exposed by the health app`() = runTest(timeout = timeout) {
 
-        val livenessRequest = Request(GET, "http://localhost:${service.healthPort}/liveness")
-        val readinessRequest = Request(GET, "http://localhost:${service.healthPort}/readiness")
+        val livenessRequest = Request(GET, service.healthPath("liveness"))
+        val readinessRequest = Request(GET, service.healthPath("readiness"))
 
         val livenessResponse = client(livenessRequest)
         val readinessResponse = client(readinessRequest)
@@ -62,8 +62,8 @@ private class ServiceTest {
     @Test
     fun `monitoring endpoints are not exposed by the main app`() = runTest(timeout = timeout) {
 
-        val livenessRequestOnWrongPort = Request(GET, "http://localhost:${service.port}/liveness")
-        val readinessRequestOnWrongPort = Request(GET, "http://localhost:${service.port}/readiness")
+        val livenessRequestOnWrongPort = Request(GET, service.path("liveness"))
+        val readinessRequestOnWrongPort = Request(GET, service.path("readiness"))
 
         val livenessRequestOnWrongPortResponse = client(livenessRequestOnWrongPort)
         val readinessRequestOnWrongPortResponse = client(readinessRequestOnWrongPort)
@@ -72,3 +72,6 @@ private class ServiceTest {
         assertThat(readinessRequestOnWrongPortResponse.status).isEqualTo(NOT_FOUND) // TODO fails, make it work by implementing routes in the main app
     }
 }
+
+private fun Service.path(value: String): String = "http://localhost:${port}/$value"
+private fun Service.healthPath(value: String): String = "http://localhost:${healthPort}/$value"
