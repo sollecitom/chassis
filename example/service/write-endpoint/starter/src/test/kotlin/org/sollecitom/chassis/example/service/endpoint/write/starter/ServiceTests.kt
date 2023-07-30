@@ -37,6 +37,6 @@ private class ServiceTest {
 
         assertThat(serviceResponse.status).isEqualTo(OK)
         assertThat(livenessResponse.status).isEqualTo(OK)
-        assertThat(livenessRequestOnWrongPortResponse.status).isEqualTo(NOT_FOUND)
+        assertThat(livenessRequestOnWrongPortResponse.status).isEqualTo(NOT_FOUND) // TODO fails, make it work by implementing routes in the main app
     }
 }
