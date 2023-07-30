@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.lens.core.extensions
+package org.sollecitom.chassis.lens.core.extensions.base
 
 import org.http4k.lens.BiDiLensSpec
 import org.http4k.lens.BiDiMapping
