@@ -4,6 +4,8 @@ import kotlinx.coroutines.runBlocking
 import org.http4k.core.HttpHandler
 import org.http4k.core.Request
 import org.http4k.core.Response
+import org.http4k.routing.PathMethod
+import org.http4k.routing.RoutingHttpHandler
 import org.http4k.server.Http4kServer
 import org.http4k.server.ServerConfig
 import org.http4k.server.asServer
@@ -16,3 +18,5 @@ fun SuspendingHttpHandler.asBlockingHandler(): HttpHandler = object : HttpHandle
 
     override fun invoke(request: Request) = runBlocking { this@asBlockingHandler.invoke(request) }
 }
+
+infix fun PathMethod.toSuspending(action: SuspendingHttpHandler): RoutingHttpHandler = to(action.asBlockingHandler())

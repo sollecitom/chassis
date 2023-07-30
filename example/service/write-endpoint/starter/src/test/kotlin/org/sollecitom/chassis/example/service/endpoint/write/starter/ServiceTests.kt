@@ -6,8 +6,11 @@ import kotlinx.coroutines.test.runTest
 import org.http4k.client.ApacheClient
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
+import org.http4k.core.Method
 import org.http4k.core.Method.GET
+import org.http4k.core.Method.POST
 import org.http4k.core.Request
+import org.http4k.core.Status.Companion.ACCEPTED
 import org.http4k.core.Status.Companion.NOT_FOUND
 import org.http4k.core.Status.Companion.OK
 import org.junit.jupiter.api.BeforeAll
@@ -39,11 +42,11 @@ private class ServiceTest {
     @Test
     fun `main app request`() = runTest(timeout = timeout) {
 
-        val serviceRequest = Request(GET, service.path("something"))
+        val serviceRequest = Request(POST, service.path("commands"))
 
         val serviceResponse = client(serviceRequest)
 
-        assertThat(serviceResponse.status).isEqualTo(OK)
+        assertThat(serviceResponse.status).isEqualTo(ACCEPTED)
     }
 
     @Test
