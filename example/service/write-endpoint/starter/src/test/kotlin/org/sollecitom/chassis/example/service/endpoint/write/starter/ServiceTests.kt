@@ -71,8 +71,8 @@ private class ServiceTest {
         val livenessRequestOnWrongPortResponse = client(livenessRequestOnWrongPort)
         val readinessRequestOnWrongPortResponse = client(readinessRequestOnWrongPort)
 
-        assertThat(livenessRequestOnWrongPortResponse.status).isEqualTo(NOT_FOUND) // TODO fails, make it work by implementing routes in the main app
-        assertThat(readinessRequestOnWrongPortResponse.status).isEqualTo(NOT_FOUND) // TODO fails, make it work by implementing routes in the main app
+        assertThat(livenessRequestOnWrongPortResponse.status).isEqualTo(NOT_FOUND)
+        assertThat(readinessRequestOnWrongPortResponse.status).isEqualTo(NOT_FOUND)
     }
 }
 
