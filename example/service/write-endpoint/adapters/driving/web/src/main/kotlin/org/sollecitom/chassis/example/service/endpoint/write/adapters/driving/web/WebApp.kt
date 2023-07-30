@@ -43,7 +43,7 @@ class WebApp(private val configuration: Configuration) : Startable, Stoppable {
 
     private fun mainApp(): HttpHandler = GunZip().then(PrintRequestAndResponse().inIntelliJOnly()).then(
             routes(
-                    "/commands" bind POST toSuspending { request: Request ->
+                    "/commands" bind POST toSuspending { request ->
                         Response(ACCEPTED)
                     }
             )
