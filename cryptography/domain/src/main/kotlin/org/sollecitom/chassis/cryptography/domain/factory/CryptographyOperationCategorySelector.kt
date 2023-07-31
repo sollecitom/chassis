@@ -1,6 +1,6 @@
 package org.sollecitom.chassis.cryptography.domain.factory
 
-interface CryptographyCategorySelector {
+interface CryptographyOperationCategorySelector {
 
     val asymmetric: AsymmetricAlgorithmFamilySelector
 }

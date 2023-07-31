@@ -19,7 +19,7 @@ import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFact
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PrivateKeyFactory
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PublicKeyFactory
 import org.sollecitom.chassis.cryptography.domain.factory.AsymmetricAlgorithmFamilySelector
-import org.sollecitom.chassis.cryptography.domain.factory.CryptographyCategorySelector
+import org.sollecitom.chassis.cryptography.domain.factory.CryptographyOperationCategorySelector
 import org.sollecitom.chassis.cryptography.domain.factory.CrystalsAlgorithmSelector
 import org.sollecitom.chassis.cryptography.domain.key.KeyMetadata
 import org.sollecitom.chassis.cryptography.domain.symmetric.EncryptedData
@@ -48,7 +48,7 @@ import java.security.PublicKey as JavaPublicKey
 @TestInstance(PER_CLASS)
 private class BouncyCastleCryptographyExampleTests : CryptographyTestSpecification {
 
-    override val cryptography: CryptographyCategorySelector get() = BouncyCastleCryptographyImplementation
+    override val cryptography: CryptographyOperationCategorySelector get() = BouncyCastleCryptographyImplementationOperation
 }
 
 private const val BC_PROVIDER = BouncyCastleProvider.PROVIDER_NAME
@@ -56,7 +56,7 @@ private val BCPQC_PROVIDER = BouncyCastlePQCProvider.PROVIDER_NAME
 
 // TODO refactor this whole mess
 // TODO turn into a class?
-object BouncyCastleCryptographyImplementation : CryptographyCategorySelector {
+object BouncyCastleCryptographyImplementationOperation : CryptographyOperationCategorySelector {
 
     private val random = SecureRandom() // TODO pass a seed?
 
