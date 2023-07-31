@@ -19,7 +19,7 @@ import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFact
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PrivateKeyFactory
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PublicKeyFactory
 import org.sollecitom.chassis.cryptography.domain.factory.AsymmetricAlgorithmFamilySelector
-import org.sollecitom.chassis.cryptography.domain.factory.CryptographyOperationCategorySelector
+import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
 import org.sollecitom.chassis.cryptography.domain.factory.CrystalsAlgorithmSelector
 import org.sollecitom.chassis.cryptography.domain.key.KeyMetadata
 import org.sollecitom.chassis.cryptography.domain.symmetric.EncryptedData
@@ -48,82 +48,86 @@ import java.security.PublicKey as JavaPublicKey
 @TestInstance(PER_CLASS)
 private class BouncyCastleCryptographyExampleTests : CryptographyTestSpecification {
 
-    override val cryptography: CryptographyOperationCategorySelector get() = BouncyCastleCryptographyImplementationOperation
+    override val cryptography: CryptographicOperations get() = CryptographicOperations.bouncyCastle()
 }
 
-private const val BC_PROVIDER = BouncyCastleProvider.PROVIDER_NAME
-private val BCPQC_PROVIDER = BouncyCastlePQCProvider.PROVIDER_NAME
+internal const val BC_PROVIDER = BouncyCastleProvider.PROVIDER_NAME
+internal val BCPQC_PROVIDER = BouncyCastlePQCProvider.PROVIDER_NAME
 
-// TODO refactor this whole mess
-// TODO turn into a class?
-object BouncyCastleCryptographyImplementationOperation : CryptographyOperationCategorySelector {
+fun CryptographicOperations.Companion.bouncyCastle(random: SecureRandom = SecureRandom()): CryptographicOperations = BouncyCastleCryptographicOperations(random)
 
-    private val random = SecureRandom() // TODO pass a seed?
+private class BouncyCastleCryptographicOperations(private val random: SecureRandom) : CryptographicOperations {
 
-    init {
-        if (Security.getProvider(BCPQC_PROVIDER) == null) {
-            Security.addProvider(BouncyCastlePQCProvider())
-        }
-        if (Security.getProvider(BC_PROVIDER) == null) {
-            Security.addProvider(BouncyCastleProvider())
-        }
-    }
+    override val asymmetric: AsymmetricAlgorithmFamilySelector by lazy { AsymmetricAlgorithmFamilyCustomizer(random) }
 
-    override val asymmetric: AsymmetricAlgorithmFamilySelector get() = Asymmetric
-
-    private object Asymmetric : AsymmetricAlgorithmFamilySelector {
-
-        override val crystals: CrystalsAlgorithmSelector get() = Crystals
-
-        private object Crystals : CrystalsAlgorithmSelector {
-
-            override val kyber: KyberAlgorithmOperationSelector get() = Kyber
-
-            private object Kyber : KyberAlgorithmOperationSelector {
-
-                private const val ALGORITHM = "KYBER"
-                override val keyPair: KeyPairFactory<KyberKeyPairArguments, KEMPublicKey> get() = KeyPairFact
-                override val privateKey: PrivateKeyFactory get() = PrivateKeyFact
-                override val publicKey: PublicKeyFactory<KEMPublicKey> get() = PublicKeyFact
-
-                private object KeyPairFact : KeyPairFactory<KyberKeyPairArguments, KEMPublicKey> {
-
-                    override fun invoke(arguments: KyberKeyPairArguments): AsymmetricKeyPair<KEMPublicKey> = arguments.generateRawKeyPair().adapted(random)
-
-                    override fun fromKeys(publicKey: KEMPublicKey, privateKey: PrivateKey): AsymmetricKeyPair<KEMPublicKey> {
-
-                        require(publicKey.metadata.algorithm == ALGORITHM) { "Public key algorithm must be $ALGORITHM" }
-                        require(privateKey.metadata.algorithm == ALGORITHM) { "Private key algorithm must be $ALGORITHM" }
-                        return KeyPair(publicKey, privateKey)
-                    }
-
-                    private val Variant.spec: KyberParameterSpec
-                        get() = when (this) {
-                            Variant.KYBER_512 -> KyberParameterSpec.kyber512
-                            Variant.KYBER_768 -> KyberParameterSpec.kyber768
-                            Variant.KYBER_1024 -> KyberParameterSpec.kyber1024
-                            Variant.KYBER_512_AES -> KyberParameterSpec.kyber512_aes
-                            Variant.KYBER_768_AES -> KyberParameterSpec.kyber768_aes
-                            Variant.KYBER_1024_AES -> KyberParameterSpec.kyber512_aes
-                        }
-
-                    private fun Variant.generateRawKeyPair(): JavaKeyPair = generateKeyPair(ALGORITHM, spec, random)
-
-                    private fun KyberKeyPairArguments.generateRawKeyPair() = variant.generateRawKeyPair()
-                }
-
-                private object PrivateKeyFact : PrivateKeyFactory {
-
-                    override fun fromBytes(bytes: ByteArray): PrivateKey = JavaPrivateKeyAdapter.fromBytes(bytes, ALGORITHM, random)
-                }
-
-                private object PublicKeyFact : PublicKeyFactory<KEMPublicKey> {
-
-                    override fun fromBytes(bytes: ByteArray): KEMPublicKey = JavaKEMPublicKeyAdapter.fromBytes(bytes, ALGORITHM, random)
-                }
+    companion object {
+        init {
+            if (Security.getProvider(BCPQC_PROVIDER) == null) {
+                Security.addProvider(BouncyCastlePQCProvider())
+            }
+            if (Security.getProvider(BC_PROVIDER) == null) {
+                Security.addProvider(BouncyCastleProvider())
             }
         }
     }
+}
+
+internal class AsymmetricAlgorithmFamilyCustomizer(private val random: SecureRandom) : AsymmetricAlgorithmFamilySelector {
+
+    override val crystals: CrystalsAlgorithmSelector by lazy { CrystalsAlgorithmCustomizer(random) }
+}
+
+internal class CrystalsAlgorithmCustomizer(private val random: SecureRandom) : CrystalsAlgorithmSelector {
+
+    override val kyber: KyberAlgorithmOperationSelector by lazy { KyberAlgorithmOperationCustomizer(random) }
+}
+
+internal class KyberAlgorithmOperationCustomizer(private val random: SecureRandom) : KyberAlgorithmOperationSelector {
+
+    override val keyPair: KeyPairFactory<KyberKeyPairArguments, KEMPublicKey> by lazy { KyberKeyPairFactory(random) }
+    override val privateKey: PrivateKeyFactory by lazy { GenericPrivateKeyFactory(Algorithms.KYBER, random) }
+    override val publicKey: PublicKeyFactory<KEMPublicKey> by lazy { KEMPublicKeyFactory(Algorithms.KYBER, random) }
+}
+
+internal class GenericPrivateKeyFactory(private val algorithm: String, private val random: SecureRandom) : PrivateKeyFactory {
+
+    override fun fromBytes(bytes: ByteArray): PrivateKey = JavaPrivateKeyAdapter.fromBytes(bytes, algorithm, random)
+}
+
+internal class KEMPublicKeyFactory(private val algorithm: String, private val random: SecureRandom) : PublicKeyFactory<KEMPublicKey> {
+
+    override fun fromBytes(bytes: ByteArray): KEMPublicKey = JavaKEMPublicKeyAdapter.fromBytes(bytes, algorithm, random)
+}
+
+object Algorithms {
+
+    const val KYBER = "KYBER"
+}
+
+internal class KyberKeyPairFactory(private val random: SecureRandom) : KeyPairFactory<KyberKeyPairArguments, KEMPublicKey> {
+
+    override fun invoke(arguments: KyberKeyPairArguments): AsymmetricKeyPair<KEMPublicKey> = arguments.generateRawKeyPair().adapted(random)
+
+    override fun fromKeys(publicKey: KEMPublicKey, privateKey: PrivateKey): AsymmetricKeyPair<KEMPublicKey> {
+
+        require(publicKey.metadata.algorithm == Algorithms.KYBER) { "Public key algorithm must be ${Algorithms.KYBER}" }
+        require(privateKey.metadata.algorithm == Algorithms.KYBER) { "Private key algorithm must be ${Algorithms.KYBER}" }
+        return KeyPair(publicKey, privateKey)
+    }
+
+    private val Variant.spec: KyberParameterSpec
+        get() = when (this) {
+            Variant.KYBER_512 -> KyberParameterSpec.kyber512
+            Variant.KYBER_768 -> KyberParameterSpec.kyber768
+            Variant.KYBER_1024 -> KyberParameterSpec.kyber1024
+            Variant.KYBER_512_AES -> KyberParameterSpec.kyber512_aes
+            Variant.KYBER_768_AES -> KyberParameterSpec.kyber768_aes
+            Variant.KYBER_1024_AES -> KyberParameterSpec.kyber512_aes
+        }
+
+    private fun Variant.generateRawKeyPair(): JavaKeyPair = generateKeyPair(Algorithms.KYBER, spec, random)
+
+    private fun KyberKeyPairArguments.generateRawKeyPair() = variant.generateRawKeyPair()
 }
 
 private fun generateAESEncryptionKey(publicKey: JavaPublicKey, algorithm: String, random: SecureRandom): SecretKeyWithEncapsulation {
@@ -184,6 +188,18 @@ private data class JavaPrivateKeyAdapter(private val key: JavaPrivateKey, privat
         return JavaAESKeyAdapter(rawEncodedSymmetricKey, random)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as JavaPrivateKeyAdapter
+
+        return key == other.key
+    }
+
+    override fun hashCode() = key.hashCode()
+
+
     companion object {
 
         fun fromBytes(bytes: ByteArray, algorithm: String, random: SecureRandom): JavaPrivateKeyAdapter = getPrivateKeyFromEncoded(bytes, algorithm).let { JavaPrivateKeyAdapter(it, random) }
@@ -200,26 +216,18 @@ private data class JavaAESKeyAdapter(override val encoded: ByteArray, private va
         require(metadata.algorithm == ALGORITHM) { "Key algorithm must be $ALGORITHM" }
     }
 
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
         other as JavaAESKeyAdapter
 
-        if (!encoded.contentEquals(other.encoded)) return false
-        if (random != other.random) return false
-
-        return true
+        return encoded.contentEquals(other.encoded)
     }
 
-    override fun hashCode(): Int {
-        var result = encoded.contentHashCode()
-        result = 31 * result + random.hashCode()
-        return result
-    }
+    override fun hashCode() = encoded.contentHashCode()
 
-    override fun toString() = "JavaAESKeyAdapter(encoded=${encoded.contentToString()}, random=$random)"
+    override fun toString() = "JavaAESKeyAdapter(encoded=${encoded.contentToString()}, keySpec=${keySpec})"
 
     companion object {
         private const val ALGORITHM = "AES"
@@ -243,6 +251,18 @@ private data class JavaKEMPublicKeyAdapter(private val key: JavaPublicKey, priva
         val rawKeyAndEncapsulation = generateAESEncryptionKey(key, metadata.algorithm, random)
         return SymmetricKeyWithEncapsulation(key = JavaAESKeyAdapter(rawKeyAndEncapsulation.encoded, random), encapsulation = rawKeyAndEncapsulation.encapsulation)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as JavaKEMPublicKeyAdapter
+
+        return key == other.key
+    }
+
+    override fun hashCode() = key.hashCode()
+
 
     companion object {
 
@@ -269,6 +289,17 @@ private class CTROperationsAdapter(private val key: SecretKey, private val rando
     override fun decrypt(bytes: ByteArray, iv: ByteArray): ByteArray = ctrDecrypt(key = key, iv = iv, cipherText = bytes)
 
     private fun newIv() = random.generateSeed(RANDOM_IV_LENGTH)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as CTROperationsAdapter
+
+        return key == other.key
+    }
+
+    override fun hashCode() = key.hashCode()
 
     companion object {
         private const val RANDOM_IV_LENGTH = 16

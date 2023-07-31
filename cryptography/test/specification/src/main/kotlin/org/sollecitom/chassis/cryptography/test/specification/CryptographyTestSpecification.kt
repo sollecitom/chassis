@@ -7,7 +7,7 @@ import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.KyberKeyPairA
 import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.KyberKeyPairArguments.Variant.KYBER_1024_AES
 import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPublicKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
-import org.sollecitom.chassis.cryptography.domain.factory.CryptographyOperationCategorySelector
+import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
 import org.sollecitom.chassis.cryptography.domain.symmetric.decrypt
 
 @Suppress("FunctionName")
@@ -43,7 +43,7 @@ interface CryptographyTestSpecification {
         assertThat(aliceSymmetricKey).isEqualTo(bobSymmetricKey)
     }
 
-    val cryptography: CryptographyOperationCategorySelector
+    val cryptography: CryptographicOperations
     val crystalsKyber get() = cryptography.asymmetric.crystals.kyber
 
     // TODO crystals dilithium
