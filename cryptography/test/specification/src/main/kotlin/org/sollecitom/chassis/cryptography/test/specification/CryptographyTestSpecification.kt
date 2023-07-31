@@ -17,7 +17,8 @@ interface CryptographyTestSpecification { // TODO refactor this whole mess
     fun `using an asymmetric key pair to generate and exchange a symmetric key securely`() {
 
         // Bob
-        val bobKeyPair = crystalsKyber.keyPair()
+        // has a public key
+        val bobKeyPair = crystalsKyber.keyPair() // sends his public key to Alice
 
         // Alice
         val decodedBobPublicKey = crystalsKyber.publicKey.fromBytes(bobKeyPair.public.encoded) // receives Bob's public key
