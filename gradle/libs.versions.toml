@@ -12,6 +12,7 @@ ulid-creator = "5.2.0"
 org-json = "20230618"
 everit-json-schema = "1.14.2"
 guava = "32.1.1-jre"
+bouncy-castle = "1.75"
 # plugin versions
 plugin-palantir-git = "3.0.0"
 plugin-version-catalog-report = "0.47.0"
@@ -39,6 +40,9 @@ ulid-creator = { module = "com.github.f4b6a3:ulid-creator", version.ref = "ulid-
 org-json = { module = "org.json:json", version.ref = "org-json" }
 everit-json-schema = { module = "com.github.erosb:everit-json-schema", version.ref = "everit-json-schema" }
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
+bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncy-castle" }
+bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bouncy-castle" }
+bcutil = { module = "org.bouncycastle:bcutil-jdk18on", version.ref = "bouncy-castle" }
 
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
