@@ -7,8 +7,11 @@ import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPublicKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.KeyPair
 import org.sollecitom.chassis.cryptography.domain.asymmetric.PrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.PublicKey
 import java.security.SecureRandom
+import java.security.KeyPair as JavaKeyPair
+import java.security.PrivateKey as JavaPrivateKey
 
 internal class KyberKeyPairFactory(private val random: SecureRandom) : KeyPairFactory<KyberKeyPairArguments, KEMPublicKey> {
 
@@ -31,12 +34,12 @@ internal class KyberKeyPairFactory(private val random: SecureRandom) : KeyPairFa
             KyberKeyPairArguments.Variant.KYBER_1024_AES -> KyberParameterSpec.kyber512_aes
         }
 
-    private fun KyberKeyPairArguments.Variant.generateRawKeyPair(): java.security.KeyPair = generateKeyPair(Algorithms.KYBER, spec, random)
+    private fun KyberKeyPairArguments.Variant.generateRawKeyPair(): JavaKeyPair = BouncyCastleUtils.generateKeyPair(Algorithms.KYBER, spec, random)
 
     private fun KyberKeyPairArguments.generateRawKeyPair() = variant.generateRawKeyPair()
 }
 
-private fun java.security.KeyPair.adapted(random: SecureRandom) = KeyPair(public = public.asKEMPublicKey(random), private = private.adapted(random))
+private fun JavaKeyPair.adapted(random: SecureRandom) = KeyPair(public = public.asKEMPublicKey(random), private = private.adapted(random))
 
-private fun java.security.PrivateKey.adapted(random: SecureRandom) = JavaPrivateKeyAdapter(this, random)
+private fun JavaPrivateKey.adapted(random: SecureRandom) = JavaPrivateKeyAdapter(this, random)
 private fun PublicKey.asKEMPublicKey(random: SecureRandom): KEMPublicKey = JavaKEMPublicKeyAdapter(this, random)

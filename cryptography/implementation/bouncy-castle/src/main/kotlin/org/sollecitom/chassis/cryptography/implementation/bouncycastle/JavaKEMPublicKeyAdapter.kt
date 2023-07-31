@@ -3,6 +3,7 @@ package org.sollecitom.chassis.cryptography.implementation.bouncycastle
 import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPublicKey
 import org.sollecitom.chassis.cryptography.domain.key.KeyMetadata
 import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricKeyWithEncapsulation
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.PublicKey
 import java.security.SecureRandom
 
@@ -13,7 +14,7 @@ internal data class JavaKEMPublicKeyAdapter(private val key: PublicKey, private 
 
     override fun generateEncapsulatedAESKey(): SymmetricKeyWithEncapsulation {
 
-        val rawKeyAndEncapsulation = generateAESEncryptionKey(key, metadata.algorithm, random)
+        val rawKeyAndEncapsulation = BouncyCastleUtils.generateAESEncryptionKey(key, metadata.algorithm, random)
         return SymmetricKeyWithEncapsulation(key = JavaAESKeyAdapter(rawKeyAndEncapsulation.encoded, random), encapsulation = rawKeyAndEncapsulation.encapsulation)
     }
 
@@ -31,6 +32,6 @@ internal data class JavaKEMPublicKeyAdapter(private val key: PublicKey, private 
 
     companion object {
 
-        fun fromBytes(bytes: ByteArray, algorithm: String, random: SecureRandom): JavaKEMPublicKeyAdapter = getPublicKeyFromEncoded(bytes, algorithm).let { JavaKEMPublicKeyAdapter(it, random) }
+        fun fromBytes(bytes: ByteArray, algorithm: String, random: SecureRandom): JavaKEMPublicKeyAdapter = BouncyCastleUtils.getPublicKeyFromEncoded(bytes, algorithm).let { JavaKEMPublicKeyAdapter(it, random) }
     }
 }

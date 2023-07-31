@@ -2,6 +2,7 @@ package org.sollecitom.chassis.cryptography.implementation.bouncycastle
 
 import org.sollecitom.chassis.cryptography.domain.symmetric.EncryptedData
 import org.sollecitom.chassis.cryptography.domain.symmetric.EncryptionMode
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.SecureRandom
 import javax.crypto.SecretKey
 
@@ -11,11 +12,11 @@ private class CTROperationsAdapter(private val key: SecretKey, private val rando
 
     override fun encrypt(bytes: ByteArray, iv: ByteArray): EncryptedData<EncryptionMode.CTR.Metadata> {
 
-        val (_, encrypted) = ctrEncrypt(key, iv, bytes)
+        val (_, encrypted) = BouncyCastleUtils.ctrEncrypt(key, iv, bytes)
         return EncryptedData(content = encrypted, EncryptionMode.CTR.Metadata(iv = iv))
     }
 
-    override fun decrypt(bytes: ByteArray, iv: ByteArray): ByteArray = ctrDecrypt(key = key, iv = iv, cipherText = bytes)
+    override fun decrypt(bytes: ByteArray, iv: ByteArray): ByteArray = BouncyCastleUtils.ctrDecrypt(key = key, iv = iv, cipherText = bytes)
 
     private fun newIv() = random.generateSeed(RANDOM_IV_LENGTH)
 

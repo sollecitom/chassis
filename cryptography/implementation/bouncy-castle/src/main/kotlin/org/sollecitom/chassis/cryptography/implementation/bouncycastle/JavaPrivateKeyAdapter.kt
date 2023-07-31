@@ -2,6 +2,7 @@ package org.sollecitom.chassis.cryptography.implementation.bouncycastle
 
 import org.sollecitom.chassis.cryptography.domain.key.KeyMetadata
 import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricKey
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.PrivateKey
 import java.security.SecureRandom
 
@@ -12,7 +13,7 @@ internal data class JavaPrivateKeyAdapter(private val key: PrivateKey, private v
 
     override fun decryptEncapsulatedAESKey(encapsulatedKey: ByteArray): SymmetricKey {
 
-        val rawEncodedSymmetricKey = decryptEncapsulatedAESKey(key, encapsulatedKey, metadata.algorithm, random)
+        val rawEncodedSymmetricKey = BouncyCastleUtils.decryptEncapsulatedAESKey(key, encapsulatedKey, metadata.algorithm, random)
         return JavaAESKeyAdapter(rawEncodedSymmetricKey, random)
     }
 
@@ -30,6 +31,6 @@ internal data class JavaPrivateKeyAdapter(private val key: PrivateKey, private v
 
     companion object {
 
-        fun fromBytes(bytes: ByteArray, algorithm: String, random: SecureRandom): JavaPrivateKeyAdapter = getPrivateKeyFromEncoded(bytes, algorithm).let { JavaPrivateKeyAdapter(it, random) }
+        fun fromBytes(bytes: ByteArray, algorithm: String, random: SecureRandom): JavaPrivateKeyAdapter = BouncyCastleUtils.getPrivateKeyFromEncoded(bytes, algorithm).let { JavaPrivateKeyAdapter(it, random) }
     }
 }
