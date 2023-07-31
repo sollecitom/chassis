@@ -4,6 +4,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.pqc.jcajce.provider.BouncyCastlePQCProvider
 import org.sollecitom.chassis.cryptography.domain.factory.AsymmetricAlgorithmFamilySelector
 import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.AsymmetricAlgorithmFamilyCustomizer
 import java.security.SecureRandom
 import java.security.Security
 

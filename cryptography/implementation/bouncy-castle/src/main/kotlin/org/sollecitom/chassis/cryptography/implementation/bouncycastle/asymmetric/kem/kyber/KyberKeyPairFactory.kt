@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.cryptography.implementation.bouncycastle
+package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.kyber
 
 import org.bouncycastle.pqc.jcajce.spec.KyberParameterSpec
 import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.KyberKeyPairArguments
@@ -7,6 +7,9 @@ import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPublicKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.KeyPair
 import org.sollecitom.chassis.cryptography.domain.asymmetric.PrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.Algorithms
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.JavaPrivateKeyAdapter
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.JavaKEMPublicKeyAdapter
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.PublicKey
 import java.security.SecureRandom
@@ -37,9 +40,9 @@ internal class KyberKeyPairFactory(private val random: SecureRandom) : KeyPairFa
     private fun KyberKeyPairArguments.Variant.generateRawKeyPair(): JavaKeyPair = BouncyCastleUtils.generateKeyPair(Algorithms.KYBER, spec, random)
 
     private fun KyberKeyPairArguments.generateRawKeyPair() = variant.generateRawKeyPair()
+
+    private fun JavaKeyPair.adapted(random: SecureRandom) = KeyPair(public = public.asKEMPublicKey(random), private = private.adapted(random))
+
+    private fun JavaPrivateKey.adapted(random: SecureRandom) = JavaPrivateKeyAdapter(this, random)
+    private fun PublicKey.asKEMPublicKey(random: SecureRandom): KEMPublicKey = JavaKEMPublicKeyAdapter(this, random)
 }
-
-private fun JavaKeyPair.adapted(random: SecureRandom) = KeyPair(public = public.asKEMPublicKey(random), private = private.adapted(random))
-
-private fun JavaPrivateKey.adapted(random: SecureRandom) = JavaPrivateKeyAdapter(this, random)
-private fun PublicKey.asKEMPublicKey(random: SecureRandom): KEMPublicKey = JavaKEMPublicKeyAdapter(this, random)

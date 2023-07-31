@@ -1,8 +1,10 @@
-package org.sollecitom.chassis.cryptography.implementation.bouncycastle
+package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem
 
 import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPublicKey
 import org.sollecitom.chassis.cryptography.domain.key.KeyMetadata
 import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricKeyWithEncapsulation
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.symmetric.JavaAESKeyAdapter
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.JavaKeyMetadataAdapter
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.PublicKey
 import java.security.SecureRandom

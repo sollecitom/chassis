@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.cryptography.implementation.bouncycastle
+package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric
 
 import org.sollecitom.chassis.cryptography.domain.factory.AsymmetricAlgorithmFamilySelector
 import org.sollecitom.chassis.cryptography.domain.factory.CrystalsAlgorithmSelector

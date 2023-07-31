@@ -1,15 +1,17 @@
-package org.sollecitom.chassis.cryptography.implementation.bouncycastle
+package org.sollecitom.chassis.cryptography.implementation.bouncycastle.symmetric
 
 import org.sollecitom.chassis.cryptography.domain.key.KeyMetadata
 import org.sollecitom.chassis.cryptography.domain.symmetric.EncryptionMode
 import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricKey
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.JavaKeyMetadataAdapter
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.create
 import java.security.SecureRandom
 import javax.crypto.spec.SecretKeySpec
 
 internal data class JavaAESKeyAdapter(override val encoded: ByteArray, private val random: SecureRandom) : SymmetricKey {
 
     private val keySpec = SecretKeySpec(encoded, ALGORITHM)
-    override val metadata: KeyMetadata = JavaKeySpecMetadataAdapter(keySpec)
+    override val metadata: KeyMetadata = JavaKeyMetadataAdapter(keySpec)
     override val ctr: EncryptionMode.CTR.Operations by lazy { EncryptionMode.CTR.Operations.create(keySpec, random) }
 
     init {
