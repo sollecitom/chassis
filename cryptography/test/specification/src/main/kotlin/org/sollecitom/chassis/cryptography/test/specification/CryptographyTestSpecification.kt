@@ -11,7 +11,7 @@ import org.sollecitom.chassis.cryptography.domain.factory.CryptographyOperationC
 import org.sollecitom.chassis.cryptography.domain.symmetric.decrypt
 
 @Suppress("FunctionName")
-interface CryptographyTestSpecification { // TODO refactor this whole mess
+interface CryptographyTestSpecification {
 
     @Test
     fun `using an asymmetric key pair to generate and exchange a symmetric key securely`() {
