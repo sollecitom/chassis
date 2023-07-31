@@ -35,6 +35,7 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
+import kotlin.random.Random
 import java.security.Key as JavaKey
 import java.security.KeyPair as JavaKeyPair
 import java.security.PrivateKey as JavaPrivateKey
@@ -100,6 +101,9 @@ object BouncyCastleCryptographyImplementation : CryptographyCategorySelector {
                             Variant.KYBER_512 -> KyberParameterSpec.kyber512
                             Variant.KYBER_768 -> KyberParameterSpec.kyber768
                             Variant.KYBER_1024 -> KyberParameterSpec.kyber1024
+                            Variant.KYBER_512_AES -> KyberParameterSpec.kyber512_aes
+                            Variant.KYBER_768_AES -> KyberParameterSpec.kyber768_aes
+                            Variant.KYBER_1024_AES -> KyberParameterSpec.kyber512_aes
                         }
 
                     private fun Variant.generateRawKeyPair(): JavaKeyPair = generateKeyPair(ALGORITHM, spec, random)

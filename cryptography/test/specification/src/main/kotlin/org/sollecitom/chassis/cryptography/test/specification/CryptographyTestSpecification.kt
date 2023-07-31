@@ -5,6 +5,7 @@ import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Test
 import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.KyberKeyPairArguments
 import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.KyberKeyPairArguments.Variant.KYBER_1024
+import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.KyberKeyPairArguments.Variant.KYBER_1024_AES
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.domain.factory.CryptographyCategorySelector
 import org.sollecitom.chassis.cryptography.domain.symmetric.decrypt
@@ -48,6 +49,6 @@ interface CryptographyTestSpecification { // TODO refactor this whole mess
     fun newCryptographyKeysFactory(): CryptographyCategorySelector
 }
 
-private val defaultKyberKeyPairArguments = KyberKeyPairArguments(variant = KYBER_1024)
+private val defaultKyberKeyPairArguments = KyberKeyPairArguments(variant = KYBER_1024_AES)
 
 private operator fun KeyPairFactory<KyberKeyPairArguments>.invoke() = invoke(defaultKyberKeyPairArguments)
