@@ -12,6 +12,7 @@ import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.KyberAlgorith
 import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.KyberKeyPairArguments
 import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.KyberKeyPairArguments.Variant
 import org.sollecitom.chassis.cryptography.domain.asymmetric.AsymmetricKeyPair
+import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPublicKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.PrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.PublicKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
@@ -21,7 +22,10 @@ import org.sollecitom.chassis.cryptography.domain.factory.AsymmetricAlgorithmFam
 import org.sollecitom.chassis.cryptography.domain.factory.CryptographyCategorySelector
 import org.sollecitom.chassis.cryptography.domain.factory.CrystalsAlgorithmSelector
 import org.sollecitom.chassis.cryptography.domain.key.KeyMetadata
-import org.sollecitom.chassis.cryptography.domain.symmetric.*
+import org.sollecitom.chassis.cryptography.domain.symmetric.EncryptedData
+import org.sollecitom.chassis.cryptography.domain.symmetric.EncryptionMode
+import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricKey
+import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricKeyWithEncapsulation
 import org.sollecitom.chassis.cryptography.test.specification.CryptographyTestSpecification
 import java.security.KeyFactory
 import java.security.KeyPairGenerator
@@ -35,7 +39,6 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
-import kotlin.random.Random
 import java.security.Key as JavaKey
 import java.security.KeyPair as JavaKeyPair
 import java.security.PrivateKey as JavaPrivateKey
@@ -45,10 +48,8 @@ import java.security.PublicKey as JavaPublicKey
 @TestInstance(PER_CLASS)
 private class BouncyCastleCryptographyExampleTests : CryptographyTestSpecification {
 
-    override fun newCryptographyKeysFactory(): CryptographyCategorySelector = implementation
+    override val cryptography: CryptographyCategorySelector get() = BouncyCastleCryptographyImplementation
 }
-
-private val implementation = BouncyCastleCryptographyImplementation
 
 private const val BC_PROVIDER = BouncyCastleProvider.PROVIDER_NAME
 private val BCPQC_PROVIDER = BouncyCastlePQCProvider.PROVIDER_NAME
@@ -81,15 +82,15 @@ object BouncyCastleCryptographyImplementation : CryptographyCategorySelector {
             private object Kyber : KyberAlgorithmOperationSelector {
 
                 private const val ALGORITHM = "KYBER"
-                override val keyPair: KeyPairFactory<KyberKeyPairArguments> get() = KeyPairFact
+                override val keyPair: KeyPairFactory<KyberKeyPairArguments, KEMPublicKey> get() = KeyPairFact
                 override val privateKey: PrivateKeyFactory get() = PrivateKeyFact
-                override val publicKey: PublicKeyFactory get() = PublicKeyFact
+                override val publicKey: PublicKeyFactory<KEMPublicKey> get() = PublicKeyFact
 
-                private object KeyPairFact : KeyPairFactory<KyberKeyPairArguments> {
+                private object KeyPairFact : KeyPairFactory<KyberKeyPairArguments, KEMPublicKey> {
 
-                    override fun invoke(arguments: KyberKeyPairArguments): AsymmetricKeyPair = arguments.generateRawKeyPair().adapted(random)
+                    override fun invoke(arguments: KyberKeyPairArguments): AsymmetricKeyPair<KEMPublicKey> = arguments.generateRawKeyPair().adapted(random)
 
-                    override fun fromKeys(publicKey: PublicKey, privateKey: PrivateKey): AsymmetricKeyPair {
+                    override fun fromKeys(publicKey: KEMPublicKey, privateKey: PrivateKey): AsymmetricKeyPair<KEMPublicKey> {
 
                         require(publicKey.metadata.algorithm == ALGORITHM) { "Public key algorithm must be $ALGORITHM" }
                         require(privateKey.metadata.algorithm == ALGORITHM) { "Private key algorithm must be $ALGORITHM" }
@@ -116,9 +117,9 @@ object BouncyCastleCryptographyImplementation : CryptographyCategorySelector {
                     override fun fromBytes(bytes: ByteArray): PrivateKey = JavaPrivateKeyAdapter.fromBytes(bytes, ALGORITHM, random)
                 }
 
-                private object PublicKeyFact : PublicKeyFactory {
+                private object PublicKeyFact : PublicKeyFactory<KEMPublicKey> {
 
-                    override fun fromBytes(bytes: ByteArray): PublicKey = JavaPublicKeyAdapter.fromBytes(bytes, ALGORITHM, random)
+                    override fun fromBytes(bytes: ByteArray): KEMPublicKey = JavaKEMPublicKeyAdapter.fromBytes(bytes, ALGORITHM, random)
                 }
             }
         }
@@ -160,12 +161,12 @@ private fun getPublicKeyFromEncoded(encodedKey: ByteArray, algorithm: String): J
     return keyFactory.generatePublic(x509EncodedKeySpec)
 }
 
-private fun JavaKeyPair.adapted(random: SecureRandom) = KeyPair(public = public.adapted(random), private = private.adapted(random))
+private fun JavaKeyPair.adapted(random: SecureRandom) = KeyPair(public = public.asKEMPublicKey(random), private = private.adapted(random))
 
 private fun JavaPrivateKey.adapted(random: SecureRandom) = JavaPrivateKeyAdapter(this, random)
-private fun JavaPublicKey.adapted(random: SecureRandom) = JavaPublicKeyAdapter(this, random)
+private fun JavaPublicKey.asKEMPublicKey(random: SecureRandom): KEMPublicKey = JavaKEMPublicKeyAdapter(this, random)
 
-private data class KeyPair(override val public: PublicKey, override val private: PrivateKey) : AsymmetricKeyPair {
+private data class KeyPair<PUBLIC : PublicKey>(override val public: PUBLIC, override val private: PrivateKey) : AsymmetricKeyPair<PUBLIC> {
 
     init {
         require(public.metadata.algorithm == private.metadata.algorithm) { "Public and private key must have the same algorithm" }
@@ -232,7 +233,7 @@ private data class JavaKeySpecMetadataAdapter(private val keySpec: SecretKeySpec
 
 }
 
-private data class JavaPublicKeyAdapter(private val key: JavaPublicKey, private val random: SecureRandom) : PublicKey {
+private data class JavaKEMPublicKeyAdapter(private val key: JavaPublicKey, private val random: SecureRandom) : KEMPublicKey {
 
     override val encoded: ByteArray get() = key.encoded
     override val metadata: KeyMetadata = JavaKeyMetadataAdapter(key)
@@ -245,7 +246,7 @@ private data class JavaPublicKeyAdapter(private val key: JavaPublicKey, private 
 
     companion object {
 
-        fun fromBytes(bytes: ByteArray, algorithm: String, random: SecureRandom): JavaPublicKeyAdapter = getPublicKeyFromEncoded(bytes, algorithm).let { JavaPublicKeyAdapter(it, random) }
+        fun fromBytes(bytes: ByteArray, algorithm: String, random: SecureRandom): JavaKEMPublicKeyAdapter = getPublicKeyFromEncoded(bytes, algorithm).let { JavaKEMPublicKeyAdapter(it, random) }
     }
 }
 

@@ -1,7 +1,7 @@
 package org.sollecitom.chassis.cryptography.domain.asymmetric
 
-interface AsymmetricKeyPair {
+interface AsymmetricKeyPair<PUBLIC : PublicKey> {
 
-    val public: PublicKey
+    val public: PUBLIC
     val private: PrivateKey
 }
