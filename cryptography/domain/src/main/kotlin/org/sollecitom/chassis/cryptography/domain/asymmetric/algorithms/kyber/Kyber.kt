@@ -1,10 +1,11 @@
 package org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.kyber
 
 import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.KeyPairGenerationOperations
+import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMAlgorithm
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
 
-object Kyber {
+object Kyber : KEMAlgorithm<Kyber.KeyPairArguments, KEMPrivateKey, KEMPublicKey> {
 
     const val NAME = "KYBER"
 

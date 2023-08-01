@@ -5,7 +5,7 @@ import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPriv
 import java.security.SecureRandom
 
 // TODO make this generic by passing an algorithm to it
-internal class DilithiumSigningPrivateKeyFactory(private val random: SecureRandom) : PrivateKeyFactory<SigningPrivateKey<Unit>> {
+internal class DilithiumSigningPrivateKeyFactory(private val random: SecureRandom) : PrivateKeyFactory<SigningPrivateKey> {
 
-    override fun fromBytes(bytes: ByteArray): SigningPrivateKey<Unit> = JavaDilithiumPrivateKeyAdapter.fromBytes(bytes, random)
+    override fun fromBytes(bytes: ByteArray): SigningPrivateKey = JavaDilithiumPrivateKeyAdapter.fromBytes(bytes, random)
 }
