@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.cryptography.implementation.bouncycastle.symmetric
+package org.sollecitom.chassis.cryptography.implementation.bouncycastle.symmetric.aes
 
 import org.sollecitom.chassis.cryptography.domain.key.CryptographicKey
 import org.sollecitom.chassis.cryptography.domain.symmetric.EncryptionMode

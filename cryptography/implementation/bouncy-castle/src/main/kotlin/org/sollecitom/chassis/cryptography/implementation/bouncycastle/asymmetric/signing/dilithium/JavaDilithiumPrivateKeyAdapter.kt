@@ -1,6 +1,6 @@
 package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.dilithium
 
-import org.sollecitom.chassis.cryptography.domain.algorithms.dilithium.Dilithium
+import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithium.Dilithium
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.Signature
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
 import org.sollecitom.chassis.cryptography.domain.key.CryptographicKey

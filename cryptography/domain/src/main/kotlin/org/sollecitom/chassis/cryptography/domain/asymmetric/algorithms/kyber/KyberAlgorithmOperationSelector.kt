@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.cryptography.domain.algorithms.kyber
+package org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.kyber
 
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey

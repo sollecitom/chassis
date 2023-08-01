@@ -1,7 +1,7 @@
 package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.kyber
 
-import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.Kyber
-import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.KyberAlgorithmOperationSelector
+import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.kyber.Kyber
+import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.kyber.KyberAlgorithmOperationSelector
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory

@@ -1,7 +1,7 @@
 package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric
 
-import org.sollecitom.chassis.cryptography.domain.algorithms.dilithium.DilithiumAlgorithmOperationSelector
-import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.KyberAlgorithmOperationSelector
+import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithium.DilithiumAlgorithmOperationSelector
+import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.kyber.KyberAlgorithmOperationSelector
 import org.sollecitom.chassis.cryptography.domain.factory.CrystalsAlgorithmSelector
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.kyber.KyberAlgorithmOperationCustomizer
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.dilithium.DilithiumAlgorithmOperationCustomizer

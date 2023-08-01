@@ -9,10 +9,12 @@ import org.bouncycastle.util.Strings
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.cryptography.domain.algorithms.dilithium.Dilithium
+import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithium.Dilithium
+import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
-import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
+import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.sign
+import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.verify
 import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
 import org.sollecitom.chassis.cryptography.test.specification.CryptographyTestSpecification
 import java.security.*
@@ -66,26 +68,28 @@ private class BouncyCastleCryptographyExampleTests : CryptographyTestSpecificati
     fun `using Dilithium to sign and verify`() {
 
         val keyPair = crystalsDilithium.keyPair()
+        val message = "something to attest".toByteArray()
+
+        val signature = keyPair.private.sign(message)
+        val verifies = keyPair.public.verify(message, signature)
+
+        assertThat(verifies).isTrue()
+        assertThat(signature.metadata.keyHash).isEqualTo(keyPair.private.hash)
+        assertThat(signature.metadata.algorithmName).isEqualTo(keyPair.private.algorithm)
+    }
+
+    @Test
+    fun `sending Dilithium keys over the wire`() {
+
+        val keyPair = crystalsDilithium.keyPair(arguments = Dilithium.KeyPairArguments(variant = Dilithium.Variant.DILITHIUM_5_AES))
 
         val decodedPublicKey = crystalsDilithium.publicKey.fromBytes(keyPair.public.encoded)
         val decodedPrivateKey = crystalsDilithium.privateKey.fromBytes(keyPair.private.encoded)
 
+        assertThat(keyPair.private.algorithm).isEqualTo(Dilithium.Variant.DILITHIUM_5_AES.signatureAlgorithm)
+        assertThat(keyPair.public.algorithm).isEqualTo(Dilithium.Variant.DILITHIUM_5_AES.signatureAlgorithm)
         assertThat(decodedPrivateKey).isEqualTo(keyPair.private)
         assertThat(decodedPublicKey).isEqualTo(keyPair.public)
-
-//        val decodedBobPublicKey = crystalsKyber.publicKey.fromBytes(bobKeyPair.public.encoded) // receives Bob's public key
-//        val (aliceSymmetricKey, encapsulation) = decodedBobPublicKey.generateEncapsulatedAESKey() // generated encryption key with encapsulation
-//
-//        val bobSymmetricKey = bobKeyPair.private.decryptEncapsulatedAESKey(encapsulation) // decrypts the encapsulated key
-//
-//        val aliceMessage = "a message".toByteArray() // prepares a message for Bob
-//        val encryptedByAlice = aliceSymmetricKey.ctr.encryptWithRandomIV(aliceMessage) // encrypts the message using the symmetric key and sends it to Bob
-//
-//        val decryptedByBobMessage = bobSymmetricKey.ctr.decrypt(encryptedByAlice) // decrypts the message
-//        assertThat(decryptedByBobMessage).isEqualTo(aliceMessage)
-//
-//        assertThat(aliceSymmetricKey.encoded).isEqualTo(bobSymmetricKey.encoded)
-//        assertThat(aliceSymmetricKey).isEqualTo(bobSymmetricKey)
     }
 
     val crystalsDilithium get() = cryptography.asymmetric.crystals.dilithium

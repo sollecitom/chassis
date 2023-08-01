@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.cryptography.domain.algorithms.dilithium
+package org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithium
 
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey

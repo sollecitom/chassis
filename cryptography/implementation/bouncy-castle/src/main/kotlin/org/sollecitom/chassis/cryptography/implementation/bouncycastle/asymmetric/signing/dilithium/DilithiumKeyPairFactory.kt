@@ -1,7 +1,7 @@
 package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.dilithium
 
 import org.bouncycastle.pqc.jcajce.spec.DilithiumParameterSpec
-import org.sollecitom.chassis.cryptography.domain.algorithms.dilithium.Dilithium
+import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithium.Dilithium
 import org.sollecitom.chassis.cryptography.domain.asymmetric.*
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey

@@ -1,7 +1,7 @@
 package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.kyber
 
 import org.bouncycastle.pqc.jcajce.spec.KyberParameterSpec
-import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.Kyber
+import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.kyber.Kyber
 import org.sollecitom.chassis.cryptography.domain.asymmetric.*
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
@@ -32,7 +32,7 @@ internal class KyberKeyPairFactory(private val random: SecureRandom) : KeyPairFa
             Kyber.Variant.KYBER_1024 -> KyberParameterSpec.kyber1024
             Kyber.Variant.KYBER_512_AES -> KyberParameterSpec.kyber512_aes
             Kyber.Variant.KYBER_768_AES -> KyberParameterSpec.kyber768_aes
-            Kyber.Variant.KYBER_1024_AES -> KyberParameterSpec.kyber512_aes
+            Kyber.Variant.KYBER_1024_AES -> KyberParameterSpec.kyber1024_aes
         }
 
     private fun Kyber.Variant.generateRawKeyPair(): JavaKeyPair = BouncyCastleUtils.generateKeyPair(Kyber.NAME, spec, random)

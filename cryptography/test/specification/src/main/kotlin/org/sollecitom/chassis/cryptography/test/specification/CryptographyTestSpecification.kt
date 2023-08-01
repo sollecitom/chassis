@@ -3,11 +3,12 @@ package org.sollecitom.chassis.cryptography.test.specification
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Test
-import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.Kyber
+import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.kyber.Kyber
+import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
-import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
+import org.sollecitom.chassis.cryptography.domain.symmetric.algorithms.aes.AES
 import org.sollecitom.chassis.cryptography.domain.symmetric.decrypt
 
 
@@ -41,7 +42,22 @@ interface CryptographyTestSpecification {
         assertThat(decryptedByBobMessage).isEqualTo(aliceMessage)
 
         assertThat(aliceSymmetricKey.encoded).isEqualTo(bobSymmetricKey.encoded)
+        assertThat(aliceSymmetricKey.algorithm).isEqualTo(AES.NAME)
         assertThat(aliceSymmetricKey).isEqualTo(bobSymmetricKey)
+    }
+
+    @Test
+    fun `sending Kyber keys over the wire`() {
+
+        val keyPair = crystalsKyber.keyPair(arguments = Kyber.KeyPairArguments(variant = Kyber.Variant.KYBER_1024_AES))
+
+        val decodedPublicKey = crystalsKyber.publicKey.fromBytes(keyPair.public.encoded)
+        val decodedPrivateKey = crystalsKyber.privateKey.fromBytes(keyPair.private.encoded)
+
+        assertThat(keyPair.private.algorithm).isEqualTo(Kyber.Variant.KYBER_1024_AES.algorithmName)
+        assertThat(keyPair.public.algorithm).isEqualTo(Kyber.Variant.KYBER_1024_AES.algorithmName)
+        assertThat(decodedPrivateKey).isEqualTo(keyPair.private)
+        assertThat(decodedPublicKey).isEqualTo(keyPair.public)
     }
 
 
