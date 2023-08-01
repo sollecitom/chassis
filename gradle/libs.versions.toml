@@ -1,23 +1,22 @@
 [versions]
 # library versions
 kotlin = "1.9.0"
-kotlinx-coroutines = "1.7.2"
+kotlinx-coroutines = "1.7.3"
 slf4j = "2.0.7"
-http4k = "5.4.0.0"
-junit-jupiter = "5.9.3"
-testcontainers = "1.18.3"
+http4k = "5.5.0.0"
+junit-jupiter = "5.10.0"
 assertk = "0.26.1"
 kotlinx-datetime = "0.4.0"
 ulid-creator = "5.2.1"
 org-json = "20230618"
 everit-json-schema = "1.14.2"
-guava = "32.1.1-jre"
-bouncy-castle = "1.75"
+guava = "32.1.2-jre"
+bouncy-castle = "1.76"
 commons-codec = "1.16.0"
 # plugin versions
 plugin-palantir-git = "3.0.0"
 plugin-version-catalog-report = "0.47.0"
-plugin-version-catalog-update = "0.8.0"
+plugin-version-catalog-update = "0.8.1"
 
 [libraries]
 kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines" }
@@ -27,7 +26,6 @@ kotlinx-coroutines-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutin
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" }
 kotlinx-coroutines-debug = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-debug" }
 kotlinx-coroutines-slf4j = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j" }
-
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 http4k-bom = { module = "org.http4k:http4k-bom", version.ref = "http4k" }
@@ -45,7 +43,6 @@ commons-codec = { module = "commons-codec:commons-codec", version.ref = "commons
 bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncy-castle" }
 bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bouncy-castle" }
 bcutil = { module = "org.bouncycastle:bcutil-jdk18on", version.ref = "bouncy-castle" }
-
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
