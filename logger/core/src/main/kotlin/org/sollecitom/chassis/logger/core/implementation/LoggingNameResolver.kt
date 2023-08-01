@@ -5,7 +5,7 @@ import kotlin.reflect.KClass
 
 internal object LoggingNameResolver {
 
-    internal fun name(loggable: Any): String = name(loggable::class) // TODO remove?
+    internal fun name(loggable: Any): String = name(loggable::class)
     internal fun <T : Any> name(forClass: KClass<T>): String = name(forClass.java)
     private fun <T : Any> name(forClass: Class<T>): String = unwrapCompanionClass(forClass).name
 
