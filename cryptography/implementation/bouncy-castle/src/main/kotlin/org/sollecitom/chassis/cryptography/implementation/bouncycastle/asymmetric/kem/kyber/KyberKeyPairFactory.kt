@@ -4,6 +4,8 @@ import org.bouncycastle.pqc.jcajce.spec.KyberParameterSpec
 import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.Kyber
 import org.sollecitom.chassis.cryptography.domain.asymmetric.*
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
+import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
+import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.JavaKEMPrivateKeyAdapter
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.JavaKEMPublicKeyAdapter
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
@@ -18,8 +20,8 @@ internal class KyberKeyPairFactory(private val random: SecureRandom) : KeyPairFa
 
     override fun fromKeys(privateKey: KEMPrivateKey, publicKey: KEMPublicKey): AsymmetricKeyPair<KEMPrivateKey, KEMPublicKey> {
 
-        require(privateKey.metadata.algorithm == Kyber.NAME) { "Private key algorithm must be ${Kyber.NAME}" }
-        require(publicKey.metadata.algorithm == Kyber.NAME) { "Public key algorithm must be ${Kyber.NAME}" }
+        require(privateKey.algorithm == Kyber.NAME) { "Private key algorithm must be ${Kyber.NAME}" }
+        require(publicKey.algorithm == Kyber.NAME) { "Public key algorithm must be ${Kyber.NAME}" }
         return KeyPair(privateKey, publicKey)
     }
 

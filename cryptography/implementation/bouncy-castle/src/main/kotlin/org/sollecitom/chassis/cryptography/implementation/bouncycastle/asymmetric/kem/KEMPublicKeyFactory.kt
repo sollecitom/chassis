@@ -1,7 +1,6 @@
 package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem
 
-import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPublicKey
-import org.sollecitom.chassis.cryptography.domain.asymmetric.VerifyingPublicKey
+import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PublicKeyFactory
 import java.security.SecureRandom
 

@@ -1,6 +1,6 @@
 package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing
 
-import org.sollecitom.chassis.cryptography.domain.asymmetric.VerifyingPublicKey
+import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PublicKeyFactory
 import java.security.SecureRandom
 

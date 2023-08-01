@@ -1,23 +1,19 @@
 package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem
 
-import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPublicKey
-import org.sollecitom.chassis.cryptography.domain.asymmetric.VerifyingPublicKey
-import org.sollecitom.chassis.cryptography.domain.key.KeyMetadata
+import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
+import org.sollecitom.chassis.cryptography.domain.key.CryptographicKey
 import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricKeyWithEncapsulation
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.key.CryptographicKeyAdapter
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.symmetric.JavaAESKeyAdapter
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.JavaKeyMetadataAdapter
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.PublicKey
 import java.security.SecureRandom
 
-internal data class JavaKEMPublicKeyAdapter(private val key: PublicKey, private val random: SecureRandom) : KEMPublicKey {
-
-    override val encoded: ByteArray get() = key.encoded
-    override val metadata: KeyMetadata = JavaKeyMetadataAdapter(key)
+internal data class JavaKEMPublicKeyAdapter(private val key: PublicKey, private val random: SecureRandom) : KEMPublicKey, CryptographicKey by CryptographicKeyAdapter(key) {
 
     override fun generateEncapsulatedAESKey(): SymmetricKeyWithEncapsulation {
 
-        val rawKeyAndEncapsulation = BouncyCastleUtils.generateAESEncryptionKey(key, metadata.algorithm, random)
+        val rawKeyAndEncapsulation = BouncyCastleUtils.generateAESEncryptionKey(key, algorithm, random)
         return SymmetricKeyWithEncapsulation(key = JavaAESKeyAdapter(rawKeyAndEncapsulation.encoded, random), encapsulation = rawKeyAndEncapsulation.encapsulation)
     }
 

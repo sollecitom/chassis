@@ -1,7 +1,7 @@
 package org.sollecitom.chassis.cryptography.domain.algorithms.kyber
 
-import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPrivateKey
-import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPublicKey
+import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
+import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PrivateKeyFactory
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PublicKeyFactory

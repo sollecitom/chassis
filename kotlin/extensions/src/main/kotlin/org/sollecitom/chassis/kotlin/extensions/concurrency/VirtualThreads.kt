@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.kotlin.extensions
+package org.sollecitom.chassis.kotlin.extensions.concurrency
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

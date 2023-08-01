@@ -10,11 +10,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.cryptography.domain.algorithms.dilithium.Dilithium
-import org.sollecitom.chassis.cryptography.domain.asymmetric.SigningPrivateKey
-import org.sollecitom.chassis.cryptography.domain.asymmetric.VerifyingPublicKey
+import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
+import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
-import org.sollecitom.chassis.cryptography.domain.symmetric.decrypt
 import org.sollecitom.chassis.cryptography.test.specification.CryptographyTestSpecification
 import java.security.*
 
@@ -94,4 +93,4 @@ private class BouncyCastleCryptographyExampleTests : CryptographyTestSpecificati
 
 private val defaultDilithiumKeyPairArguments = Dilithium.KeyPairArguments(variant = Dilithium.Variant.DILITHIUM_5_AES)
 
-private operator fun KeyPairFactory<Dilithium.KeyPairArguments, SigningPrivateKey, VerifyingPublicKey>.invoke() = invoke(defaultDilithiumKeyPairArguments)
+private operator fun KeyPairFactory<Dilithium.KeyPairArguments, SigningPrivateKey<Unit>, VerifyingPublicKey>.invoke() = invoke(defaultDilithiumKeyPairArguments)

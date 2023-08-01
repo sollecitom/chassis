@@ -4,8 +4,8 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Test
 import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.Kyber
-import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPrivateKey
-import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPublicKey
+import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
+import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
 import org.sollecitom.chassis.cryptography.domain.symmetric.decrypt
