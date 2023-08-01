@@ -6,7 +6,7 @@ import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.Bou
 import java.security.SecureRandom
 import javax.crypto.SecretKey
 
-private class CTROperationsAdapter(private val key: SecretKey, private val random: SecureRandom) : EncryptionMode.CTR.Operations {
+private class CTROperationsAdapter(private val key: SecretKey, private val random: SecureRandom, private val randomSeedLength: Int = DEFAULT_RANDOM_IV_LENGTH) : EncryptionMode.CTR.Operations {
 
     override fun encryptWithRandomIV(bytes: ByteArray) = encrypt(bytes = bytes, iv = newIv())
 
@@ -18,7 +18,7 @@ private class CTROperationsAdapter(private val key: SecretKey, private val rando
 
     override fun decrypt(bytes: ByteArray, iv: ByteArray): ByteArray = BouncyCastleUtils.ctrDecrypt(key = key, iv = iv, cipherText = bytes)
 
-    private fun newIv() = random.generateSeed(RANDOM_IV_LENGTH)
+    private fun newIv() = random.generateSeed(randomSeedLength)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -32,7 +32,7 @@ private class CTROperationsAdapter(private val key: SecretKey, private val rando
     override fun hashCode() = key.hashCode()
 
     companion object {
-        private const val RANDOM_IV_LENGTH = 16
+        private const val DEFAULT_RANDOM_IV_LENGTH = 16
     }
 }
 

@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithium
 
-import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.KeyPairGenerationOperations
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningAlgorithm
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
@@ -20,6 +19,4 @@ object Dilithium : SigningAlgorithm<Dilithium.KeyPairArguments, SigningPrivateKe
     }
 
     data class KeyPairArguments(val variant: Variant)
-
-    interface Operations : KeyPairGenerationOperations<KeyPairArguments, SigningPrivateKey, VerifyingPublicKey>
 }

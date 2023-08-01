@@ -1,5 +1,6 @@
 package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.dilithium
 
+import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.KeyPairGenerationOperations
 import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithium.Dilithium
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PrivateKeyFactory
@@ -10,7 +11,7 @@ import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetri
 import java.security.SecureRandom
 
 // TODO merge this with Dilithium?
-internal class DilithiumAlgorithmOperationCustomizer(private val random: SecureRandom) : Dilithium.Operations {
+internal class DilithiumAlgorithmOperationCustomizer(private val random: SecureRandom) : KeyPairGenerationOperations<Dilithium.KeyPairArguments, SigningPrivateKey, VerifyingPublicKey> {
 
     override val keyPair by lazy { DilithiumKeyPairFactory(random) }
     override val privateKey by lazy { DilithiumSigningPrivateKeyFactory(random) }

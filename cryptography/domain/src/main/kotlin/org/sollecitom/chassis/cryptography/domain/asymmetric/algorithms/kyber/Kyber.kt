@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.kyber
 
-import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.KeyPairGenerationOperations
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMAlgorithm
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
@@ -19,6 +18,4 @@ object Kyber : KEMAlgorithm<Kyber.KeyPairArguments, KEMPrivateKey, KEMPublicKey>
     }
 
     data class KeyPairArguments(val variant: Variant)
-
-    interface Operations : KeyPairGenerationOperations<KeyPairArguments, KEMPrivateKey, KEMPublicKey>
 }
