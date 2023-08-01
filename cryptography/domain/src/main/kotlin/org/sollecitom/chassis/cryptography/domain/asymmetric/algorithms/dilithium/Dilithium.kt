@@ -1,8 +1,6 @@
 package org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithium
 
-import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
-import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PrivateKeyFactory
-import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PublicKeyFactory
+import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.KeyPairGenerationOperations
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
 
@@ -22,12 +20,7 @@ object Dilithium {
 
     data class KeyPairArguments(val variant: Variant)
 
-    interface Operations {
-
-        val keyPair: KeyPairFactory<KeyPairArguments, DilithiumPrivateKey, DilithiumPublicKey>
-        val privateKey: PrivateKeyFactory<DilithiumPrivateKey>
-        val publicKey: PublicKeyFactory<DilithiumPublicKey>
-    }
+    interface Operations : KeyPairGenerationOperations<KeyPairArguments, DilithiumPrivateKey, DilithiumPublicKey>
 }
 
 typealias DilithiumPublicKey = VerifyingPublicKey

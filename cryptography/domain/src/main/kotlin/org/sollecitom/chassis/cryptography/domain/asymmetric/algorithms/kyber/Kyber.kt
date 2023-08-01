@@ -1,8 +1,6 @@
 package org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.kyber
 
-import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
-import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PrivateKeyFactory
-import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PublicKeyFactory
+import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.KeyPairGenerationOperations
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
 
@@ -21,10 +19,5 @@ object Kyber {
 
     data class KeyPairArguments(val variant: Variant)
 
-    interface Operations {
-
-        val keyPair: KeyPairFactory<KeyPairArguments, KEMPrivateKey, KEMPublicKey>
-        val privateKey: PrivateKeyFactory<KEMPrivateKey>
-        val publicKey: PublicKeyFactory<KEMPublicKey>
-    }
+    interface Operations : KeyPairGenerationOperations<KeyPairArguments, KEMPrivateKey, KEMPublicKey>
 }
