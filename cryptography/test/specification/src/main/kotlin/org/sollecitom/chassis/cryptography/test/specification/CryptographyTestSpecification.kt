@@ -10,11 +10,12 @@ import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFact
 import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
 import org.sollecitom.chassis.cryptography.domain.symmetric.decrypt
 
+
 @Suppress("FunctionName")
 interface CryptographyTestSpecification {
 
     @Test
-    fun `using an asymmetric key pair to generate and exchange a symmetric key securely`() {
+    fun `using Kyber to generate and exchange a symmetric key securely`() {
 
         // Bob
         // has a public key
@@ -42,6 +43,7 @@ interface CryptographyTestSpecification {
         assertThat(aliceSymmetricKey.encoded).isEqualTo(bobSymmetricKey.encoded)
         assertThat(aliceSymmetricKey).isEqualTo(bobSymmetricKey)
     }
+
 
     val cryptography: CryptographicOperations
     val crystalsKyber get() = cryptography.asymmetric.crystals.kyber
