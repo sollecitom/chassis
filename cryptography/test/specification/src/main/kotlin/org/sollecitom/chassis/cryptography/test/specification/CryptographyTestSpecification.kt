@@ -2,11 +2,11 @@ package org.sollecitom.chassis.cryptography.test.specification
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
 import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithium.Dilithium
 import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.kyber.Kyber
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.sign
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.verify
 import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
 import org.sollecitom.chassis.cryptography.domain.symmetric.algorithms.aes.AES
@@ -42,8 +42,8 @@ interface CryptographyTestSpecification {
         val decryptedByBobMessage = bobSymmetricKey.ctr.decrypt(encryptedByAlice) // decrypts the message
         assertThat(decryptedByBobMessage).isEqualTo(aliceMessage)
 
-        assertThat(aliceSymmetricKey.encoded).isEqualTo(bobSymmetricKey.encoded)
-        assertThat(aliceSymmetricKey.algorithm).isEqualTo(AES.NAME)
+        assertThat(aliceSymmetricKey::encoded).isEqualTo(bobSymmetricKey.encoded)
+        assertThat(aliceSymmetricKey::algorithm).isEqualTo(AES.NAME)
         assertThat(aliceSymmetricKey).isEqualTo(bobSymmetricKey)
     }
 
@@ -55,8 +55,8 @@ interface CryptographyTestSpecification {
         val decodedPublicKey = kyber.publicKey.fromBytes(keyPair.public.encoded)
         val decodedPrivateKey = kyber.privateKey.fromBytes(keyPair.private.encoded)
 
-        assertThat(keyPair.private.algorithm).isEqualTo(Kyber.Variant.KYBER_1024_AES.algorithmName)
-        assertThat(keyPair.public.algorithm).isEqualTo(Kyber.Variant.KYBER_1024_AES.algorithmName)
+        assertThat(keyPair.private::algorithm).isEqualTo(Kyber.Variant.KYBER_1024_AES.algorithmName)
+        assertThat(keyPair.public::algorithm).isEqualTo(Kyber.Variant.KYBER_1024_AES.algorithmName)
         assertThat(decodedPrivateKey).isEqualTo(keyPair.private)
         assertThat(decodedPublicKey).isEqualTo(keyPair.public)
     }
@@ -71,8 +71,12 @@ interface CryptographyTestSpecification {
         val verifies = keyPair.public.verify(message, signature)
 
         assertThat(verifies).isTrue()
-        assertThat(signature.metadata.keyHash).isEqualTo(keyPair.private.hash)
-        assertThat(signature.metadata.algorithmName).isEqualTo(keyPair.private.algorithm)
+        assertThat(signature.metadata::keyHash).isEqualTo(keyPair.private.hash)
+        assertThat(signature.metadata::algorithmName).isEqualTo(keyPair.private.algorithm)
+
+        val notTheOriginalSigner = dilithium.keyPair(defaultDilithiumKeyPairArguments).public
+
+        assertThat(notTheOriginalSigner.verify(message, signature)).isFalse()
     }
 
     @Test
@@ -83,8 +87,8 @@ interface CryptographyTestSpecification {
         val decodedPublicKey = dilithium.publicKey.fromBytes(keyPair.public.encoded)
         val decodedPrivateKey = dilithium.privateKey.fromBytes(keyPair.private.encoded)
 
-        assertThat(keyPair.private.algorithm).isEqualTo(Dilithium.Variant.DILITHIUM_5_AES.value)
-        assertThat(keyPair.public.algorithm).isEqualTo(Dilithium.Variant.DILITHIUM_5_AES.value)
+        assertThat(keyPair.private::algorithm).isEqualTo(Dilithium.Variant.DILITHIUM_5_AES.value)
+        assertThat(keyPair.public::algorithm).isEqualTo(Dilithium.Variant.DILITHIUM_5_AES.value)
         assertThat(decodedPrivateKey).isEqualTo(keyPair.private)
         assertThat(decodedPublicKey).isEqualTo(keyPair.public)
     }
