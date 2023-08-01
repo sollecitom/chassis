@@ -1,14 +1,11 @@
 package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.kyber
 
 import org.bouncycastle.pqc.jcajce.spec.KyberParameterSpec
-import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.KyberKeyPairArguments
-import org.sollecitom.chassis.cryptography.domain.asymmetric.AsymmetricKeyPair
-import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPublicKey
-import org.sollecitom.chassis.cryptography.domain.asymmetric.KeyPair
-import org.sollecitom.chassis.cryptography.domain.asymmetric.PrivateKey
+import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.Kyber
+import org.sollecitom.chassis.cryptography.domain.asymmetric.*
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.Algorithms
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.JavaPrivateKeyAdapter
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.JavaKEMPrivateKeyAdapter
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.JavaKEMPublicKeyAdapter
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.PublicKey
@@ -16,33 +13,33 @@ import java.security.SecureRandom
 import java.security.KeyPair as JavaKeyPair
 import java.security.PrivateKey as JavaPrivateKey
 
-internal class KyberKeyPairFactory(private val random: SecureRandom) : KeyPairFactory<KyberKeyPairArguments, KEMPublicKey> {
+internal class KyberKeyPairFactory(private val random: SecureRandom) : KeyPairFactory<Kyber.KeyPairArguments, KEMPrivateKey, KEMPublicKey> {
 
-    override fun invoke(arguments: KyberKeyPairArguments): AsymmetricKeyPair<KEMPublicKey> = arguments.generateRawKeyPair().adapted(random)
+    override fun invoke(arguments: Kyber.KeyPairArguments): AsymmetricKeyPair<KEMPrivateKey, KEMPublicKey> = arguments.generateRawKeyPair().asKEMPrivateKey(random)
 
-    override fun fromKeys(publicKey: KEMPublicKey, privateKey: PrivateKey): AsymmetricKeyPair<KEMPublicKey> {
+    override fun fromKeys(publicKey: KEMPublicKey, privateKey: KEMPrivateKey): AsymmetricKeyPair<KEMPrivateKey, KEMPublicKey> {
 
-        require(publicKey.metadata.algorithm == Algorithms.Kyber.NAME) { "Public key algorithm must be ${Algorithms.Kyber.NAME}" }
         require(privateKey.metadata.algorithm == Algorithms.Kyber.NAME) { "Private key algorithm must be ${Algorithms.Kyber.NAME}" }
-        return KeyPair(publicKey, privateKey)
+        require(publicKey.metadata.algorithm == Algorithms.Kyber.NAME) { "Public key algorithm must be ${Algorithms.Kyber.NAME}" }
+        return KeyPair(privateKey, publicKey)
     }
 
-    private val KyberKeyPairArguments.Variant.spec: KyberParameterSpec
+    private val Kyber.Variant.spec: KyberParameterSpec
         get() = when (this) {
-            KyberKeyPairArguments.Variant.KYBER_512 -> KyberParameterSpec.kyber512
-            KyberKeyPairArguments.Variant.KYBER_768 -> KyberParameterSpec.kyber768
-            KyberKeyPairArguments.Variant.KYBER_1024 -> KyberParameterSpec.kyber1024
-            KyberKeyPairArguments.Variant.KYBER_512_AES -> KyberParameterSpec.kyber512_aes
-            KyberKeyPairArguments.Variant.KYBER_768_AES -> KyberParameterSpec.kyber768_aes
-            KyberKeyPairArguments.Variant.KYBER_1024_AES -> KyberParameterSpec.kyber512_aes
+            Kyber.Variant.KYBER_512 -> KyberParameterSpec.kyber512
+            Kyber.Variant.KYBER_768 -> KyberParameterSpec.kyber768
+            Kyber.Variant.KYBER_1024 -> KyberParameterSpec.kyber1024
+            Kyber.Variant.KYBER_512_AES -> KyberParameterSpec.kyber512_aes
+            Kyber.Variant.KYBER_768_AES -> KyberParameterSpec.kyber768_aes
+            Kyber.Variant.KYBER_1024_AES -> KyberParameterSpec.kyber512_aes
         }
 
-    private fun KyberKeyPairArguments.Variant.generateRawKeyPair(): JavaKeyPair = BouncyCastleUtils.generateKeyPair(Algorithms.Kyber.NAME, spec, random)
+    private fun Kyber.Variant.generateRawKeyPair(): JavaKeyPair = BouncyCastleUtils.generateKeyPair(Algorithms.Kyber.NAME, spec, random)
 
-    private fun KyberKeyPairArguments.generateRawKeyPair() = variant.generateRawKeyPair()
+    private fun Kyber.KeyPairArguments.generateRawKeyPair() = variant.generateRawKeyPair()
 
-    private fun JavaKeyPair.adapted(random: SecureRandom) = KeyPair(public = public.asKEMPublicKey(random), private = private.adapted(random))
+    private fun JavaKeyPair.asKEMPrivateKey(random: SecureRandom) = KeyPair(private = private.asKEMPrivateKey(random), public = public.asKEMPublicKey(random))
 
-    private fun JavaPrivateKey.adapted(random: SecureRandom) = JavaPrivateKeyAdapter(this, random)
+    private fun JavaPrivateKey.asKEMPrivateKey(random: SecureRandom): KEMPrivateKey = JavaKEMPrivateKeyAdapter(this, random)
     private fun PublicKey.asKEMPublicKey(random: SecureRandom): KEMPublicKey = JavaKEMPublicKeyAdapter(this, random)
 }

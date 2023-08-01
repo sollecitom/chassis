@@ -3,8 +3,8 @@ package org.sollecitom.chassis.cryptography.test.specification
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Test
-import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.KyberKeyPairArguments
-import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.KyberKeyPairArguments.Variant.KYBER_1024_AES
+import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.Kyber
+import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPublicKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
@@ -52,6 +52,6 @@ interface CryptographyTestSpecification {
     // TODO 1 party, with 1 identity, and a number of CertificateAndKeyPair (a keypair, and a certificate binding the identity to the public key)
 }
 
-private val defaultKyberKeyPairArguments = KyberKeyPairArguments(variant = KYBER_1024_AES)
+private val defaultKyberKeyPairArguments = Kyber.KeyPairArguments(variant = Kyber.Variant.KYBER_1024_AES)
 
-private operator fun KeyPairFactory<KyberKeyPairArguments, KEMPublicKey>.invoke() = invoke(defaultKyberKeyPairArguments)
+private operator fun KeyPairFactory<Kyber.KeyPairArguments, KEMPrivateKey, KEMPublicKey>.invoke() = invoke(defaultKyberKeyPairArguments)
