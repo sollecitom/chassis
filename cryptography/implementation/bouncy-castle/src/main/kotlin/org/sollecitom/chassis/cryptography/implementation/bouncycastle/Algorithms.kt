@@ -2,7 +2,7 @@ package org.sollecitom.chassis.cryptography.implementation.bouncycastle
 
 import org.bouncycastle.pqc.jcajce.spec.DilithiumParameterSpec
 
-internal object Algorithms {
+internal object Algorithms { // TODO break into separate types (1 per algo) and delete
 
     object Kyber {
         const val NAME = "KYBER"
