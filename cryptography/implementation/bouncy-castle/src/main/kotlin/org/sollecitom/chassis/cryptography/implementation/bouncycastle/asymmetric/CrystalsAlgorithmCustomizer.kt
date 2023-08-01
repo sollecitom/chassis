@@ -4,11 +4,11 @@ import org.sollecitom.chassis.cryptography.domain.algorithms.dilithium.Dilithium
 import org.sollecitom.chassis.cryptography.domain.algorithms.kyber.KyberAlgorithmOperationSelector
 import org.sollecitom.chassis.cryptography.domain.factory.CrystalsAlgorithmSelector
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.kyber.KyberAlgorithmOperationCustomizer
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.dilithium.DilithiumAlgorithmOperationCustomizer
 import java.security.SecureRandom
 
 internal class CrystalsAlgorithmCustomizer(private val random: SecureRandom) : CrystalsAlgorithmSelector {
 
     override val kyber: KyberAlgorithmOperationSelector by lazy { KyberAlgorithmOperationCustomizer(random) }
-    override val dilithium: DilithiumAlgorithmOperationSelector
-        get() = TODO("Not yet implemented")
+    override val dilithium: DilithiumAlgorithmOperationSelector by lazy { DilithiumAlgorithmOperationCustomizer(random) }
 }

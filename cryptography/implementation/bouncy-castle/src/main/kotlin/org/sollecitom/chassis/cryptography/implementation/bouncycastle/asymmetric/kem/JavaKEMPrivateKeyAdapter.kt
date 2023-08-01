@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric
+package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem
 
 import org.sollecitom.chassis.cryptography.domain.asymmetric.KEMPrivateKey
 import org.sollecitom.chassis.cryptography.domain.key.KeyMetadata

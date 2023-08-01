@@ -71,7 +71,8 @@ private class BouncyCastleCryptographyExampleTests : CryptographyTestSpecificati
         val decodedPublicKey = crystalsDilithium.publicKey.fromBytes(keyPair.public.encoded)
         val decodedPrivateKey = crystalsDilithium.privateKey.fromBytes(keyPair.private.encoded)
 
-//        assertThat()
+        assertThat(decodedPrivateKey).isEqualTo(keyPair.private)
+        assertThat(decodedPublicKey).isEqualTo(keyPair.public)
 
 //        val decodedBobPublicKey = crystalsKyber.publicKey.fromBytes(bobKeyPair.public.encoded) // receives Bob's public key
 //        val (aliceSymmetricKey, encapsulation) = decodedBobPublicKey.generateEncapsulatedAESKey() // generated encryption key with encapsulation

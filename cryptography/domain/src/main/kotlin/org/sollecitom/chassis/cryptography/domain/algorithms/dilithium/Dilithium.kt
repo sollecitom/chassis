@@ -2,7 +2,7 @@ package org.sollecitom.chassis.cryptography.domain.algorithms.dilithium
 
 object Dilithium {
 
-    const val NAME = "DILITHIUM"
+    const val NAME = "Dilithium"
 
     enum class Variant(val signatureAlgorithm: String) {
 
