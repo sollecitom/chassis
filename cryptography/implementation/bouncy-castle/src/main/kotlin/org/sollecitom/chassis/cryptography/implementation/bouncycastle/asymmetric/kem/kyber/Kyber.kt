@@ -1,14 +1,17 @@
 package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.kyber
 
 import org.bouncycastle.pqc.jcajce.spec.KyberParameterSpec
-import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.KeyPairGenerationOperations
-import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.kyber.Kyber
+import org.sollecitom.chassis.cryptography.domain.asymmetric.KeyPairGenerationOperations
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.*
+import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.kyber.Kyber
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.KEMAlgorithm
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.KEMKeyPairFactory
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.KEMPrivateKeyFactory
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.KEMPublicKeyFactory
 import java.security.SecureRandom
 
-object Kyber : KEMAlgorithm<Kyber.KeyPairArguments, KEMPrivateKey, KEMPublicKey> {
+object Kyber : KEMAlgorithm<Kyber.KeyPairArguments> {
 
     override val name: String get() = Kyber.name
 

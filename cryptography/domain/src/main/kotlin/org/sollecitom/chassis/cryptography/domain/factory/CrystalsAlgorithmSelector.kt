@@ -1,8 +1,8 @@
 package org.sollecitom.chassis.cryptography.domain.factory
 
-import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.KeyPairGenerationOperations
-import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithium.Dilithium
-import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.kyber.Kyber
+import org.sollecitom.chassis.cryptography.domain.asymmetric.KeyPairGenerationOperations
+import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.dilithium.Dilithium
+import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.kyber.Kyber
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey

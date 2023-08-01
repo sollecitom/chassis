@@ -1,10 +1,8 @@
-package org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.kyber
+package org.sollecitom.chassis.cryptography.domain.asymmetric.kem.kyber
 
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMAlgorithm
-import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
-import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
 
-object Kyber : KEMAlgorithm<Kyber.KeyPairArguments, KEMPrivateKey, KEMPublicKey> {
+object Kyber : KEMAlgorithm<Kyber.KeyPairArguments> {
 
     override val name = "KYBER"
 

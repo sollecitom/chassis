@@ -5,5 +5,4 @@ import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.AsymmetricAlgorithm
 
-// TODO remove these key PUBLIC_KEY and PRIVATE_KEY generics
-interface KEMAlgorithm<KEY_GENERATION_ARGUMENTS, PRIVATE_KEY : KEMPrivateKey, PUBLIC_KEY : KEMPublicKey> : KEMAlgorithm<KEY_GENERATION_ARGUMENTS, PRIVATE_KEY, PUBLIC_KEY>, AsymmetricAlgorithm<KEY_GENERATION_ARGUMENTS, PRIVATE_KEY, PUBLIC_KEY>
+interface KEMAlgorithm<KEY_GENERATION_ARGUMENTS> : KEMAlgorithm<KEY_GENERATION_ARGUMENTS>, AsymmetricAlgorithm<KEY_GENERATION_ARGUMENTS, KEMPrivateKey, KEMPublicKey>

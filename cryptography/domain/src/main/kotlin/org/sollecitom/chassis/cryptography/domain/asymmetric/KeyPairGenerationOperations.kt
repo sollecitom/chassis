@@ -1,7 +1,5 @@
-package org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms
+package org.sollecitom.chassis.cryptography.domain.asymmetric
 
-import org.sollecitom.chassis.cryptography.domain.asymmetric.PrivateKey
-import org.sollecitom.chassis.cryptography.domain.asymmetric.PublicKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PrivateKeyFactory
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PublicKeyFactory

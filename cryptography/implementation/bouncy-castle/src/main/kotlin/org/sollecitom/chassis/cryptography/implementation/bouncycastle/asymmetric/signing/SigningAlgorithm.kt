@@ -5,5 +5,4 @@ import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPriv
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.AsymmetricAlgorithm
 
-// TODO remove these key PUBLIC_KEY and PRIVATE_KEY generics
-interface SigningAlgorithm<KEY_GENERATION_ARGUMENTS, PRIVATE_KEY : SigningPrivateKey, PUBLIC_KEY : VerifyingPublicKey> : SigningAlgorithm<KEY_GENERATION_ARGUMENTS, PRIVATE_KEY, PUBLIC_KEY>, AsymmetricAlgorithm<KEY_GENERATION_ARGUMENTS, PRIVATE_KEY, PUBLIC_KEY>
+interface SigningAlgorithm<KEY_GENERATION_ARGUMENTS> : SigningAlgorithm<KEY_GENERATION_ARGUMENTS>, AsymmetricAlgorithm<KEY_GENERATION_ARGUMENTS, SigningPrivateKey, VerifyingPublicKey>

@@ -1,5 +1,5 @@
 package org.sollecitom.chassis.cryptography.domain.asymmetric.kem
 
-import org.sollecitom.chassis.cryptography.domain.algorithm.Algorithm
+import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithm.AsymmetricAlgorithm
 
-interface KEMAlgorithm<KEY_GENERATION_ARGUMENTS, PRIVATE_KEY : KEMPrivateKey, PUBLIC_KEY : KEMPublicKey> : Algorithm
+interface KEMAlgorithm<KEY_GENERATION_ARGUMENTS> : AsymmetricAlgorithm<KEY_GENERATION_ARGUMENTS, KEMPrivateKey, KEMPublicKey>

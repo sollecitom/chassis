@@ -5,8 +5,8 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
-import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithium.Dilithium
-import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.kyber.Kyber
+import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.dilithium.Dilithium
+import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.kyber.Kyber
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.verify
 import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
 import org.sollecitom.chassis.cryptography.domain.symmetric.algorithms.aes.AES

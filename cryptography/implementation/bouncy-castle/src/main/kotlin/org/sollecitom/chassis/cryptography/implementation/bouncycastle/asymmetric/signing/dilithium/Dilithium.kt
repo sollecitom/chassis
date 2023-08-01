@@ -1,14 +1,17 @@
 package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.dilithium
 
 import org.bouncycastle.pqc.jcajce.spec.DilithiumParameterSpec
-import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.KeyPairGenerationOperations
-import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithium.Dilithium
+import org.sollecitom.chassis.cryptography.domain.asymmetric.KeyPairGenerationOperations
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.*
+import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.dilithium.Dilithium
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.SigningAlgorithm
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.SigningKeyPairFactory
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.SigningPrivateKeyFactory
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.VerifyingPublicKeyFactory
 import java.security.SecureRandom
 
-object Dilithium : SigningAlgorithm<Dilithium.KeyPairArguments, SigningPrivateKey, VerifyingPublicKey> {
+object Dilithium : SigningAlgorithm<Dilithium.KeyPairArguments> {
 
     override val name: String get() = Dilithium.name
 

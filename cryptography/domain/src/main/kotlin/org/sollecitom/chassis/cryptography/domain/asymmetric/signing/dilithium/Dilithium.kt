@@ -1,10 +1,8 @@
-package org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithium
+package org.sollecitom.chassis.cryptography.domain.asymmetric.signing.dilithium
 
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningAlgorithm
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
 
-object Dilithium : SigningAlgorithm<Dilithium.KeyPairArguments, SigningPrivateKey, VerifyingPublicKey> {
+object Dilithium : SigningAlgorithm<Dilithium.KeyPairArguments> {
 
     override val name = "Dilithium"
 
