@@ -6,7 +6,7 @@ import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPu
 
 object Dilithium : SigningAlgorithm<Dilithium.KeyPairArguments, SigningPrivateKey, VerifyingPublicKey> {
 
-    const val NAME = "Dilithium"
+    override val name = "Dilithium"
 
     enum class Variant(val value: String) {
 

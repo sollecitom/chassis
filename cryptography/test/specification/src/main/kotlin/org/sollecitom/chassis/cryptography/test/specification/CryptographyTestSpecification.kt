@@ -43,7 +43,7 @@ interface CryptographyTestSpecification {
         assertThat(decryptedByBobMessage).isEqualTo(aliceMessage)
 
         assertThat(aliceSymmetricKey::encoded).isEqualTo(bobSymmetricKey.encoded)
-        assertThat(aliceSymmetricKey::algorithm).isEqualTo(AES.NAME)
+        assertThat(aliceSymmetricKey::algorithm).isEqualTo(AES.name)
         assertThat(aliceSymmetricKey).isEqualTo(bobSymmetricKey)
     }
 

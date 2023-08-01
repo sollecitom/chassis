@@ -19,8 +19,8 @@ internal class DilithiumKeyPairFactory(private val random: SecureRandom) : KeyPa
 
     override fun fromKeys(privateKey: SigningPrivateKey, publicKey: VerifyingPublicKey): AsymmetricKeyPair<SigningPrivateKey, VerifyingPublicKey> {
 
-        require(privateKey.algorithm == Dilithium.NAME) { "Private key algorithm must be ${Dilithium.NAME}" }
-        require(publicKey.algorithm == Dilithium.NAME) { "Public key algorithm must be ${Dilithium.NAME}" }
+        require(privateKey.algorithm == Dilithium.name) { "Private key algorithm must be ${Dilithium.name}" }
+        require(publicKey.algorithm == Dilithium.name) { "Public key algorithm must be ${Dilithium.name}" }
         return KeyPair(privateKey, publicKey)
     }
 
@@ -34,7 +34,7 @@ internal class DilithiumKeyPairFactory(private val random: SecureRandom) : KeyPa
             Dilithium.Variant.DILITHIUM_5_AES -> DilithiumParameterSpec.dilithium5_aes
         }
 
-    private fun Dilithium.Variant.generateRawKeyPair(): JavaKeyPair = BouncyCastleUtils.generateKeyPair(Dilithium.NAME, spec, random)
+    private fun Dilithium.Variant.generateRawKeyPair(): JavaKeyPair = BouncyCastleUtils.generateKeyPair(Dilithium.name, spec, random)
 
     private fun Dilithium.KeyPairArguments.generateRawKeyPair() = variant.generateRawKeyPair()
 

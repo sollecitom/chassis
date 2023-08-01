@@ -2,9 +2,6 @@ package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetr
 
 import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.KeyPairGenerationOperations
 import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithium.Dilithium
-import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
-import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PrivateKeyFactory
-import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.PublicKeyFactory
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.VerifyingPublicKeyFactory
@@ -15,5 +12,5 @@ internal class DilithiumAlgorithmOperationCustomizer(private val random: SecureR
 
     override val keyPair by lazy { DilithiumKeyPairFactory(random) }
     override val privateKey by lazy { DilithiumSigningPrivateKeyFactory(random) }
-    override val publicKey by lazy { VerifyingPublicKeyFactory(Dilithium.NAME, random) }
+    override val publicKey by lazy { VerifyingPublicKeyFactory(Dilithium.name, random) }
 }

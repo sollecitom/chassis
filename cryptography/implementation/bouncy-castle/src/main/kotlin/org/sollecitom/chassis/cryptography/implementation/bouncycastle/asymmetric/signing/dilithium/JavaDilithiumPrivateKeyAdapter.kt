@@ -32,6 +32,6 @@ internal data class JavaDilithiumPrivateKeyAdapter(private val key: JavaPrivateK
     companion object {
 
         // TODO make this class generic by passing an instance of Algorithm here
-        fun fromBytes(bytes: ByteArray, random: SecureRandom): JavaDilithiumPrivateKeyAdapter = BouncyCastleUtils.getPrivateKeyFromEncoded(bytes, Dilithium.NAME).let { JavaDilithiumPrivateKeyAdapter(it, random) }
+        fun fromBytes(bytes: ByteArray, random: SecureRandom): JavaDilithiumPrivateKeyAdapter = BouncyCastleUtils.getPrivateKeyFromEncoded(bytes, Dilithium.name).let { JavaDilithiumPrivateKeyAdapter(it, random) }
     }
 }

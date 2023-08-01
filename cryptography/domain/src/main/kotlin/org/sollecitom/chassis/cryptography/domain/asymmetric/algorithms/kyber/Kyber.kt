@@ -6,7 +6,7 @@ import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
 
 object Kyber : KEMAlgorithm<Kyber.KeyPairArguments, KEMPrivateKey, KEMPublicKey> {
 
-    const val NAME = "KYBER"
+    override val name = "KYBER"
 
     enum class Variant(val keyLength: Int, val algorithmName: String) {
         KYBER_512(512, "KYBER512"),
