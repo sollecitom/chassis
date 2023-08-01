@@ -14,6 +14,6 @@ import java.security.SecureRandom
 internal class KyberAlgorithmOperationCustomizer(private val random: SecureRandom) : KyberAlgorithmOperationSelector {
 
     override val keyPair: KeyPairFactory<KyberKeyPairArguments, KEMPublicKey> by lazy { KyberKeyPairFactory(random) }
-    override val privateKey: PrivateKeyFactory by lazy { GenericPrivateKeyFactory(Algorithms.KYBER, random) }
-    override val publicKey: PublicKeyFactory<KEMPublicKey> by lazy { KEMPublicKeyFactory(Algorithms.KYBER, random) }
+    override val privateKey: PrivateKeyFactory by lazy { GenericPrivateKeyFactory(Algorithms.Kyber.NAME, random) }
+    override val publicKey: PublicKeyFactory<KEMPublicKey> by lazy { KEMPublicKeyFactory(Algorithms.Kyber.NAME, random) }
 }

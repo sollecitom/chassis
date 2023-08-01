@@ -22,8 +22,8 @@ internal class KyberKeyPairFactory(private val random: SecureRandom) : KeyPairFa
 
     override fun fromKeys(publicKey: KEMPublicKey, privateKey: PrivateKey): AsymmetricKeyPair<KEMPublicKey> {
 
-        require(publicKey.metadata.algorithm == Algorithms.KYBER) { "Public key algorithm must be ${Algorithms.KYBER}" }
-        require(privateKey.metadata.algorithm == Algorithms.KYBER) { "Private key algorithm must be ${Algorithms.KYBER}" }
+        require(publicKey.metadata.algorithm == Algorithms.Kyber.NAME) { "Public key algorithm must be ${Algorithms.Kyber.NAME}" }
+        require(privateKey.metadata.algorithm == Algorithms.Kyber.NAME) { "Private key algorithm must be ${Algorithms.Kyber.NAME}" }
         return KeyPair(publicKey, privateKey)
     }
 
@@ -37,7 +37,7 @@ internal class KyberKeyPairFactory(private val random: SecureRandom) : KeyPairFa
             KyberKeyPairArguments.Variant.KYBER_1024_AES -> KyberParameterSpec.kyber512_aes
         }
 
-    private fun KyberKeyPairArguments.Variant.generateRawKeyPair(): JavaKeyPair = BouncyCastleUtils.generateKeyPair(Algorithms.KYBER, spec, random)
+    private fun KyberKeyPairArguments.Variant.generateRawKeyPair(): JavaKeyPair = BouncyCastleUtils.generateKeyPair(Algorithms.Kyber.NAME, spec, random)
 
     private fun KyberKeyPairArguments.generateRawKeyPair() = variant.generateRawKeyPair()
 

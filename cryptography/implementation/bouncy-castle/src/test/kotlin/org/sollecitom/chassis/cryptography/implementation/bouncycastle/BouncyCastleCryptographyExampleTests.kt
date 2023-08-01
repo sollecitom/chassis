@@ -12,6 +12,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
 import org.sollecitom.chassis.cryptography.test.specification.CryptographyTestSpecification
 import java.security.*
+import java.security.spec.AlgorithmParameterSpec
 
 
 @TestInstance(PER_CLASS)
