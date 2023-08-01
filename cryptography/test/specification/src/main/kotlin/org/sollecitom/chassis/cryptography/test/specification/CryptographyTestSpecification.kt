@@ -21,10 +21,10 @@ interface CryptographyTestSpecification {
 
         // Bob
         // has a public key
-        val bobKeyPair = crystalsKyber.keyPair(defaultKyberKeyPairArguments) // sends his public key to Alice
+        val bobKeyPair = kyber.keyPair(defaultKyberKeyPairArguments) // sends his public key to Alice
 
         // Alice
-        val decodedBobPublicKey = crystalsKyber.publicKey.fromBytes(bobKeyPair.public.encoded) // receives Bob's public key
+        val decodedBobPublicKey = kyber.publicKey.fromBytes(bobKeyPair.public.encoded) // receives Bob's public key
         val (aliceSymmetricKey, encapsulation) = decodedBobPublicKey.generateEncapsulatedAESKey() // generated encryption key with encapsulation
         // sends the encapsulation to Bob
 
@@ -50,10 +50,10 @@ interface CryptographyTestSpecification {
     @Test
     fun `sending Kyber keys over the wire`() {
 
-        val keyPair = crystalsKyber.keyPair(arguments = Kyber.KeyPairArguments(variant = Kyber.Variant.KYBER_1024_AES))
+        val keyPair = kyber.keyPair(arguments = Kyber.KeyPairArguments(variant = Kyber.Variant.KYBER_1024_AES))
 
-        val decodedPublicKey = crystalsKyber.publicKey.fromBytes(keyPair.public.encoded)
-        val decodedPrivateKey = crystalsKyber.privateKey.fromBytes(keyPair.private.encoded)
+        val decodedPublicKey = kyber.publicKey.fromBytes(keyPair.public.encoded)
+        val decodedPrivateKey = kyber.privateKey.fromBytes(keyPair.private.encoded)
 
         assertThat(keyPair.private.algorithm).isEqualTo(Kyber.Variant.KYBER_1024_AES.algorithmName)
         assertThat(keyPair.public.algorithm).isEqualTo(Kyber.Variant.KYBER_1024_AES.algorithmName)
@@ -64,7 +64,7 @@ interface CryptographyTestSpecification {
     @Test
     fun `using Dilithium to sign and verify`() {
 
-        val keyPair = crystalsDilithium.keyPair(defaultDilithiumKeyPairArguments)
+        val keyPair = dilithium.keyPair(defaultDilithiumKeyPairArguments)
         val message = "something to attest".toByteArray()
 
         val signature = keyPair.private.sign(message)
@@ -78,10 +78,10 @@ interface CryptographyTestSpecification {
     @Test
     fun `sending Dilithium keys over the wire`() {
 
-        val keyPair = crystalsDilithium.keyPair(arguments = Dilithium.KeyPairArguments(variant = Dilithium.Variant.DILITHIUM_5_AES))
+        val keyPair = dilithium.keyPair(arguments = Dilithium.KeyPairArguments(variant = Dilithium.Variant.DILITHIUM_5_AES))
 
-        val decodedPublicKey = crystalsDilithium.publicKey.fromBytes(keyPair.public.encoded)
-        val decodedPrivateKey = crystalsDilithium.privateKey.fromBytes(keyPair.private.encoded)
+        val decodedPublicKey = dilithium.publicKey.fromBytes(keyPair.public.encoded)
+        val decodedPrivateKey = dilithium.privateKey.fromBytes(keyPair.private.encoded)
 
         assertThat(keyPair.private.algorithm).isEqualTo(Dilithium.Variant.DILITHIUM_5_AES.value)
         assertThat(keyPair.public.algorithm).isEqualTo(Dilithium.Variant.DILITHIUM_5_AES.value)
@@ -91,8 +91,8 @@ interface CryptographyTestSpecification {
 
 
     val cryptography: CryptographicOperations
-    val crystalsKyber get() = cryptography.asymmetric.crystals.kyber
-    val crystalsDilithium get() = cryptography.asymmetric.crystals.dilithium
+    val kyber get() = cryptography.asymmetric.crystals.kyber
+    val dilithium get() = cryptography.asymmetric.crystals.dilithium
 
     // TODO 1 party, with 1 identity, and a number of CertificateAndKeyPair (a keypair, and a certificate binding the identity to the public key)
 }
