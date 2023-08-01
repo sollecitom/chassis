@@ -1,6 +1,5 @@
-package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.dilithium
+package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing
 
-import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithium.Dilithium
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.Signature
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
 import org.sollecitom.chassis.cryptography.domain.key.CryptographicKey
@@ -10,7 +9,7 @@ import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.Bou
 import java.security.SecureRandom
 import java.security.PrivateKey as JavaPrivateKey
 
-internal data class JavaDilithiumPrivateKeyAdapter(private val key: JavaPrivateKey, private val random: SecureRandom) : SigningPrivateKey, CryptographicKey by CryptographicKeyAdapter(key) {
+internal data class JavaSigningKeyAdapter(private val key: JavaPrivateKey, private val random: SecureRandom) : SigningPrivateKey, CryptographicKey by CryptographicKeyAdapter(key) {
 
     override fun sign(input: ByteArray): Signature {
 
@@ -22,7 +21,7 @@ internal data class JavaDilithiumPrivateKeyAdapter(private val key: JavaPrivateK
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as JavaDilithiumPrivateKeyAdapter
+        other as JavaSigningKeyAdapter
 
         return key == other.key
     }
@@ -31,7 +30,6 @@ internal data class JavaDilithiumPrivateKeyAdapter(private val key: JavaPrivateK
 
     companion object {
 
-        // TODO make this class generic by passing an instance of Algorithm here
-        fun fromBytes(bytes: ByteArray, random: SecureRandom): JavaDilithiumPrivateKeyAdapter = BouncyCastleUtils.getPrivateKeyFromEncoded(bytes, Dilithium.name).let { JavaDilithiumPrivateKeyAdapter(it, random) }
+        fun fromBytes(bytes: ByteArray, random: SecureRandom, algorithm: String): JavaSigningKeyAdapter = BouncyCastleUtils.getPrivateKeyFromEncoded(bytes, algorithm).let { JavaSigningKeyAdapter(it, random) }
     }
 }

@@ -6,6 +6,7 @@ import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithiu
 import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.JavaSigningKeyAdapter
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.JavaVerifyingPublicKeyAdapter
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.PublicKey
@@ -40,6 +41,6 @@ internal class DilithiumKeyPairFactory(private val random: SecureRandom) : KeyPa
 
     private fun JavaKeyPair.asSigningAndVerifyingPrivateKey(random: SecureRandom) = KeyPair(private = private.asSigningPrivateKey(random), public = public.asVerifyingPublicKey(random))
 
-    private fun JavaPrivateKey.asSigningPrivateKey(random: SecureRandom): SigningPrivateKey = JavaDilithiumPrivateKeyAdapter(this, random) // TODO make this whole class SigningKeyPairFactory after JavaDilithiumPrivateKeyAdapter will have become JavaSigningPrivateKeyAdapter
+    private fun JavaPrivateKey.asSigningPrivateKey(random: SecureRandom): SigningPrivateKey = JavaSigningKeyAdapter(this, random) // TODO make this whole class SigningKeyPairFactory after JavaDilithiumPrivateKeyAdapter will have become JavaSigningPrivateKeyAdapter
     private fun PublicKey.asVerifyingPublicKey(random: SecureRandom): VerifyingPublicKey = JavaVerifyingPublicKeyAdapter(this, random)
 }
