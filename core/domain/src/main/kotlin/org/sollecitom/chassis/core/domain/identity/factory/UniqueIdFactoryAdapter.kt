@@ -1,10 +1,10 @@
 package org.sollecitom.chassis.core.domain.identity.factory
 
+import com.github.f4b6a3.ulid.UlidFactory
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import org.sollecitom.chassis.core.domain.identity.ulid.ULID
 import org.sollecitom.chassis.core.domain.identity.ulid.ULIDFactory
-import org.sollecitom.chassis.core.domain.identity.ulid.java.JavaUlidFactory
 import kotlin.random.Random
 import kotlin.random.asJavaRandom
 
@@ -14,7 +14,7 @@ private class UniqueIdFactoryAdapter(random: Random = Random, clock: Clock = Clo
 
     private class UlidFactoryAdapter(random: Random, clock: Clock) : ULIDFactory {
 
-        private val delegate = JavaUlidFactory.newMonotonicInstance(random.asJavaRandom()) {
+        private val delegate = UlidFactory.newMonotonicInstance(random.asJavaRandom()) {
             clock.now().toEpochMilliseconds()
         }
 

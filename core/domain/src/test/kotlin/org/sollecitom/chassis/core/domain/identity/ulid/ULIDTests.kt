@@ -13,7 +13,7 @@ import org.sollecitom.chassis.kotlin.extensions.time.fixed
 import org.sollecitom.chassis.kotlin.extensions.time.truncatedToMilliseconds
 
 @TestInstance(PER_CLASS)
-private class UlidsTests {
+private class ULIDTests {
 
     @Test
     fun `generating ULIDs`() {

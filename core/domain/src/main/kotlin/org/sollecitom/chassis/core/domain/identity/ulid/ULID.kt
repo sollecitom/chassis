@@ -1,10 +1,10 @@
 package org.sollecitom.chassis.core.domain.identity.ulid
 
+import com.github.f4b6a3.ulid.Ulid
 import kotlinx.datetime.toKotlinInstant
 import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
-import org.sollecitom.chassis.core.domain.identity.ulid.java.JavaUlid
 
-class ULID internal constructor(private val delegate: JavaUlid) : SortableTimestampedUniqueIdentifier<ULID> {
+class ULID internal constructor(private val delegate: Ulid) : SortableTimestampedUniqueIdentifier<ULID> {
 
     override val stringValue by lazy(delegate::toString)
     override val bytesValue: ByteArray by lazy(delegate::toBytes)
@@ -25,9 +25,9 @@ class ULID internal constructor(private val delegate: JavaUlid) : SortableTimest
 
     companion object {
 
-        operator fun invoke(stringValue: String): ULID = ULID(JavaUlid.from(stringValue))
+        operator fun invoke(stringValue: String): ULID = ULID(Ulid.from(stringValue))
 
-        operator fun invoke(bytesValue: ByteArray): ULID = ULID(JavaUlid.from(bytesValue))
+        operator fun invoke(bytesValue: ByteArray): ULID = ULID(Ulid.from(bytesValue))
     }
 }
 
