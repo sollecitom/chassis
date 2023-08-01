@@ -6,9 +6,10 @@ import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricKey
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.create
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.key.CryptographicKeyAdapter
 import java.security.SecureRandom
+import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 
-internal data class JavaAESKeyAdapter(private val keySpec: SecretKeySpec, private val random: SecureRandom) : SymmetricKey, CryptographicKey by CryptographicKeyAdapter(keySpec) {
+internal data class JavaAESKeyAdapter(private val keySpec: SecretKey, private val random: SecureRandom) : SymmetricKey, CryptographicKey by CryptographicKeyAdapter(keySpec) {
 
     constructor(encoded: ByteArray, random: SecureRandom) : this(SecretKeySpec(encoded, ALGORITHM), random)
 
