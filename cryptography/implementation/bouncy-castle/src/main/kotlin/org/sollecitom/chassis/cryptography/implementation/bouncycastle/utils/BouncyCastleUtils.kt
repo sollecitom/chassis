@@ -16,6 +16,25 @@ import javax.crypto.spec.IvParameterSpec
 
 object BouncyCastleUtils {
 
+    fun sign(privateKey: PrivateKey, message: ByteArray, signatureAlgorithm: String, provider: String): ByteArray {
+
+        val sig: Signature = Signature.getInstance(signatureAlgorithm, provider)
+        sig.initSign(privateKey, SecureRandom())
+        sig.update(message, 0, message.size)
+        return sig.sign()
+    }
+
+    fun verifySignature(publicKey: PublicKey, message: ByteArray, signature: ByteArray, signatureAlgorithm: String, provider: String): Boolean {
+
+        val sig = Signature.getInstance(signatureAlgorithm, provider)
+
+        sig.initVerify(publicKey)
+
+        sig.update(message, 0, message.size)
+
+        return sig.verify(signature)
+    }
+
     fun generateAESEncryptionKey(publicKey: PublicKey, algorithm: String, random: SecureRandom): SecretKeyWithEncapsulation {
 
         val keyGen = KeyGenerator.getInstance(algorithm, BCPQC_PROVIDER)

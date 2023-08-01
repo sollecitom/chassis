@@ -4,7 +4,7 @@ object Dilithium {
 
     const val NAME = "Dilithium"
 
-    enum class Variant(val signatureAlgorithm: String) {
+    enum class Variant(val value: String) {
 
         DILITHIUM_2("DILITHIUM2"),
         DILITHIUM_3("DILITHIUM3"),

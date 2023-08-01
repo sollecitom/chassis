@@ -5,7 +5,7 @@ import java.nio.charset.Charset
 
 interface VerifyingPublicKey : PublicKey {
 
-    fun verify(input: ByteArray, signatureBytes: ByteArray, signatureHashAlgorithm: String): Boolean
+    fun verify(input: ByteArray, signatureBytes: ByteArray, signatureAlgorithm: String): Boolean
 }
 
 fun VerifyingPublicKey.verify(input: String, signatureBytes: ByteArray, signatureHashAlgorithm: String, charset: Charset = Charsets.UTF_8): Boolean = verify(input.toByteArray(charset), signatureBytes, signatureHashAlgorithm)

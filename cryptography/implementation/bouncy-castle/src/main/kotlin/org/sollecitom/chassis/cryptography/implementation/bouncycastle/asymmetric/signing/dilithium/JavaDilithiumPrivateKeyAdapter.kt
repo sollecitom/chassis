@@ -4,6 +4,7 @@ import org.sollecitom.chassis.cryptography.domain.asymmetric.algorithms.dilithiu
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.Signature
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
 import org.sollecitom.chassis.cryptography.domain.key.CryptographicKey
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.BC_PROVIDER
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.key.CryptographicKeyAdapter
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.SecureRandom
@@ -12,7 +13,9 @@ import java.security.PrivateKey as JavaPrivateKey
 internal data class JavaDilithiumPrivateKeyAdapter(private val key: JavaPrivateKey, private val random: SecureRandom) : SigningPrivateKey<Unit>, CryptographicKey by CryptographicKeyAdapter(key) {
 
     override fun sign(input: ByteArray, options: Unit): Signature {
-        TODO("Not yet implemented")
+
+        val bytes = BouncyCastleUtils.sign(privateKey = key, message = input, signatureAlgorithm = key.algorithm, provider = BC_PROVIDER)
+        return Signature(bytes = bytes, metadata = Signature.Metadata(hash, key.algorithm))
     }
 
     override fun equals(other: Any?): Boolean {
