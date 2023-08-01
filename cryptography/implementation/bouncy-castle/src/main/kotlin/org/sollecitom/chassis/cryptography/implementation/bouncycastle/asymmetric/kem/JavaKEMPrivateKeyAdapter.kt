@@ -4,7 +4,7 @@ import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
 import org.sollecitom.chassis.cryptography.domain.key.CryptographicKey
 import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricKey
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.key.CryptographicKeyAdapter
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.symmetric.aes.JavaAESKeyAdapter
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.symmetric.aes.AESKeyAdapter
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.SecureRandom
 import java.security.PrivateKey as JavaPrivateKey
@@ -14,7 +14,7 @@ internal data class JavaKEMPrivateKeyAdapter(private val key: JavaPrivateKey, pr
     override fun decryptEncapsulatedAESKey(encapsulatedKey: ByteArray): SymmetricKey {
 
         val rawEncodedSymmetricKey = BouncyCastleUtils.decryptEncapsulatedAESKey(key, encapsulatedKey, algorithm, random)
-        return JavaAESKeyAdapter(rawEncodedSymmetricKey, random)
+        return AESKeyAdapter(rawEncodedSymmetricKey, random)
     }
 
     override fun equals(other: Any?): Boolean {

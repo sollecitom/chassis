@@ -9,7 +9,7 @@ import java.security.SecureRandom
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 
-internal data class JavaAESKeyAdapter(private val keySpec: SecretKey, private val random: SecureRandom) : SymmetricKey, CryptographicKey by CryptographicKeyAdapter(keySpec) {
+internal data class AESKeyAdapter(private val keySpec: SecretKey, private val random: SecureRandom) : SymmetricKey, CryptographicKey by CryptographicKeyAdapter(keySpec) {
 
     constructor(encoded: ByteArray, random: SecureRandom) : this(SecretKeySpec(encoded, ALGORITHM), random)
 
@@ -23,7 +23,7 @@ internal data class JavaAESKeyAdapter(private val keySpec: SecretKey, private va
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as JavaAESKeyAdapter
+        other as AESKeyAdapter
 
         return encoded.contentEquals(other.encoded)
     }
@@ -33,6 +33,6 @@ internal data class JavaAESKeyAdapter(private val keySpec: SecretKey, private va
     override fun toString() = "JavaAESKeyAdapter(encoded=${encoded.contentToString()}, keySpec=${keySpec})"
 
     companion object {
-        private const val ALGORITHM = "AES"
+        const val ALGORITHM = "AES"
     }
 }
