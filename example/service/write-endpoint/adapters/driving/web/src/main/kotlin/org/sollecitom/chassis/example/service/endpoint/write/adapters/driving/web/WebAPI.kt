@@ -19,7 +19,7 @@ import org.sollecitom.chassis.http4k.server.utils.SuspendingHttpHandler
 import org.sollecitom.chassis.http4k.server.utils.asBlockingHandler
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 
-class WebApp(private val configuration: Configuration) : Startable, Stoppable {
+class WebAPI(private val configuration: Configuration) : Startable, Stoppable {
 
     private val commandsEndpoint = CommandsEndpoint()
     private val server = server(mainApp(commandsEndpoint))

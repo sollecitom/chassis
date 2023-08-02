@@ -4,7 +4,7 @@ import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
 import org.sollecitom.chassis.core.domain.lifecycle.Startable
 import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
-import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.WebApp
+import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.WebAPI
 import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.loggable.Loggable
@@ -12,21 +12,21 @@ import java.io.File
 
 class Service(private val environment: Environment) : Startable, Stoppable {
 
-    private lateinit var webApp: WebApp
+    private lateinit var webAPI: WebAPI
 
-    val port: Int get() = webApp.servicePort
-    val healthPort: Int get() = webApp.healthPort
+    val port: Int get() = webAPI.servicePort
+    val healthPort: Int get() = webAPI.healthPort
 
     override suspend fun start() {
         // TODO should this be encapsulated into a module?
-        val webAppConfiguration = with(WebApp.Configuration.Parser) { WebApp.Configuration.from(environment) }
-        webApp = WebApp(webAppConfiguration)
-        webApp.start()
+        val webAPIConfiguration = with(WebAPI.Configuration.Parser) { WebAPI.Configuration.from(environment) }
+        webAPI = WebAPI(webAPIConfiguration)
+        webAPI.start()
         logger.info { "Started" }
     }
 
     override suspend fun stop() {
-        webApp.stop()
+        webAPI.stop()
         logger.info { "Stopped" }
     }
 
@@ -40,19 +40,19 @@ interface EnvironmentReader<TARGET : Any, TO> {
 }
 
 // TODO move
-val WebApp.Configuration.Companion.Parser: EnvironmentReader<WebApp.Configuration.Companion, WebApp.Configuration> get() = WebAppConfigurationParser
+val WebAPI.Configuration.Companion.Parser: EnvironmentReader<WebAPI.Configuration.Companion, WebAPI.Configuration> get() = WebAppConfigurationParser
 
 // TODO move
-private object WebAppConfigurationParser : EnvironmentReader<WebApp.Configuration.Companion, WebApp.Configuration> {
+private object WebAppConfigurationParser : EnvironmentReader<WebAPI.Configuration.Companion, WebAPI.Configuration> {
 
     private val servicePortKey = EnvironmentKey.servicePort
     private val healthPortKey = EnvironmentKey.healthPort
 
-    override fun WebApp.Configuration.Companion.from(environment: Environment): WebApp.Configuration {
+    override fun WebAPI.Configuration.Companion.from(environment: Environment): WebAPI.Configuration {
 
         val servicePort = servicePortKey(environment)
         val healthPort = healthPortKey(environment)
-        return WebApp.Configuration(servicePort, healthPort)
+        return WebAPI.Configuration(servicePort, healthPort)
     }
 }
 
