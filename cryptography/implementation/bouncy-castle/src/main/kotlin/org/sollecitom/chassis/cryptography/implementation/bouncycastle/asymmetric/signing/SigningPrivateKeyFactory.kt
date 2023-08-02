@@ -6,5 +6,5 @@ import java.security.SecureRandom
 
 internal class SigningPrivateKeyFactory(private val algorithm: String, private val random: SecureRandom) : PrivateKeyFactory<SigningPrivateKey> {
 
-    override fun fromBytes(bytes: ByteArray): SigningPrivateKey = JavaSigningKeyAdapter.fromBytes(bytes, random, algorithm)
+    override fun from(bytes: ByteArray): SigningPrivateKey = JavaSigningKeyAdapter.from(bytes, random, algorithm)
 }

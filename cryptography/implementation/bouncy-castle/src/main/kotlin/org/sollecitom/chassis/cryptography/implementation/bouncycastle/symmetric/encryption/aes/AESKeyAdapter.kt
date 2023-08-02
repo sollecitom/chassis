@@ -45,6 +45,6 @@ internal data class AESKeyAdapter(private val keySpec: SecretKey, private val ra
             return AESKeyAdapter(keySpec = rawKey, random = random)
         }
 
-        override fun fromBytes(bytes: ByteArray): SymmetricKey = AESKeyAdapter(encoded = bytes, random = random)
+        override fun from(bytes: ByteArray): SymmetricKey = AESKeyAdapter(encoded = bytes, random = random)
     }
 }

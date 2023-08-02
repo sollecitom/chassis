@@ -31,6 +31,6 @@ internal data class JavaKEMPrivateKeyAdapter(private val key: JavaPrivateKey, pr
 
     companion object {
 
-        fun fromBytes(bytes: ByteArray, algorithm: String, random: SecureRandom): JavaKEMPrivateKeyAdapter = BouncyCastleUtils.getPrivateKeyFromEncoded(bytes, algorithm).let { JavaKEMPrivateKeyAdapter(it, random) }
+        fun from(bytes: ByteArray, algorithm: String, random: SecureRandom): JavaKEMPrivateKeyAdapter = BouncyCastleUtils.getPrivateKeyFromEncoded(bytes, algorithm).let { JavaKEMPrivateKeyAdapter(it, random) }
     }
 }

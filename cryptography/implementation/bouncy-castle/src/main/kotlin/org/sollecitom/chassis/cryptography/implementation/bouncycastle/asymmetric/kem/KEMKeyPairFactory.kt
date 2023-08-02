@@ -15,7 +15,7 @@ internal class KEMKeyPairFactory<ARGUMENTS>(private val algorithm: String, priva
 
     override fun invoke(arguments: ARGUMENTS): AsymmetricKeyPair<KEMPrivateKey, KEMPublicKey> = arguments.generateRawKeyPair().asKEMKeyPair(random)
 
-    override fun fromKeys(privateKey: KEMPrivateKey, publicKey: KEMPublicKey): AsymmetricKeyPair<KEMPrivateKey, KEMPublicKey> {
+    override fun from(privateKey: KEMPrivateKey, publicKey: KEMPublicKey): AsymmetricKeyPair<KEMPrivateKey, KEMPublicKey> {
 
         require(privateKey.algorithm == algorithm) { "Private key algorithm must be $algorithm" }
         require(publicKey.algorithm == algorithm) { "Public key algorithm must be $algorithm" }

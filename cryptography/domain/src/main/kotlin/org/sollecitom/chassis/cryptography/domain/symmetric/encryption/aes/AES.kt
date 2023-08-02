@@ -1,5 +1,7 @@
 package org.sollecitom.chassis.cryptography.domain.symmetric.encryption.aes
 
+import org.sollecitom.chassis.cryptography.domain.symmetric.SecretKeyFactory
+import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricKey
 import org.sollecitom.chassis.cryptography.domain.symmetric.encryption.EncryptionAlgorithm
 
 object AES : EncryptionAlgorithm<AES.KeyArguments> {
@@ -14,3 +16,5 @@ object AES : EncryptionAlgorithm<AES.KeyArguments> {
 
     data class KeyArguments(val variant: Variant)
 }
+
+operator fun SecretKeyFactory<AES.KeyArguments, SymmetricKey>.invoke(variant: AES.Variant) = invoke(arguments = AES.KeyArguments(variant = variant))

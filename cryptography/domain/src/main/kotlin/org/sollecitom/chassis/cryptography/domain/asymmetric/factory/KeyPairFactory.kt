@@ -8,5 +8,5 @@ interface KeyPairFactory<in ARGUMENTS, PRIVATE : PrivateKey, PUBLIC : PublicKey>
 
     operator fun invoke(arguments: ARGUMENTS): AsymmetricKeyPair<PRIVATE, PUBLIC>
 
-    fun fromKeys(privateKey: PRIVATE, publicKey: PUBLIC): AsymmetricKeyPair<PRIVATE, PUBLIC>
+    fun from(privateKey: PRIVATE, publicKey: PUBLIC): AsymmetricKeyPair<PRIVATE, PUBLIC>
 }

@@ -16,7 +16,7 @@ internal class SigningKeyPairFactory<ARGUMENTS>(private val algorithm: String, p
 
     override fun invoke(arguments: ARGUMENTS): AsymmetricKeyPair<SigningPrivateKey, VerifyingPublicKey> = arguments.generateRawKeyPair().asSigningAndVerifyingPrivateKey(random)
 
-    override fun fromKeys(privateKey: SigningPrivateKey, publicKey: VerifyingPublicKey): AsymmetricKeyPair<SigningPrivateKey, VerifyingPublicKey> {
+    override fun from(privateKey: SigningPrivateKey, publicKey: VerifyingPublicKey): AsymmetricKeyPair<SigningPrivateKey, VerifyingPublicKey> {
 
         require(privateKey.algorithm == algorithm) { "Private key algorithm must be $algorithm" }
         require(publicKey.algorithm == algorithm) { "Public key algorithm must be $algorithm" }

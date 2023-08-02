@@ -29,6 +29,6 @@ internal data class JavaVerifyingPublicKeyAdapter(private val key: PublicKey, pr
 
     companion object {
 
-        fun fromBytes(bytes: ByteArray, algorithm: String, random: SecureRandom): JavaVerifyingPublicKeyAdapter = BouncyCastleUtils.getPublicKeyFromEncoded(bytes, algorithm).let { JavaVerifyingPublicKeyAdapter(it, random) }
+        fun from(bytes: ByteArray, algorithm: String, random: SecureRandom): JavaVerifyingPublicKeyAdapter = BouncyCastleUtils.getPublicKeyFromEncoded(bytes, algorithm).let { JavaVerifyingPublicKeyAdapter(it, random) }
     }
 }

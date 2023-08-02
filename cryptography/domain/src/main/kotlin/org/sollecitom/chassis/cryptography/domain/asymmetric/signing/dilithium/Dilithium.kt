@@ -1,6 +1,9 @@
 package org.sollecitom.chassis.cryptography.domain.asymmetric.signing.dilithium
 
+import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningAlgorithm
+import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
+import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
 
 object Dilithium : SigningAlgorithm<Dilithium.KeyPairArguments> {
 
@@ -18,3 +21,5 @@ object Dilithium : SigningAlgorithm<Dilithium.KeyPairArguments> {
 
     data class KeyPairArguments(val variant: Variant)
 }
+
+operator fun KeyPairFactory<Dilithium.KeyPairArguments, SigningPrivateKey, VerifyingPublicKey>.invoke(variant: Dilithium.Variant) = invoke(arguments = Dilithium.KeyPairArguments(variant = variant))

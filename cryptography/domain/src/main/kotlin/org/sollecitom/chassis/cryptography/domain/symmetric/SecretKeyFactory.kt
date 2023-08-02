@@ -4,5 +4,5 @@ interface SecretKeyFactory<in ARGUMENTS, out KEY : SymmetricKey> {
 
     operator fun invoke(arguments: ARGUMENTS): KEY
 
-    fun fromBytes(bytes: ByteArray): KEY
+    fun from(bytes: ByteArray): KEY
 }

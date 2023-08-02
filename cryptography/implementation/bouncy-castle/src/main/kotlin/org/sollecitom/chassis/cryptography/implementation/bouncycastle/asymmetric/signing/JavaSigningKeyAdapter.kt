@@ -30,6 +30,6 @@ internal data class JavaSigningKeyAdapter(private val key: JavaPrivateKey, priva
 
     companion object {
 
-        fun fromBytes(bytes: ByteArray, random: SecureRandom, algorithm: String): JavaSigningKeyAdapter = BouncyCastleUtils.getPrivateKeyFromEncoded(bytes, algorithm).let { JavaSigningKeyAdapter(it, random) }
+        fun from(bytes: ByteArray, random: SecureRandom, algorithm: String): JavaSigningKeyAdapter = BouncyCastleUtils.getPrivateKeyFromEncoded(bytes, algorithm).let { JavaSigningKeyAdapter(it, random) }
     }
 }

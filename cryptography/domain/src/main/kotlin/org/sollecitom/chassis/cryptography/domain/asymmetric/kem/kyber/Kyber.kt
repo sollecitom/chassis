@@ -1,6 +1,9 @@
 package org.sollecitom.chassis.cryptography.domain.asymmetric.kem.kyber
 
+import org.sollecitom.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMAlgorithm
+import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
+import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
 
 object Kyber : KEMAlgorithm<Kyber.KeyPairArguments> {
 
@@ -17,3 +20,5 @@ object Kyber : KEMAlgorithm<Kyber.KeyPairArguments> {
 
     data class KeyPairArguments(val variant: Variant)
 }
+
+operator fun KeyPairFactory<Kyber.KeyPairArguments, KEMPrivateKey, KEMPublicKey>.invoke(variant: Kyber.Variant) = invoke(arguments = Kyber.KeyPairArguments(variant = variant))

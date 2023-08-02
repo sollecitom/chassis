@@ -4,5 +4,5 @@ import org.sollecitom.chassis.cryptography.domain.asymmetric.PrivateKey
 
 interface PrivateKeyFactory<out PRIVATE : PrivateKey> {
 
-    fun fromBytes(bytes: ByteArray): PRIVATE
+    fun from(bytes: ByteArray): PRIVATE
 }
