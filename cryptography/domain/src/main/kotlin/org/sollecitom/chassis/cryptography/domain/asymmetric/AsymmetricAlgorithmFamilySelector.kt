@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.cryptography.domain.factory
+package org.sollecitom.chassis.cryptography.domain.asymmetric
 
 interface AsymmetricAlgorithmFamilySelector {
 

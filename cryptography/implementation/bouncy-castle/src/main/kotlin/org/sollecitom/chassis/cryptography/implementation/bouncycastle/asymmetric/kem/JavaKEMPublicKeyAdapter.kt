@@ -4,7 +4,7 @@ import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
 import org.sollecitom.chassis.cryptography.domain.key.CryptographicKey
 import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricKeyWithEncapsulation
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.key.CryptographicKeyAdapter
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.symmetric.aes.AESKeyAdapter
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.symmetric.encryption.aes.AESKeyAdapter
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.PublicKey
 import java.security.SecureRandom

@@ -1,6 +1,6 @@
 package org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric
 
-import org.sollecitom.chassis.cryptography.domain.factory.CrystalsAlgorithmSelector
+import org.sollecitom.chassis.cryptography.domain.asymmetric.CrystalsAlgorithmSelector
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.kyber.Kyber
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.dilithium.Dilithium
 import java.security.SecureRandom

@@ -2,15 +2,18 @@ package org.sollecitom.chassis.cryptography.implementation.bouncycastle
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.pqc.jcajce.provider.BouncyCastlePQCProvider
-import org.sollecitom.chassis.cryptography.domain.factory.AsymmetricAlgorithmFamilySelector
+import org.sollecitom.chassis.cryptography.domain.asymmetric.AsymmetricAlgorithmFamilySelector
 import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
+import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricAlgorithmFamilySelector
 import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.AsymmetricAlgorithmFamilyCustomizer
+import org.sollecitom.chassis.cryptography.implementation.bouncycastle.symmetric.SymmetricAlgorithmFamilyCustomizer
 import java.security.SecureRandom
 import java.security.Security
 
 private class BouncyCastleCryptographicOperations(private val random: SecureRandom) : CryptographicOperations {
 
     override val asymmetric: AsymmetricAlgorithmFamilySelector by lazy { AsymmetricAlgorithmFamilyCustomizer(random) }
+    override val symmetric: SymmetricAlgorithmFamilySelector by lazy { SymmetricAlgorithmFamilyCustomizer(random) }
 
     companion object {
         init {

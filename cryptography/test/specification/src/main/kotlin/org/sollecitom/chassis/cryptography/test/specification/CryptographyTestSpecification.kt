@@ -5,12 +5,12 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.dilithium.Dilithium
 import org.sollecitom.chassis.cryptography.domain.asymmetric.kem.kyber.Kyber
+import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.dilithium.Dilithium
 import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.verify
 import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
-import org.sollecitom.chassis.cryptography.domain.symmetric.algorithms.aes.AES
 import org.sollecitom.chassis.cryptography.domain.symmetric.decrypt
+import org.sollecitom.chassis.cryptography.domain.symmetric.encryption.aes.AES
 
 
 @Suppress("FunctionName")
@@ -93,10 +93,24 @@ interface CryptographyTestSpecification {
         assertThat(decodedPublicKey).isEqualTo(keyPair.public)
     }
 
+    @Test
+    fun `encrypting and decrypting with AES`() {
+
+        val message = "something secret".toByteArray()
+        val secretKey = aes.key(AES.KeyArguments(variant = AES.Variant.AES_256))
+        val decodedKey = aes.key.fromBytes(secretKey.encoded)
+
+        val encrypted = secretKey.ctr.encryptWithRandomIV(message)
+        val decrypted = decodedKey.ctr.decrypt(encrypted)
+
+        assertThat(decrypted).isEqualTo(message)
+    }
+
 
     val cryptography: CryptographicOperations
     val kyber get() = cryptography.asymmetric.crystals.kyber
     val dilithium get() = cryptography.asymmetric.crystals.dilithium
+    val aes get() = cryptography.symmetric.aes
 
     // TODO 1 party, with 1 identity, and a number of CertificateAndKeyPair (a keypair, and a certificate binding the identity to the public key)
 }

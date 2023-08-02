@@ -35,6 +35,13 @@ object BouncyCastleUtils {
         return sig.verify(signature)
     }
 
+    fun generateSecretKey(algorithm: String, length: Int, provider: String): SecretKey {
+
+        val keyGenerator = KeyGenerator.getInstance(algorithm, provider)
+        keyGenerator.init(length)
+        return keyGenerator.generateKey()
+    }
+
     fun generateAESEncryptionKey(publicKey: PublicKey, algorithm: String, random: SecureRandom): SecretKeyWithEncapsulation {
 
         val keyGen = KeyGenerator.getInstance(algorithm, BCPQC_PROVIDER)
