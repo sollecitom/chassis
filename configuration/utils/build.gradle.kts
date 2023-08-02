@@ -5,6 +5,8 @@ dependencies {
 
     implementation(projects.chassisKotlinExtensions)
 
+    runtimeOnly(libs.http4k.format.jackson.yaml)
+
     testImplementation(projects.chassisLensCoreExtensions)
     testRuntimeOnly(libs.http4k.format.jackson.yaml)
     testImplementation(projects.chassisTestUtils)

@@ -2,13 +2,16 @@ package org.sollecitom.chassis.example.service.endpoint.write.starter
 
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
+import org.http4k.cloudnative.env.fromYaml
+import org.http4k.routing.ResourceLoader
+import org.sollecitom.chassis.configuration.utils.fromYamlResource
 import org.sollecitom.chassis.core.domain.lifecycle.Startable
 import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.WebAPI
 import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.loggable.Loggable
-import java.io.File
+import kotlin.io.path.toPath
 
 class Service(private val environment: Environment) : Startable, Stoppable {
 
@@ -57,4 +60,6 @@ private object WebAppConfigurationParser : EnvironmentReader<WebAPI.Configuratio
 }
 
 // TODO move?
-fun rawConfiguration(): Environment = Environment.JVM_PROPERTIES overrides Environment.from(File("secrets.yml")) overrides Environment.from(File("configuration.yml")) overrides Environment.ENV overrides Environment.fromResource("default-configuration.yml")
+// TODO to pass a file names to this, from command args (for config-map and secrets exposed as files)
+fun rawConfiguration(): Environment = Environment.JVM_PROPERTIES overrides Environment.ENV overrides Environment.fromYamlResource("default-configuration.yml")
+//fun rawConfiguration(): Environment = Environment.JVM_PROPERTIES overrides Environment.fromConfigFile(File("secrets.yml")) overrides Environment.fromConfigFile(File("configuration.yml")) overrides Environment.ENV overrides Environment.fromResource("default-configuration.yml")

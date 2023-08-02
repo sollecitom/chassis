@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web
+package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api
 
 import org.http4k.core.Method
 import org.http4k.routing.RoutingHttpHandler
