@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.example.service.endpoint.write.starter
 
-import kotlinx.coroutines.coroutineScope
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
 import org.sollecitom.chassis.core.domain.lifecycle.Startable
@@ -10,13 +9,6 @@ import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import java.io.File
-
-suspend fun main(): Unit = coroutineScope {
-
-    val environment = rawConfiguration()
-    configureLogging(environment)
-    Service(environment).start()
-}
 
 class Service(private val environment: Environment) : Startable, Stoppable {
 
