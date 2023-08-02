@@ -12,5 +12,5 @@ fun main() {
     val environment = rawConfiguration()
     configureLogging(environment)
 
-    static(ResourceLoader.Directory()).asServer(::JettyLoom, Port(9000)).start()
+    static(ResourceLoader.Directory(baseDir = "example/service/write-endpoint/starter/src/main/resources")).asServer(::JettyLoom, Port(9000)).start()
 }
