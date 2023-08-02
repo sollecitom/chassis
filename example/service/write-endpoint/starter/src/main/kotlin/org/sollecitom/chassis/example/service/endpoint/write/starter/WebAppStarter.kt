@@ -8,6 +8,7 @@ import org.http4k.server.asServer
 
 // TODO move or remove (along with the resources folder)
 fun main() {
+
     val environment = rawConfiguration()
     configureLogging(environment)
 

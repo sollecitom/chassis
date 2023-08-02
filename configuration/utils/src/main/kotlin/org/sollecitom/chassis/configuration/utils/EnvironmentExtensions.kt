@@ -1,15 +1,38 @@
 package org.sollecitom.chassis.configuration.utils
 
 import org.http4k.cloudnative.env.Environment
-import org.http4k.cloudnative.env.fromYaml
+import org.http4k.cloudnative.env.MapEnvironment
+import org.http4k.format.JacksonYaml
 import org.http4k.lens.BiDiLens
-import org.http4k.routing.ResourceLoader
-import kotlin.io.path.toPath
+import org.sollecitom.chassis.resource.utils.ResourceLoader
+import java.io.InputStream
+import java.io.InputStreamReader
 
 fun Environment.Companion.from(vararg entries: Pair<BiDiLens<Environment, *>, String>) = from(*entries.map { it.first.meta.name to it.second }.toTypedArray())
 
 fun Environment.Companion.fromYamlResource(resourceName: String): Environment {
 
-    val file = ResourceLoader.Classpath().load(resourceName)?.toURI()?.toPath()?.toFile() ?: error("No resource with name $resourceName was found")
-    return Environment.fromYaml(file)
+    val stream = ResourceLoader.openAsStream(resourceName)
+    return Environment.fromYaml(stream)
+}
+
+fun Environment.Companion.fromYaml(input: InputStream): Environment { // TODO suggest this to HTTP4K
+
+    val map = JacksonYaml.asA<Map<String, Any>>(InputStreamReader(input).use { it.readText() })
+
+    fun Map<*, *>.flatten(): List<Pair<String, String>> {
+        fun convert(key: Any?, value: Any?): List<Pair<String, String>> {
+            val keyString = (key ?: "").toString()
+
+            return when (value) {
+                is List<*> -> listOf(keyString to value.flatMap { convert(null, it) }.joinToString(",") { it.second })
+                is Map<*, *> -> value.flatten().map { "$keyString.${it.first}" to it.second }
+                else -> listOf((keyString to (value ?: "").toString()))
+            }
+        }
+
+        return entries.fold(listOf()) { acc, (key, value) -> acc + convert(key, value) }
+    }
+
+    return MapEnvironment.from(map.flatten().toMap().toProperties())
 }

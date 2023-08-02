@@ -4,7 +4,15 @@ import kotlinx.coroutines.coroutineScope
 
 suspend fun main(): Unit = coroutineScope {
 
-    val environment = rawConfiguration()
-    configureLogging(environment)
-    Service(environment).start()
+    Starter.start()
+}
+
+object Starter {
+
+    suspend fun start() {
+
+        val environment = rawConfiguration()
+        configureLogging(environment)
+        Service(environment).start()
+    }
 }
