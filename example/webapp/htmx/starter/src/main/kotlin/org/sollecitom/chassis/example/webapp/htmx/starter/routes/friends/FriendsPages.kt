@@ -15,7 +15,7 @@ object FriendsPages {
                 h1 { a { href = "/${FriendsEndpoint.path}"; +"My Friends" } }
             }
             div {
-                id = "friends-list-div"
+                id = "friends-div"
                 table {
                     friends.forEach { friend ->
                         tr {
@@ -24,7 +24,7 @@ object FriendsPages {
                                     href = "/${FriendsEndpoint.path}/$friend" // Sets cursor pointer and works without js
                                     hxGet("/${FriendsEndpoint.path}/$friend")
                                     hxSwap("outerHTML")
-                                    hxTarget("closest div")
+                                    hxTarget("#friends-div")
                                     +friend
                                 }
                             }
