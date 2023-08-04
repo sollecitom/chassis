@@ -7,6 +7,7 @@ http4k = "5.5.0.0"
 junit-jupiter = "5.10.0"
 assertk = "0.26.1"
 kotlinx-datetime = "0.4.0"
+kotlinx-html = "0.9.1"
 ulid-creator = "5.2.1"
 org-json = "20230618"
 everit-json-schema = "1.14.2"
@@ -28,6 +29,7 @@ kotlinx-coroutines-debug = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-
 kotlinx-coroutines-slf4j = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html", version.ref = "kotlinx-html" }
 http4k-bom = { module = "org.http4k:http4k-bom", version.ref = "http4k" }
 http4k-core = { module = "org.http4k:http4k-core" }
 http4k-cloudnative = { module = "org.http4k:http4k-cloudnative" }

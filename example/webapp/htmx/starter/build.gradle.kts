@@ -1,6 +1,8 @@
 dependencies {
     implementation(libs.http4k.server.jetty)
+    implementation(libs.kotlinx.html)
     implementation(projects.chassisExampleServiceWriteEndpointConfiguration)
+    implementation(projects.chassisHttp4kServerUtils)
     implementation(projects.chassisLensCoreExtensions)
     implementation(projects.chassisConfigurationUtils)
     implementation(projects.chassisLoggingStandardSlf4jConfiguration)
