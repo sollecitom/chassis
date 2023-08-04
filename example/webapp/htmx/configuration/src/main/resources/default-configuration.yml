@@ -1,0 +1,4 @@
+service:
+  port: 0
+health:
+  port: 0
