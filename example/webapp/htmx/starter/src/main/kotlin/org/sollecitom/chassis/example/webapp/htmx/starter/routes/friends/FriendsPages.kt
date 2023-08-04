@@ -9,26 +9,35 @@ import org.sollecitom.chassis.example.webapp.htmx.starter.hxTarget
 
 object FriendsPages {
 
-    fun index(friends: List<String>): String {
-        return HTMX {
-            h1 { a { href = "/${FriendsEndpoint.path}"; +"My Friends" } } // nested `a` inside a `h1`. To insert a text inside any tag we use the + operator
-            friends.forEach { friend ->
-                h2 {
-                    a {
-                        href = "/${FriendsEndpoint.path}/$friend" // Sets cursor pointer and works without js
-                        hxGet("/$friend")
-                        hxSwap("outerHTML")
-                        hxTarget("closest h2")
-                        +friend
+    fun index(friends: List<String>) = HTMX {
+        div {
+            div {
+                h1 { a { href = "/${FriendsEndpoint.path}"; +"My Friends" } }
+            }
+            div {
+                id = "friends-list-div"
+                table {
+                    friends.forEach { friend ->
+                        tr {
+                            td {
+                                a {
+                                    href = "/${FriendsEndpoint.path}/$friend" // Sets cursor pointer and works without js
+                                    hxGet("/${FriendsEndpoint.path}/$friend")
+                                    hxSwap("outerHTML")
+                                    hxTarget("closest div")
+                                    +friend
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     }
 
-    fun profile(friend: String, characteristic: String): String {
-        return createHTML().article {
-            h2(classes = "your-css-class") {
+    fun profile(friend: String, characteristic: String) = createHTML().article {
+        div {
+            h2 {
                 +friend
             }
             p {
