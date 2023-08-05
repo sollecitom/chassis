@@ -41,18 +41,20 @@ interface RegisterUser : Command {
 
     val emailAddress: EmailAddress
 
+    companion object {
+        val typeName = Name("COMMAND-REGISTER_USER")
+    }
+
     class V1(override val emailAddress: EmailAddress, override val id: SortableTimestampedUniqueIdentifier<*>, override val timestamp: Instant) : RegisterUser {
 
         override val type: Command.Type get() = Type
-        override val version get() = Companion.version
 
         object Type : Command.Type {
-            override val id = Name("COMMAND-REGISTER_USER-V${version.value}")
+            override val version = IntVersion(1)
+            override val id = typeName
         }
 
-        companion object {
-            val version = IntVersion(1)
-        }
+        companion object
     }
 }
 
@@ -60,30 +62,54 @@ interface Command : Instruction { // TODO add context
 
     override val type: Type
 
-    interface Type : Happening.Type
+    companion object
+
+    interface Type : Happening.Type {
+
+        companion object
+    }
 }
 
 interface Query : Instruction {
 
     override val type: Type
 
-    interface Type : Happening.Type
+    companion object
+
+    interface Type : Happening.Type {
+
+        companion object
+    }
 }
 
 interface Event : Happening {
 
     override val type: Type
 
-    interface Type : Happening.Type
+    companion object
+
+    interface Type : Happening.Type {
+
+        companion object
+    }
 }
 
-interface Instruction : Happening
+interface Instruction : Happening {
+
+    companion object
+}
 
 interface Happening : Identifiable<SortableTimestampedUniqueIdentifier<*>>, Timestamped, Versioned<IntVersion> {
 
     val type: Type
+    override val version: IntVersion get() = type.version
 
-    interface Type : Identifiable<Name>
+    companion object
+
+    interface Type : Identifiable<Name>, Versioned<IntVersion> {
+
+        companion object
+    }
 }
 
 interface Application {
