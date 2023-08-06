@@ -4,7 +4,6 @@ import assertk.assertThat
 import assertk.assertions.isInstanceOf
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
@@ -18,6 +17,7 @@ import org.sollecitom.chassis.core.domain.traits.Timestamped
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.core.domain.versioning.Versioned
 import org.sollecitom.chassis.example.service.endpoint.write.application.RegisterUserCommandV1.Result.Accepted
+import org.sollecitom.chassis.example.service.endpoint.write.application.RegisterUserCommandV1.Result.Rejected.EmailAddressAlreadyInUse
 
 @TestInstance(PER_CLASS)
 private class CommandProcessingTests {
@@ -34,19 +34,54 @@ private class CommandProcessingTests {
         assertThat(result).isInstanceOf<Accepted>()
     }
 
-    private fun registerUser(emailAddress: EmailAddress, id: SortableTimestampedUniqueIdentifier<*> = newULID(), timestamp: Instant = clock.now()): RegisterUser.V1 {
+    private fun registerUser(emailAddress: EmailAddress): RegisterUser.V1 {
 
-        return RegisterUser.V1(emailAddress = emailAddress, id = id, timestamp = timestamp)
+        return RegisterUser.V1(emailAddress = emailAddress)
     }
 
-    private fun newApplication(): Application = DispatchingApplication()
+    private fun newApplication(): Application = DispatchingApplication(::userWithEmailAddress)
 }
 
-class DispatchingApplication : Application {
+class DispatchingApplication(private val userWithEmailAddress: suspend (EmailAddress) -> User) : Application {
 
-    override suspend fun <RESULT> invoke(command: ApplicationCommand<RESULT>): RESULT {
-        return Accepted as RESULT
+    @Suppress("UNCHECKED_CAST")
+    override suspend fun <RESULT> invoke(command: ApplicationCommand<RESULT>) = when (command) {
+        is RegisterUserCommandV1 -> process(command) as RESULT
     }
+
+    private suspend fun process(command: RegisterUserCommandV1): RegisterUserCommandV1.Result {
+
+        val user = userWithEmailAddress(command.emailAddress)
+        return try {
+            user.submitRegistrationRequest() // TODO handle events
+            Accepted
+        } catch (error: UserAlreadyRegisteredException) {
+            EmailAddressAlreadyInUse(user.id)
+        }
+    }
+}
+
+// TODO move
+private suspend fun userWithEmailAddress(emailAddress: EmailAddress): User {
+
+    return InMemoryUser(id = newULID()) // TODO pass all previous events
+}
+
+class InMemoryUser(override val id: SortableTimestampedUniqueIdentifier<*>) : User {
+
+    override suspend fun submitRegistrationRequest() {
+
+        // TODO publish event, and save it so that if again it fails
+    }
+}
+
+class UserAlreadyRegisteredException : IllegalStateException("User is already registered")
+
+interface User : Identifiable<SortableTimestampedUniqueIdentifier<*>> {
+
+    // TODO add event publishing
+
+    suspend fun submitRegistrationRequest()
 }
 
 interface Application {
@@ -79,7 +114,7 @@ interface RegisterUser : Command {
         val typeName = Name("register-user")
     }
 
-    class V1(override val emailAddress: EmailAddress, override val id: SortableTimestampedUniqueIdentifier<*>, override val timestamp: Instant) : RegisterUser {
+    class V1(override val emailAddress: EmailAddress) : RegisterUser {
 
         override val type: Command.Type get() = Type
 
@@ -116,7 +151,7 @@ interface Query : Instruction {
     }
 }
 
-interface Event : Happening {
+interface Event : Happening, Identifiable<SortableTimestampedUniqueIdentifier<*>>, Timestamped {
 
     override val type: Type
 
@@ -133,7 +168,7 @@ interface Instruction : Happening {
     companion object
 }
 
-interface Happening : Identifiable<SortableTimestampedUniqueIdentifier<*>>, Timestamped, Versioned<IntVersion> {
+interface Happening : Versioned<IntVersion> {
 
     val type: Type
     override val version: IntVersion get() = type.version
