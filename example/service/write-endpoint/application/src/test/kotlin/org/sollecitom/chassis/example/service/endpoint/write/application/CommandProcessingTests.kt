@@ -47,7 +47,6 @@ private class CommandProcessingTests {
         application(registerUser).let { check(it is Accepted) }
 
         val registerUserWithSameEmail = registerUser(emailAddress = emailAddress).asApplicationCommand()
-
         val result = application(registerUserWithSameEmail)
 
         assertThat(result).isInstanceOf<EmailAddressAlreadyInUse>()
