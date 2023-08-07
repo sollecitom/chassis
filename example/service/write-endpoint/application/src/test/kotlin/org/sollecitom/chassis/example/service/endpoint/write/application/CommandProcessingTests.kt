@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isInstanceOf
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
@@ -26,7 +27,7 @@ private class CommandProcessingTests {
     fun `registering a new user`() = runTest {
 
         val application = newApplication()
-        val emailAddress = EmailAddress("someone@somedomain.com")
+        val emailAddress = "someone@somedomain.com".let(::EmailAddress)
         val registerUser = registerUser(emailAddress = emailAddress).asApplicationCommand()
 
         val result = application(registerUser)
@@ -38,7 +39,7 @@ private class CommandProcessingTests {
     fun `a user attempting to register with an email address already in use`() = runTest {
 
         val application = newApplication()
-        val emailAddress = EmailAddress("someone@somedomain.com")
+        val emailAddress = "someone@somedomain.com".let(::EmailAddress)
         val registerUser = registerUser(emailAddress = emailAddress).asApplicationCommand()
         application(registerUser).let { check(it is Accepted) }
 
@@ -54,7 +55,7 @@ private class CommandProcessingTests {
         return RegisterUser.V1(emailAddress = emailAddress)
     }
 
-    private fun newApplication(userRepository: UserRepository = InMemoryUserRepository()): Application = DispatchingApplication(userRepository::withEmailAddress)
+    private fun newApplication(clock: Clock = Clock.System, userRepository: UserRepository = InMemoryUserRepository(newId = newULID::invoke, clock = clock)): Application = DispatchingApplication(userRepository::withEmailAddress)
 }
 
 class DispatchingApplication(private val userWithEmailAddress: suspend (EmailAddress) -> User) : Application {
@@ -81,18 +82,25 @@ interface UserRepository {
     suspend fun withEmailAddress(emailAddress: EmailAddress): User
 }
 
-class InMemoryUserRepository : UserRepository {
+class InMemoryUserRepository(private val newId: (Instant) -> SortableTimestampedUniqueIdentifier<*>, private val clock: Clock) : UserRepository {
 
     override suspend fun withEmailAddress(emailAddress: EmailAddress): User {
 
-        return InMemoryUser(id = newULID()) // TODO pass all previous events
+        return InMemoryUser(id = newULID(), emailAddress = emailAddress, newId = newId, clock = clock) // TODO pass all previous events
     }
 
-    private class InMemoryUser(override val id: SortableTimestampedUniqueIdentifier<*>) : User {
+    private class InMemoryUser(override val id: SortableTimestampedUniqueIdentifier<*>, private val emailAddress: EmailAddress, private val newId: (Instant) -> SortableTimestampedUniqueIdentifier<*>, private val clock: Clock) : User {
 
         override suspend fun submitRegistrationRequest() {
 
+            val event = registrationRequestWasSubmitted()
             // TODO publish event, and save it so that if again it fails
+        }
+
+        private fun registrationRequestWasSubmitted(): RegistrationRequestWasSubmittedV1 {
+
+            val now = clock.now()
+            return RegistrationRequestWasSubmittedV1(emailAddress = emailAddress, userId = id, id = newId(now), timestamp = now)
         }
     }
 }
@@ -133,7 +141,7 @@ interface RegisterUser : Command {
     val emailAddress: EmailAddress
 
     companion object {
-        val typeName = Name("register-user")
+        val typeName = "register-user".let(::Name)
     }
 
     class V1(override val emailAddress: EmailAddress) : RegisterUser {
@@ -141,7 +149,7 @@ interface RegisterUser : Command {
         override val type: Command.Type get() = Type
 
         object Type : Command.Type {
-            override val version = IntVersion(1)
+            override val version = 1.let(::IntVersion)
             override val id = typeName
         }
 
@@ -168,6 +176,68 @@ interface Query : Instruction {
     companion object
 
     interface Type : Happening.Type {
+
+        companion object
+    }
+}
+
+class RegistrationRequestWasSubmittedV1(val emailAddress: EmailAddress, userId: SortableTimestampedUniqueIdentifier<*>, override val id: SortableTimestampedUniqueIdentifier<*>, override val timestamp: Instant) : UserEvent(id, timestamp, Type, userId) {
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as RegistrationRequestWasSubmittedV1
+
+        if (emailAddress != other.emailAddress) return false
+        if (userId != other.userId) return false
+        if (id != other.id) return false
+        if (timestamp != other.timestamp) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = emailAddress.hashCode()
+        result = 31 * result + userId.hashCode()
+        result = 31 * result + id.hashCode()
+        result = 31 * result + timestamp.hashCode()
+        return result
+    }
+
+    override fun toString() = "RegistrationRequestWasSubmittedV1(emailAddress=$emailAddress, userId=$userId, id=$id, timestamp=$timestamp)"
+
+    object Type : UserEvent.Type {
+        override val id = "registration-request-submitted".let(::Name)
+        override val version = 1.let(::IntVersion)
+    }
+}
+
+sealed class UserEvent(override val id: SortableTimestampedUniqueIdentifier<*>, override val timestamp: Instant, override val type: Type, val userId: SortableTimestampedUniqueIdentifier<*>) : EntityEvent {
+
+    override val entityId = userId
+    override val entityType: Name get() = ENTITY_TYPE
+
+    companion object {
+        private val ENTITY_TYPE = "user".let(::Name)
+    }
+
+    interface Type : EntityEvent.Type {
+
+        companion object
+    }
+}
+
+interface EntityEvent : Event {
+
+    val entityId: SortableTimestampedUniqueIdentifier<*>
+    val entityType: Name
+
+    override val type: Type
+
+    companion object
+
+    interface Type : Event.Type {
 
         companion object
     }
