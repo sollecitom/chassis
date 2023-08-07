@@ -86,11 +86,11 @@ interface UserRepository {
 
 interface EventStore {
 
-    fun forEntity(entityId: SortableTimestampedUniqueIdentifier<*>): EntityEventStore
+    val stream: Flow<Event>
 
     fun history(): Flow<Event>
 
-    val stream: Flow<Event>
+    fun forEntity(entityId: SortableTimestampedUniqueIdentifier<*>): EntityEventStore
 
     interface Mutable : EventStore {
 
@@ -102,9 +102,9 @@ interface EventStore {
 
 interface EntityEventStore {
 
-    fun history(): Flow<EntityEvent>
-
     val stream: Flow<EntityEvent>
+
+    fun history(): Flow<EntityEvent>
 
     interface Mutable : EntityEventStore {
 
@@ -114,8 +114,8 @@ interface EntityEventStore {
 
 class InMemoryEventStore : EventStore.Mutable {
 
-    private val history = mutableListOf<Event>()
     private val _stream = MutableSharedFlow<Event>()
+    private val history = mutableListOf<Event>()
     private val mutex = Mutex()
 
     override suspend fun publish(event: Event) = mutex.withLock {
