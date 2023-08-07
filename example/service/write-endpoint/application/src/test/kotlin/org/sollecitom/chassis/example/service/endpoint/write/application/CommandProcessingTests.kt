@@ -156,19 +156,20 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
     private fun createNewUser(emailAddress: EmailAddress): User {
 
         val userId = newULID()
-        return InMemoryUser(_events = events.forEntity(userId), id = userId, emailAddress = emailAddress, newId = newId, clock = clock)
+        return EventSourcedUser(_events = events.forEntity(userId), id = userId, emailAddress = emailAddress, newId = newId, clock = clock)
     }
 
-    private class InMemoryUser(override val id: SortableTimestampedUniqueIdentifier<*>, private val emailAddress: EmailAddress, private val _events: EntityEventStore.Mutable, private val newId: (Instant) -> SortableTimestampedUniqueIdentifier<*>, private val clock: Clock) : User {
+    private class EventSourcedUser(override val id: SortableTimestampedUniqueIdentifier<*>, private val emailAddress: EmailAddress, private val _events: EntityEventStore.Mutable, private val newId: (Instant) -> SortableTimestampedUniqueIdentifier<*>, private val clock: Clock) : User {
 
+        private val history get() = _events.history()
         override val events: EntityEventStore get() = _events
+        private val mutex = Mutex()
 
-        override suspend fun submitRegistrationRequest() {
+        override suspend fun submitRegistrationRequest() = mutex.withLock {
 
-            // TODO fail if an event is already there
-            _events.history().firstOrNull { it is RegistrationRequestWasSubmittedV1 }
+            ensureRegistrationWasNotAlreadySubmitted()
             val event = registrationRequestWasSubmitted()
-            _events.publish(event)
+            publish(event)
         }
 
         private fun registrationRequestWasSubmitted(): RegistrationRequestWasSubmittedV1 {
@@ -176,10 +177,17 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
             val now = clock.now()
             return RegistrationRequestWasSubmittedV1(emailAddress = emailAddress, userId = id, id = newId(now), timestamp = now)
         }
+
+        private suspend fun ensureRegistrationWasNotAlreadySubmitted() {
+
+            history.firstOrNull { it is RegistrationRequestWasSubmittedV1 && it.emailAddress == emailAddress }?.let { throw UserAlreadyRegisteredException(userId = id, emailAddress = emailAddress) }
+        }
+
+        private suspend fun publish(event: EntityEvent) = _events.publish(event)
     }
 }
 
-class UserAlreadyRegisteredException : IllegalStateException("User is already registered")
+class UserAlreadyRegisteredException(val userId: SortableTimestampedUniqueIdentifier<*>, val emailAddress: EmailAddress) : IllegalStateException("User is already registered")
 
 interface User : Entity<SortableTimestampedUniqueIdentifier<*>> {
 
