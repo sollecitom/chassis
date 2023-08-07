@@ -34,12 +34,27 @@ private class CommandProcessingTests {
         assertThat(result).isInstanceOf<Accepted>()
     }
 
+    @Test
+    fun `a user attempting to register with an email address already in use`() = runTest {
+
+        val application = newApplication()
+        val emailAddress = EmailAddress("someone@somedomain.com")
+        val registerUser = registerUser(emailAddress = emailAddress).asApplicationCommand()
+        application(registerUser).let { check(it is Accepted) }
+
+        val registerUserWithSameEmail = registerUser(emailAddress = emailAddress).asApplicationCommand()
+
+        val result = application(registerUserWithSameEmail)
+
+        assertThat(result).isInstanceOf<EmailAddressAlreadyInUse>()
+    }
+
     private fun registerUser(emailAddress: EmailAddress): RegisterUser.V1 {
 
         return RegisterUser.V1(emailAddress = emailAddress)
     }
 
-    private fun newApplication(): Application = DispatchingApplication(::userWithEmailAddress)
+    private fun newApplication(userRepository: UserRepository = InMemoryUserRepository()): Application = DispatchingApplication(userRepository::withEmailAddress)
 }
 
 class DispatchingApplication(private val userWithEmailAddress: suspend (EmailAddress) -> User) : Application {
@@ -61,17 +76,24 @@ class DispatchingApplication(private val userWithEmailAddress: suspend (EmailAdd
     }
 }
 
-// TODO move
-private suspend fun userWithEmailAddress(emailAddress: EmailAddress): User {
+interface UserRepository {
 
-    return InMemoryUser(id = newULID()) // TODO pass all previous events
+    suspend fun withEmailAddress(emailAddress: EmailAddress): User
 }
 
-class InMemoryUser(override val id: SortableTimestampedUniqueIdentifier<*>) : User {
+class InMemoryUserRepository : UserRepository {
 
-    override suspend fun submitRegistrationRequest() {
+    override suspend fun withEmailAddress(emailAddress: EmailAddress): User {
 
-        // TODO publish event, and save it so that if again it fails
+        return InMemoryUser(id = newULID()) // TODO pass all previous events
+    }
+
+    private class InMemoryUser(override val id: SortableTimestampedUniqueIdentifier<*>) : User {
+
+        override suspend fun submitRegistrationRequest() {
+
+            // TODO publish event, and save it so that if again it fails
+        }
     }
 }
 
