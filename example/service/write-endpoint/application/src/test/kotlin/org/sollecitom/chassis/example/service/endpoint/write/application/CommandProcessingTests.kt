@@ -2,6 +2,9 @@ package org.sollecitom.chassis.example.service.endpoint.write.application
 
 import assertk.assertThat
 import assertk.assertions.isInstanceOf
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -55,7 +58,7 @@ private class CommandProcessingTests {
         return RegisterUser.V1(emailAddress = emailAddress)
     }
 
-    private fun newApplication(clock: Clock = Clock.System, userRepository: UserRepository = InMemoryUserRepository(newId = newULID::invoke, clock = clock)): Application = DispatchingApplication(userRepository::withEmailAddress)
+    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(), clock: Clock = Clock.System, userRepository: UserRepository = InMemoryUserRepository(events = events, newId = newULID::invoke, clock = clock)): Application = DispatchingApplication(userRepository::withEmailAddress)
 }
 
 class DispatchingApplication(private val userWithEmailAddress: suspend (EmailAddress) -> User) : Application {
@@ -69,7 +72,7 @@ class DispatchingApplication(private val userWithEmailAddress: suspend (EmailAdd
 
         val user = userWithEmailAddress(command.emailAddress)
         return try {
-            user.submitRegistrationRequest() // TODO handle events
+            user.submitRegistrationRequest()
             Accepted
         } catch (error: UserAlreadyRegisteredException) {
             EmailAddressAlreadyInUse(user.id)
@@ -82,19 +85,90 @@ interface UserRepository {
     suspend fun withEmailAddress(emailAddress: EmailAddress): User
 }
 
-class InMemoryUserRepository(private val newId: (Instant) -> SortableTimestampedUniqueIdentifier<*>, private val clock: Clock) : UserRepository {
+interface EventStore {
 
-    override suspend fun withEmailAddress(emailAddress: EmailAddress): User {
+    fun forEntity(entityId: SortableTimestampedUniqueIdentifier<*>): EntityEventStore
 
-        return InMemoryUser(id = newULID(), emailAddress = emailAddress, newId = newId, clock = clock) // TODO pass all previous events
+    fun history(): Flow<Event>
+
+    val stream: Flow<Event>
+
+    interface Mutable : EventStore {
+
+        suspend fun publish(event: Event)
+
+        override fun forEntity(entityId: SortableTimestampedUniqueIdentifier<*>): EntityEventStore.Mutable
+    }
+}
+
+interface EntityEventStore {
+
+    fun history(): Flow<EntityEvent>
+
+    val stream: Flow<EntityEvent>
+
+    interface Mutable : EntityEventStore {
+
+        suspend fun publish(event: EntityEvent)
+    }
+}
+
+class InMemoryEventStore : EventStore.Mutable {
+
+    private val history = mutableListOf<Event>()
+    private val _stream = MutableSharedFlow<Event>()
+    private val mutex = Mutex()
+
+    override suspend fun publish(event: Event) = mutex.withLock {
+        history += event
+        _stream.emit(event)
     }
 
-    private class InMemoryUser(override val id: SortableTimestampedUniqueIdentifier<*>, private val emailAddress: EmailAddress, private val newId: (Instant) -> SortableTimestampedUniqueIdentifier<*>, private val clock: Clock) : User {
+    override fun history() = history.asFlow()
+
+    override val stream: Flow<Event> get() = _stream
+
+    override fun forEntity(entityId: SortableTimestampedUniqueIdentifier<*>): EntityEventStore.Mutable = EntityEventStoreView(entityId)
+
+    private inner class EntityEventStoreView(private val entityId: SortableTimestampedUniqueIdentifier<*>) : EntityEventStore.Mutable {
+
+        override suspend fun publish(event: EntityEvent) {
+
+            require(event.isForEntity(entityId)) { "Cannot publish event for entityId '${event.entityId.stringValue}'. Expected entityId is '${entityId.stringValue}'" }
+            this@InMemoryEventStore.publish(event)
+        }
+
+        override fun history() = this@InMemoryEventStore.history().forEntity(entityId)
+
+        override val stream = this@InMemoryEventStore.stream.forEntity(entityId)
+
+        private fun Flow<Event>.forEntity(entityId: SortableTimestampedUniqueIdentifier<*>): Flow<EntityEvent> = filterIsInstance<EntityEvent>().filter { it.entityId == entityId }
+        private fun EntityEvent.isForEntity(entityId: SortableTimestampedUniqueIdentifier<*>): Boolean = this.entityId == entityId
+    }
+}
+
+class InMemoryUserRepository(private val events: EventStore.Mutable, private val newId: (Instant) -> SortableTimestampedUniqueIdentifier<*>, private val clock: Clock) : UserRepository {
+
+    private val userByEmail = mutableMapOf<EmailAddress, User>()
+
+    override suspend fun withEmailAddress(emailAddress: EmailAddress) = userByEmail.computeIfAbsent(emailAddress, ::createNewUser)
+
+    private fun createNewUser(emailAddress: EmailAddress): User {
+
+        val userId = newULID()
+        return InMemoryUser(_events = events.forEntity(userId), id = userId, emailAddress = emailAddress, newId = newId, clock = clock)
+    }
+
+    private class InMemoryUser(override val id: SortableTimestampedUniqueIdentifier<*>, private val emailAddress: EmailAddress, private val _events: EntityEventStore.Mutable, private val newId: (Instant) -> SortableTimestampedUniqueIdentifier<*>, private val clock: Clock) : User {
+
+        override val events: EntityEventStore get() = _events
 
         override suspend fun submitRegistrationRequest() {
 
+            // TODO fail if an event is already there
+            _events.history().firstOrNull { it is RegistrationRequestWasSubmittedV1 }
             val event = registrationRequestWasSubmitted()
-            // TODO publish event, and save it so that if again it fails
+            _events.publish(event)
         }
 
         private fun registrationRequestWasSubmitted(): RegistrationRequestWasSubmittedV1 {
@@ -107,11 +181,14 @@ class InMemoryUserRepository(private val newId: (Instant) -> SortableTimestamped
 
 class UserAlreadyRegisteredException : IllegalStateException("User is already registered")
 
-interface User : Identifiable<SortableTimestampedUniqueIdentifier<*>> {
-
-    // TODO add event publishing
+interface User : Entity<SortableTimestampedUniqueIdentifier<*>> {
 
     suspend fun submitRegistrationRequest()
+}
+
+interface Entity<ID : SortableTimestampedUniqueIdentifier<*>> : Identifiable<ID> {
+
+    val events: EntityEventStore
 }
 
 interface Application {
@@ -157,7 +234,7 @@ interface RegisterUser : Command {
     }
 }
 
-interface Command : Instruction { // TODO add context
+interface Command : Instruction {
 
     override val type: Type
 
