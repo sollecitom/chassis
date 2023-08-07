@@ -102,6 +102,8 @@ interface EventStore {
 
 interface EntityEventStore {
 
+    val entityId: SortableTimestampedUniqueIdentifier<*>
+
     val stream: Flow<EntityEvent>
 
     fun history(): Flow<EntityEvent>
@@ -129,7 +131,7 @@ class InMemoryEventStore : EventStore.Mutable {
 
     override fun forEntity(entityId: SortableTimestampedUniqueIdentifier<*>): EntityEventStore.Mutable = EntityEventStoreView(entityId)
 
-    private inner class EntityEventStoreView(private val entityId: SortableTimestampedUniqueIdentifier<*>) : EntityEventStore.Mutable {
+    private inner class EntityEventStoreView(override val entityId: SortableTimestampedUniqueIdentifier<*>) : EntityEventStore.Mutable {
 
         override suspend fun publish(event: EntityEvent) {
 
@@ -164,6 +166,10 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
         override val events: EntityEventStore get() = _events
         private val mutex = Mutex()
 
+        init {
+            require(events.entityId == id) { "The entity ID for the entity-specific event store '${events.entityId}' doesn't match the entity ID of the user '$id'" }
+        }
+
         override suspend fun submitRegistrationRequest() = mutex.withLock {
 
             ensureRegistrationWasNotAlreadySubmitted()
@@ -193,7 +199,7 @@ interface User : Entity<SortableTimestampedUniqueIdentifier<*>> {
     suspend fun submitRegistrationRequest()
 }
 
-interface Entity<ID : SortableTimestampedUniqueIdentifier<*>> : Identifiable<ID> {
+interface Entity<ID> : Identifiable<ID> {
 
     val events: EntityEventStore
 }
