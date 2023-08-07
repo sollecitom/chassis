@@ -172,15 +172,15 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
             publish(event)
         }
 
-        private fun registrationRequestWasSubmitted(): RegistrationRequestWasSubmittedV1 {
+        private fun registrationRequestWasSubmitted(): RegistrationRequestWasSubmitted.V1 {
 
             val now = clock.now()
-            return RegistrationRequestWasSubmittedV1(emailAddress = emailAddress, userId = id, id = newId(now), timestamp = now)
+            return RegistrationRequestWasSubmitted.V1(emailAddress = emailAddress, userId = id, id = newId(now), timestamp = now)
         }
 
         private suspend fun ensureRegistrationWasNotAlreadySubmitted() {
 
-            history.firstOrNull { it is RegistrationRequestWasSubmittedV1 && it.emailAddress == emailAddress }?.let { throw UserAlreadyRegisteredException(userId = id, emailAddress = emailAddress) }
+            history.firstOrNull { it is RegistrationRequestWasSubmitted && it.emailAddress == emailAddress }?.let { throw UserAlreadyRegisteredException(userId = id, emailAddress = emailAddress) }
         }
 
         private suspend fun publish(event: EntityEvent) = _events.publish(event)
@@ -266,35 +266,44 @@ interface Query : Instruction {
     }
 }
 
-class RegistrationRequestWasSubmittedV1(val emailAddress: EmailAddress, userId: SortableTimestampedUniqueIdentifier<*>, override val id: SortableTimestampedUniqueIdentifier<*>, override val timestamp: Instant) : UserEvent(id, timestamp, Type, userId) {
+sealed class RegistrationRequestWasSubmitted(val emailAddress: EmailAddress, userId: SortableTimestampedUniqueIdentifier<*>, override val id: SortableTimestampedUniqueIdentifier<*>, override val timestamp: Instant, type: Type) : UserEvent(id, timestamp, type, userId) {
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+    interface Type : UserEvent.Type
 
-        other as RegistrationRequestWasSubmittedV1
-
-        if (emailAddress != other.emailAddress) return false
-        if (userId != other.userId) return false
-        if (id != other.id) return false
-        if (timestamp != other.timestamp) return false
-
-        return true
+    companion object {
+        val typeId = "registration-request-submitted".let(::Name)
     }
 
-    override fun hashCode(): Int {
-        var result = emailAddress.hashCode()
-        result = 31 * result + userId.hashCode()
-        result = 31 * result + id.hashCode()
-        result = 31 * result + timestamp.hashCode()
-        return result
-    }
+    class V1(emailAddress: EmailAddress, userId: SortableTimestampedUniqueIdentifier<*>, id: SortableTimestampedUniqueIdentifier<*>, timestamp: Instant) : RegistrationRequestWasSubmitted(emailAddress, userId, id, timestamp, Type) {
 
-    override fun toString() = "RegistrationRequestWasSubmittedV1(emailAddress=$emailAddress, userId=$userId, id=$id, timestamp=$timestamp)"
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
 
-    object Type : UserEvent.Type {
-        override val id = "registration-request-submitted".let(::Name)
-        override val version = 1.let(::IntVersion)
+            other as V1
+
+            if (emailAddress != other.emailAddress) return false
+            if (userId != other.userId) return false
+            if (id != other.id) return false
+            if (timestamp != other.timestamp) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = emailAddress.hashCode()
+            result = 31 * result + userId.hashCode()
+            result = 31 * result + id.hashCode()
+            result = 31 * result + timestamp.hashCode()
+            return result
+        }
+
+        override fun toString() = "RegistrationRequestWasSubmitted.V1(emailAddress=$emailAddress, userId=$userId, id=$id, timestamp=$timestamp)"
+
+        object Type : RegistrationRequestWasSubmitted.Type {
+            override val id get() = typeId
+            override val version = 1.let(::IntVersion)
+        }
     }
 }
 
