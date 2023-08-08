@@ -11,8 +11,9 @@ import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.WithCoreUtils
 import org.sollecitom.chassis.ddd.domain.EventStore
 import org.sollecitom.chassis.ddd.test.utils.InMemoryEventStore
-import org.sollecitom.chassis.example.service.endpoint.write.application.RegisterUserCommand.V1.Result.Accepted
-import org.sollecitom.chassis.example.service.endpoint.write.application.RegisterUserCommand.V1.Result.Rejected.EmailAddressAlreadyInUse
+import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
+import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Accepted
+import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRepository
 
 @TestInstance(PER_CLASS)
@@ -23,7 +24,7 @@ private class CommandProcessingTests : WithCoreUtils by WithCoreUtils.testProvid
 
         val application = newApplication()
         val emailAddress = "someone@somedomain.com".let(::EmailAddress)
-        val registerUser = registerUser(emailAddress = emailAddress).asApplicationCommand()
+        val registerUser = registerUser(emailAddress = emailAddress)
 
         val result = application(registerUser)
 
@@ -35,10 +36,10 @@ private class CommandProcessingTests : WithCoreUtils by WithCoreUtils.testProvid
 
         val application = newApplication()
         val emailAddress = "someone@somedomain.com".let(::EmailAddress)
-        val registerUserAFirstTime = registerUser(emailAddress = emailAddress).asApplicationCommand()
+        val registerUserAFirstTime = registerUser(emailAddress = emailAddress)
         application(registerUserAFirstTime).let { check(it is Accepted) }
 
-        val registerUserASecondTime = registerUser(emailAddress = emailAddress).asApplicationCommand()
+        val registerUserASecondTime = registerUser(emailAddress = emailAddress)
         val result = application(registerUserASecondTime)
 
         assertThat(result).isInstanceOf<EmailAddressAlreadyInUse>()
