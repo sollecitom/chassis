@@ -15,9 +15,11 @@ sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT> {
         val typeName = "register-user".let(::Name)
     }
 
-    class V1(override val emailAddress: EmailAddress) : RegisterUser<V1.Result> {
+    data class V1(override val emailAddress: EmailAddress) : RegisterUser<V1.Result> {
 
         override val type: Command.Type get() = Type
+
+        override fun toString() = "RegisterUser(emailAddress=${emailAddress.value}, type=${type.id.value}, version=${version.value})"
 
         object Type : Command.Type {
             override val version = 1.let(::IntVersion)

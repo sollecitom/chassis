@@ -7,19 +7,21 @@ import org.sollecitom.chassis.example.service.endpoint.write.application.user.Re
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserAlreadyRegisteredException
 
-class DispatchingApplication(private val userWithEmailAddress: suspend (EmailAddress) -> User) : Application {
+internal class DispatchingApplication(private val userWithEmailAddress: suspend (EmailAddress) -> User) : Application {
 
-    @Suppress("UNCHECKED_CAST")
     override suspend fun <RESULT> invoke(command: ApplicationCommand<RESULT>) = when (command) {
 
-        is RegisterUser -> when (command) {
-            is RegisterUser.V1 -> process(command) as RESULT
-        }
-
+        is RegisterUser -> processRegisterUserCommand(command)
         else -> error("Unknown application command $command")
     }
 
-    private suspend fun process(command: RegisterUser.V1): RegisterUser.V1.Result {
+    @Suppress("UNCHECKED_CAST")
+    private suspend fun <RESULT> processRegisterUserCommand(command: RegisterUser<RESULT>): RESULT = when (command) {
+
+        is RegisterUser.V1 -> processRegisterUserCommandV1(command) as RESULT
+    }
+
+    private suspend fun processRegisterUserCommandV1(command: RegisterUser.V1): RegisterUser.V1.Result {
 
         val user = userWithEmailAddress(command.emailAddress)
         val attempt = runCatching { user.submitRegistrationRequest() }
