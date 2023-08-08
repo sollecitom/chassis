@@ -6,7 +6,6 @@ import kotlinx.coroutines.test.runTest
 import org.http4k.client.ApacheClient
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
-import org.http4k.core.Method
 import org.http4k.core.Method.GET
 import org.http4k.core.Method.POST
 import org.http4k.core.Request
@@ -18,6 +17,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.configuration.utils.from
+import org.sollecitom.chassis.example.service.endpoint.write.configuration.configureLogging
 import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import kotlin.time.Duration.Companion.seconds

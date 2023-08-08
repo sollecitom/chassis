@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.service.endpoint.write.starter
+package org.sollecitom.chassis.example.service.endpoint.write.configuration
 
 import org.http4k.cloudnative.env.Environment
 import org.sollecitom.chassis.logger.core.JvmLoggerFactory
@@ -17,4 +17,3 @@ fun configureLogging(environment: Environment) {
 }
 
 private fun minimumLoggingLevelOverrides() = mapOf("org.eclipse.jetty.server" to LoggingLevel.WARN)
-

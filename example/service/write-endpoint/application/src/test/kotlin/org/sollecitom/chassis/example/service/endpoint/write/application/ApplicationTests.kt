@@ -15,10 +15,15 @@ import org.sollecitom.chassis.ddd.test.utils.InMemoryEventStore
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
+import org.sollecitom.chassis.example.service.endpoint.write.configuration.configureLogging
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRepository
 
 @TestInstance(PER_CLASS)
 private class ApplicationTests : WithCoreUtils by WithCoreUtils.testProvider {
+
+    init {
+        configureLogging()
+    }
 
     @Nested
     inner class UserTests {
@@ -52,5 +57,5 @@ private class ApplicationTests : WithCoreUtils by WithCoreUtils.testProvider {
         private fun registerUser(emailAddress: EmailAddress) = RegisterUser.V1(emailAddress = emailAddress)
     }
 
-    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(), userRepository: UserRepository = InMemoryUserRepository(events = events, coreUtilsAdapter = this)): Application = DispatchingApplication(userRepository::withEmailAddress)
+    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(), userRepository: UserRepository = InMemoryUserRepository(events = events, coreUtilsAdapter = this)): Application = Application(userRepository::withEmailAddress)
 }
