@@ -5,7 +5,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
-import org.sollecitom.chassis.core.utils.WithCoreUtils
+import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.EntityEventStore
 import org.sollecitom.chassis.ddd.domain.EventStore
@@ -14,7 +14,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserAlr
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRepository
 
-class InMemoryUserRepository(private val events: EventStore.Mutable, private val coreUtilsAdapter: WithCoreUtils) : UserRepository, WithCoreUtils by coreUtilsAdapter {
+class InMemoryUserRepository(private val events: EventStore.Mutable, private val coreGenerators: WithCoreGenerators) : UserRepository, WithCoreGenerators by coreGenerators {
 
     private val userByEmail = mutableMapOf<EmailAddress, User>()
 
@@ -23,10 +23,10 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
     private fun createNewUser(emailAddress: EmailAddress): User {
 
         val userId = newId.ulid()
-        return EventSourcedUser(_events = events.forEntity(userId), id = userId, emailAddress = emailAddress, coreUtilsAdapter = coreUtilsAdapter)
+        return EventSourcedUser(_events = events.forEntity(userId), id = userId, emailAddress = emailAddress, coreGenerators = coreGenerators)
     }
 
-    private class EventSourcedUser(override val id: SortableTimestampedUniqueIdentifier<*>, private val emailAddress: EmailAddress, private val _events: EntityEventStore.Mutable, coreUtilsAdapter: WithCoreUtils) : User, WithCoreUtils by coreUtilsAdapter {
+    private class EventSourcedUser(override val id: SortableTimestampedUniqueIdentifier<*>, private val emailAddress: EmailAddress, private val _events: EntityEventStore.Mutable, coreGenerators: WithCoreGenerators) : User, WithCoreGenerators by coreGenerators {
 
         private val history get() = _events.history()
         override val events: EntityEventStore get() = _events

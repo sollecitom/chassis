@@ -9,7 +9,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.test.utils.testProvider
-import org.sollecitom.chassis.core.utils.WithCoreUtils
+import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.ddd.domain.EventStore
 import org.sollecitom.chassis.ddd.test.utils.InMemoryEventStore
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
@@ -19,7 +19,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.configuration.confi
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRepository
 
 @TestInstance(PER_CLASS)
-private class ApplicationTests : WithCoreUtils by WithCoreUtils.testProvider {
+private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testProvider {
 
     init {
         configureLogging()
@@ -57,5 +57,5 @@ private class ApplicationTests : WithCoreUtils by WithCoreUtils.testProvider {
         private fun registerUser(emailAddress: EmailAddress) = RegisterUser.V1(emailAddress = emailAddress)
     }
 
-    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(), userRepository: UserRepository = InMemoryUserRepository(events = events, coreUtilsAdapter = this)): Application = Application(userRepository::withEmailAddress)
+    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(), userRepository: UserRepository = InMemoryUserRepository(events = events, coreGenerators = this)): Application = Application(userRepository::withEmailAddress)
 }
