@@ -1,0 +1,13 @@
+package org.sollecitom.chassis.configuration.utils
+
+import org.http4k.cloudnative.env.Environment
+import java.io.File
+
+object StandardEnvironment {
+
+    const val STANDARD_DEFAULT_CONFIGURATION_RESOURCE_NAME = "default-configuration.yml"
+
+    val defaultYamlConfiguration: Environment by lazy { Environment.fromYamlResource(STANDARD_DEFAULT_CONFIGURATION_RESOURCE_NAME) }
+
+    operator fun invoke(files: List<File> = emptyList(), defaultConfiguration: Environment = Environment.EMPTY): Environment = Environment.fromFiles(files) overrides Environment.JVM_PROPERTIES overrides Environment.ENV overrides defaultConfiguration
+}

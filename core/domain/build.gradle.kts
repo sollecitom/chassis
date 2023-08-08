@@ -1,5 +1,5 @@
 dependencies {
-    implementation(projects.chassisKotlinExtensions)
+    api(projects.chassisKotlinExtensions)
     implementation(libs.ulid.creator)
 
     testImplementation(projects.chassisTestUtils)

@@ -13,18 +13,19 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
-import org.sollecitom.chassis.core.domain.identity.factory.UniqueIdFactory
-import org.sollecitom.chassis.core.domain.identity.factory.invoke
+import org.sollecitom.chassis.core.domain.identity.factory.SortableTimestampedUniqueIdentifierFactory
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.traits.Identifiable
 import org.sollecitom.chassis.core.domain.traits.Timestamped
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.core.domain.versioning.Versioned
-import org.sollecitom.chassis.example.service.endpoint.write.application.RegisterUserCommandV1.Result.Accepted
-import org.sollecitom.chassis.example.service.endpoint.write.application.RegisterUserCommandV1.Result.Rejected.EmailAddressAlreadyInUse
+import org.sollecitom.chassis.core.test.utils.testProvider
+import org.sollecitom.chassis.core.utils.WithCoreUtils
+import org.sollecitom.chassis.example.service.endpoint.write.application.RegisterUserCommand.V1.Result.Accepted
+import org.sollecitom.chassis.example.service.endpoint.write.application.RegisterUserCommand.V1.Result.Rejected.EmailAddressAlreadyInUse
 
 @TestInstance(PER_CLASS)
-private class CommandProcessingTests {
+private class CommandProcessingTests : WithCoreUtils by WithCoreUtils.testProvider {
 
     @Test
     fun `registering a new user`() = runTest {
@@ -57,17 +58,17 @@ private class CommandProcessingTests {
         return RegisterUser.V1(emailAddress = emailAddress)
     }
 
-    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(), clock: Clock = Clock.System, userRepository: UserRepository = InMemoryUserRepository(events = events, newId = newULID::invoke, clock = clock)): Application = DispatchingApplication(userRepository::withEmailAddress)
+    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(), clock: Clock = this.clock, userRepository: UserRepository = InMemoryUserRepository(events = events, newId = newId.ulid, clock = clock)): Application = DispatchingApplication(userRepository::withEmailAddress)
 }
 
 class DispatchingApplication(private val userWithEmailAddress: suspend (EmailAddress) -> User) : Application {
 
     @Suppress("UNCHECKED_CAST")
     override suspend fun <RESULT> invoke(command: ApplicationCommand<RESULT>) = when (command) {
-        is RegisterUserCommandV1 -> process(command) as RESULT
+        is RegisterUserCommand.V1 -> process(command) as RESULT
     }
 
-    private suspend fun process(command: RegisterUserCommandV1): RegisterUserCommandV1.Result {
+    private suspend fun process(command: RegisterUserCommand.V1): RegisterUserCommand.V1.Result {
 
         val user = userWithEmailAddress(command.emailAddress)
         return try {
@@ -148,7 +149,7 @@ class InMemoryEventStore : EventStore.Mutable {
     }
 }
 
-class InMemoryUserRepository(private val events: EventStore.Mutable, private val newId: (Instant) -> SortableTimestampedUniqueIdentifier<*>, private val clock: Clock) : UserRepository {
+class InMemoryUserRepository(private val events: EventStore.Mutable, private val newId: SortableTimestampedUniqueIdentifierFactory<*>, private val clock: Clock) : UserRepository {
 
     private val userByEmail = mutableMapOf<EmailAddress, User>()
 
@@ -156,11 +157,11 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
 
     private fun createNewUser(emailAddress: EmailAddress): User {
 
-        val userId = newULID()
+        val userId = newId()
         return EventSourcedUser(_events = events.forEntity(userId), id = userId, emailAddress = emailAddress, newId = newId, clock = clock)
     }
 
-    private class EventSourcedUser(override val id: SortableTimestampedUniqueIdentifier<*>, private val emailAddress: EmailAddress, private val _events: EntityEventStore.Mutable, private val newId: (Instant) -> SortableTimestampedUniqueIdentifier<*>, private val clock: Clock) : User {
+    private class EventSourcedUser(override val id: SortableTimestampedUniqueIdentifier<*>, private val emailAddress: EmailAddress, private val _events: EntityEventStore.Mutable, private val newId: SortableTimestampedUniqueIdentifierFactory<*>, private val clock: Clock) : User {
 
         private val history get() = _events.history()
         override val events: EntityEventStore get() = _events
@@ -211,20 +212,23 @@ interface Application {
 
 sealed interface ApplicationCommand<out RESULT> : Command
 
-data class RegisterUserCommandV1(val command: RegisterUser.V1) : ApplicationCommand<RegisterUserCommandV1.Result>, RegisterUser by command {
+sealed class RegisterUserCommand {
 
-    sealed interface Result {
+    class V1(val command: RegisterUser.V1) : RegisterUserCommand(), ApplicationCommand<V1.Result>, RegisterUser by command {
 
-        data object Accepted : Result
+        sealed interface Result {
 
-        sealed interface Rejected : Result {
+            data object Accepted : Result
 
-            data class EmailAddressAlreadyInUse(val userId: SortableTimestampedUniqueIdentifier<*>) : Rejected
+            sealed interface Rejected : Result {
+
+                data class EmailAddressAlreadyInUse(val userId: SortableTimestampedUniqueIdentifier<*>) : Rejected
+            }
         }
     }
 }
 
-fun RegisterUser.V1.asApplicationCommand() = RegisterUserCommandV1(this)
+fun RegisterUser.V1.asApplicationCommand() = RegisterUserCommand.V1(this)
 
 interface RegisterUser : Command {
 
@@ -371,7 +375,3 @@ interface Happening : Versioned<IntVersion> {
         companion object
     }
 }
-
-// TODO move
-private val newULID = UniqueIdFactory().ulid
-private val clock: Clock = Clock.System
