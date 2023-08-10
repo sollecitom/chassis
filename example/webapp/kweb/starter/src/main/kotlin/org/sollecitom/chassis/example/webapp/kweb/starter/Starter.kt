@@ -15,11 +15,23 @@ suspend fun main() = coroutineScope<Unit> {
 
     Kweb(port = 9000) {
         doc.body {
-            p().text("What is your name?")
-            val input = input(type = InputType.text)
-            input.value = KVar("Peter Pan")
-            val greeting = input.value.map { name -> "Hi $name!" }
-            p().text(greeting)
+            route {
+                path("/users/{userId}") { params ->
+                    val userId = params.getValue("userId")
+                    h1().text(userId.map { "User id: $it" })
+                }
+                path("/lists/{listId}") { params ->
+                    val listId = params.getValue("listId")
+                    h1().text(listId.map { "List id: $it" })
+                }
+                path("") {
+                    p().text("What is your name?")
+                    val input = input(type = InputType.text)
+                    input.value = KVar("Peter Pan")
+                    val greeting = input.value.map { name -> "Hi $name!" }
+                    p().text(greeting)
+                }
+            }
         }
     }
 }
