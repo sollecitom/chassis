@@ -37,6 +37,8 @@ module("example", "service", "write-endpoint", "adapters", "driven", "pulsar")
 module("example", "service", "write-endpoint", "starter")
 
 module("example", "webapp", "htmx", "starter")
+module("example", "webapp", "kweb", "configuration")
+module("example", "webapp", "kweb", "starter")
 
 fun module(vararg pathSegments: String) {
     val projectName = pathSegments.last()

@@ -40,3 +40,5 @@ fun Environment.Companion.fromYaml(input: InputStream): Environment { // TODO su
 }
 
 fun Environment.Companion.fromFiles(files: List<File>): Environment = files.map { Environment.fromYaml(it) }.foldRight(EMPTY) { item, accumulator -> item overrides accumulator }
+
+fun Environment.formatted(): String = "Environment: {\n\t${keys().joinToString(separator = "\n\t", postfix = "\n}") { key -> "$key: ${get(key)}" }}"
