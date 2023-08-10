@@ -1,8 +1,8 @@
 package org.sollecitom.chassis.example.webapp.kweb.starter
 
 import kotlinx.coroutines.coroutineScope
-import kweb.Kweb
-import kweb.h1
+import kweb.*
+import kweb.state.KVar
 import org.http4k.cloudnative.env.Environment
 import org.sollecitom.chassis.configuration.utils.formatted
 import org.sollecitom.chassis.configuration.utils.fromYamlResource
@@ -15,7 +15,11 @@ suspend fun main() = coroutineScope<Unit> {
 
     Kweb(port = 9000) {
         doc.body {
-            h1().text("Hello World!")
+            p().text("What is your name?")
+            val input = input(type = InputType.text)
+            input.value = KVar("Peter Pan")
+            val greeting = input.value.map { name -> "Hi $name!" }
+            p().text(greeting)
         }
     }
 }
