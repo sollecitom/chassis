@@ -19,6 +19,9 @@ suspend fun main() = coroutineScope<Unit> {
                 path("/users/{userId}", PathIdVisualizer("User", "userId"))
                 path("/lists/{listId}", PathIdVisualizer("List", "listId"))
                 path("", MainPage().asRoutedComponent())
+                notFound {
+                    h1().text("Page not found!")
+                }
             }
         }
     }
