@@ -18,7 +18,7 @@ suspend fun main() = coroutineScope<Unit> {
             route {
                 path("/users/{userId}", PathIdVisualizer("User", "userId"))
                 path("/lists/{listId}", PathIdVisualizer("List", "listId"))
-                path("", MainPage())
+                path("", MainPage().asRoutedComponent())
             }
         }
     }
@@ -41,10 +41,26 @@ class PathIdVisualizer(private val idType: String, private val listIdParamName: 
 }
 
 typealias RoutedComponent = (ElementCreator<*>, Map<String, KVar<String>>) -> Unit
+typealias Component = (ElementCreator<*>) -> Unit
 
-class MainPage : RoutedComponentTemplate {
+interface ComponentTemplate : Component {
 
-    override fun ElementCreator<*>.render(params: Map<String, KVar<String>>) {
+    fun ElementCreator<*>.render()
+
+    override fun invoke(html: ElementCreator<*>) = with(html) { render() }
+}
+
+fun ComponentTemplate.asRoutedComponent(): RoutedComponent {
+
+    return object : RoutedComponent {
+
+        override fun invoke(html: ElementCreator<*>, params: Map<String, KVar<String>>) = this@asRoutedComponent.invoke(html)
+    }
+}
+
+class MainPage : ComponentTemplate {
+
+    override fun ElementCreator<*>.render() {
 
         p().text("What is your name?")
         val input = input(type = InputType.text)
