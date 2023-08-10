@@ -2,6 +2,7 @@ package org.sollecitom.chassis.example.webapp.kweb.starter
 
 import kotlinx.coroutines.coroutineScope
 import kweb.*
+import kweb.routing.PathReceiver
 import kweb.state.KVar
 import org.http4k.cloudnative.env.Environment
 import org.sollecitom.chassis.configuration.utils.formatted
@@ -16,25 +17,47 @@ suspend fun main() = coroutineScope<Unit> {
     Kweb(port = 9000) {
         doc.body {
             route {
-                path("/users/{userId}") { params ->
-                    val userId = params.getValue("userId")
-                    h1().text(userId.map { "User id: $it" })
-                }
-                path("/lists/{listId}") { params ->
-                    val listId = params.getValue("listId")
-                    h1().text(listId.map { "List id: $it" })
-                }
-                path("") {
-                    p().text("What is your name?")
-                    val input = input(type = InputType.text)
-                    input.value = KVar("Peter Pan")
-                    val greeting = input.value.map { name -> "Hi $name!" }
-                    p().text(greeting)
-                }
+                path("/users/{userId}", PathIdVisualizer("User", "userId"))
+                path("/lists/{listId}", PathIdVisualizer("List", "listId"))
+                path("", MainPage())
             }
         }
     }
 }
+
+class PathIdVisualizer(private val idType: String, private val listIdParamName: String) : RoutedComponent {
+
+    override fun invoke(html: ElementCreator<*>, params: Map<String, KVar<String>>) {
+        with(html) {
+            val listId = params.getValue(listIdParamName)
+            h1().text(listId.map { "$idType id: $it" })
+        }
+    }
+}
+
+typealias RoutedComponent = (ElementCreator<*>, Map<String, KVar<String>>) -> Unit
+
+class MainPage : RoutedComponent {
+
+    override fun invoke(html: ElementCreator<*>, params: Map<String, KVar<String>>) {
+        with(html) {
+            p().text("What is your name?")
+            val input = input(type = InputType.text)
+            input.value = KVar("Peter Pan")
+            val greeting = input.value.map { name -> "Hi $name!" }
+            p().text(greeting)
+        }
+    }
+}
+
+fun mainPage(): PathReceiver = {
+    p().text("What is your name?")
+    val input = input(type = InputType.text)
+    input.value = KVar("Peter Pan")
+    val greeting = input.value.map { name -> "Hi $name!" }
+    p().text(greeting)
+}
+
 
 private object Starter : Loggable()
 
