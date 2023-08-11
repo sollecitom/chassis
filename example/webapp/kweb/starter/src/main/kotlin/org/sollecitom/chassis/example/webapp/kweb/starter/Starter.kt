@@ -5,6 +5,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
 import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
+import kweb.routing.RouteReceiver
 import kweb.state.KVar
 import org.http4k.cloudnative.env.Environment
 import org.sollecitom.chassis.configuration.utils.formatted
@@ -19,10 +20,10 @@ suspend fun main() = coroutineScope<Unit> {
     Kweb(port = 9000, plugins = listOf(fomanticUIPlugin)) {
         doc.body {
             route {
-                path("", SearchBar(placeholder = "Search...").asRoutedComponent())
+                path("", SearchBar(placeholder = "Search..."))
                 path("/users/{userId}", PathIdVisualizer("User", "userId"))
                 path("/lists/{listId}", PathIdVisualizer("List", "listId"))
-//                path("", MainPage().asRoutedComponent())
+//                path("", MainPage())
                 notFound {
                     h1().text("Page not found!")
                 }
@@ -72,6 +73,8 @@ class PathIdVisualizer(private val idType: String, private val listIdParamName: 
 
 typealias RoutedComponent = (ElementCreator<*>, Map<String, KVar<String>>) -> Unit
 typealias Component = (ElementCreator<*>) -> Unit
+
+fun RouteReceiver.path(template: String, component: ComponentTemplate) = path(template, component.asRoutedComponent())
 
 interface ComponentTemplate : Component {
 
