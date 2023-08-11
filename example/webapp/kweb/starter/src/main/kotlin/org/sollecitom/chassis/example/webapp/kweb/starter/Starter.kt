@@ -31,16 +31,28 @@ suspend fun main() = coroutineScope<Unit> {
     }
 }
 
-class SearchBar(private val placeholder: String?, private val divAttributes: Map<String, JsonPrimitive> = fomantic.ui.icon.input, private val iconAttributes: Map<String, JsonPrimitive> = fomantic.search.icon) : ComponentTemplate {
+class SearchBar(private val placeholder: String?, private val style: Style = DefaultFomaticStyle) : ComponentTemplate {
 
     override fun ElementCreator<*>.render() {
 
-        div(divAttributes) {
-            input(type = InputType.text, placeholder = placeholder)
-            i(iconAttributes)
+        div(style.div) {
+            input(type = InputType.search, placeholder = placeholder)
+            i(style.icon)
         }
     }
+
+    interface Style {
+        val div: Attributes
+        val icon: Attributes
+    }
+
+    object DefaultFomaticStyle : Style {
+        override val div: Attributes get() = fomantic.ui.icon.input
+        override val icon: Attributes get() = fomantic.search.icon
+    }
 }
+
+typealias Attributes = Map<String, JsonPrimitive>
 
 interface RoutedComponentTemplate : RoutedComponent {
 
