@@ -2,6 +2,7 @@ package org.sollecitom.chassis.example.webapp.kweb.starter
 
 import kotlinx.coroutines.coroutineScope
 import kweb.*
+import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
 import kweb.state.KVar
 import org.http4k.cloudnative.env.Environment
@@ -11,7 +12,8 @@ import org.sollecitom.chassis.example.webapp.kweb.starter.component.template.Com
 import org.sollecitom.chassis.example.webapp.kweb.starter.component.template.RoutedComponentTemplate
 import org.sollecitom.chassis.example.webapp.kweb.starter.components.Components
 import org.sollecitom.chassis.example.webapp.kweb.starter.components.search.bar.searchBar
-import org.sollecitom.chassis.example.webapp.kweb.starter.core.extensions.path
+import org.sollecitom.chassis.example.webapp.kweb.starter.fomantic.extensions.home
+import org.sollecitom.chassis.example.webapp.kweb.starter.fomantic.extensions.layout
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 
 suspend fun main() = coroutineScope<Unit> {
@@ -36,7 +38,23 @@ suspend fun main() = coroutineScope<Unit> {
             }
             doc.body {
                 route {
-                    path("", searchBar)
+                    path("") {
+                        div(fomantic.ui.attached.stackable.menu) {
+                            div(fomantic.ui.container) {
+                                a(fomantic.item) {
+                                    i(fomantic.home.icon)
+                                    p().text("Home")
+                                }
+                                a(fomantic.item) {
+                                    i(fomantic.grid.layout.icon)
+                                    p().text("Something")
+                                }
+                                div(fomantic.right.item) {
+                                    searchBar(this)
+                                }
+                            }
+                        }
+                    }
                     path("/users/{userId}", PathIdVisualizer("User", "userId"))
                     path("/lists/{listId}", PathIdVisualizer("List", "listId"))
 //                path("", MainPage())
