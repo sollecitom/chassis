@@ -2,7 +2,7 @@ package org.sollecitom.chassis.example.webapp.kweb.starter.core.extensions
 
 import kweb.ElementCreator
 import kweb.routing.RouteReceiver
-import org.sollecitom.chassis.example.webapp.kweb.starter.component.templating.ComponentTemplate
+import org.sollecitom.chassis.example.webapp.kweb.starter.component.template.ComponentTemplate
 import org.sollecitom.chassis.example.webapp.kweb.starter.core.aliases.RoutedComponent
 import org.sollecitom.chassis.example.webapp.kweb.starter.core.aliases.RoutingParams
 

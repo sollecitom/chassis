@@ -7,9 +7,10 @@ import kweb.state.KVar
 import org.http4k.cloudnative.env.Environment
 import org.sollecitom.chassis.configuration.utils.formatted
 import org.sollecitom.chassis.configuration.utils.fromYamlResource
-import org.sollecitom.chassis.example.webapp.kweb.starter.component.templating.ComponentTemplate
-import org.sollecitom.chassis.example.webapp.kweb.starter.component.templating.RoutedComponentTemplate
-import org.sollecitom.chassis.example.webapp.kweb.starter.components.SearchBar
+import org.sollecitom.chassis.example.webapp.kweb.starter.component.template.ComponentTemplate
+import org.sollecitom.chassis.example.webapp.kweb.starter.component.template.RoutedComponentTemplate
+import org.sollecitom.chassis.example.webapp.kweb.starter.components.Components
+import org.sollecitom.chassis.example.webapp.kweb.starter.components.search.bar.searchBar
 import org.sollecitom.chassis.example.webapp.kweb.starter.core.extensions.path
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 
@@ -19,27 +20,29 @@ suspend fun main() = coroutineScope<Unit> {
     logger.info { environment.formatted() }
 
     Kweb(port = 9000, plugins = listOf(fomanticUIPlugin)) {
-        val searchBar = SearchBar(placeholder = "Search...") {
-            onValueChanged { oldValue, newValue ->
-                logger.info { "Searchbar - value changed from ${oldValue.takeIf { it.isNotBlank() } ?: "<EMPTY-${oldValue.length}>"} to ${newValue.takeIf { it.isNotBlank() } ?: "<EMPTY-${newValue.length}>"}" }
-            }
-            onSearch {
-                logger.info { "Searchbar - search requested with value $value" }
-            }
-            raw {
-                on.keyup {
-                    logger.info { "Searchbar - key pressed ${it.key} and value is now ${element.value.value}" }
+        with(Components) {
+            val searchBar = searchBar(placeholder = "Search...") {
+                onValueChanged { oldValue, newValue ->
+                    logger.info { "Searchbar - value changed from ${oldValue.takeIf { it.isNotBlank() } ?: "<EMPTY-${oldValue.length}>"} to ${newValue.takeIf { it.isNotBlank() } ?: "<EMPTY-${newValue.length}>"}" }
+                }
+                onSearch {
+                    logger.info { "Searchbar - search requested with value $value" }
+                }
+                raw {
+                    on.keyup {
+                        logger.info { "Searchbar - key pressed ${it.key} and value is now ${element.value.value}" }
+                    }
                 }
             }
-        }
-        doc.body {
-            route {
-                path("", searchBar)
-                path("/users/{userId}", PathIdVisualizer("User", "userId"))
-                path("/lists/{listId}", PathIdVisualizer("List", "listId"))
+            doc.body {
+                route {
+                    path("", searchBar)
+                    path("/users/{userId}", PathIdVisualizer("User", "userId"))
+                    path("/lists/{listId}", PathIdVisualizer("List", "listId"))
 //                path("", MainPage())
-                notFound {
-                    h1().text("Page not found!")
+                    notFound {
+                        h1().text("Page not found!")
+                    }
                 }
             }
         }

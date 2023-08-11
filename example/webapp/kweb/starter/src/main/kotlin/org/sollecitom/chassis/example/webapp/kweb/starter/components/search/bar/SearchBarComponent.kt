@@ -1,15 +1,15 @@
-package org.sollecitom.chassis.example.webapp.kweb.starter.components
+package org.sollecitom.chassis.example.webapp.kweb.starter.components.search.bar
 
 import kweb.*
-import kweb.plugins.fomanticUI.fomantic
 import kweb.state.KVar
-import org.sollecitom.chassis.example.webapp.kweb.starter.component.templating.ComponentTemplate
-import org.sollecitom.chassis.example.webapp.kweb.starter.core.aliases.Attributes
+import org.sollecitom.chassis.example.webapp.kweb.starter.components.Components
 import org.sollecitom.chassis.example.webapp.kweb.starter.core.listeners.ElementListenersBuilder
 import org.sollecitom.chassis.example.webapp.kweb.starter.core.listeners.forElement
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 
-class SearchBar(private val placeholder: String?, private val style: Style = DefaultFomaticStyle, private val listen: Listeners.() -> Unit = {}) : ComponentTemplate {
+fun Components.searchBar(placeholder: String?, style: SearchBar.Style = SearchBar.DefaultFomaticStyle, listen: SearchBar.Listeners.() -> Unit = {}): SearchBar = SearchBarComponent(placeholder, style, listen)
+
+private class SearchBarComponent(private val placeholder: String?, private val style: SearchBar.Style = SearchBar.DefaultFomaticStyle, private val listen: SearchBar.Listeners.() -> Unit = {}) : SearchBar {
 
     private lateinit var searchBar: InputElement
 
@@ -22,42 +22,23 @@ class SearchBar(private val placeholder: String?, private val style: Style = Def
         }
     }
 
-    var value: String
+    override var value: String
         get() = searchBar.value.value
         set(value) {
             searchBar.value.value = value
         }
 
-    val rawValue: InputElement get() = searchBar
+    override val rawValue: InputElement get() = searchBar
 
-    fun enable() {
+    override fun enable() {
         searchBar.enable()
     }
 
-    fun disable() {
+    override fun disable() {
         searchBar.disable()
     }
 
-    interface Style {
-        val div: Attributes
-        val icon: Attributes
-    }
-
-    object DefaultFomaticStyle : Style {
-        override val div: Attributes get() = fomantic.ui.icon.input
-        override val icon: Attributes get() = fomantic.search.icon
-    }
-
-    interface Listeners {
-
-        fun onValueChanged(handle: KVar<String>.(oldValue: String, newValue: String) -> Unit)
-
-        fun onSearch(handle: KVar<String>.() -> Unit)
-
-        fun raw(configure: ElementListenersBuilder<InputElement>.() -> Unit)
-    }
-
-    private class SearchBarListeners(private val searchBar: InputElement) : Listeners {
+    private class SearchBarListeners(private val searchBar: InputElement) : SearchBar.Listeners {
 
         override fun onValueChanged(handle: KVar<String>.(oldValue: String, newValue: String) -> Unit) {
 

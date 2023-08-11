@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.webapp.kweb.starter.component.templating
+package org.sollecitom.chassis.example.webapp.kweb.starter.component.template
 
 import kweb.ElementCreator
 import kweb.state.KVar
