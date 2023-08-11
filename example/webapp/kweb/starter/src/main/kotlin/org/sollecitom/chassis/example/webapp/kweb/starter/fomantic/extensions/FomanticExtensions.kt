@@ -5,12 +5,16 @@ import kweb.plugins.fomanticUI.FomanticUIClasses
 
 val FomanticUIClasses.home: FomanticUIClasses
     get() {
-        classes("home")
-        return this
+        return named("home")
     }
 
 val FomanticUIClasses.layout: FomanticUIClasses
     get() {
-        classes("layout")
-        return this
+        return named("layout")
     }
+
+fun FomanticUIClasses.named(name: String): FomanticUIClasses {
+
+    classes(name)
+    return this
+}
