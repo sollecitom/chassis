@@ -9,9 +9,12 @@ import org.http4k.cloudnative.env.Environment
 import org.sollecitom.chassis.configuration.utils.formatted
 import org.sollecitom.chassis.configuration.utils.fromYamlResource
 import org.sollecitom.chassis.example.webapp.kweb.starter.component.template.ComponentTemplate
+import org.sollecitom.chassis.example.webapp.kweb.starter.component.template.ElementWrapper
 import org.sollecitom.chassis.example.webapp.kweb.starter.component.template.RoutedComponentTemplate
+import org.sollecitom.chassis.example.webapp.kweb.starter.component.template.WithComponentControls
 import org.sollecitom.chassis.example.webapp.kweb.starter.components.Components
 import org.sollecitom.chassis.example.webapp.kweb.starter.components.search.bar.searchBar
+import org.sollecitom.chassis.example.webapp.kweb.starter.core.aliases.Attributes
 import org.sollecitom.chassis.example.webapp.kweb.starter.fomantic.extensions.home
 import org.sollecitom.chassis.example.webapp.kweb.starter.fomantic.extensions.layout
 import org.sollecitom.chassis.logger.core.loggable.Loggable
@@ -41,17 +44,9 @@ suspend fun main() = coroutineScope<Unit> {
                     path("") {
                         div(fomantic.ui.attached.stackable.menu) {
                             div(fomantic.ui.container) {
-                                a(fomantic.item) {
-                                    i(fomantic.home.icon)
-                                    p().text("Home")
-                                }
-                                a(fomantic.item) {
-                                    i(fomantic.grid.layout.icon)
-                                    p().text("Something")
-                                }
-                                div(fomantic.right.item) {
-                                    searchBar(this)
-                                }
+                                menuItem(item = iconAndText("Home", fomantic.home.icon))
+                                menuItem(item = iconAndText("Something", fomantic.grid.layout.icon))
+                                menuItem(item = searchBar, position = MenuItem.Position.RIGHT)
                             }
                         }
                     }
@@ -64,6 +59,55 @@ suspend fun main() = coroutineScope<Unit> {
                 }
             }
         }
+    }
+}
+
+fun Components.iconAndText(text: KVar<String>, iconAttributes: Attributes, textElementAttributes: Attributes = emptyMap(), textElement: ElementCreator<Element>.() -> Element = { p(textElementAttributes) }): IconAndText = IconAndTextComponent(text, iconAttributes, textElementAttributes, textElement)
+
+fun Components.iconAndText(text: String, iconAttributes: Attributes, textElementAttributes: Attributes = emptyMap(), textElement: ElementCreator<Element>.() -> Element = { p(textElementAttributes) }): IconAndText = IconAndTextComponent(KVar(text), iconAttributes, textElementAttributes, textElement)
+
+interface IconAndText : ComponentTemplate
+
+private class IconAndTextComponent(private val text: KVar<String>, private val iconAttributes: Attributes, private val textElementAttributes: Attributes = emptyMap(), private val textElement: ElementCreator<Element>.() -> Element = { p(textElementAttributes) }) : IconAndText {
+
+    override fun ElementCreator<*>.render() {
+        i(fomantic.home.icon)
+        textElement().text(text)
+    }
+}
+
+context(Components)
+fun ElementCreator<*>.menuItem(item: ComponentTemplate, position: MenuItem.Position = MenuItem.Position.LEFT): MenuItem = MenuItemComponent(item, position).apply { invoke(this@menuItem) }
+
+interface MenuItem : ComponentTemplate, WithComponentControls, ElementWrapper<Element> {
+
+    enum class Position {
+        LEFT, RIGHT
+    }
+}
+
+private class MenuItemComponent(private val item: ComponentTemplate, private val position: MenuItem.Position) : MenuItem {
+
+    override lateinit var rawValue: Element
+
+    override fun ElementCreator<*>.render() {
+        rawValue = when (position) {
+            MenuItem.Position.LEFT -> a(fomantic.item) {
+                item(this)
+            }
+
+            MenuItem.Position.RIGHT -> div(fomantic.right.item) {
+                item(this)
+            }
+        }
+    }
+
+    override fun enable() {
+        rawValue.enable()
+    }
+
+    override fun disable() {
+        rawValue.disable()
     }
 }
 
