@@ -1,7 +1,10 @@
 package org.sollecitom.chassis.example.webapp.kweb.starter
 
 import kotlinx.coroutines.coroutineScope
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
+import kweb.plugins.fomanticUI.fomantic
+import kweb.plugins.fomanticUI.fomanticUIPlugin
 import kweb.state.KVar
 import org.http4k.cloudnative.env.Environment
 import org.sollecitom.chassis.configuration.utils.formatted
@@ -13,16 +16,28 @@ suspend fun main() = coroutineScope<Unit> {
     val environment = rawConfiguration().also(::configureLogging)
     logger.info { environment.formatted() }
 
-    Kweb(port = 9000) {
+    Kweb(port = 9000, plugins = listOf(fomanticUIPlugin)) {
         doc.body {
             route {
+                path("", SearchBar(placeholder = "Search...").asRoutedComponent())
                 path("/users/{userId}", PathIdVisualizer("User", "userId"))
                 path("/lists/{listId}", PathIdVisualizer("List", "listId"))
-                path("", MainPage().asRoutedComponent())
+//                path("", MainPage().asRoutedComponent())
                 notFound {
                     h1().text("Page not found!")
                 }
             }
+        }
+    }
+}
+
+class SearchBar(private val placeholder: String?, private val divAttributes: Map<String, JsonPrimitive> = fomantic.ui.icon.input, private val iconAttributes: Map<String, JsonPrimitive> = fomantic.search.icon) : ComponentTemplate {
+
+    override fun ElementCreator<*>.render() {
+
+        div(divAttributes) {
+            input(type = InputType.text, placeholder = placeholder)
+            i(iconAttributes)
         }
     }
 }
