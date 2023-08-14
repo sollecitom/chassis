@@ -5,3 +5,8 @@ a[highlight] {
     font-weight: bold;
     text-decoration: underline;
 }
+
+.centered-content {
+  margin: 0 auto;
+  max-width: 250px;
+}
