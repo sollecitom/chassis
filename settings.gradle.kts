@@ -40,6 +40,15 @@ module("example", "webapp", "htmx", "starter")
 module("example", "webapp", "kweb", "configuration")
 module("example", "webapp", "kweb", "starter")
 
+module("example", "webapp", "vaadin", "configuration")
+module("example", "webapp", "vaadin", "domain")
+module("example", "webapp", "vaadin", "domain", "sdk")
+module("example", "webapp", "vaadin", "application")
+module("example", "webapp", "vaadin", "adapters", "driving", "web")
+module("example", "webapp", "vaadin", "adapters", "driven", "sdk", "memory")
+module("example", "webapp", "vaadin", "adapters", "driven", "sdk", "http")
+module("example", "webapp", "vaadin", "starter")
+
 fun module(vararg pathSegments: String) {
     val projectName = pathSegments.last()
     val path = pathSegments.dropLast(1)
