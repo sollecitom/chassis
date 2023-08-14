@@ -5,13 +5,10 @@ import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.formlayout.FormLayout
-import com.vaadin.flow.component.html.Paragraph
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.component.textfield.Autocapitalize
 import com.vaadin.flow.component.textfield.EmailField
 import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.data.binder.Validator
 import com.vaadin.flow.router.Route
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 
@@ -23,28 +20,10 @@ class MainView(private val greetingService: GreetingService) : VerticalLayout() 
 
         logger.info { "Saved user $user" }
     }
-//    private val textField = textField()
-//    private val button = sayHelloButton(textField)
 
     init {
         addClassName("centered-content") // Use custom CSS classes to apply styling. This is defined in styles.css.
         add(newUserForm)
-//        add(newUserForm, textField, button)
-    }
-
-    private fun textField() = TextField("Your name")
-
-    private fun sayHelloButton(textField: TextField): Button {
-
-        val button = Button("Say hello") {
-            val message = greetingService.greet(textField.value)
-            add(Paragraph(message))
-        }
-
-        button.addClickShortcut(Key.ENTER)
-        button.addThemeVariants(ButtonVariant.LUMO_PRIMARY)
-
-        return button
     }
 
     companion object : Loggable()
@@ -84,10 +63,9 @@ class NewUserForm(private val onSave: (ClickEvent<Button>, User) -> Unit = { _, 
         }
     }
 
-    private val save = Button("Save") {
-        onSave(it, User(firstName.value, lastName.value, email.value))
-    }.apply {
+    private val save = Button("Save").apply {
         isEnabled = false
+        addClickListener { onSave(it, User(firstName.value, lastName.value, email.value)) }
     }
     private val close = Button("Cancel") {
         clear()
