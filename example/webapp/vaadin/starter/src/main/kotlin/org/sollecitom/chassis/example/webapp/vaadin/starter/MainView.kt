@@ -7,9 +7,7 @@ import com.vaadin.flow.component.html.Paragraph
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.router.Route
-import org.springframework.web.context.annotation.ApplicationScope
 
-@ApplicationScope
 @Route("")
 class MainView : VerticalLayout() {
 
