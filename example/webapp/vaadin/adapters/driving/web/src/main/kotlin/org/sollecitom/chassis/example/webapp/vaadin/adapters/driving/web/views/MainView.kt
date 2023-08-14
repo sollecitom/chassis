@@ -11,19 +11,25 @@ import com.vaadin.flow.router.Route
 @Route("")
 class MainView(private val greetingService: GreetingService) : VerticalLayout() {
 
+    private val textField = TextField("Your name")
+    private val button = sayHelloButton(textField)
+
     init {
-        val textField = TextField("Your name")
+        // Use custom CSS classes to apply styling. This is defined in styles.css.
+        addClassName("centered-content")
+        add(textField, button)
+    }
+
+    private fun sayHelloButton(textField: TextField): Button {
 
         val button = Button("Say hello") {
             val message = greetingService.greet(textField.value)
             add(Paragraph(message))
         }
 
-        button.addThemeVariants(ButtonVariant.LUMO_PRIMARY)
         button.addClickShortcut(Key.ENTER)
+        button.addThemeVariants(ButtonVariant.LUMO_PRIMARY)
 
-        // Use custom CSS classes to apply styling. This is defined in styles.css.
-        addClassName("centered-content")
-        add(textField, button)
+        return button
     }
 }
