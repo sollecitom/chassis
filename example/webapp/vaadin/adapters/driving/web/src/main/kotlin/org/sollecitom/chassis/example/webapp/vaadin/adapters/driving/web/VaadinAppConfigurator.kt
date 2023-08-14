@@ -9,10 +9,6 @@ import org.springframework.web.context.annotation.ApplicationScope
 @NpmPackage(value = "lumo-css-framework", version = "^4.0.10")
 @Theme("flowcrmtutorial")
 @PWA(name = "VaadinCRM", shortName = "CRM", offlinePath = "offline.html", offlineResources = ["./images/offline.png"])
-@ApplicationScope
-class VaadinAppConfigurator : AppShellConfigurator {  // TODO try to move this in adapters-driving-web
+@ApplicationScope // TODO try to remove this
+class VaadinAppConfigurator : AppShellConfigurator
 
-    init {
-        println("Initialised")
-    }
-}
