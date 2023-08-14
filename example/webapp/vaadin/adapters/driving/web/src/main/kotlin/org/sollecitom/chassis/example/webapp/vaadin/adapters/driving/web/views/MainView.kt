@@ -9,6 +9,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.EmailField
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.router.Route
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 
@@ -33,21 +34,13 @@ data class User(val firstName: String, val lastName: String, val email: String)
 
 class NewUserForm(private val onSave: (ClickEvent<Button>, User) -> Unit = { _, _ -> }) : FormLayout() {
 
-    private val firstName: TextField = TextField("First name").apply {
-        isRequired = true
-        minLength = 1
-        maxLength = 300
-        isInvalid = true
+    private val firstName: TextField = textField(label = "First name").apply {
         addClientValidatedEventListener {
             save.isEnabled = isValid()
         }
     }
 
-    private val lastName: TextField = TextField("Last name").apply {
-        isRequired = true
-        minLength = 1
-        maxLength = 300
-        isInvalid = true
+    private val lastName: TextField = textField(label = "Last name").apply {
         addClientValidatedEventListener {
             save.isEnabled = isValid()
         }
@@ -69,6 +62,17 @@ class NewUserForm(private val onSave: (ClickEvent<Button>, User) -> Unit = { _, 
     }
     private val close = Button("Cancel") {
         clear()
+    }
+
+    fun textField(label: String, required: Boolean = true, placeholder: String? = null, minLength: Int = 1, maxLength: Int = 300): TextField {
+
+        val textField = TextField(label)
+        textField.placeholder = placeholder
+        textField.minLength = minLength
+        textField.maxLength = maxLength
+        textField.isRequired = required
+        textField.isInvalid = required
+        return textField
     }
 
     init {
