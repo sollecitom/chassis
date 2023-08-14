@@ -9,9 +9,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.router.Route
 
 @Route("")
-class MainView : VerticalLayout() {
-
-    private val greetingService: GreetingService = StubbedGreetingService()
+class MainView(private val greetingService: GreetingService) : VerticalLayout() {
 
     init {
         val textField = TextField("Your name")
@@ -28,14 +26,4 @@ class MainView : VerticalLayout() {
         addClassName("centered-content")
         add(textField, button)
     }
-}
-
-interface GreetingService {
-
-    fun greet(name: String): String
-}
-
-class StubbedGreetingService : GreetingService {
-
-    override fun greet(name: String): String = "Hello $name"
 }
