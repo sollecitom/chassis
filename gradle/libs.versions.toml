@@ -15,6 +15,8 @@ guava = "32.1.2-jre"
 bouncy-castle = "1.76"
 commons-codec = "1.16.0"
 kweb = "1.4.8"
+vaadin = "24.1.4"
+spring-boot = "3.1.2"
 # plugin versions
 plugin-palantir-git = "3.0.0"
 plugin-version-catalog-report = "0.47.0"
@@ -50,9 +52,12 @@ bcutil = { module = "org.bouncycastle:bcutil-jdk18on", version.ref = "bouncy-cas
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
+vaadin-spring-boot-starer = { module = "com.vaadin:vaadin-spring-boot-starter", version.ref = "vaadin" }
 
 [plugins]
 com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "plugin-version-catalog-report" }
 com-palantir-git-version = { id = "com.palantir.git-version", version.ref = "plugin-palantir-git" }
 nl-littlerobots-version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "plugin-version-catalog-update" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+vaadin = { id = "com.vaadin", version.ref = "vaadin" }

@@ -37,12 +37,19 @@ object RepositoryConfiguration {
             }
 
             config.maven {
+                url = URI.create("https://maven.vaadin.com/vaadin-addons")
+                content {
+                    excludeGroupByRegex(internalGroup)
+                }
+            }
+
+            config.maven {
                 url = URI.create("https://maven.pkg.github.com/sollecitom/*")
                 credentials {
                     username = project.findProperty("sollecitom.github.user") as String?
-                            ?: System.getenv("GITHUB_USERNAME")
+                        ?: System.getenv("GITHUB_USERNAME")
                     password = project.findProperty("sollecitom.github.token") as String?
-                            ?: System.getenv("GITHUB_TOKEN")
+                        ?: System.getenv("GITHUB_TOKEN")
                 }
                 content {
                     includeGroupByRegex(internalGroup)
