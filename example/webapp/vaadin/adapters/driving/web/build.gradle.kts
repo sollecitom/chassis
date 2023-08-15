@@ -1,13 +1,10 @@
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
-
 plugins {
     java
     alias(libs.plugins.vaadin)
-    alias(libs.plugins.spring.boot) // TODO remove?
 }
 
 dependencies {
-    implementation(platform(SpringBootPlugin.BOM_COORDINATES))
+    implementation(platform(libs.spring.boot.dependencies))
     implementation(libs.vaadin.spring.boot.starer)
 
     implementation(projects.chassisExampleWebappVaadinConfiguration)

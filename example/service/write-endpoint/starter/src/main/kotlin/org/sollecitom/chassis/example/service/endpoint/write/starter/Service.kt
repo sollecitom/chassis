@@ -2,23 +2,18 @@ package org.sollecitom.chassis.example.service.endpoint.write.starter
 
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
-import org.http4k.cloudnative.env.fromYaml
-import org.http4k.routing.ResourceLoader
 import org.sollecitom.chassis.configuration.utils.fromYamlResource
-import org.sollecitom.chassis.core.domain.lifecycle.Startable
-import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.WebAPI
 import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.loggable.Loggable
-import kotlin.io.path.toPath
 
-class Service(private val environment: Environment) : Startable, Stoppable {
+internal class Service(private val environment: Environment) : WebService {
 
     private lateinit var webAPI: WebAPI
 
-    val port: Int get() = webAPI.servicePort
-    val healthPort: Int get() = webAPI.healthPort
+    override val port: Int get() = webAPI.servicePort
+    override val healthPort: Int get() = webAPI.healthPort
 
     override suspend fun start() {
         // TODO should this be encapsulated into a module?
