@@ -45,11 +45,11 @@ private class ServiceTest {
     @Test
     fun `main app request`() = runTest(timeout = timeout) {
 
-        val serviceRequest = Request(POST, service.httpURLWithPath("commands"))
+        val request = Request(POST, service.httpURLWithPath("commands"))
 
-        val serviceResponse = client(serviceRequest)
+        val response = client(request)
 
-        assertThat(serviceResponse.status).isEqualTo(ACCEPTED)
+        assertThat(response.status).isEqualTo(ACCEPTED)
     }
 
     @Nested
