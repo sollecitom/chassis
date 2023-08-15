@@ -18,13 +18,14 @@ import org.sollecitom.chassis.core.domain.lifecycle.Startable
 import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 import org.sollecitom.chassis.core.domain.networking.SpecifiedPort
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.endpoints.RegisterUserCommandsEndpoint
+import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.endpoints.UnknownCommandsEndpoint
 import org.sollecitom.chassis.http4k.server.utils.SuspendingHttpHandler
 import org.sollecitom.chassis.http4k.server.utils.asBlockingHandler
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 
 class WebAPI(private val configuration: Configuration) : Startable, Stoppable, HttpHandler {
 
-    private val mainApp = mainApp(RegisterUserCommandsEndpoint.V1())
+    private val mainApp = mainApp(RegisterUserCommandsEndpoint.V1(), UnknownCommandsEndpoint())
     private val server = server(mainApp)
 
     val servicePort: Int get() = server.port()

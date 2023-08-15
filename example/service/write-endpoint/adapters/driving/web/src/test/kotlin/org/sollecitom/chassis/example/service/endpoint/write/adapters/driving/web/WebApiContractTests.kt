@@ -41,7 +41,7 @@ private class WebApiContractTests {
 
         val response = api(request)
 
-        assertThat(response.status).isEqualTo(Status.NOT_FOUND)
+        assertThat(response.status).isEqualTo(Status.BAD_REQUEST)
     }
 
     @Test
@@ -52,7 +52,7 @@ private class WebApiContractTests {
 
         val response = api(request)
 
-        assertThat(response.status).isEqualTo(Status.NOT_FOUND)
+        assertThat(response.status).isEqualTo(Status.BAD_REQUEST)
     }
 
     private fun path(value: String) = "http://localhost:0/$value"
