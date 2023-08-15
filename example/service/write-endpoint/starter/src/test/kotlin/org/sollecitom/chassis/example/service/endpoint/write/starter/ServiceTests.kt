@@ -45,7 +45,7 @@ private class ServiceTest {
     }
 
     @Test
-    fun `main app request`() = runTest(timeout = timeout) {
+    fun `submitting a register user command`() = runTest(timeout = timeout) {
 
         val commandType = RegisterUser.V1.Type
         val request = Request(POST, service.httpURLWithPath("commands/${commandType.id.value}/${commandType.version.value}"))
