@@ -6,9 +6,9 @@ import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration
 import org.sollecitom.chassis.logging.standard.configuration.applyTo
 
-fun configureLogging() {
+fun configureLogging(defaultMinimumLoggingLevel: LoggingLevel = LoggingLevel.INFO) {
 
-    StandardLoggingConfiguration(defaultMinimumLoggingLevelOverrides = minimumLoggingLevelOverrides()).applyTo(JvmLoggerFactory)
+    StandardLoggingConfiguration(defaultMinimumLoggingLevel = defaultMinimumLoggingLevel, defaultMinimumLoggingLevelOverrides = minimumLoggingLevelOverrides()).applyTo(JvmLoggerFactory)
 }
 
 fun configureLogging(environment: Environment) {
@@ -16,4 +16,4 @@ fun configureLogging(environment: Environment) {
     StandardLoggingConfiguration(environment = environment, defaultMinimumLoggingLevelOverrides = minimumLoggingLevelOverrides()).applyTo(JvmLoggerFactory)
 }
 
-private fun minimumLoggingLevelOverrides() = mapOf("org.eclipse.jetty.server" to LoggingLevel.WARN)
+private fun minimumLoggingLevelOverrides() = mapOf("org.eclipse.jetty" to LoggingLevel.WARN, "org.apache.hc" to LoggingLevel.WARN)

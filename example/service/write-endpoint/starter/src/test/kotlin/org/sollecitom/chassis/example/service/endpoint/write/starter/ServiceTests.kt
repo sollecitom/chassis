@@ -20,6 +20,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.application.user.Re
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.configureLogging
 import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
+import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.web.api.test.utils.MonitoringEndpointsTestSpecification
 import org.sollecitom.chassis.web.api.test.utils.httpURLWithPath
 import org.sollecitom.chassis.web.service.domain.WebService
@@ -30,7 +31,7 @@ import kotlin.time.Duration.Companion.seconds
 private class ServiceTest {
 
     init {
-        configureLogging()
+        configureLogging(defaultMinimumLoggingLevel = LoggingLevel.DEBUG)
     }
 
     private val timeout = 5.seconds
