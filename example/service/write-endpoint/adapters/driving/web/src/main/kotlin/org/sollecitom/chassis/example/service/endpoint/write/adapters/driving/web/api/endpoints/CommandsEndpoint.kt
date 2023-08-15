@@ -15,10 +15,13 @@ internal class CommandsEndpoint : Endpoint {
     override val methods = setOf(Method.POST)
 
     override val route = routes(
-        path bind Method.POST toSuspending { request ->
-            Response(Status.ACCEPTED)
-        }
+        acceptCommand()
     )
+
+    private fun acceptCommand() = path bind Method.POST toSuspending { request ->
+
+        Response(Status.ACCEPTED)
+    }
 
     companion object : Loggable()
 }
