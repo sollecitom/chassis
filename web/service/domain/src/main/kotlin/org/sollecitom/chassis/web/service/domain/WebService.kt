@@ -1,9 +1,8 @@
-package org.sollecitom.chassis.example.service.endpoint.write.starter
+package org.sollecitom.chassis.web.service.domain
 
 import org.sollecitom.chassis.core.domain.lifecycle.Startable
 import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 
-// TODO move
 interface WebService : Startable, Stoppable {
 
     val port: Int

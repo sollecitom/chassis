@@ -7,6 +7,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.we
 import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.loggable.Loggable
+import org.sollecitom.chassis.web.service.domain.WebService
 
 internal class Service(private val environment: Environment) : WebService {
 

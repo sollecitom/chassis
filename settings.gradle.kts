@@ -29,6 +29,9 @@ module("logging", "standard", "slf4j", "configuration")
 module("http4k", "utils")
 module("http4k", "server", "utils")
 
+module("web", "service", "domain")
+module("web", "api", "test", "utils")
+
 module("example", "service", "write-endpoint", "configuration")
 module("example", "service", "write-endpoint", "domain")
 module("example", "service", "write-endpoint", "application")

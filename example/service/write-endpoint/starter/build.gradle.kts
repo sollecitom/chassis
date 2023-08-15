@@ -3,7 +3,9 @@ dependencies {
     implementation(projects.chassisExampleServiceWriteEndpointAdaptersDrivenPulsar)
     implementation(projects.chassisExampleServiceWriteEndpointConfiguration)
     implementation(projects.chassisKotlinExtensions)
+    implementation(projects.chassisWebServiceDomain)
 
+    testImplementation(projects.chassisWebApiTestUtils)
     testImplementation(projects.chassisTestUtils)
     testImplementation(platform(libs.http4k.bom))
     testImplementation(libs.http4k.client.apache.async)

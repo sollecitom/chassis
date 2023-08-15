@@ -19,6 +19,9 @@ import org.sollecitom.chassis.configuration.utils.from
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.configureLogging
 import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
+import org.sollecitom.chassis.web.api.test.utils.MonitoringEndpointsTestSpecification
+import org.sollecitom.chassis.web.api.test.utils.httpURLWithPath
+import org.sollecitom.chassis.web.service.domain.WebService
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -42,7 +45,7 @@ private class ServiceTest {
     @Test
     fun `main app request`() = runTest(timeout = timeout) {
 
-        val serviceRequest = Request(POST, service.path("commands"))
+        val serviceRequest = Request(POST, service.httpURLWithPath("commands"))
 
         val serviceResponse = client(serviceRequest)
 
@@ -50,14 +53,10 @@ private class ServiceTest {
     }
 
     @Nested
-    inner class Monitoring : MonitoringEndpointsTestSpecification.ForWebService {
-        override val service: WebService
-            get() = this@ServiceTest.service
-        override val timeout: Duration
-            get() = this@ServiceTest.timeout
-        override val client: HttpHandler
-            get() = this@ServiceTest.client
+    inner class Monitoring : MonitoringEndpointsTestSpecification {
+
+        override val service: WebService get() = this@ServiceTest.service
+        override val timeout: Duration get() = this@ServiceTest.timeout
+        override val client: HttpHandler get() = this@ServiceTest.client
     }
 }
-
-private fun WebService.path(value: String): String = "http://localhost:${port}/$value"
