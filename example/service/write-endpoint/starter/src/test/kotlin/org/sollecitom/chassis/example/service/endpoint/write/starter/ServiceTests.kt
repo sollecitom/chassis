@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.configuration.utils.from
+import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.configureLogging
 import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
@@ -45,7 +46,8 @@ private class ServiceTest {
     @Test
     fun `main app request`() = runTest(timeout = timeout) {
 
-        val request = Request(POST, service.httpURLWithPath("commands"))
+        val commandType = RegisterUser.V1.Type
+        val request = Request(POST, service.httpURLWithPath("commands/${commandType.id.value}/${commandType.version.value}"))
 
         val response = client(request)
 

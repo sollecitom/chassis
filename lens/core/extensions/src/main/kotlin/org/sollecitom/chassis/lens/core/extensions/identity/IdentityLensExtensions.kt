@@ -1,10 +1,11 @@
 package org.sollecitom.chassis.lens.core.extensions.identity
 
-import org.http4k.lens.BiDiLensSpec
-import org.http4k.lens.BiDiMapping
-import org.http4k.lens.StringBiDiMappings
-import org.http4k.lens.map
+import org.http4k.lens.*
 import org.sollecitom.chassis.core.domain.identity.ulid.ULID
+import org.sollecitom.chassis.lens.core.extensions.map
+import org.sollecitom.chassis.lens.core.extensions.naming.name
+
+fun Path.ulid() = map(StringBiDiMappings.ulid())
 
 fun <IN : Any> BiDiLensSpec<IN, String>.ulid() = map(StringBiDiMappings.ulid())
 

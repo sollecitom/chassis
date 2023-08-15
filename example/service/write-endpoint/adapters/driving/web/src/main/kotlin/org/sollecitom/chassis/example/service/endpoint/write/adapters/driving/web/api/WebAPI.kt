@@ -8,6 +8,8 @@ import org.http4k.core.HttpHandler
 import org.http4k.core.then
 import org.http4k.filter.DebuggingFilters.PrintRequestAndResponse
 import org.http4k.filter.RequestFilters.GunZip
+import org.http4k.filter.ServerFilters
+import org.http4k.filter.ServerFilters.CatchLensFailure
 import org.http4k.filter.inIntelliJOnly
 import org.http4k.routing.routes
 import org.http4k.server.JettyLoom
@@ -39,7 +41,7 @@ class WebAPI(private val configuration: Configuration) : Startable, Stoppable {
 
     private fun mainApp(vararg endpoints: Endpoint): HttpHandler = requestFilters().then(routes(*endpoints.map(Endpoint::route).toTypedArray()))
 
-    private fun requestFilters(): Filter = GunZip().then(PrintRequestAndResponse().inIntelliJOnly())
+    private fun requestFilters(): Filter = CatchLensFailure.then(GunZip()).then(PrintRequestAndResponse().inIntelliJOnly())
 
     private fun server(mainApp: SuspendingHttpHandler): Http4kK8sServer {
 
