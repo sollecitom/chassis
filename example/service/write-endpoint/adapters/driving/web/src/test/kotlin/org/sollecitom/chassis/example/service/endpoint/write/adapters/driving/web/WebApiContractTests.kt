@@ -15,6 +15,11 @@ import org.sollecitom.chassis.example.service.endpoint.write.application.user.Re
 @TestInstance(PER_CLASS)
 private class WebApiContractTests {
 
+    // TODO add invocation context
+    // TODO add the request body
+    // TODO add the case where the result is rejected as EmailAddressAlreadyInUse
+    // TODO add the swagger compliance checks for requests
+    // TODO add the swagger compliance checks for responses
     private val api = WebAPI(configuration = WebAPI.Configuration(servicePort = 0.let(::SpecifiedPort), healthPort = 0.let(::SpecifiedPort)))
 
     @Test
