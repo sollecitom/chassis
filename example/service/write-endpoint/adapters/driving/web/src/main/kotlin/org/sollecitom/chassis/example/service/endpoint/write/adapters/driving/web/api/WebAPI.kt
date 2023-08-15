@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web
+package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api
 
 import org.http4k.cloudnative.Http4kK8sServer
 import org.http4k.cloudnative.asK8sServer
@@ -14,7 +14,6 @@ import org.http4k.server.JettyLoom
 import org.sollecitom.chassis.core.domain.lifecycle.Startable
 import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 import org.sollecitom.chassis.core.domain.networking.SpecifiedPort
-import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.Endpoint
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.endpoints.CommandsEndpoint
 import org.sollecitom.chassis.http4k.server.utils.SuspendingHttpHandler
 import org.sollecitom.chassis.http4k.server.utils.asBlockingHandler
