@@ -1,6 +1,6 @@
 dependencies {
     api(projects.chassisExampleServiceWriteEndpointApplication)
-    api(projects.chassisHttp4kServerUtils)
+    api(projects.chassisWebApiUtils)
 
     api(platform(libs.http4k.bom))
     implementation(libs.http4k.server.jetty)

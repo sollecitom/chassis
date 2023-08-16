@@ -31,6 +31,7 @@ module("http4k", "server", "utils")
 
 module("web", "service", "domain")
 module("web", "api", "test", "utils")
+module("web", "api", "utils")
 
 module("example", "service", "write-endpoint", "configuration")
 module("example", "service", "write-endpoint", "domain")
