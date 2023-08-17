@@ -16,7 +16,9 @@ fun newExampleWriteEndpointServiceContainer(servicePort: Int = 8090, healthPort:
     val loggingArguments = mapOf("LOGGING_LEVEL_DEFAULT" to "INFO")
     val webArguments = mapOf("SERVICE_PORT" to "$servicePort", "HEALTH_PORT" to "$healthPort", "LOGGING_LEVELS" to "io.micronaut.web.router=INFO")
     val arguments = (webArguments + loggingArguments)
-    return ExampleWriteEndpointServiceContainer(servicePort, healthPort).withExposedPorts(servicePort, healthPort).waitingFor(Wait.defaultWaitStrategy()).withJavaArgs(arguments)
+    // TODO refactor this
+    val waitStrategy = Wait.forLogMessage(".*org.sollecitom.chassis.example.service.endpoint.write.starter.Service: Started.*", 1)
+    return ExampleWriteEndpointServiceContainer(servicePort, healthPort).withExposedPorts(servicePort, healthPort).waitingFor(waitStrategy).withJavaArgs(arguments)
 }
 
 // TODO fix the wait strategy so that it uses the readiness check or a log statement
