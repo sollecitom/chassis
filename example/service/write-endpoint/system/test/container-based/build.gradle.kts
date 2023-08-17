@@ -1,25 +1,40 @@
-import org.unbrokendome.gradle.plugins.testsets.dsl.testSets
+val containerBasedSystemTest by sourceSets.creating
 
-plugins {
-    alias(libs.plugins.test.sets)
+val integrationTestTask = tasks.register<Test>("containerBasedSystemTest") {
+    description = "Runs container-based system tests."
+//    group = "verification"
+    useJUnitPlatform()
+
+    testClassesDirs = containerBasedSystemTest.output.classesDirs
+    classpath = configurations[containerBasedSystemTest.runtimeClasspathConfigurationName] + containerBasedSystemTest.output
+
+//    shouldRunAfter(tasks.test)
 }
 
-testSets {
-    "containerBasedSystemTest"()
-}
-
-dependencies {
-    containerTestImplementation(projects.chassisExampleServiceWriteEndpointStarter) // TODO maybe remove
-    containerTestImplementation(projects.chassisExampleServiceWriteEndpointConfiguration) // TODO remove
-    containerTestImplementation(projects.chassisExampleServiceWriteEndpointSystemTestSpecification)
-    containerTestImplementation(projects.chassisTestContainersUtils)
-}
-
-fun DependencyHandlerScope.containerTestImplementation(dependency: Any) {
+fun DependencyHandlerScope.containerBasedSystemTestImplementation(dependency: Any) {
 
     "containerBasedSystemTestImplementation"(dependency)
 }
 
-tasks.named("containerBasedSystemTest") {
-    dependsOn(":${projects.chassisExampleServiceWriteEndpointStarter.name}:jibDockerBuild")
+dependencies {
+    containerBasedSystemTestImplementation(projects.chassisExampleServiceWriteEndpointStarter) // TODO maybe remove
+    containerBasedSystemTestImplementation(projects.chassisExampleServiceWriteEndpointConfiguration) // TODO remove
+    containerBasedSystemTestImplementation(projects.chassisExampleServiceWriteEndpointSystemTestSpecification)
+    containerBasedSystemTestImplementation(projects.chassisTestContainersUtils)
 }
+
+//dependencies {
+//    containerTestImplementation(projects.chassisExampleServiceWriteEndpointStarter) // TODO maybe remove
+//    containerTestImplementation(projects.chassisExampleServiceWriteEndpointConfiguration) // TODO remove
+//    containerTestImplementation(projects.chassisExampleServiceWriteEndpointSystemTestSpecification)
+//    containerTestImplementation(projects.chassisTestContainersUtils)
+//}
+
+//fun DependencyHandlerScope.containerTestImplementation(dependency: Any) {
+//
+//    "containerBasedTestImplementation"(dependency)
+//}
+
+//tasks.named("containerBasedTest") {
+//    dependsOn(":${projects.chassisExampleServiceWriteEndpointStarter.name}:jibDockerBuild")
+//}

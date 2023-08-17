@@ -7,7 +7,7 @@ An example write endpoint service.
 ### Run the container-based system tests
 
 ```bash
-./gradlew build chassis-example-service-write-endpoint-starter:containerBasedSystemTest
+./gradlew build :chassis-example-service-write-endpoint-system-test-container-based:containerBasedSystemTest
  
 
 ```
@@ -15,7 +15,7 @@ An example write endpoint service.
 ### Build the Docker image
 
 ```bash
-./gradlew build chassis-example-service-write-endpoint-starter:jibDockerBuild
+./gradlew build :chassis-example-service-write-endpoint-starter:jibDockerBuild
  
 
 ```
