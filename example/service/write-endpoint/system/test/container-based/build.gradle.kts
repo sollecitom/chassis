@@ -1,4 +1,4 @@
-val containerBasedSystemTest by sourceSets.creating
+val containerBasedSystemTest: SourceSet by sourceSets.creating
 
 val integrationTestTask = tasks.register<Test>("containerBasedSystemTest") {
     description = "Runs container-based system tests."
@@ -22,18 +22,6 @@ dependencies {
     containerBasedSystemTestImplementation(projects.chassisExampleServiceWriteEndpointSystemTestSpecification)
     containerBasedSystemTestImplementation(projects.chassisTestContainersUtils)
 }
-
-//dependencies {
-//    containerTestImplementation(projects.chassisExampleServiceWriteEndpointStarter) // TODO maybe remove
-//    containerTestImplementation(projects.chassisExampleServiceWriteEndpointConfiguration) // TODO remove
-//    containerTestImplementation(projects.chassisExampleServiceWriteEndpointSystemTestSpecification)
-//    containerTestImplementation(projects.chassisTestContainersUtils)
-//}
-
-//fun DependencyHandlerScope.containerTestImplementation(dependency: Any) {
-//
-//    "containerBasedTestImplementation"(dependency)
-//}
 
 //tasks.named("containerBasedTest") {
 //    dependsOn(":${projects.chassisExampleServiceWriteEndpointStarter.name}:jibDockerBuild")
