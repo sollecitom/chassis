@@ -28,7 +28,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 @TestInstance(PER_CLASS)
-private class ServiceTest {
+private class SystemTests {
 
     init {
         configureLogging(defaultMinimumLoggingLevel = LoggingLevel.DEBUG)
@@ -58,8 +58,8 @@ private class ServiceTest {
     @Nested
     inner class Monitoring : MonitoringEndpointsTestSpecification {
 
-        override val service: WebService get() = this@ServiceTest.service
-        override val timeout: Duration get() = this@ServiceTest.timeout
-        override val client: HttpHandler get() = this@ServiceTest.client
+        override val service: WebService get() = this@SystemTests.service
+        override val timeout: Duration get() = this@SystemTests.timeout
+        override val client: HttpHandler get() = this@SystemTests.client
     }
 }
