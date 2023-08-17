@@ -20,7 +20,7 @@ private class WebApiContractTests {
     // TODO add the case where the result is rejected as EmailAddressAlreadyInUse
     // TODO add the swagger compliance checks for requests
     // TODO add the swagger compliance checks for responses
-    private val api = WebAPI(configuration = WebAPI.Configuration(servicePort = 0.let(::SpecifiedPort), healthPort = 0.let(::SpecifiedPort)))
+    private val api = WebAPI(configuration = WebAPI.Configuration.programmatic())
 
     @Test
     fun `submitting a register user command`() {
@@ -56,4 +56,8 @@ private class WebApiContractTests {
     }
 
     private fun path(value: String) = "http://localhost:0/$value"
+
+    private fun WebAPI.Configuration.Companion.programmatic(servicePort: Int = 0, healthPort: Int = 0): WebAPI.Configuration = ProgrammaticWebAPIConfiguration(servicePort.let(::SpecifiedPort), healthPort.let(::SpecifiedPort))
+
+    private data class ProgrammaticWebAPIConfiguration(override val servicePort: SpecifiedPort, override val healthPort: SpecifiedPort) : WebAPI.Configuration
 }

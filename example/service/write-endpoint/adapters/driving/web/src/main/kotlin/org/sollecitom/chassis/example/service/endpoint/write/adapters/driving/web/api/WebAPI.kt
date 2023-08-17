@@ -55,7 +55,10 @@ class WebAPI(private val configuration: Configuration) : Startable, Stoppable, H
         return mainApp.asBlockingHandler().asK8sServer(::JettyLoom, mainAppPort, healthApp, healthAppPort)
     }
 
-    data class Configuration(val servicePort: SpecifiedPort, val healthPort: SpecifiedPort) {
+    interface Configuration {
+
+        val servicePort: SpecifiedPort
+        val healthPort: SpecifiedPort
 
         companion object
     }
