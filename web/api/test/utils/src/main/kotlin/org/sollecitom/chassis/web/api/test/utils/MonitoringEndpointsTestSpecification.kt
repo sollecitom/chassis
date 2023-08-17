@@ -3,27 +3,25 @@ package org.sollecitom.chassis.web.api.test.utils
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import kotlinx.coroutines.test.runTest
-import org.http4k.core.HttpHandler
 import org.http4k.core.Request
 import org.http4k.core.Status
 import org.junit.jupiter.api.Test
 import org.sollecitom.chassis.web.service.domain.WebService
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
-interface MonitoringEndpointsTestSpecification {
+interface MonitoringEndpointsTestSpecification : WebServiceTestSpecification {
 
-    val service: WebService
-    val timeout: Duration
-    val client: HttpHandler
+    val timeout: Duration get() = 30.seconds
     val livenessPath: String get() = DEFAULT_LIVENESS_PATH
     val readinessPath: String get() = DEFAULT_READINESS_PATH
 
     @Test
     fun `liveness endpoint is exposed on the health port`() = runTest(timeout = timeout) {
 
-        val request = service.livenessRequest()
+        val request = webService.livenessRequest()
 
-        val response = client(request)
+        val response = httpClient(request)
 
         assertThat(response.status).isEqualTo(Status.OK)
     }
@@ -31,9 +29,9 @@ interface MonitoringEndpointsTestSpecification {
     @Test
     fun `liveness endpoint is not exposed on the main port`() = runTest(timeout = timeout) {
 
-        val request = service.livenessRequest(port = service.port)
+        val request = webService.livenessRequest(port = webService.port)
 
-        val response = client(request)
+        val response = httpClient(request)
 
         assertThat(response.status).isEqualTo(Status.NOT_FOUND)
     }
@@ -41,9 +39,9 @@ interface MonitoringEndpointsTestSpecification {
     @Test
     fun `readiness endpoint is exposed on the health port`() = runTest(timeout = timeout) {
 
-        val request = service.readinessRequest()
+        val request = webService.readinessRequest()
 
-        val response = client(request)
+        val response = httpClient(request)
 
         assertThat(response.status).isEqualTo(Status.OK)
     }
@@ -51,9 +49,9 @@ interface MonitoringEndpointsTestSpecification {
     @Test
     fun `readiness endpoint is not exposed on the main port`() = runTest(timeout = timeout) {
 
-        val request = service.readinessRequest(port = service.port)
+        val request = webService.readinessRequest(port = webService.port)
 
-        val response = client(request)
+        val response = httpClient(request)
 
         assertThat(response.status).isEqualTo(Status.NOT_FOUND)
     }

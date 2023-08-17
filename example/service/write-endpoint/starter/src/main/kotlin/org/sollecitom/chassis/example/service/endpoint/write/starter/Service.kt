@@ -7,7 +7,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.we
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.service.domain.WebService
 
-internal class Service(private val environment: Environment) : WebService {
+class Service(private val environment: Environment) : WebService {
 
     private lateinit var webAPI: WebAPI
 
