@@ -38,10 +38,10 @@ val serviceImage = "$repository$serviceName" // TODO change this to "$repository
 
 val tmpVolume = "/tmp"
 val maxRamPercentage = "70.000000"
-val customJvmFlags = listOf("-XX:+UnlockExperimentalVMOptions", "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=$tmpVolume/java_pid<pid>.hprof", "-XX:MaxRAMPercentage=$maxRamPercentage", "-XX:+UseG1GC", "-XX:+AlwaysPreTouch", "-XX:+UseNUMA")
+val customJvmFlags = listOf("-XX:+UnlockExperimentalVMOptions", "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=$tmpVolume/java_pid<pid>.hprof", "-XX:MaxRAMPercentage=$maxRamPercentage", "-XX:+UseG1GC", "-XX:+AlwaysPreTouch", "-XX:+UseNUMA", "--enable-preview")
 val customArgs = listOf("-Djava.security.egd=file:/dev/./urandom")
-val mainAppPort = "8085"
-val healthAppPort = "8085"
+val mainAppPort = "8081"
+val healthAppPort = "8082"
 val containerEnvironment = mutableMapOf("SERVICE_PORT" to mainAppPort, "HEALTH_PORT" to healthAppPort, "BUILD_REVISION" to gitVersionDetails.gitHashFull, "BUILD_TIMESTAMP" to buildTimestamp)
 val imageTags = setOf(gitVersionDetails.gitHashFull, "snapshot")
 
@@ -59,7 +59,6 @@ configure<JibExtension> {
                 "build.timestamp" to buildTimestamp
             )
         )
-        ports = listOf(mainAppPort, healthAppPort)
         filesModificationTime.set(buildTimestamp)
         creationTime.set(buildTimestamp) // TODO this is to achieve build reproducibility - think whether reproducibility is worth it
         mainClass = "org.sollecitom.chassis.example.service.endpoint.write.starter.StarterKt"

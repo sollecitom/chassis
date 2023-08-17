@@ -31,3 +31,10 @@ A set of modular libraries that can be used by multiple projects.
 ./gradlew versionCatalogUpdate
 
 ```
+
+### Build all the Docker images (for the example projects)
+
+```bash
+./gradlew jibDockerBuild
+
+```
