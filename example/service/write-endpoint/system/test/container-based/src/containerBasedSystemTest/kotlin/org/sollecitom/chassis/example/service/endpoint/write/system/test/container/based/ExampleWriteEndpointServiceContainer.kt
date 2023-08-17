@@ -4,10 +4,7 @@ import org.sollecitom.chassis.web.service.domain.WebServiceInfo
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy
 import org.testcontainers.containers.wait.strategy.Wait
-import org.testcontainers.containers.wait.strategy.WaitStrategy
-import org.testcontainers.containers.wait.strategy.WaitStrategyTarget
 import org.testcontainers.utility.DockerImageName
-import java.time.Duration
 
 // TODO refactor this whole mess
 private const val IMAGE = "example-write-endpoint:snapshot"
@@ -19,11 +16,11 @@ fun newExampleWriteEndpointServiceContainer(servicePort: Int = 8090, healthPort:
     val loggingArguments = mapOf("LOGGING_LEVEL_DEFAULT" to "INFO")
     val webArguments = mapOf("SERVICE_PORT" to "$servicePort", "HEALTH_PORT" to "$healthPort", "LOGGING_LEVELS" to "io.micronaut.web.router=INFO")
     val arguments = (webArguments + loggingArguments)
-    return ExampleWriteEndpointServiceContainer(servicePort, healthPort).withExposedPorts(servicePort, healthPort).withJavaArgs(arguments)
+    return ExampleWriteEndpointServiceContainer(servicePort, healthPort).withExposedPorts(servicePort, healthPort).waitingFor(Wait.defaultWaitStrategy()).withJavaArgs(arguments)
 }
 
-class ExampleWriteEndpointServiceContainer(val servicePort: Int, val healthPort: Int) : JvmMicroserviceContainer<ExampleWriteEndpointServiceContainer>(imageName) {
-//class ExampleWriteEndpointServiceContainer(val servicePort: Int, val healthPort: Int) : JvmMicroserviceContainer<ExampleWriteEndpointServiceContainer>(imageName, readinessHttpWaitStrategy(healthPort)) {
+// TODO fix the wait strategy so that it uses the readiness check or a log statement
+class ExampleWriteEndpointServiceContainer(val servicePort: Int, val healthPort: Int) : GenericContainer<ExampleWriteEndpointServiceContainer>(imageName) {
 
     val webServiceInfo: WebServiceInfo by lazy { WebServiceInfoAdapter(host, getMappedPort(servicePort), getMappedPort(healthPort)) }
 }
@@ -57,18 +54,9 @@ private fun Map.Entry<String, String>.toJavaArgument(): String = "-D$key=$value"
 
 fun Map<String, String>.toJavaArgumentsList(): List<String> = map { it.toJavaArgument() }
 
-abstract class JvmMicroserviceContainer<SELF : JvmMicroserviceContainer<SELF>>(imageName: DockerImageName, waitStrategy: WaitStrategy = Wait.defaultWaitStrategy()) : GenericContainer<SELF>(imageName) {
+// TODO maybe it takes a port? but it wouldn't know which port...
+fun readinessHttpWaitStrategy(port: Int, path: String = "readiness"): HttpWaitStrategy = Wait.forHttp(path).forPort(port).withMethod("GET").forStatusCode(200)
 
-    init {
-        setWaitStrategy(waitStrategy)
-    }
+fun <CONTAINER : GenericContainer<CONTAINER>> CONTAINER.withJavaArgs(arguments: List<String>): CONTAINER = withEnv("JAVA_TOOL_OPTIONS", arguments.joinToString(separator = " "))
 
-    final override fun setWaitStrategy(waitStrategy: WaitStrategy) = super.setWaitStrategy(waitStrategy)
-}
-
-// TODO refactor
-fun readinessHttpWaitStrategy(path: String = "readiness"): HttpWaitStrategy = Wait.forHttp(path).withMethod("GET").forStatusCode(200)
-
-fun <CONTAINER : JvmMicroserviceContainer<CONTAINER>> CONTAINER.withJavaArgs(arguments: List<String>): CONTAINER = withEnv("JAVA_TOOL_OPTIONS", arguments.joinToString(separator = " "))
-
-fun <CONTAINER : JvmMicroserviceContainer<CONTAINER>> CONTAINER.withJavaArgs(arguments: Map<String, String>): CONTAINER = withJavaArgs(arguments.toJavaArgumentsList())
+fun <CONTAINER : GenericContainer<CONTAINER>> CONTAINER.withJavaArgs(arguments: Map<String, String>): CONTAINER = withJavaArgs(arguments.toJavaArgumentsList())
