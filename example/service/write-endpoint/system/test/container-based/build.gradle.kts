@@ -23,6 +23,7 @@ dependencies {
     containerBasedSystemTestImplementation(projects.chassisTestContainersUtils)
 }
 
-//tasks.named("containerBasedTest") {
+// TODO enable this
+//tasks.named("containerBasedSystemTest") {
 //    dependsOn(":${projects.chassisExampleServiceWriteEndpointStarter.name}:jibDockerBuild")
 //}
