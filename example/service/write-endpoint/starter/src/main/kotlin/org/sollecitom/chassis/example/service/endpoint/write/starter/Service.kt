@@ -13,6 +13,7 @@ class Service(private val environment: Environment) : WebService {
 
     override val port: Int get() = webAPI.servicePort
     override val healthPort: Int get() = webAPI.healthPort
+    override val host = "localhost" // TODO fix
 
     override suspend fun start() {
         webAPI = webApi(environment)

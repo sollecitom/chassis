@@ -17,11 +17,13 @@ commons-codec = "1.16.0"
 kweb = "1.4.8"
 vaadin = "24.1.4"
 spring-boot = "3.1.2"
+test-containers = "1.18.3"
 # plugin versions
 palantir-git-plugin = "3.0.0"
 version-catalog-report-plugin = "0.47.0"
 version-catalog-update-plugin = "0.8.1"
 jib-plugin = "3.3.2"
+version-test-sets-plugin = "4.0.0"
 
 [libraries]
 kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines" }
@@ -56,6 +58,7 @@ assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assert
 vaadin-spring-boot-starer = { module = "com.vaadin:vaadin-spring-boot-starter", version.ref = "vaadin" }
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
 spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot" }
+test-containers = { module = "org.testcontainers:testcontainers", version.ref = "test-containers" }
 
 [plugins]
 com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "version-catalog-report-plugin" }
@@ -65,3 +68,4 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 vaadin = { id = "com.vaadin", version.ref = "vaadin" }
 jib = { id = "com.google.cloud.tools.jib", version.ref = "jib-plugin" }
+test-sets = { id = "org.unbroken-dome.test-sets", version.ref = "version-test-sets-plugin" }

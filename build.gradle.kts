@@ -57,7 +57,7 @@ allprojects {
             showStandardStreams = false
             exceptionFormat = TestExceptionFormat.FULL
         }
-        jvmArgs = listOf("-XX:+AllowRedefinitionToAddDeleteMethods", "--enable-preview")
+        jvmArgs = listOf("-XX:+AllowRedefinitionToAddDeleteMethods", "--enable-preview") // TODO read from buildSrc?
     }
 
     subprojects {
@@ -97,11 +97,12 @@ allprojects {
     }
 }
 
+// TODO move to a library and refactor
 fun String.isNonStable(): Boolean {
     val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { uppercase().contains(it) }
     val regex = "^[0-9,.v-]+(-r)?$".toRegex()
     val isStable = stableKeyword || regex.matches(this)
-    return isStable.not()
+    return !isStable
 }
 
 // TODO replace with a semver library of choice
@@ -120,7 +121,7 @@ tasks.withType<DependencyUpdatesTask> {
         componentSelection {
             all {
                 when {
-                    candidate.version.isNonStable() && !currentVersion.isNonStable() -> reject("Release candidate ${candidate.module}")
+                    !candidate.version.isNonStable() && currentVersion.isNonStable() -> reject("Release candidate ${candidate.module}")
                     candidate.version.toVersionNumber() < currentVersion.toVersionNumber() -> reject("Lower version ${candidate.module}")
                 }
             }

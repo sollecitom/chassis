@@ -4,6 +4,7 @@ rootProject.name = "chassis"
 val versionCatalogName: String by settings
 
 module("test", "utils")
+module("test", "containers", "utils")
 module("kotlin", "extensions")
 module("configuration", "utils")
 module("lens", "core", "extensions")
