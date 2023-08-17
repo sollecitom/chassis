@@ -5,14 +5,16 @@ import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.containers.wait.strategy.WaitStrategy
+import org.testcontainers.containers.wait.strategy.WaitStrategyTarget
 import org.testcontainers.utility.DockerImageName
+import java.time.Duration
 
 // TODO refactor this whole mess
 private const val IMAGE = "example-write-endpoint:snapshot"
-private const val IMAGE_REPOSITORY = "ghcr.io/sollecitom/"
+private const val IMAGE_REPOSITORY = "ghcr.io/sollecitom-chassis/"
 private val imageName = DockerImageName.parse("$IMAGE_REPOSITORY$IMAGE")
 
-fun newExampleWriteEndpointServiceContainer(servicePort: Int = 0, healthPort: Int = 0): ExampleWriteEndpointServiceContainer {
+fun newExampleWriteEndpointServiceContainer(servicePort: Int = 8090, healthPort: Int = 8091): ExampleWriteEndpointServiceContainer {
 
     val loggingArguments = mapOf("LOGGING_LEVEL_DEFAULT" to "INFO")
     val webArguments = mapOf("SERVICE_PORT" to "$servicePort", "HEALTH_PORT" to "$healthPort", "LOGGING_LEVELS" to "io.micronaut.web.router=INFO")
@@ -20,7 +22,8 @@ fun newExampleWriteEndpointServiceContainer(servicePort: Int = 0, healthPort: In
     return ExampleWriteEndpointServiceContainer(servicePort, healthPort).withExposedPorts(servicePort, healthPort).withJavaArgs(arguments)
 }
 
-class ExampleWriteEndpointServiceContainer(val servicePort: Int, val healthPort: Int) : JvmMicroserviceContainer<ExampleWriteEndpointServiceContainer>(imageName, readinessHttpWaitStrategy(healthPort)) {
+class ExampleWriteEndpointServiceContainer(val servicePort: Int, val healthPort: Int) : JvmMicroserviceContainer<ExampleWriteEndpointServiceContainer>(imageName) {
+//class ExampleWriteEndpointServiceContainer(val servicePort: Int, val healthPort: Int) : JvmMicroserviceContainer<ExampleWriteEndpointServiceContainer>(imageName, readinessHttpWaitStrategy(healthPort)) {
 
     val webServiceInfo: WebServiceInfo by lazy { WebServiceInfoAdapter(host, getMappedPort(servicePort), getMappedPort(healthPort)) }
 }
@@ -64,7 +67,7 @@ abstract class JvmMicroserviceContainer<SELF : JvmMicroserviceContainer<SELF>>(i
 }
 
 // TODO refactor
-fun readinessHttpWaitStrategy(port: Int, path: String = "readiness"): HttpWaitStrategy = Wait.forHttp(path).forPort(port).withMethod("GET").forStatusCode(200)
+fun readinessHttpWaitStrategy(path: String = "readiness"): HttpWaitStrategy = Wait.forHttp(path).withMethod("GET").forStatusCode(200)
 
 fun <CONTAINER : JvmMicroserviceContainer<CONTAINER>> CONTAINER.withJavaArgs(arguments: List<String>): CONTAINER = withEnv("JAVA_TOOL_OPTIONS", arguments.joinToString(separator = " "))
 
