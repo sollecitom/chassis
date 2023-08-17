@@ -49,7 +49,7 @@ class WebAPI(private val configuration: Configuration) : Startable, Stoppable, H
 
     private fun server(mainApp: SuspendingHttpHandler): Http4kK8sServer {
 
-        val healthApp = Health()
+        val healthApp = Health() // TODO add an extra route for /manifest, returning BUILD_REVISION (full Git hash) and BUILD_TIMESTAMP
         val mainAppPort = configuration.servicePort.value
         val healthAppPort = configuration.healthPort.value
         return mainApp.asBlockingHandler().asK8sServer(::JettyLoom, mainAppPort, healthApp, healthAppPort)

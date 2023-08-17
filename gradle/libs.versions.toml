@@ -18,9 +18,10 @@ kweb = "1.4.8"
 vaadin = "24.1.4"
 spring-boot = "3.1.2"
 # plugin versions
-plugin-palantir-git = "3.0.0"
-plugin-version-catalog-report = "0.47.0"
-plugin-version-catalog-update = "0.8.1"
+palantir-git-plugin = "3.0.0"
+version-catalog-report-plugin = "0.47.0"
+version-catalog-update-plugin = "0.8.1"
+jib-plugin = "3.3.2"
 
 [libraries]
 kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines" }
@@ -57,9 +58,10 @@ spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-depe
 spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot" }
 
 [plugins]
-com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "plugin-version-catalog-report" }
-com-palantir-git-version = { id = "com.palantir.git-version", version.ref = "plugin-palantir-git" }
-nl-littlerobots-version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "plugin-version-catalog-update" }
+com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "version-catalog-report-plugin" }
+com-palantir-git-version = { id = "com.palantir.git-version", version.ref = "palantir-git-plugin" }
+nl-littlerobots-version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "version-catalog-update-plugin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 vaadin = { id = "com.vaadin", version.ref = "vaadin" }
+jib = { id = "com.google.cloud.tools.jib", version.ref = "jib-plugin" }
