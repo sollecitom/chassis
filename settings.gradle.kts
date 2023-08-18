@@ -44,10 +44,6 @@ module("example", "service", "write-endpoint", "system", "test", "specification"
 module("example", "service", "write-endpoint", "system", "test", "process-based")
 module("example", "service", "write-endpoint", "system", "test", "container-based")
 
-module("example", "webapp", "htmx", "starter")
-module("example", "webapp", "kweb", "configuration")
-module("example", "webapp", "kweb", "starter")
-
 module("example", "webapp", "vaadin", "configuration")
 module("example", "webapp", "vaadin", "domain")
 module("example", "webapp", "vaadin", "domain", "sdk")
