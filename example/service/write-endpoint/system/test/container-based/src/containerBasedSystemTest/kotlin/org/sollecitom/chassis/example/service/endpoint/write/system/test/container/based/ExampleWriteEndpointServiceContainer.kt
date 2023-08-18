@@ -1,5 +1,6 @@
 package org.sollecitom.chassis.example.service.endpoint.write.system.test.container.based
 
+import org.sollecitom.chassis.example.service.endpoint.write.configuration.ApplicationProperties
 import org.sollecitom.chassis.web.service.domain.WebServiceInfo
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy
@@ -17,7 +18,7 @@ fun newExampleWriteEndpointServiceContainer(servicePort: Int = 8090, healthPort:
     val webArguments = mapOf("SERVICE_PORT" to "$servicePort", "HEALTH_PORT" to "$healthPort", "LOGGING_LEVELS" to "io.micronaut.web.router=INFO")
     val arguments = (webArguments + loggingArguments)
     // TODO refactor this
-    val waitStrategy = Wait.forLogMessage(".*org.sollecitom.chassis.example.service.endpoint.write.starter.Service: Started.*", 1)
+    val waitStrategy = Wait.forLogMessage(".*${ApplicationProperties.SERVICE_STARTED_LOG_MESSAGE}.*", 1)
     return ExampleWriteEndpointServiceContainer(servicePort, healthPort).withExposedPorts(servicePort, healthPort).waitingFor(waitStrategy).withJavaArgs(arguments)
 }
 
@@ -26,7 +27,6 @@ class ExampleWriteEndpointServiceContainer(val servicePort: Int, val healthPort:
 
     val webServiceInfo: WebServiceInfo by lazy { WebServiceInfoAdapter(host, getMappedPort(servicePort), getMappedPort(healthPort)) }
 }
-
 
 // TODO refactor & move or delete
 private data class WebServiceInfoAdapter(override val host: String, override val port: Int, override val healthPort: Int) : WebServiceInfo

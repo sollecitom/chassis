@@ -4,6 +4,7 @@ import org.http4k.cloudnative.env.Environment
 import org.sollecitom.chassis.configuration.utils.fromYamlResource
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.WebAPI
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.from
+import org.sollecitom.chassis.example.service.endpoint.write.configuration.ApplicationProperties
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.service.domain.WebService
 
@@ -18,7 +19,7 @@ class Service(private val environment: Environment) : WebService {
     override suspend fun start() {
         webAPI = webApi(environment)
         webAPI.start()
-        logger.info { "Started" }
+        logger.info { ApplicationProperties.SERVICE_STARTED_LOG_MESSAGE }
     }
 
     override suspend fun stop() {
