@@ -7,6 +7,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.configuration.Appli
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.ApplicationProperties.SERVICE_STARTED_LOG_MESSAGE
 import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration.Properties.defaultMinimumLoggingLevelEnvironmentVariableName
 import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration.Properties.defaultMinimumLoggingLevelOverridesEnvironmentVariableName
+import org.sollecitom.chassis.test.containers.utils.withJavaArgs
 import org.sollecitom.chassis.web.service.domain.WebServiceInfo
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
@@ -31,15 +32,3 @@ class ExampleWriteEndpointServiceContainer(private val servicePort: Int, private
         val imageName: DockerImageName = DockerImageName.parse("$SERVICE_OCI_IMAGE_REPOSITORY$SERVICE_OCI_IMAGE_NAME")
     }
 }
-
-// TODO move
-private fun Map.Entry<String, String>.toJavaArgument(): String = "-D$key=$value"
-
-// TODO move
-fun Map<String, String>.toJavaArgumentsList(): List<String> = map { it.toJavaArgument() }
-
-// TODO move
-fun <CONTAINER : GenericContainer<CONTAINER>> CONTAINER.withJavaArgs(arguments: List<String>): CONTAINER = withEnv("JAVA_TOOL_OPTIONS", arguments.joinToString(separator = " "))
-
-// TODO move
-fun <CONTAINER : GenericContainer<CONTAINER>> CONTAINER.withJavaArgs(arguments: Map<String, String>): CONTAINER = withJavaArgs(arguments.toJavaArgumentsList())
