@@ -6,6 +6,7 @@ dependencies {
     implementation(libs.http4k.server.jetty)
 
     implementation(projects.chassisLensCoreExtensions)
+    implementation(projects.chassisJsonUtils)
     implementation(projects.chassisConfigurationUtils)
     implementation(projects.chassisLoggingStandardSlf4jConfiguration)
     implementation(projects.chassisKotlinExtensions)
