@@ -7,8 +7,7 @@ import org.http4k.core.Method.GET
 import org.http4k.core.Request
 import org.http4k.core.Status
 import org.junit.jupiter.api.Test
-import org.sollecitom.chassis.web.service.domain.WebService
-import org.sollecitom.chassis.web.service.domain.WebServiceInfo
+import org.sollecitom.chassis.web.service.domain.WebInterface
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -58,9 +57,9 @@ interface MonitoringEndpointsTestSpecification : WebServiceTestSpecification {
         assertThat(response.status).isEqualTo(Status.NOT_FOUND)
     }
 
-    private fun WebServiceInfo.livenessRequest(port: Int = healthPort) = Request(GET, httpURLWithPath(livenessPath, port))
+    private fun WebInterface.livenessRequest(port: Int = healthPort) = Request(GET, httpURLWithPath(livenessPath, port))
 
-    private fun WebServiceInfo.readinessRequest(port: Int = healthPort) = Request(GET, httpURLWithPath(readinessPath, port))
+    private fun WebInterface.readinessRequest(port: Int = healthPort) = Request(GET, httpURLWithPath(readinessPath, port))
 
     companion object {
         const val DEFAULT_LIVENESS_PATH = "liveness"

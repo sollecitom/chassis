@@ -15,7 +15,7 @@ private class ContainerBasedSystemTests : SystemTestSpecification {
 
     private val network = Network.newNetwork()
     private val serviceContainer by lazy { newExampleWriteEndpointServiceContainer().withNetwork(network) }
-    override val webService by lazy { serviceContainer.webServiceInfo }
+    override val webService by lazy { serviceContainer.webInterface }
     override val httpClient = ApacheClient()
 
     init {
