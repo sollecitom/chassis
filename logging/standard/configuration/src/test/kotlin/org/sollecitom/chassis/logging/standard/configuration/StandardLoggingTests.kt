@@ -32,7 +32,7 @@ private class StandardLoggingTests {
     @Test
     fun `selecting the JSON format option by using the default log format property name`() {
 
-        System.setProperty(StandardLoggingConfiguration.Properties.defaultLogFormatEnvironmentVariableName, StandardLoggingConfiguration.Properties.jsonFormatterEnabler)
+        System.setProperty(StandardLoggingConfiguration.Properties.FORMAT_ENV_VARIABLE, StandardLoggingConfiguration.Properties.FORMAT_JSON)
         StandardLoggingConfiguration(defaultLogFormat = PLAIN).applyTo(JvmLoggerFactory)
         val logger = JvmLoggerFactory.logger("Some logger")
 
@@ -46,7 +46,7 @@ private class StandardLoggingTests {
     fun `selecting the JSON format option by using the a custom log format property name`() {
 
         val customPropertyName = "CUSTOM_LOG_FORMAT_PROPERTY_NAME"
-        System.setProperty(customPropertyName, StandardLoggingConfiguration.Properties.jsonFormatterEnabler)
+        System.setProperty(customPropertyName, StandardLoggingConfiguration.Properties.FORMAT_JSON)
         StandardLoggingConfiguration(defaultLogFormat = PLAIN, logFormatEnvironmentVariableName = customPropertyName).applyTo(JvmLoggerFactory)
         val logger = JvmLoggerFactory.logger("Some logger")
 

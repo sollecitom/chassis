@@ -5,8 +5,8 @@ import org.sollecitom.chassis.example.service.endpoint.write.configuration.Appli
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.ApplicationProperties.SERVICE_OCI_IMAGE_REPOSITORY
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.ApplicationProperties.SERVICE_PORT
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.ApplicationProperties.SERVICE_STARTED_LOG_MESSAGE
-import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration.Properties.defaultMinimumLoggingLevelEnvironmentVariableName
-import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration.Properties.defaultMinimumLoggingLevelOverridesEnvironmentVariableName
+import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration.Properties.LOGGING_LEVEL_ENV_VARIABLE
+import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration.Properties.LOGGING_LEVEL_OVERRIDES_ENV_VARIABLE
 import org.sollecitom.chassis.test.containers.utils.withJavaArgs
 import org.sollecitom.chassis.web.service.domain.WebInterface
 import org.sollecitom.chassis.web.service.domain.WithWebInterface
@@ -17,7 +17,7 @@ import org.testcontainers.utility.DockerImageName
 
 fun newExampleWriteEndpointServiceContainer(servicePort: Int = 8090, healthPort: Int = 8091): ExampleWriteEndpointServiceContainer {
 
-    val loggingArguments = mapOf(defaultMinimumLoggingLevelEnvironmentVariableName to "INFO", defaultMinimumLoggingLevelOverridesEnvironmentVariableName to "org.eclipse.jetty=WARN,org.apache.hc=WARN")
+    val loggingArguments = mapOf(LOGGING_LEVEL_ENV_VARIABLE to "INFO", LOGGING_LEVEL_OVERRIDES_ENV_VARIABLE to "org.eclipse.jetty=WARN,org.apache.hc=WARN")
     val webArguments = mapOf(SERVICE_PORT to "$servicePort", HEALTH_PORT to "$healthPort")
     val arguments = (webArguments + loggingArguments)
     return ExampleWriteEndpointServiceContainer(servicePort, healthPort).withExposedPorts(servicePort, healthPort).waitingFor(waitForServiceStartedLogMessage()).withJavaArgs(arguments)

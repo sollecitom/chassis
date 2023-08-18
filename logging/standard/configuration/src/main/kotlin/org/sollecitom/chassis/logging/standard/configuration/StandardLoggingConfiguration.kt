@@ -10,13 +10,13 @@ import org.sollecitom.chassis.logger.json.formatter.DefaultFormatToJson
 object StandardLoggingConfiguration {
 
     operator fun invoke(
-            environment: Environment,
-            minimumLoggingLevelEnvironmentVariableName: String = Properties.defaultMinimumLoggingLevelEnvironmentVariableName,
-            minimumLoggingLevelOverridesEnvironmentVariableName: String = Properties.defaultMinimumLoggingLevelOverridesEnvironmentVariableName,
-            logFormatEnvironmentVariableName: String = Properties.defaultLogFormatEnvironmentVariableName,
-            defaultMinimumLoggingLevel: LoggingLevel = LoggingLevel.INFO,
-            defaultMinimumLoggingLevelOverrides: Map<String, LoggingLevel> = emptyMap(),
-            defaultLogFormat: LogFormat = LogFormat.PLAIN
+        environment: Environment,
+        minimumLoggingLevelEnvironmentVariableName: String = Properties.LOGGING_LEVEL_ENV_VARIABLE,
+        minimumLoggingLevelOverridesEnvironmentVariableName: String = Properties.LOGGING_LEVEL_OVERRIDES_ENV_VARIABLE,
+        logFormatEnvironmentVariableName: String = Properties.FORMAT_ENV_VARIABLE,
+        defaultMinimumLoggingLevel: LoggingLevel = LoggingLevel.INFO,
+        defaultMinimumLoggingLevelOverrides: Map<String, LoggingLevel> = emptyMap(),
+        defaultLogFormat: LogFormat = LogFormat.PLAIN
     ) = invoke(
             minimumLoggingLevelEnvironmentVariableName,
             minimumLoggingLevelOverridesEnvironmentVariableName,
@@ -28,13 +28,13 @@ object StandardLoggingConfiguration {
     )
 
     operator fun invoke(
-            minimumLoggingLevelEnvironmentVariableName: String = Properties.defaultMinimumLoggingLevelEnvironmentVariableName,
-            minimumLoggingLevelOverridesEnvironmentVariableName: String = Properties.defaultMinimumLoggingLevelOverridesEnvironmentVariableName,
-            logFormatEnvironmentVariableName: String = Properties.defaultLogFormatEnvironmentVariableName,
-            defaultMinimumLoggingLevel: LoggingLevel = LoggingLevel.INFO,
-            defaultMinimumLoggingLevelOverrides: Map<String, LoggingLevel> = emptyMap(),
-            defaultLogFormat: LogFormat = LogFormat.PLAIN,
-            readConfigurationValue: (String) -> String? = ::defaultReadConfigurationValue
+        minimumLoggingLevelEnvironmentVariableName: String = Properties.LOGGING_LEVEL_ENV_VARIABLE,
+        minimumLoggingLevelOverridesEnvironmentVariableName: String = Properties.LOGGING_LEVEL_OVERRIDES_ENV_VARIABLE,
+        logFormatEnvironmentVariableName: String = Properties.FORMAT_ENV_VARIABLE,
+        defaultMinimumLoggingLevel: LoggingLevel = LoggingLevel.INFO,
+        defaultMinimumLoggingLevelOverrides: Map<String, LoggingLevel> = emptyMap(),
+        defaultLogFormat: LogFormat = LogFormat.PLAIN,
+        readConfigurationValue: (String) -> String? = ::defaultReadConfigurationValue
     ): LoggingCustomizer {
 
         val minimumLoggingLevelValue = defaultMinimumLoggingLevelFromEnvironment(minimumLoggingLevelEnvironmentVariableName, readConfigurationValue) ?: defaultMinimumLoggingLevel
@@ -56,17 +56,17 @@ object StandardLoggingConfiguration {
     }
 
     private fun parseLogFormat(value: String): LogFormat = when (value) {
-        Properties.stringFormatterEnabler -> LogFormat.PLAIN
-        Properties.jsonFormatterEnabler -> LogFormat.JSON
+        Properties.FORMAT_STRING -> LogFormat.PLAIN
+        Properties.FORMAT_JSON -> LogFormat.JSON
         else -> error("Unknown log format $value")
     }
 
     object Properties {
-        const val stringFormatterEnabler = "string"
-        const val jsonFormatterEnabler = "json"
-        const val defaultMinimumLoggingLevelEnvironmentVariableName = "LOGGING_LEVEL_DEFAULT"
-        const val defaultMinimumLoggingLevelOverridesEnvironmentVariableName = "LOGGING_LEVELS"
-        const val defaultLogFormatEnvironmentVariableName = "LOGGING_FORMAT"
+        const val FORMAT_STRING = "string"
+        const val FORMAT_JSON = "json"
+        const val LOGGING_LEVEL_ENV_VARIABLE = "LOGGING_LEVEL_DEFAULT"
+        const val LOGGING_LEVEL_OVERRIDES_ENV_VARIABLE = "LOGGING_LEVELS"
+        const val FORMAT_ENV_VARIABLE = "LOGGING_FORMAT"
     }
 }
 
