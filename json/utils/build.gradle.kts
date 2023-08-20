@@ -1,6 +1,6 @@
 dependencies {
     api(libs.org.json)
-    api(libs.everit.json.schema) // TODO upgrade commons-collections in it to 4.3+
+    api(libs.json.schema.parser)
 
     implementation(projects.chassisResourceUtils)
 
