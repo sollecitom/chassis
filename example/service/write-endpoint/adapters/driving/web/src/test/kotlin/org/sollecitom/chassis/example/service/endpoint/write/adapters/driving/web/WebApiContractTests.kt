@@ -38,7 +38,7 @@ private class WebApiContractTests {
         val api = webApi { Accepted }
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
-        val request = Request(Method.POST, path("commands/${commandType.id.value}/${commandType.version.value}")).body(json)
+        val request = Request(Method.POST, path("commands/${commandType.id.value}/v${commandType.version.value}")).body(json)
 
         val response = api(request)
 
@@ -52,7 +52,7 @@ private class WebApiContractTests {
         val api = webApi { EmailAddressAlreadyInUse(userId = existingUserId) }
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
-        val request = Request(Method.POST, path("commands/${commandType.id.value}/${commandType.version.value}")).body(json)
+        val request = Request(Method.POST, path("commands/${commandType.id.value}/v${commandType.version.value}")).body(json)
 
         val response = api(request)
 
@@ -65,7 +65,7 @@ private class WebApiContractTests {
         val api = webApi { Accepted }
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("invalid")
-        val request = Request(Method.POST, path("commands/${commandType.id.value}/${commandType.version.value}")).body(json)
+        val request = Request(Method.POST, path("commands/${commandType.id.value}/v${commandType.version.value}")).body(json)
 
         val response = api(request)
 
@@ -78,7 +78,7 @@ private class WebApiContractTests {
         val api = webApi { Accepted }
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
-        val request = Request(Method.POST, path("commands/${commandType.id.value}/${commandType.version.value}")).body(json.toString()).contentType(TEXT_PLAIN)
+        val request = Request(Method.POST, path("commands/${commandType.id.value}/v${commandType.version.value}")).body(json.toString()).contentType(TEXT_PLAIN)
 
         val response = api(request)
 
@@ -104,7 +104,7 @@ private class WebApiContractTests {
         val api = webApi()
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
-        val request = Request(Method.POST, path("commands/unknown/${commandType.version.value}")).body(json)
+        val request = Request(Method.POST, path("commands/unknown/v${commandType.version.value}")).body(json)
 
         val response = api(request)
 

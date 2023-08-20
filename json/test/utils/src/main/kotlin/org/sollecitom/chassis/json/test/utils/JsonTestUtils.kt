@@ -5,9 +5,9 @@ import assertk.assertions.containsAll
 import assertk.assertions.containsOnly
 import assertk.assertions.support.expected
 import assertk.assertions.support.show
-import org.everit.json.schema.Schema
-import org.everit.json.schema.ValidationException
+import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
+import org.sollecitom.chassis.json.utils.validate
 
 fun Assert<JSONObject>.containsOnly(pair: Pair<String, Any>, vararg others: Pair<String, Any>) = given { actual ->
 
@@ -19,11 +19,11 @@ fun Assert<JSONObject>.containsAll(pair: Pair<String, Any>, vararg others: Pair<
     assertThat(actual.toMap()).containsAll(*arrayOf(pair) + others)
 }
 
+// TODO add tests for this
 fun Assert<JSONObject>.compliesWith(schema: Schema) = given { actual ->
 
-    try {
-        schema.validate(actual)
-    } catch (e: ValidationException) {
-        expected("JSON that complies with schema at :${show(schema.location)}/${schema.title} but there were errors: ${show(e.allMessages)}")
+    val failure = schema.validate(actual)
+    if (failure != null) {
+        expected("JSON that complies with schema at :${show(schema.location)} but there were errors: ${show(failure.message)}") // TODO include all causes?
     }
 }

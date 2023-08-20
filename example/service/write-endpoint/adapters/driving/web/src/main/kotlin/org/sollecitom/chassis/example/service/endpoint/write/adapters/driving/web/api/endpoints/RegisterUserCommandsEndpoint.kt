@@ -21,7 +21,7 @@ sealed class RegisterUserCommandsEndpoint {
 
     class V1(private val handle: suspend (RegisterUser.V1) -> RegisterUser.V1.Result) : Endpoint {
 
-        override val path = "/commands/${COMMAND_TYPE.id.value}/${COMMAND_TYPE.version.value}"
+        override val path = "/commands/${COMMAND_TYPE.id.value}/v${COMMAND_TYPE.version.value}"
         override val methods = setOf(Method.POST)
 
         override val route = routes(

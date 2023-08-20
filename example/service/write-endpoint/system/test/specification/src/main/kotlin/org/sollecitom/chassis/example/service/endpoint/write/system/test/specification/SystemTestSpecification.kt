@@ -28,7 +28,7 @@ interface SystemTestSpecification : MonitoringEndpointsTestSpecification {
         val commandType = RegisterUser.V1.Type
         val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
         val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
-        val request = Request(Method.POST, webService.httpURLWithPath("commands/${commandType.id.value}/${commandType.version.value}")).body(json)
+        val request = Request(Method.POST, webService.httpURLWithPath("commands/${commandType.id.value}/v${commandType.version.value}")).body(json)
 
         val response = httpClient(request)
 
