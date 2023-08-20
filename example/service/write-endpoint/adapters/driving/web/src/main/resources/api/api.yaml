@@ -91,7 +91,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '/api/schemas/json/ErrorsList.json'
+            $ref: '/api/schemas/json/Error.json'
       headers:
         content-type:
           $ref: '#/components/headers/contentType'
@@ -108,7 +108,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '/api/schemas/json/ErrorsList.json'
+            $ref: '/api/schemas/json/Error.json'
       headers:
         content-type:
           $ref: '#/components/headers/contentType'
@@ -125,7 +125,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '/api/schemas/json/ErrorsList.json'
+            $ref: '/api/schemas/json/Error.json'
       headers:
         content-type:
           $ref: '#/components/headers/contentType'
@@ -142,7 +142,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '/api/schemas/json/ErrorsList.json'
+            $ref: '/api/schemas/json/Error.json'
       headers:
         content-type:
           $ref: '#/components/headers/contentType'
