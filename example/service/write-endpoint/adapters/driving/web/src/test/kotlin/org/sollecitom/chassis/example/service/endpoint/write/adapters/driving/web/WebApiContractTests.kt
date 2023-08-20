@@ -2,7 +2,6 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.w
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import org.http4k.core.ContentType
 import org.http4k.core.ContentType.Companion.TEXT_PLAIN
 import org.http4k.core.Method
 import org.http4k.core.Request
@@ -21,7 +20,6 @@ import org.sollecitom.chassis.example.service.endpoint.write.application.Applica
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
-import org.sollecitom.chassis.web.api.utils.HttpHeaders
 import org.sollecitom.chassis.web.api.utils.body
 import org.sollecitom.chassis.web.api.utils.contentType
 
