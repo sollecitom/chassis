@@ -2,7 +2,6 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.w
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import org.http4k.core.ContentType
 import org.http4k.core.Method
 import org.http4k.core.Request
 import org.http4k.core.Status
@@ -20,7 +19,6 @@ import org.sollecitom.chassis.example.service.endpoint.write.application.Applica
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
-import org.sollecitom.chassis.web.api.utils.HttpHeaders
 import org.sollecitom.chassis.web.api.utils.body
 
 @TestInstance(PER_CLASS)
@@ -37,8 +35,7 @@ private class WebApiContractTests {
 
         val api = webApi { Accepted }
         val commandType = RegisterUser.V1.Type
-        val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
-        val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
+        val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val request = Request(Method.POST, path("commands/${commandType.id.value}/${commandType.version.value}")).body(json)
 
         val response = api(request)
@@ -52,8 +49,7 @@ private class WebApiContractTests {
         val existingUserId = ulid()
         val api = webApi { EmailAddressAlreadyInUse(userId = existingUserId) }
         val commandType = RegisterUser.V1.Type
-        val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
-        val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
+        val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val request = Request(Method.POST, path("commands/${commandType.id.value}/${commandType.version.value}")).body(json)
 
         val response = api(request)
@@ -62,12 +58,24 @@ private class WebApiContractTests {
     }
 
     @Test
+    fun `attempting to submit a register user command with an invalid email address`() {
+
+        val api = webApi { Accepted }
+        val commandType = RegisterUser.V1.Type
+        val json = registerUserPayload("invalid")
+        val request = Request(Method.POST, path("commands/${commandType.id.value}/${commandType.version.value}")).body(json)
+
+        val response = api(request)
+
+        assertThat(response.status).isEqualTo(Status.BAD_REQUEST)
+    }
+
+    @Test
     fun `attempting to submit a register user command with an invalid version`() {
 
         val api = webApi()
         val commandType = RegisterUser.V1.Type
-        val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
-        val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
+        val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val request = Request(Method.POST, path("commands/${commandType.id.value}/!")).body(json)
 
         val response = api(request)
@@ -80,14 +88,20 @@ private class WebApiContractTests {
 
         val api = webApi()
         val commandType = RegisterUser.V1.Type
-        val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
-        val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
+        val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val request = Request(Method.POST, path("commands/unknown/${commandType.version.value}")).body(json)
 
         val response = api(request)
 
         assertThat(response.status).isEqualTo(Status.BAD_REQUEST)
     }
+
+    // TODO move
+    // to test invalid email addresses
+    fun registerUserPayload(emailAddress: EmailAddress) = registerUserPayload(emailAddress.value)
+
+    // TODO move and share with the system test specification
+    fun registerUserPayload(emailAddress: String): JSONObject = JSONObject().put("email", JSONObject().put("address", emailAddress))
 
     private class StubbedApplication(private val handleRegisterUserV1: suspend (RegisterUser.V1) -> RegisterUser.V1.Result = { Accepted }) : Application {
 
