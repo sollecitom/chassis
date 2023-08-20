@@ -6,12 +6,17 @@ import org.sollecitom.chassis.example.service.endpoint.write.application.user.Re
 import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.serde.JsonDeserializer
+import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
-val RegisterUser.V1.Companion.deserializer: JsonDeserializer<RegisterUser.V1> get() = RegisterUserCommandDeserializer.V1
+val RegisterUser.V1.Companion.serde: JsonSerde<RegisterUser.V1> get() = RegisterUserCommandSerde.V1
 
-private object RegisterUserCommandDeserializer {
+private object RegisterUserCommandSerde {
 
-    object V1 : JsonDeserializer<RegisterUser.V1> {
+    object V1 : JsonSerde<RegisterUser.V1> {
+
+        override fun serialize(value: RegisterUser.V1): JSONObject {
+            TODO("Not yet implemented")
+        }
 
         override fun deserialize(json: JSONObject): RegisterUser.V1 {
 
