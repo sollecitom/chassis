@@ -9,14 +9,15 @@ import org.http4k.lens.BodyLensSpec
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.json.JSONObject
+import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.Endpoint
-import org.sollecitom.chassis.example.service.endpoint.write.application.ApplicationCommand
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.http4k.server.utils.toSuspending
 import org.sollecitom.chassis.http4k.utils.lens.jsonObject
 import org.sollecitom.chassis.json.utils.getJSONObjectOrNull
 import org.sollecitom.chassis.json.utils.getRequiredJSONObject
+import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 
 sealed class RegisterUserCommandsEndpoint {
@@ -48,27 +49,27 @@ sealed class RegisterUserCommandsEndpoint {
         companion object : Loggable() {
 
             private val COMMAND_TYPE: Command.Type = RegisterUser.V1.Type
+
+            // TODO use the swagger spec to create a Lens that validates the request against Swagger
             private val command = Body.jsonObject().map(RegisterUserCommandDeserializer.V1).toLens()
         }
-    }
-}
-
-private class ApplicationCommandJsonDeserializer(private val commandType: Command.Type) : JsonDeserializer<ApplicationCommand<*>> {
-
-    override fun deserialize(json: JSONObject) = when (commandType) {
-        RegisterUser.V1.Type -> RegisterUserCommandDeserializer.V1.deserialize(json)
-        else -> error("Unknown command type $commandType")
     }
 }
 
 // TODO change
 private object RegisterUserCommandDeserializer {
 
-    internal object V1 : JsonDeserializer<RegisterUser.V1> {
+    object V1 : JsonDeserializer<RegisterUser.V1> {
 
         override fun deserialize(json: JSONObject): RegisterUser.V1 {
 
-            TODO("")
+            val emailAddress = json.getRequiredJSONObject(Fields.EMAIL).getRequiredString(Fields.ADDRESS).let(::EmailAddress)
+            return RegisterUser.V1(emailAddress = emailAddress)
+        }
+
+        private object Fields {
+            const val EMAIL = "email"
+            const val ADDRESS = "address"
         }
     }
 }
