@@ -21,6 +21,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.application.user.Re
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
 import org.sollecitom.chassis.web.api.utils.HttpHeaders
+import org.sollecitom.chassis.web.api.utils.body
 
 @TestInstance(PER_CLASS)
 private class WebApiContractTests {
@@ -38,7 +39,7 @@ private class WebApiContractTests {
         val commandType = RegisterUser.V1.Type
         val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
         val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
-        val request = Request(Method.POST, path("commands/${commandType.id.value}/${commandType.version.value}")).body(json.toString()).header(HttpHeaders.ContentType.name, ContentType.APPLICATION_JSON.toHeaderValue())
+        val request = Request(Method.POST, path("commands/${commandType.id.value}/${commandType.version.value}")).body(json)
 
         val response = api(request)
 
@@ -53,7 +54,7 @@ private class WebApiContractTests {
         val commandType = RegisterUser.V1.Type
         val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
         val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
-        val request = Request(Method.POST, path("commands/${commandType.id.value}/${commandType.version.value}")).body(json.toString()).header(HttpHeaders.ContentType.name, ContentType.APPLICATION_JSON.toHeaderValue())
+        val request = Request(Method.POST, path("commands/${commandType.id.value}/${commandType.version.value}")).body(json)
 
         val response = api(request)
 
@@ -67,7 +68,7 @@ private class WebApiContractTests {
         val commandType = RegisterUser.V1.Type
         val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
         val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
-        val request = Request(Method.POST, path("commands/${commandType.id.value}/!")).body(json.toString()).header(HttpHeaders.ContentType.name, ContentType.APPLICATION_JSON.toHeaderValue())
+        val request = Request(Method.POST, path("commands/${commandType.id.value}/!")).body(json)
 
         val response = api(request)
 
@@ -81,7 +82,7 @@ private class WebApiContractTests {
         val commandType = RegisterUser.V1.Type
         val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
         val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
-        val request = Request(Method.POST, path("commands/unknown/${commandType.version.value}")).body(json.toString()).header(HttpHeaders.ContentType.name, ContentType.APPLICATION_JSON.toHeaderValue())
+        val request = Request(Method.POST, path("commands/unknown/${commandType.version.value}")).body(json)
 
         val response = api(request)
 

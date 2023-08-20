@@ -14,6 +14,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.application.user.Re
 import org.sollecitom.chassis.web.api.test.utils.MonitoringEndpointsTestSpecification
 import org.sollecitom.chassis.web.api.test.utils.httpURLWithPath
 import org.sollecitom.chassis.web.api.utils.HttpHeaders
+import org.sollecitom.chassis.web.api.utils.body
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -27,7 +28,7 @@ interface SystemTestSpecification : MonitoringEndpointsTestSpecification {
         val commandType = RegisterUser.V1.Type
         val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
         val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
-        val request = Request(Method.POST, webService.httpURLWithPath("commands/${commandType.id.value}/${commandType.version.value}")).body(json.toString()).header(HttpHeaders.ContentType.name, ContentType.APPLICATION_JSON.toHeaderValue())
+        val request = Request(Method.POST, webService.httpURLWithPath("commands/${commandType.id.value}/${commandType.version.value}")).body(json)
 
         val response = httpClient(request)
 

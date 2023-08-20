@@ -35,5 +35,7 @@ sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT> {
                 data class EmailAddressAlreadyInUse(val userId: SortableTimestampedUniqueIdentifier<*>) : Rejected
             }
         }
+
+        companion object
     }
 }
