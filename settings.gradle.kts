@@ -29,6 +29,8 @@ module("logging", "standard", "configuration")
 module("logging", "standard", "slf4j", "configuration")
 module("http4k", "utils")
 module("http4k", "server", "utils")
+module("openapi", "parser")
+module("openapi", "checker")
 
 module("web", "service", "domain")
 module("web", "api", "test", "utils")
