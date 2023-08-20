@@ -5,7 +5,6 @@ import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.getRequiredString
-import org.sollecitom.chassis.json.utils.serde.JsonDeserializer
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 val RegisterUser.V1.Companion.serde: JsonSerde<RegisterUser.V1> get() = RegisterUserCommandSerde.V1
@@ -14,9 +13,7 @@ private object RegisterUserCommandSerde {
 
     object V1 : JsonSerde<RegisterUser.V1> {
 
-        override fun serialize(value: RegisterUser.V1): JSONObject {
-            TODO("Not yet implemented")
-        }
+        override fun serialize(value: RegisterUser.V1): JSONObject = JSONObject().put(Fields.EMAIL, JSONObject().put(Fields.ADDRESS, value.emailAddress.value))
 
         override fun deserialize(json: JSONObject): RegisterUser.V1 {
 
