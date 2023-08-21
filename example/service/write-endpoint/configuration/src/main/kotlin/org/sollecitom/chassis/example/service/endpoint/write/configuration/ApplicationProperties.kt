@@ -9,4 +9,6 @@ object ApplicationProperties {
 
     const val SERVICE_OCI_IMAGE_NAME = "example-write-endpoint:snapshot"
     const val SERVICE_OCI_IMAGE_REPOSITORY = "ghcr.io/sollecitom-chassis/"
+
+    const val OPEN_API_FILE_LOCATION = "api/api.yaml"
 }
