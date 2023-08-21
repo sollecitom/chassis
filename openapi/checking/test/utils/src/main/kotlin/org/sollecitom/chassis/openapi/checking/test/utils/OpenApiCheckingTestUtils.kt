@@ -4,10 +4,19 @@ import assertk.Assert
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
+import io.swagger.v3.oas.models.OpenAPI
 import org.sollecitom.chassis.openapi.checking.checker.ComplianceCheckResult
 import org.sollecitom.chassis.openapi.checking.checker.rule.RuleResult
 import org.sollecitom.chassis.openapi.checking.checker.rule.field.FieldRulesViolation
+import org.sollecitom.chassis.openapi.checking.checker.sets.OpenApiRuleSet
+import org.sollecitom.chassis.openapi.checking.checker.sets.checkAgainstRules
 import org.sollecitom.chassis.test.utils.assertions.containsSameElementsAs
+
+fun Assert<OpenAPI>.isCompliantWith(firstRuleSet: OpenApiRuleSet, vararg otherRuleSets: OpenApiRuleSet) = given { api ->
+
+    val result = api.checkAgainstRules(firstRuleSet, *otherRuleSets)
+    assertThat(result).isCompliant()
+}
 
 fun Assert<ComplianceCheckResult>.isCompliant() = given { result ->
 
