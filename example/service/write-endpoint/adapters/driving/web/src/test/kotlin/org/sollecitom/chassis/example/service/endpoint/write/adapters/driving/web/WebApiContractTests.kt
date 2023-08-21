@@ -31,6 +31,7 @@ private class WebApiContractTests {
     // TODO add the case where the result is rejected as EmailAddressAlreadyInUse
     // TODO add the swagger compliance checks for requests
     // TODO add the swagger compliance checks for responses
+    // TODO test the declared swagger for compliance to standards (using openapi-checker and the StandardOpenApiRulesSet)
 
     @Test
     fun `submitting a register user command for an unregistered user`() {
