@@ -9,7 +9,6 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.openapi.checking.checker.model.ParameterLocation
 import org.sollecitom.chassis.openapi.checking.checker.rules.DisallowReservedCharactersInParameterNameRule
-import org.sollecitom.chassis.openapi.checking.checker.rules.MandatoryVersioningPathPrefixRule
 import org.sollecitom.chassis.openapi.checking.checker.rules.WhitelistedAlphabetParameterNameRule
 import org.sollecitom.chassis.openapi.checking.checker.rules.WhitelistedAlphabetPathNameRule
 import org.sollecitom.chassis.openapi.checking.checker.sets.StandardOpenApiRules
@@ -19,7 +18,7 @@ import org.sollecitom.chassis.openapi.checking.test.utils.*
 @TestInstance(PER_CLASS)
 private class StandardOpenApiRulesTest : OpenApiTestSpecification {
 
-    override val validPath = "/v1/people/{person-id}/close-friends/v2"
+    override val validPath = "/people/{person-id}/close-friends"
     override val validOperationId = "getCloseFriends"
     override val validSummary = "Returns a list of close friends for the given person."
 
@@ -41,9 +40,65 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
         }
 
         @Test
+        fun `trailing version path segment with number works`() {
+
+            val path = "/commands/register-user/v1"
+            val api = buildOpenApi {
+                path(path)
+            }
+
+            val result = api.checkAgainstRules(StandardOpenApiRules)
+
+            assertThat(result).isCompliant()
+        }
+
+        @Test
+        fun `cannot contain trailing invalid path segment that looks like a version with number`() {
+
+            val invalidPath = "/commands/register-user/av1"
+            val api = buildOpenApi {
+                path(invalidPath)
+            }
+
+            val result = api.checkAgainstRules(StandardOpenApiRules)
+
+            assertThat(result).isNotCompliantWithOnlyViolation<WhitelistedAlphabetPathNameRule.Violation> { violation ->
+                assertThat(violation.path).isEqualTo(invalidPath)
+            }
+        }
+
+        @Test
+        fun `cannot contain numbers`() {
+
+            val invalidPath = "/commands/123/register-user"
+            val api = buildOpenApi {
+                path(invalidPath)
+            }
+
+            val result = api.checkAgainstRules(StandardOpenApiRules)
+
+            assertThat(result).isNotCompliantWithOnlyViolation<WhitelistedAlphabetPathNameRule.Violation> { violation ->
+                assertThat(violation.path).isEqualTo(invalidPath)
+            }
+        }
+
+        @Test
+        fun `leading version path segment with number works`() {
+
+            val path = "/v1/commands/register-user"
+            val api = buildOpenApi {
+                path(path)
+            }
+
+            val result = api.checkAgainstRules(StandardOpenApiRules)
+
+            assertThat(result).isCompliant()
+        }
+
+        @Test
         fun `cannot contain uppercase letters`() {
 
-            val invalidPath = "/v1/All"
+            val invalidPath = "/something/All"
             val api = buildOpenApi {
                 path(invalidPath)
             }
@@ -58,7 +113,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
         @Test
         fun `cannot contain symbols`() {
 
-            val invalidPath = "/v1/all_people"
+            val invalidPath = "/something/all_people"
             val api = buildOpenApi {
                 path(invalidPath)
             }
@@ -104,7 +159,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
         @Test
         fun `valid templated segments work`() {
 
-            val path = "/v1/people/{person-id}"
+            val path = "/people/{person-id}"
             val api = buildOpenApi {
                 path(path)
             }

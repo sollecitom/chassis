@@ -4,7 +4,7 @@ import io.swagger.v3.oas.models.OpenAPI
 import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
 import org.sollecitom.chassis.openapi.checking.checker.rule.RuleResult
 
-class WhitelistedAlphabetPathNameRule(val alphabet: Set<Char>, val templatedPathSegmentsAlphabet: Set<Char> = alphabet, private val versioningPathPrefixRule: MandatoryVersioningPathPrefixRule? = null) : OpenApiRule {
+class WhitelistedAlphabetPathNameRule(val alphabet: Set<Char>, val templatedPathSegmentsAlphabet: Set<Char> = alphabet, private val versioningPathPrefixRule: MandatoryVersioningPathPrefixRule? = null, private val allowedPathSegments: Set<Regex> = emptySet()) : OpenApiRule {
 
     override fun check(api: OpenAPI): RuleResult {
 
@@ -15,7 +15,7 @@ class WhitelistedAlphabetPathNameRule(val alphabet: Set<Char>, val templatedPath
     private fun check(path: Pair<String, String>): Violation? {
         val (pathName, pathToCheck) = path
         val segments = pathToCheck.split(pathSegmentSeparator).filterNot { it.isBlank() }
-        segments.forEach { pathSegment ->
+        segments.filterNot { segment -> allowedPathSegments.any { regex -> regex.matchEntire(segment)?.let { true } ?: false } }.forEach { pathSegment ->
             if (!pathSegment.isTemplatedSegment() && pathSegment.any { character -> character !in alphabet }) return violationForPath(pathName)
             if (pathSegment.isTemplatedSegment() && pathSegment.removePrefix(pathTemplateStart.toString()).removeSuffix(pathTemplateEnd.toString()).any { character -> character !in templatedPathSegmentsAlphabet }) return violationForPath(pathName)
         }
