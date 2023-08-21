@@ -7,6 +7,7 @@ import org.sollecitom.chassis.openapi.checking.checker.model.OperationWithContex
 import org.sollecitom.chassis.openapi.checking.checker.model.allOperations
 import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
 import org.sollecitom.chassis.openapi.checking.checker.rule.RuleResult
+import org.sollecitom.chassis.openapi.checking.checker.rules.utils.trimmed
 
 class MandatoryOperationFieldsRule(private val requiredFields: Set<OpenApiField<Operation, Any?>>) : OpenApiRule {
 
@@ -30,10 +31,5 @@ class MandatoryOperationFieldsRule(private val requiredFields: Set<OpenApiField<
     data class Violation(val operation: OperationWithContext, val requiredFields: Set<OpenApiField<Operation, Any?>>, val missingRequiredFields: Set<OpenApiField<Operation, Any?>>) : RuleResult.Violation {
 
         override val message = "Operation ${operation.operation.method} on path ${operation.pathName} should specify the following mandatory fields ${requiredFields.map(OpenApiField<Operation, *>::name)}, but fields ${missingRequiredFields.map(OpenApiField<Operation, *>::name)}"
-    }
-
-    private fun Any.trimmed(): Any? = when (this) {
-        is String -> takeIf { it.isNotBlank() }
-        else -> this
     }
 }

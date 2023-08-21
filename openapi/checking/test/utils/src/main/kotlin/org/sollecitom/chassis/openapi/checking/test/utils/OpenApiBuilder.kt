@@ -4,6 +4,7 @@ import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.SpecVersion
+import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.media.Content
 import io.swagger.v3.oas.models.media.MediaType
 import io.swagger.v3.oas.models.parameters.Parameter
@@ -22,6 +23,13 @@ class OpenApiBuilder(version: SpecVersion) {
 
     fun version(version: String) {
         api.openapi(version)
+    }
+
+    fun info(customize: Info.() -> Unit = {}) {
+        if (api.info == null) {
+            api.info(Info())
+        }
+        api.info.customize()
     }
 
     fun path(name: String, customize: PathItem.() -> Unit = {}) {

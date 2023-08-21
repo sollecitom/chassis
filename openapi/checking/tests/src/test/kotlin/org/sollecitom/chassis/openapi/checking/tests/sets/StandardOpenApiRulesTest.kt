@@ -1,6 +1,7 @@
 package org.sollecitom.chassis.openapi.checking.tests.sets
 
 import assertk.assertThat
+import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.PathItem.HttpMethod.*
@@ -9,11 +10,13 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.sollecitom.chassis.logger.core.JvmLoggerFactory
+import org.sollecitom.chassis.logger.core.LoggingLevel
+import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration
+import org.sollecitom.chassis.logging.standard.configuration.applyTo
+import org.sollecitom.chassis.openapi.checking.checker.model.OpenApiFields
 import org.sollecitom.chassis.openapi.checking.checker.model.ParameterLocation
-import org.sollecitom.chassis.openapi.checking.checker.rules.DisallowReservedCharactersInParameterNameRule
-import org.sollecitom.chassis.openapi.checking.checker.rules.WhitelistedAlphabetParameterNameRule
-import org.sollecitom.chassis.openapi.checking.checker.rules.WhitelistedAlphabetPathNameRule
-import org.sollecitom.chassis.openapi.checking.checker.rules.WhitelistedOpenApiVersionFieldRule
+import org.sollecitom.chassis.openapi.checking.checker.rules.*
 import org.sollecitom.chassis.openapi.checking.checker.sets.StandardOpenApiRules
 import org.sollecitom.chassis.openapi.checking.checker.sets.checkAgainstRules
 import org.sollecitom.chassis.openapi.checking.test.utils.*
@@ -25,10 +28,19 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
     override val validOperationId = "getCloseFriends"
     override val validSummary = "Returns a list of close friends for the given person."
 
+    init {
+        StandardLoggingConfiguration(defaultMinimumLoggingLevel = LoggingLevel.INFO).applyTo(JvmLoggerFactory)
+    }
+
     override fun openApi(version: OpenApiBuilder.OpenApiVersion, customize: OpenApiBuilder.() -> Unit): OpenAPI {
 
         val prepare: OpenApiBuilder.() -> Unit = {
             version(version)
+            info {
+                title = "Some title"
+                description = "A description."
+            }
+
             customize()
         }
         return buildOpenApi(SpecVersion.V31, prepare)
@@ -36,7 +48,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
 
     @Nested
     @TestInstance(PER_CLASS)
-    inner class Metadata {
+    inner class Info {
 
         @Test
         fun `cannot specify a disallowed OpenAPI version`() {
@@ -51,6 +63,40 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
 
             assertThat(result).isNotCompliantWithOnlyViolation<WhitelistedOpenApiVersionFieldRule.Violation> { violation ->
                 assertThat(violation.declaredVersion).isEqualTo(disallowedOpenApiVersion)
+            }
+        }
+
+        @Test
+        fun `cannot omit a title`() {
+
+            val api = openApi {
+                info {
+                    title = null
+                }
+                path("/something")
+            }
+
+            val result = api.checkAgainstRules(StandardOpenApiRules)
+
+            assertThat(result).isNotCompliantWithOnlyViolation<MandatoryInfoFieldsRule.Violation> { violation ->
+                assertThat(violation.missingRequiredFields).containsOnly(OpenApiFields.Info.title)
+            }
+        }
+
+        @Test
+        fun `cannot omit a description`() {
+
+            val api = openApi {
+                info {
+                    description = null
+                }
+                path("/something")
+            }
+
+            val result = api.checkAgainstRules(StandardOpenApiRules)
+
+            assertThat(result).isNotCompliantWithOnlyViolation<MandatoryInfoFieldsRule.Violation> { violation ->
+                assertThat(violation.missingRequiredFields).containsOnly(OpenApiFields.Info.description)
             }
         }
     }

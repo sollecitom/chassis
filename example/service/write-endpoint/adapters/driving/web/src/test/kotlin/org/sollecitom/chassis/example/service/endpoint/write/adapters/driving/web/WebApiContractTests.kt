@@ -20,6 +20,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.application.Applica
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
+import org.sollecitom.chassis.example.service.endpoint.write.configuration.configureLogging
 import org.sollecitom.chassis.web.api.utils.body
 import org.sollecitom.chassis.web.api.utils.contentType
 
@@ -33,6 +34,10 @@ private class WebApiContractTests {
     // TODO add the swagger compliance checks for responses
     // TODO test the declared swagger for compliance to standards (using openapi-checker and the StandardOpenApiRulesSet)
     // TODO move Error.json to another module and import, so we can share it
+
+    init {
+        configureLogging()
+    }
 
     @Test
     fun `submitting a register user command for an unregistered user`() {

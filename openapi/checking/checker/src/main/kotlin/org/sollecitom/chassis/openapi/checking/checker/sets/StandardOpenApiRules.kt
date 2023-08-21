@@ -29,6 +29,7 @@ object StandardOpenApiRules : OpenApiRuleSet {
     private val mandatoryRequestBodyContentMediaTypeRule by lazy { MandatoryRequestBodyContentMediaTypesRule(methodsToCheck = setOf(POST, PUT, PATCH)) }
     private val mandatoryRequestBodyDescriptionRule by lazy { MandatoryRequestBodyDescriptionRule(methods = setOf(POST, PUT, PATCH)) }
     private val whitelistedOpenApiVersionFieldRule by lazy { WhitelistedOpenApiVersionFieldRule(whitelistedOpenApiVersions = whitelistedOpenApiVersions) }
+    private val mandatoryInfoFieldsRule by lazy { MandatoryInfoFieldsRule(requiredFields = setOf(OpenApiFields.Info.title, OpenApiFields.Info.description)) }
 
     private val operationTextFieldRules by lazy {
         FieldSpecificRules(
@@ -50,7 +51,8 @@ object StandardOpenApiRules : OpenApiRuleSet {
             forbiddenRequestBodyRule,
             mandatoryRequestBodyDescriptionRule,
             operationTextFieldRules,
-            whitelistedOpenApiVersionFieldRule
+            whitelistedOpenApiVersionFieldRule,
+            mandatoryInfoFieldsRule
         ) + StandardTracingHeadersOpenApiRules.rules
     }
 }
