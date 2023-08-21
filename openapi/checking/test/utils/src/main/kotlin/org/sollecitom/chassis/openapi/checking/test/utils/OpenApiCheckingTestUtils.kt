@@ -1,14 +1,14 @@
-package org.sollecitom.chassis.openapi.checking.checker
+package org.sollecitom.chassis.openapi.checking.test.utils
 
 import assertk.Assert
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
+import org.sollecitom.chassis.openapi.checking.checker.ComplianceCheckResult
 import org.sollecitom.chassis.openapi.checking.checker.rule.RuleResult
 import org.sollecitom.chassis.openapi.checking.checker.rule.field.FieldRulesViolation
 import org.sollecitom.chassis.test.utils.assertions.containsSameElementsAs
 
-// TODO move somewhere, so we can use this in other modules
 fun Assert<ComplianceCheckResult>.isCompliant() = given { result ->
 
     assertThat(result).isEqualTo(ComplianceCheckResult.Compliant)

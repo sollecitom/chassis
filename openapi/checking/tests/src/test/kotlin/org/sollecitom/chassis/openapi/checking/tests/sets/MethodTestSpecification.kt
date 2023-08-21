@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.openapi.checking.checker.sets
+package org.sollecitom.chassis.openapi.checking.tests.sets
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -9,6 +9,9 @@ import org.sollecitom.chassis.openapi.checking.checker.model.OpenApiFields
 import org.sollecitom.chassis.openapi.checking.checker.rule.field.FieldRulesViolation
 import org.sollecitom.chassis.openapi.checking.checker.rules.*
 import org.sollecitom.chassis.openapi.checking.checker.rules.field.MandatorySuffixTextFieldRule
+import org.sollecitom.chassis.openapi.checking.checker.sets.StandardOpenApiRules
+import org.sollecitom.chassis.openapi.checking.checker.sets.checkAgainstRules
+import org.sollecitom.chassis.openapi.checking.test.utils.*
 
 interface MethodTestSpecification : TracingHeadersTestSpecification {
 

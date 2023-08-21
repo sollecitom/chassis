@@ -1,5 +1,5 @@
 dependencies {
-    api(projects.chassisOpenapiChecker)
+    api(projects.chassisOpenapiCheckingChecker)
     api(projects.chassisTestUtils)
 
     implementation(projects.chassisKotlinExtensions)

@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.openapi.checking.checker
+package org.sollecitom.chassis.openapi.checking.test.utils
 
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.Operation
@@ -11,8 +11,8 @@ import io.swagger.v3.oas.models.parameters.RequestBody
 import io.swagger.v3.oas.models.responses.ApiResponse
 import io.swagger.v3.oas.models.responses.ApiResponses
 
-// TODO extract to another module
-fun buildOpenApi(version: SpecVersion = SpecVersion.V30, customize: OpenApiBuilder.() -> Unit): OpenAPI = OpenApiBuilder(version).apply(customize).build()
+// TODO should this be part some non-test-specific module instead?
+fun buildOpenApi(version: SpecVersion = SpecVersion.V31, customize: OpenApiBuilder.() -> Unit): OpenAPI = OpenApiBuilder(version).apply(customize).build()
 
 class OpenApiBuilder(version: SpecVersion) {
 

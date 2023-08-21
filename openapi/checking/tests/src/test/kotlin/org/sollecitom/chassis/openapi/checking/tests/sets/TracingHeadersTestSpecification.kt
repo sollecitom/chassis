@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.openapi.checking.checker.sets
+package org.sollecitom.chassis.openapi.checking.tests.sets
 
 interface TracingHeadersTestSpecification : WithMethodContext {
 

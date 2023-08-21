@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.openapi.checking.checker.sets
+package org.sollecitom.chassis.openapi.checking.tests.sets
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -8,12 +8,14 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.openapi.checking.checker.*
 import org.sollecitom.chassis.openapi.checking.checker.model.ParameterLocation
 import org.sollecitom.chassis.openapi.checking.checker.rules.DisallowReservedCharactersInParameterNameRule
 import org.sollecitom.chassis.openapi.checking.checker.rules.MandatoryVersioningPathPrefixRule
 import org.sollecitom.chassis.openapi.checking.checker.rules.WhitelistedAlphabetParameterNameRule
 import org.sollecitom.chassis.openapi.checking.checker.rules.WhitelistedAlphabetPathNameRule
+import org.sollecitom.chassis.openapi.checking.checker.sets.StandardOpenApiRules
+import org.sollecitom.chassis.openapi.checking.checker.sets.checkAgainstRules
+import org.sollecitom.chassis.openapi.checking.test.utils.*
 
 @TestInstance(PER_CLASS)
 private class StandardOpenApiRulesTest : OpenApiTestSpecification {
@@ -345,7 +347,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
                     assertThat(violation.parameter.name).isEqualTo(invalidParameterName)
                     assertThat(violation.parameter.location.value).isEqualTo(parameterLocation)
                     assertThat(violation.parameter.location.pathName).isEqualTo(validPath)
-                    assertThat(violation.parameter.location.operation.method).isEqualTo(HttpMethod.GET)
+                    assertThat(violation.parameter.location.operation.method).isEqualTo(GET)
                 }
             }
 
@@ -375,7 +377,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
                     assertThat(violation.parameter.name).isEqualTo(invalidParameterName)
                     assertThat(violation.parameter.location.value).isEqualTo(parameterLocation)
                     assertThat(violation.parameter.location.pathName).isEqualTo(validPath)
-                    assertThat(violation.parameter.location.operation.method).isEqualTo(HttpMethod.GET)
+                    assertThat(violation.parameter.location.operation.method).isEqualTo(GET)
                 }
             }
 
@@ -501,7 +503,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
                     assertThat(violation.parameter.name).isEqualTo(invalidParameterName)
                     assertThat(violation.parameter.location.value).isEqualTo(parameterLocation)
                     assertThat(violation.parameter.location.pathName).isEqualTo(validPath)
-                    assertThat(violation.parameter.location.operation.method).isEqualTo(HttpMethod.GET)
+                    assertThat(violation.parameter.location.operation.method).isEqualTo(GET)
                 }
             }
 
@@ -531,7 +533,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
                     assertThat(violation.parameter.name).isEqualTo(invalidParameterName)
                     assertThat(violation.parameter.location.value).isEqualTo(parameterLocation)
                     assertThat(violation.parameter.location.pathName).isEqualTo(validPath)
-                    assertThat(violation.parameter.location.operation.method).isEqualTo(HttpMethod.GET)
+                    assertThat(violation.parameter.location.operation.method).isEqualTo(GET)
                 }
             }
 
@@ -657,7 +659,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
                     assertThat(violation.parameter.name).isEqualTo(invalidParameterName)
                     assertThat(violation.parameter.location.value).isEqualTo(parameterLocation)
                     assertThat(violation.parameter.location.pathName).isEqualTo(validPath)
-                    assertThat(violation.parameter.location.operation.method).isEqualTo(HttpMethod.GET)
+                    assertThat(violation.parameter.location.operation.method).isEqualTo(GET)
                 }
             }
 
@@ -687,7 +689,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
                     assertThat(violation.parameter.name).isEqualTo(invalidParameterName)
                     assertThat(violation.parameter.location.value).isEqualTo(parameterLocation)
                     assertThat(violation.parameter.location.pathName).isEqualTo(validPath)
-                    assertThat(violation.parameter.location.operation.method).isEqualTo(HttpMethod.GET)
+                    assertThat(violation.parameter.location.operation.method).isEqualTo(GET)
                 }
             }
 
