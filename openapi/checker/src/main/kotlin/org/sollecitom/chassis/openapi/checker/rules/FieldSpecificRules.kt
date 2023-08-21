@@ -10,7 +10,7 @@ import org.sollecitom.chassis.openapi.checker.rule.RuleResult
 import org.sollecitom.chassis.openapi.checker.rule.field.FieldRule
 import org.sollecitom.chassis.openapi.checker.rule.field.FieldRulesViolation
 
-class CompositeFieldRule<VALUE : Any>(private val rulesByField: Map<OpenApiField<Operation, VALUE?>, Set<FieldRule<VALUE, *>>>) : OpenApiRule {
+class FieldSpecificRules<VALUE : Any>(private val rulesByField: Map<OpenApiField<Operation, VALUE?>, Set<FieldRule<VALUE, *>>>) : OpenApiRule {
 
     override fun check(api: OpenAPI): RuleResult {
 
@@ -28,4 +28,9 @@ class CompositeFieldRule<VALUE : Any>(private val rulesByField: Map<OpenApiField
     private fun OperationWithContext.fields(): Sequence<FieldWithContext<VALUE?>> = rulesByField.asSequence().map { FieldWithContext(it.key, this) }
 
     private data class FieldWithContext<VALUE>(val field: OpenApiField<Operation, VALUE>, val operation: OperationWithContext)
+
+    companion object {
+
+        operator fun <VALUE : Any> invoke(vararg fieldRules: Pair<OpenApiField<Operation, VALUE?>, Set<FieldRule<VALUE, *>>>) = FieldSpecificRules(fieldRules.toMap())
+    }
 }

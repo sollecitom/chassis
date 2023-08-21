@@ -30,11 +30,9 @@ object StandardOpenApiRules : OpenApiRuleSet {
     private val mandatoryRequestBodyDescriptionRule by lazy { MandatoryRequestBodyDescriptionRule(methods = setOf(POST, PUT, PATCH)) }
 
     private val operationTextFieldRules by lazy {
-        CompositeFieldRule(
-            mapOf(
-                OpenApiFields.Operation.summary to setOf(textFieldMustEndWithFullStop),
-                OpenApiFields.Operation.description to setOf(textFieldMustEndWithFullStop)
-            )
+        FieldSpecificRules(
+            OpenApiFields.Operation.summary to setOf(textFieldMustEndWithFullStop),
+            OpenApiFields.Operation.description to setOf(textFieldMustEndWithFullStop)
         )
     }
 
