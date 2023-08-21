@@ -34,6 +34,7 @@ fun <VIOLATION : RuleResult.Violation> Assert<ComplianceCheckResult>.isNotCompli
     assertThat(result).isInstanceOf(ComplianceCheckResult.NonCompliant::class)
     with(result as ComplianceCheckResult.NonCompliant) {
         val violations = problems.flatMap { it.violations }
+        assertThat(violations).hasSize(1)
         violations.single().let { it as VIOLATION }.apply(check)
     }
 }

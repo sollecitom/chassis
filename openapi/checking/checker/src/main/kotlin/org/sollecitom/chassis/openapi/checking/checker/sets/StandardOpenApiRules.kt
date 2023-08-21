@@ -19,6 +19,7 @@ object StandardOpenApiRules : OpenApiRuleSet {
     private val whitelistedCookiesAlphabet by lazy { (lowercaseCaseLetters + '-').toSet() }
     private val whitelistedHeadersAlphabet by lazy { (letters + '-').toSet() }
     private val requiredOperationFields by lazy { setOf(OpenApiField("operationId", Operation::getOperationId), OpenApiField("summary", Operation::getSummary)) }
+    private val whitelistedOpenApiVersions by lazy { setOf("3.1.0") }
 
     private val versioningPathSegmentRegex = Regex("v[1-9]+\$")
     private val mandatoryRequestBodyRule by lazy { MandatoryRequestBodyRule(methods = setOf(POST to true, PUT to true, PATCH to true)) }
@@ -27,6 +28,7 @@ object StandardOpenApiRules : OpenApiRuleSet {
     private val parametersNameRule by lazy { WhitelistedAlphabetParameterNameRule(pathAlphabet = whitelistedPathParametersAlphabet, headerAlphabet = whitelistedHeadersAlphabet, queryAlphabet = whitelistedQueryParametersAlphabet, cookieAlphabet = whitelistedCookiesAlphabet) }
     private val mandatoryRequestBodyContentMediaTypeRule by lazy { MandatoryRequestBodyContentMediaTypesRule(methodsToCheck = setOf(POST, PUT, PATCH)) }
     private val mandatoryRequestBodyDescriptionRule by lazy { MandatoryRequestBodyDescriptionRule(methods = setOf(POST, PUT, PATCH)) }
+    private val whitelistedOpenApiVersionFieldRule by lazy { WhitelistedOpenApiVersionFieldRule(whitelistedOpenApiVersions = whitelistedOpenApiVersions) }
 
     private val operationTextFieldRules by lazy {
         FieldSpecificRules(
@@ -47,7 +49,8 @@ object StandardOpenApiRules : OpenApiRuleSet {
             mandatoryRequestBodyContentMediaTypeRule,
             forbiddenRequestBodyRule,
             mandatoryRequestBodyDescriptionRule,
-            operationTextFieldRules
+            operationTextFieldRules,
+            whitelistedOpenApiVersionFieldRule
         ) + StandardTracingHeadersOpenApiRules.rules
     }
 }

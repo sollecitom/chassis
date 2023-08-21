@@ -19,7 +19,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
     fun `valid value works`() {
 
         val path = validPath
-        val api = buildOpenApi {
+        val api = openApi {
             path(path) {
                 operation(method) {
                     withValidFields()
@@ -37,7 +37,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
     fun `cannot omit operationId`() {
 
         val path = validPath
-        val api = buildOpenApi {
+        val api = openApi {
             path(path) {
                 operation(method) {
                     withValidFields()
@@ -59,7 +59,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
     fun `cannot specify blank operationId`() {
 
         val path = validPath
-        val api = buildOpenApi {
+        val api = openApi {
             path(path) {
                 operation(method) {
                     withValidFields()
@@ -81,7 +81,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
     fun `cannot omit summary`() {
 
         val path = validPath
-        val api = buildOpenApi {
+        val api = openApi {
             path(path) {
                 operation(method) {
                     withValidFields()
@@ -103,7 +103,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
     fun `cannot specify blank summary`() {
 
         val path = validPath
-        val api = buildOpenApi {
+        val api = openApi {
             path(path) {
                 operation(method) {
                     withValidFields()
@@ -125,7 +125,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
     fun `cannot specify a description equal to the summary`() {
 
         val path = validPath
-        val api = buildOpenApi {
+        val api = openApi {
             path(path) {
                 operation(method) {
                     withValidFields()
@@ -147,7 +147,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
     fun `cannot specify an operationId which is not in camelCase`() {
 
         val path = validPath
-        val api = buildOpenApi {
+        val api = openApi {
             path(path) {
                 operation(method) {
                     withValidFields()
@@ -169,7 +169,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
     fun `cannot specify a summary that doesn't end with a full stop`() {
 
         val path = validPath
-        val api = buildOpenApi {
+        val api = openApi {
             path(path) {
                 operation(method) {
                     withValidFields()
@@ -195,7 +195,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
     fun `cannot specify a description that doesn't end with a full stop`() {
 
         val path = validPath
-        val api = buildOpenApi {
+        val api = openApi {
             path(path) {
                 operation(method) {
                     withValidFields()
@@ -227,7 +227,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
         fun `cannot specify request body`() {
 
             val path = validPath
-            val api = buildOpenApi {
+            val api = openApi {
                 path(path) {
                     operation(method) {
                         withValidFields()
@@ -257,7 +257,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
         fun `cannot omit request body`() {
 
             val path = validPath
-            val api = buildOpenApi {
+            val api = openApi {
                 path(path) {
                     operation(method) {
                         withValidFields()
@@ -277,7 +277,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
         fun `cannot omit request body content media types`() {
 
             val path = validPath
-            val api = buildOpenApi {
+            val api = openApi {
                 path(path) {
                     operation(method) {
                         withValidFields()
@@ -303,7 +303,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
         fun `cannot specify optional request body`() {
 
             val path = validPath
-            val api = buildOpenApi {
+            val api = openApi {
                 path(path) {
                     operation(method) {
                         withValidFields()
@@ -327,7 +327,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
         fun `cannot omit request body description`() {
 
             val path = validPath
-            val api = buildOpenApi {
+            val api = openApi {
                 path(path) {
                     operation(method) {
                         withValidFields()
@@ -351,7 +351,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
         fun `cannot specify a blank request body description`() { // TODO add a test to enforce that the description for the request body ends with a full stop
 
             val path = validPath
-            val api = buildOpenApi {
+            val api = openApi {
                 path(path) {
                     operation(method) {
                         withValidFields()

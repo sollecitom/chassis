@@ -18,12 +18,22 @@ class OpenApiBuilder(version: SpecVersion) {
 
     private val api = OpenAPI(version)
 
+    fun version(version: OpenApiVersion) = version(version.value)
+
+    fun version(version: String) {
+        api.openapi(version)
+    }
+
     fun path(name: String, customize: PathItem.() -> Unit = {}) {
 
         api.path(name, PathItem().apply(customize))
     }
 
     internal fun build(): OpenAPI = api
+
+    enum class OpenApiVersion(val value: String) {
+        V3_1_0("3.1.0"), V3_0_1("3.0.1")
+    }
 }
 
 fun PathItem.get(builder: Operation.() -> Unit = {}) = operation(method = PathItem.HttpMethod.GET, builder)

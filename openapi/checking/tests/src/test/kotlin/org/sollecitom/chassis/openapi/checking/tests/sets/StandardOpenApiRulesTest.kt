@@ -2,7 +2,9 @@ package org.sollecitom.chassis.openapi.checking.tests.sets
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.PathItem.HttpMethod.*
+import io.swagger.v3.oas.models.SpecVersion
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -11,6 +13,7 @@ import org.sollecitom.chassis.openapi.checking.checker.model.ParameterLocation
 import org.sollecitom.chassis.openapi.checking.checker.rules.DisallowReservedCharactersInParameterNameRule
 import org.sollecitom.chassis.openapi.checking.checker.rules.WhitelistedAlphabetParameterNameRule
 import org.sollecitom.chassis.openapi.checking.checker.rules.WhitelistedAlphabetPathNameRule
+import org.sollecitom.chassis.openapi.checking.checker.rules.WhitelistedOpenApiVersionFieldRule
 import org.sollecitom.chassis.openapi.checking.checker.sets.StandardOpenApiRules
 import org.sollecitom.chassis.openapi.checking.checker.sets.checkAgainstRules
 import org.sollecitom.chassis.openapi.checking.test.utils.*
@@ -22,6 +25,36 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
     override val validOperationId = "getCloseFriends"
     override val validSummary = "Returns a list of close friends for the given person."
 
+    override fun openApi(version: OpenApiBuilder.OpenApiVersion, customize: OpenApiBuilder.() -> Unit): OpenAPI {
+
+        val prepare: OpenApiBuilder.() -> Unit = {
+            version(version)
+            customize()
+        }
+        return buildOpenApi(SpecVersion.V31, prepare)
+    }
+
+    @Nested
+    @TestInstance(PER_CLASS)
+    inner class Metadata {
+
+        @Test
+        fun `cannot specify a disallowed OpenAPI version`() {
+
+            val disallowedOpenApiVersion = "3.0.0"
+            val api = openApi {
+                version(disallowedOpenApiVersion)
+                path("/something")
+            }
+
+            val result = api.checkAgainstRules(StandardOpenApiRules)
+
+            assertThat(result).isNotCompliantWithOnlyViolation<WhitelistedOpenApiVersionFieldRule.Violation> { violation ->
+                assertThat(violation.declaredVersion).isEqualTo(disallowedOpenApiVersion)
+            }
+        }
+    }
+
     @Nested
     @TestInstance(PER_CLASS)
     inner class Paths {
@@ -30,7 +63,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
         fun `valid value works`() {
 
             val path = validPath
-            val api = buildOpenApi {
+            val api = openApi {
                 path(path)
             }
 
@@ -43,7 +76,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
         fun `trailing version path segment with number works`() {
 
             val path = "/commands/register-user/v1"
-            val api = buildOpenApi {
+            val api = openApi {
                 path(path)
             }
 
@@ -56,7 +89,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
         fun `cannot contain trailing invalid path segment that looks like a version with number`() {
 
             val invalidPath = "/commands/register-user/av1"
-            val api = buildOpenApi {
+            val api = openApi {
                 path(invalidPath)
             }
 
@@ -71,7 +104,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
         fun `cannot contain numbers`() {
 
             val invalidPath = "/commands/123/register-user"
-            val api = buildOpenApi {
+            val api = openApi {
                 path(invalidPath)
             }
 
@@ -86,7 +119,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
         fun `leading version path segment with number works`() {
 
             val path = "/v1/commands/register-user"
-            val api = buildOpenApi {
+            val api = openApi {
                 path(path)
             }
 
@@ -99,7 +132,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
         fun `cannot contain uppercase letters`() {
 
             val invalidPath = "/something/All"
-            val api = buildOpenApi {
+            val api = openApi {
                 path(invalidPath)
             }
 
@@ -114,7 +147,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
         fun `cannot contain symbols`() {
 
             val invalidPath = "/something/all_people"
-            val api = buildOpenApi {
+            val api = openApi {
                 path(invalidPath)
             }
 
@@ -130,7 +163,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
 
             val invalidParameterName = "id123"
             val invalidPath = "/v1/all/{$invalidParameterName}"
-            val api = buildOpenApi {
+            val api = openApi {
                 path(invalidPath)
             }
 
@@ -145,7 +178,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
         fun `templated segments cannot contain further braces`() {
 
             val invalidPath = "/v1/all/{{a}"
-            val api = buildOpenApi {
+            val api = openApi {
                 path(invalidPath)
             }
 
@@ -160,7 +193,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
         fun `valid templated segments work`() {
 
             val path = "/people/{person-id}"
-            val api = buildOpenApi {
+            val api = openApi {
                 path(path)
             }
 
@@ -184,7 +217,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `valid value works`() {
 
                 val parameterName = validParameterName
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         get {
                             operationId = validOperationId
@@ -209,7 +242,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `cannot contain numbers`() {
 
                 val invalidParameterName = "filter123"
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         get {
                             operationId = validOperationId
@@ -239,7 +272,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `cannot contain symbols`() {
 
                 val invalidParameterName = "filte_r"
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         get {
                             operationId = validOperationId
@@ -269,7 +302,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `cannot contain uppercase letters`() {
 
                 val invalidParameterName = "fiLter"
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         post {
                             operationId = validOperationId
@@ -300,7 +333,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `cannot allow reserved URL characters`() {
 
                 val parameterName = validParameterName
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         put {
                             operationId = validOperationId
@@ -340,7 +373,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `valid value works`() {
 
                 val parameterName = validParameterName
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         get {
                             operationId = validOperationId
@@ -365,7 +398,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `cannot contain numbers`() {
 
                 val invalidParameterName = "id123"
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         get {
                             operationId = validOperationId
@@ -395,7 +428,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `cannot contain symbols`() {
 
                 val invalidParameterName = "i_d"
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         get {
                             operationId = validOperationId
@@ -425,7 +458,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `cannot contain uppercase letters`() {
 
                 val invalidParameterName = "ID"
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         post {
                             operationId = validOperationId
@@ -456,7 +489,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `cannot allow reserved URL characters`() {
 
                 val parameterName = validParameterName
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         put {
                             operationId = validOperationId
@@ -496,7 +529,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `valid value works`() {
 
                 val parameterName = validParameterName
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         get {
                             operationId = validOperationId
@@ -521,7 +554,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `cannot contain numbers`() {
 
                 val invalidParameterName = "session-123"
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         get {
                             operationId = validOperationId
@@ -551,7 +584,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `cannot contain symbols`() {
 
                 val invalidParameterName = "session_id"
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         get {
                             operationId = validOperationId
@@ -581,7 +614,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `cannot contain uppercase letters`() {
 
                 val invalidParameterName = "SESSION-ID"
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         post {
                             operationId = validOperationId
@@ -612,7 +645,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `cannot allow reserved URL characters`() {
 
                 val parameterName = validParameterName
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         put {
                             operationId = validOperationId
@@ -652,7 +685,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `valid value works`() {
 
                 val parameterName = validParameterName
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         get {
                             operationId = validOperationId
@@ -677,7 +710,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `cannot contain numbers`() {
 
                 val invalidParameterName = "HEADER-123"
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         get {
                             operationId = validOperationId
@@ -707,7 +740,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `cannot contain symbols`() {
 
                 val invalidParameterName = "HEA_DER"
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         get {
                             operationId = validOperationId
@@ -737,7 +770,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             fun `cannot allow reserved URL characters`() {
 
                 val parameterName = validParameterName
-                val api = buildOpenApi {
+                val api = openApi {
                     path(validPath) {
                         put {
                             operationId = validOperationId
@@ -779,6 +812,8 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             override val validPath get() = this@StandardOpenApiRulesTest.validPath
             override val validOperationId get() = this@StandardOpenApiRulesTest.validOperationId
             override val validSummary get() = this@StandardOpenApiRulesTest.validSummary
+
+            override fun openApi(version: OpenApiBuilder.OpenApiVersion, customize: OpenApiBuilder.() -> Unit) = this@StandardOpenApiRulesTest.openApi(version, customize)
         }
 
         @Nested
@@ -789,6 +824,8 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             override val validPath get() = this@StandardOpenApiRulesTest.validPath
             override val validOperationId get() = this@StandardOpenApiRulesTest.validOperationId
             override val validSummary get() = this@StandardOpenApiRulesTest.validSummary
+
+            override fun openApi(version: OpenApiBuilder.OpenApiVersion, customize: OpenApiBuilder.() -> Unit) = this@StandardOpenApiRulesTest.openApi(version, customize)
         }
 
         @Nested
@@ -799,6 +836,8 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             override val validPath get() = this@StandardOpenApiRulesTest.validPath
             override val validOperationId get() = this@StandardOpenApiRulesTest.validOperationId
             override val validSummary get() = this@StandardOpenApiRulesTest.validSummary
+
+            override fun openApi(version: OpenApiBuilder.OpenApiVersion, customize: OpenApiBuilder.() -> Unit) = this@StandardOpenApiRulesTest.openApi(version, customize)
         }
 
         @Nested
@@ -809,6 +848,8 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             override val validPath get() = this@StandardOpenApiRulesTest.validPath
             override val validOperationId get() = this@StandardOpenApiRulesTest.validOperationId
             override val validSummary get() = this@StandardOpenApiRulesTest.validSummary
+
+            override fun openApi(version: OpenApiBuilder.OpenApiVersion, customize: OpenApiBuilder.() -> Unit) = this@StandardOpenApiRulesTest.openApi(version, customize)
         }
 
         @Nested
@@ -819,6 +860,8 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             override val validPath get() = this@StandardOpenApiRulesTest.validPath
             override val validOperationId get() = this@StandardOpenApiRulesTest.validOperationId
             override val validSummary get() = this@StandardOpenApiRulesTest.validSummary
+
+            override fun openApi(version: OpenApiBuilder.OpenApiVersion, customize: OpenApiBuilder.() -> Unit) = this@StandardOpenApiRulesTest.openApi(version, customize)
         }
 
         @Nested
@@ -829,6 +872,8 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             override val validPath get() = this@StandardOpenApiRulesTest.validPath
             override val validOperationId get() = this@StandardOpenApiRulesTest.validOperationId
             override val validSummary get() = this@StandardOpenApiRulesTest.validSummary
+
+            override fun openApi(version: OpenApiBuilder.OpenApiVersion, customize: OpenApiBuilder.() -> Unit) = this@StandardOpenApiRulesTest.openApi(version, customize)
         }
 
         @Nested
@@ -839,6 +884,8 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             override val validPath get() = this@StandardOpenApiRulesTest.validPath
             override val validOperationId get() = this@StandardOpenApiRulesTest.validOperationId
             override val validSummary get() = this@StandardOpenApiRulesTest.validSummary
+
+            override fun openApi(version: OpenApiBuilder.OpenApiVersion, customize: OpenApiBuilder.() -> Unit) = this@StandardOpenApiRulesTest.openApi(version, customize)
         }
 
         @Nested
@@ -849,6 +896,8 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             override val validPath get() = this@StandardOpenApiRulesTest.validPath
             override val validOperationId get() = this@StandardOpenApiRulesTest.validOperationId
             override val validSummary get() = this@StandardOpenApiRulesTest.validSummary
+
+            override fun openApi(version: OpenApiBuilder.OpenApiVersion, customize: OpenApiBuilder.() -> Unit) = this@StandardOpenApiRulesTest.openApi(version, customize)
         }
     }
 
@@ -860,7 +909,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
         fun `can omit a versioning path prefix`() {
 
             val path = "/a-valid-path-without-versioning-prefix"
-            val api = buildOpenApi {
+            val api = openApi {
                 path(path) {
                     post {
                         operationId = validOperationId
@@ -879,7 +928,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
         fun `can include a versioning path prefix`() {
 
             val path = "/v1/a-valid-path-with-versioning-prefix"
-            val api = buildOpenApi {
+            val api = openApi {
                 path(path) {
                     post {
                         operationId = validOperationId
