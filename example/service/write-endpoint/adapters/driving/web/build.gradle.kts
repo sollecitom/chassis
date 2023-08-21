@@ -12,4 +12,6 @@ dependencies {
     implementation(projects.chassisKotlinExtensions)
 
     testImplementation(projects.chassisTestUtils)
+    testImplementation(projects.chassisOpenapiCheckingTestUtils)
+    testImplementation(projects.chassisResourceUtils)
 }

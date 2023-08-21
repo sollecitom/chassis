@@ -1,12 +1,12 @@
 openapi: 3.1.0
-#openapi: 3.0.1
 info:
   title: Example Write Endpoint Service API
   description: Accepts commands to register a user.
   version: "1.0"
 paths:
-  /commands/register-user/1:
+  /commands/register-user/v1:
     post:
+      operationId: registerUserV1
       summary: Submits a register user V1 command to register a new user.
       parameters:
         - in: header
@@ -20,7 +20,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '/api/schemas/json/IssueCardCommand.json'
+              $ref: '/api/schemas/json/RegisterUserCommandV1.json'
             example: { "email": { "address": "bruce@waynecorp.com" } }
         required: true
       responses:

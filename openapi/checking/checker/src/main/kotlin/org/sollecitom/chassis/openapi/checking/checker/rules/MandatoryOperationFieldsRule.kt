@@ -18,17 +18,18 @@ class MandatoryOperationFieldsRule(private val requiredFields: Set<OpenApiField<
 
     private fun check(operation: OperationWithContext): Violation? {
 
-        if (operation.isNotCompliant()) return operation.violation()
+        val missingRequiredFields = requiredFields.filter { field -> field.getter(operation.operation.operation)?.trimmed() == null }.toSet()
+        if (missingRequiredFields.isNotEmpty()) return operation.violation(missingRequiredFields)
         return null
     }
 
-    private fun OperationWithContext.violation() = Violation(this, requiredFields)
+    private fun OperationWithContext.violation(missingRequiredFields: Set<OpenApiField<Operation, Any?>>) = Violation(this, requiredFields, missingRequiredFields)
 
     private fun OperationWithContext.isNotCompliant(): Boolean = requiredFields.any { field -> field.getter(operation.operation)?.trimmed() == null }
 
-    data class Violation(val operation: OperationWithContext, val requiredFields: Set<OpenApiField<Operation, Any?>>) : RuleResult.Violation {
+    data class Violation(val operation: OperationWithContext, val requiredFields: Set<OpenApiField<Operation, Any?>>, val missingRequiredFields: Set<OpenApiField<Operation, Any?>>) : RuleResult.Violation {
 
-        override val message = "Operation ${operation.operation.method} on path ${operation.pathName} should specify the following mandatory fields ${requiredFields.map(OpenApiField<Operation, *>::name)}, but doesn't"
+        override val message = "Operation ${operation.operation.method} on path ${operation.pathName} should specify the following mandatory fields ${requiredFields.map(OpenApiField<Operation, *>::name)}, but fields ${missingRequiredFields.map(OpenApiField<Operation, *>::name)}"
     }
 
     private fun Any.trimmed(): Any? = when (this) {

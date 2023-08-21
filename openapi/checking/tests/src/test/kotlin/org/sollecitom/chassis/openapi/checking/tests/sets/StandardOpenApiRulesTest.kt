@@ -901,6 +901,9 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
 //        else -> true
 //    }
 
+// TODO sections
+//    // TODO add mandatory info fields, including title, description, and version
+//    // TODO add mandatory version for OpenApi, equal to 3.1.0, or minimum 3.1.0 at least
 // TODO generic
 //    // TODO investigate using dictionaries to whitelist words and structure e.g. plural vs singular (like with https://dev.languagetool.org/java-api)
 //    // TODO media types
