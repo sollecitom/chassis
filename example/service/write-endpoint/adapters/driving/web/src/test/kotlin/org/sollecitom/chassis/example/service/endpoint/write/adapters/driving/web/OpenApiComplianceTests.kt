@@ -23,9 +23,6 @@ private class OpenApiComplianceTests {
 
         val result = api.checkAgainstRules(StandardOpenApiRules)
 
-        if (result is ComplianceCheckResult.NonCompliant) {
-            println(result.description())
-        }
         assertThat(result).isCompliant()
     }
 }

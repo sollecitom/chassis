@@ -11,6 +11,9 @@ import org.sollecitom.chassis.test.utils.assertions.containsSameElementsAs
 
 fun Assert<ComplianceCheckResult>.isCompliant() = given { result ->
 
+    if (result is ComplianceCheckResult.NonCompliant) {
+        println(result.description())
+    }
     assertThat(result).isEqualTo(ComplianceCheckResult.Compliant)
 }
 
