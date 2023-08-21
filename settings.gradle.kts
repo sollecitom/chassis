@@ -31,6 +31,7 @@ module("http4k", "utils")
 module("http4k", "server", "utils")
 module("openapi", "parser")
 module("openapi", "checker")
+module("openapi", "checking", "test", "utils")
 
 module("web", "service", "domain")
 module("web", "api", "test", "utils")
