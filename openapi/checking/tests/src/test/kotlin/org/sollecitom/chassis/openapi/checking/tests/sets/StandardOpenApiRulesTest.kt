@@ -2,7 +2,6 @@ package org.sollecitom.chassis.openapi.checking.tests.sets
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import io.swagger.v3.oas.models.PathItem.HttpMethod
 import io.swagger.v3.oas.models.PathItem.HttpMethod.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -20,7 +19,7 @@ import org.sollecitom.chassis.openapi.checking.test.utils.*
 @TestInstance(PER_CLASS)
 private class StandardOpenApiRulesTest : OpenApiTestSpecification {
 
-    override val validPath = "/v1/people/{person-id}/close-friends"
+    override val validPath = "/v1/people/{person-id}/close-friends/v2"
     override val validOperationId = "getCloseFriends"
     override val validSummary = "Returns a list of close friends for the given person."
 
@@ -39,21 +38,6 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
             val result = api.checkAgainstRules(StandardOpenApiRules)
 
             assertThat(result).isCompliant()
-        }
-
-        @Test
-        fun `cannot contain numbers`() {
-
-            val invalidPath = "/v2/all123"
-            val api = buildOpenApi {
-                path(invalidPath)
-            }
-
-            val result = api.checkAgainstRules(StandardOpenApiRules)
-
-            assertThat(result).isNotCompliantWithOnlyViolation<WhitelistedAlphabetPathNameRule.Violation> { violation ->
-                assertThat(violation.path).isEqualTo(invalidPath)
-            }
         }
 
         @Test
@@ -89,7 +73,8 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
         @Test
         fun `templated segments cannot contain numbers`() {
 
-            val invalidPath = "/v1/all/{id123}"
+            val invalidParameterName = "id123"
+            val invalidPath = "/v1/all/{$invalidParameterName}"
             val api = buildOpenApi {
                 path(invalidPath)
             }
@@ -817,9 +802,9 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
     inner class Versioning {
 
         @Test
-        fun `cannot omit versioning path prefix`() {
+        fun `can omit a versioning path prefix`() {
 
-            val path = "/an-almost-valid-path"
+            val path = "/a-valid-path-without-versioning-prefix"
             val api = buildOpenApi {
                 path(path) {
                     post {
@@ -832,9 +817,26 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
 
             val result = api.checkAgainstRules(StandardOpenApiRules)
 
-            assertThat(result).isNotCompliantWithOnlyViolation<MandatoryVersioningPathPrefixRule.Violation> { violation ->
-                assertThat(violation.pathName).isEqualTo(path)
+            assertThat(result).isCompliant()
+        }
+
+        @Test
+        fun `can include a versioning path prefix`() {
+
+            val path = "/v1/a-valid-path-with-versioning-prefix"
+            val api = buildOpenApi {
+                path(path) {
+                    post {
+                        operationId = validOperationId
+                        summary = validSummary
+                        setValidRequestBody()
+                    }
+                }
             }
+
+            val result = api.checkAgainstRules(StandardOpenApiRules)
+
+            assertThat(result).isCompliant()
         }
     }
 
