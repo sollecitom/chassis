@@ -19,6 +19,7 @@ vaadin = "24.1.4"
 spring-boot = "3.1.2"
 test-containers = "1.18.3"
 swagger-parser = "2.1.16"
+atlassian-swagger-request-validator = "2.35.2"
 # plugin versions
 palantir-git-plugin = "3.0.0"
 version-catalog-report-plugin = "0.47.0"
@@ -61,6 +62,7 @@ spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-depe
 spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot" }
 test-containers = { module = "org.testcontainers:junit-jupiter", version.ref = "test-containers" }
 swagger-parser = { module = "io.swagger.parser.v3:swagger-parser-v3", version.ref = "swagger-parser" }
+swagger-request-validator = { module = "com.atlassian.oai:swagger-request-validator-core", version.ref = "atlassian-swagger-request-validator" }
 
 [plugins]
 com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "version-catalog-report-plugin" }

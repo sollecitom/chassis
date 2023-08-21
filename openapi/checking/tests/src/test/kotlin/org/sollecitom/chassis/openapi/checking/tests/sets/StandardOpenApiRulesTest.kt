@@ -14,6 +14,7 @@ import org.sollecitom.chassis.logger.core.JvmLoggerFactory
 import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration
 import org.sollecitom.chassis.logging.standard.configuration.applyTo
+import org.sollecitom.chassis.openapi.builder.*
 import org.sollecitom.chassis.openapi.checking.checker.model.OpenApiFields
 import org.sollecitom.chassis.openapi.checking.checker.model.ParameterLocation
 import org.sollecitom.chassis.openapi.checking.checker.rules.*

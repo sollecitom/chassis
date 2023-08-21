@@ -4,7 +4,9 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import io.swagger.v3.oas.models.Operation
 import org.junit.jupiter.api.Test
-import org.sollecitom.chassis.openapi.checking.checker.*
+import org.sollecitom.chassis.openapi.builder.content
+import org.sollecitom.chassis.openapi.builder.operation
+import org.sollecitom.chassis.openapi.builder.requestBody
 import org.sollecitom.chassis.openapi.checking.checker.model.OpenApiFields
 import org.sollecitom.chassis.openapi.checking.checker.rule.field.FieldRulesViolation
 import org.sollecitom.chassis.openapi.checking.checker.rules.*

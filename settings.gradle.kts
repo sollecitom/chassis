@@ -33,6 +33,8 @@ module("openapi", "parser")
 module("openapi", "checking", "checker")
 module("openapi", "checking", "tests")
 module("openapi", "checking", "test", "utils")
+module("openapi", "builder")
+module("openapi", "validation", "request", "validator")
 
 module("web", "service", "domain")
 module("web", "api", "test", "utils")

@@ -4,10 +4,10 @@ import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.media.StringSchema
 import io.swagger.v3.oas.models.parameters.RequestBody
-import org.sollecitom.chassis.openapi.checking.test.utils.OpenApiBuilder
-import org.sollecitom.chassis.openapi.checking.test.utils.content
-import org.sollecitom.chassis.openapi.checking.test.utils.mediaTypes
-import org.sollecitom.chassis.openapi.checking.test.utils.requestBody
+import org.sollecitom.chassis.openapi.builder.OpenApiBuilder
+import org.sollecitom.chassis.openapi.builder.content
+import org.sollecitom.chassis.openapi.builder.mediaTypes
+import org.sollecitom.chassis.openapi.builder.requestBody
 
 interface OpenApiTestSpecification {
 
