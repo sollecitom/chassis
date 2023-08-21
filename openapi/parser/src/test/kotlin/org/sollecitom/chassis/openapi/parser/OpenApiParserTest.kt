@@ -22,6 +22,17 @@ private class OpenApiParserTest {
     }
 
     @Test
+    fun `parser is able to read and construct OpenAPI object via its URL`() {
+
+        val parser = newOpenApiParser()
+        val validOpenApiLocation = readResourceWithName("./api/ValidSwagger.yml")
+
+        val result = runCatching { parser.parse(validOpenApiLocation) }
+
+        assertThat(result).isSuccess()
+    }
+
+    @Test
     fun `parser is unable to read and construct OpenAPI invalid object`() {
 
         val parser = newOpenApiParser()
