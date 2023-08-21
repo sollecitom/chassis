@@ -14,4 +14,3 @@ paths:
             application/json:
               schema:
                 $ref: './schemas/json/ValidResponse.json'
-#                $ref: 'schemas/json/ValidResponse.json'
