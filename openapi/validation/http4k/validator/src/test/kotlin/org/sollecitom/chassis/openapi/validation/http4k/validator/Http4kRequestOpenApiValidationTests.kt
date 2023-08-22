@@ -84,7 +84,7 @@ private class Http4kRequestOpenApiValidationTests {
 
             val report = validator.validate(request)
 
-            assertThat(report).hasErrors()
+            assertThat(report).containsOnly(ValidationReportError.Request.Body.MissingRequiredField)
         }
 
         @Test
@@ -96,7 +96,7 @@ private class Http4kRequestOpenApiValidationTests {
 
             val report = validator.validate(request)
 
-            assertThat(report).hasErrors()
+            assertThat(report).containsOnly(ValidationReportError.Request.Body.InvalidType)
         }
     }
 

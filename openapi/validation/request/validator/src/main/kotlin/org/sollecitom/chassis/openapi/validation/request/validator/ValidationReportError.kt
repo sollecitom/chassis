@@ -7,6 +7,13 @@ sealed class ValidationReportError(val key: String) {
         data object MissingRequiredHeader : Request("validation.request.parameter.header.missing")
 
         data object UnknownHeader : Request("validation.request.parameter.header.unknown")
+
+        sealed class Body(key: String) : Request(key) {
+
+            data object MissingRequiredField : Body("validation.request.body.schema.required")
+
+            data object InvalidType : Body("validation.request.body.schema.type")
+        }
     }
 
     sealed class Response(key: String) : ValidationReportError(key) {
