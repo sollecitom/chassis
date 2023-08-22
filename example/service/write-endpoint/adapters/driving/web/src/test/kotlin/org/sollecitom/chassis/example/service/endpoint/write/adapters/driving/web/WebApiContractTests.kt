@@ -20,12 +20,20 @@ import org.sollecitom.chassis.example.service.endpoint.write.application.Applica
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
+import org.sollecitom.chassis.example.service.endpoint.write.configuration.ApplicationProperties
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.configureLogging
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.contentType
+import org.sollecitom.chassis.openapi.parser.OpenApiReader
+import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
+import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
+import org.sollecitom.chassis.openapi.validation.http4k.validator.implementation.invoke
 
 @TestInstance(PER_CLASS)
-private class WebApiContractTests {
+private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
+
+    private val openApi = OpenApiReader.parse(ApplicationProperties.OPEN_API_FILE_LOCATION)
+    override val openApiValidator = Http4kOpenApiValidator(openApi)
 
     // TODO add invocation context
     // TODO add the request body
