@@ -20,8 +20,8 @@ object OpenApiReader : OpenApiValidator, OpenApiParser {
         val parseOptions = ParseOptions()
         parseOptions.isResolve = true
         parseOptions.isResolveFully = true
-//        parseOptions.isResolveRequestBody = true
-//        parseOptions.isResolveCombinators = true
+        parseOptions.isResolveRequestBody = true
+        parseOptions.isResolveCombinators = true
         return OpenAPIV3Parser().readLocation(openApiLocation, emptyList(), parseOptions)
     }
 

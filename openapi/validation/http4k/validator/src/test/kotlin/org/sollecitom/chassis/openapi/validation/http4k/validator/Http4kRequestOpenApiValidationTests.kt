@@ -23,7 +23,8 @@ import org.sollecitom.chassis.test.utils.assertions.failedThrowing
 private class Http4kRequestOpenApiValidationTests {
 
     private val openApi = OpenApiReader.parse(API_FILE_LOCATION)
-    private val validator = StandardHttp4KOpenApiValidator(openApi = openApi, rejectUnknownRequestParameters = true, rejectUnknownResponseHeaders = true)
+    private val validator = StandardHttp4KOpenApiValidator(openApi = openApi, jsonSchemasDirectoryName = "", rejectUnknownRequestParameters = true, rejectUnknownResponseHeaders = true)
+//    private val validator = StandardHttp4KOpenApiValidator(openApi = openApi, jsonSchemasDirectoryName = "schemas/json", rejectUnknownRequestParameters = true, rejectUnknownResponseHeaders = true)
 
     @Nested
     inner class Requests {
@@ -142,7 +143,6 @@ private class Http4kRequestOpenApiValidationTests {
 
         @Test
         fun `are rejected as invalid when the body is invalid`() {
-
 
             val invalidJson = validPersonDetails.toJson().apply { remove("firstName") }
             val response = validResponse(invalidJson)

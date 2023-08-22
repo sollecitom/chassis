@@ -11,24 +11,22 @@ import org.http4k.core.ContentType
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import org.sollecitom.chassis.json.utils.jsonSchemaUnderRootFolder
+import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.validate
 import org.sollecitom.chassis.kotlin.extensions.optional.asNullable
 import java.nio.charset.Charset
 
-internal class ResponseJsonBodyValidator(val jsonSchemasDirectoryName: String = defaultJsonSchemasDirectory, val rootApiResourcesDirectoryName: String = defaultApiResourcesDirectory) : CustomResponseValidator {
+internal class ResponseJsonBodyValidator(val jsonSchemasDirectoryName: String = defaultJsonSchemasDirectory) : CustomResponseValidator {
 
-    private val jsonSchemaDirectory = "$rootApiResourcesDirectoryName/$jsonSchemasDirectoryName"
-
-    override fun validate(rawResponse: Response, apiOperation: ApiOperation): ValidationReport { // TODO refactor it and fix it
+    override fun validate(rawResponse: Response, apiOperation: ApiOperation): ValidationReport {
 
         val response = (rawResponse as ResponseWithHeadersAdapter)
         val bodyAsString = response.responseBody.asNullable()?.toString(Charset.defaultCharset())
         val responseDefinition = apiOperation.operation.responses[response.status.toString()]
         val bodySwaggerSchema = responseDefinition?.content?.get(response.acceptHeader)?.schema
-        val bodySchema = bodySwaggerSchema?.`$ref`?.resolveAsSchemaLocation()?.let { jsonSchemaUnderRootFolder(it, jsonSchemaDirectory) } // TODO replace with simple load if this works
+        val bodySchema = bodySwaggerSchema?.`$ref`?.resolveAsSchemaLocation()?.let { jsonSchemaAt(it) }
         return when {
-            !bodyAsString.isNullOrEmpty() && responseDefinition.declaresAJsonContentType() -> {
+            !bodyAsString.isNullOrEmpty() && !bodySwaggerSchema.isDefined() && responseDefinition.declaresAJsonContentType() -> {
                 bodySchema ?: return ValidationReport.singleton(ValidationReport.Message.create("Response body", "Present but JSON schema is not declared").build())
                 val json = bodyAsString.toJsonValue()
                 bodySchema.validate(json).toValidationReport()
@@ -41,9 +39,11 @@ internal class ResponseJsonBodyValidator(val jsonSchemasDirectoryName: String = 
         }
     }
 
+    private fun io.swagger.v3.oas.models.media.Schema<*>?.isDefined(): Boolean = this != null && properties.isNotEmpty() // TODO check
+
     private fun ValidationFailure?.toValidationReport() = this?.let { ValidationReport.from(ValidationReport.Message.create("Response body", it.toString()).build()) } ?: ValidationReport.empty()
 
-    private fun ApiResponse?.declaresAJsonContentType() = this?.content?.keys?.any { it == ContentType.APPLICATION_JSON.toString() } ?: true // TODO check
+    private fun ApiResponse?.declaresAJsonContentType() = this?.content?.keys?.any { it == ContentType.APPLICATION_JSON.value } ?: false
 
     private fun String.resolveAsSchemaLocation(): String = when {
         startsWith("#/components/schemas/") -> "${removePrefix("#/components/schemas/")}.json"
@@ -63,7 +63,6 @@ internal class ResponseJsonBodyValidator(val jsonSchemasDirectoryName: String = 
 
     companion object {
         const val defaultJsonSchemasDirectory = "schemas/json"
-        const val defaultApiResourcesDirectory = "api"
     }
 }
 
