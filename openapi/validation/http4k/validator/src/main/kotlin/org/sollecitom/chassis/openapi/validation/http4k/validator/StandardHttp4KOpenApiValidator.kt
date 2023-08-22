@@ -13,7 +13,7 @@ import java.nio.ByteBuffer
 import com.atlassian.oai.validator.model.Request as OpenApiRequest
 
 // TODO target an OpenApi file instead (move resolution outside of this module in terms of responsibility?)
-class StandardHttp4KOpenApiValidator(openApi: OpenAPI, rejectUnknownRequestParameters: Boolean, rejectUnknownResponseHeaders: Boolean, jsonSchemasDirectoryName: String = ResponseJsonBodyValidator.defaultJsonSchemasDirectory) : Http4kOpenApiValidator {
+class StandardHttp4KOpenApiValidator(openApi: OpenAPI, rejectUnknownRequestParameters: Boolean = true, rejectUnknownResponseHeaders: Boolean = true, jsonSchemasDirectoryName: String = ResponseJsonBodyValidator.defaultJsonSchemasDirectory) : Http4kOpenApiValidator {
 
     init {
         OpenApi.enableVersion310OrHigher() // TODO check if it works without and remove it
