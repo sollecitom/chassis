@@ -5,27 +5,21 @@ import com.atlassian.oai.validator.model.SimpleRequest
 import com.atlassian.oai.validator.model.SimpleResponse
 import com.atlassian.oai.validator.report.ValidationReport
 import io.swagger.v3.oas.models.OpenAPI
-import io.swagger.v3.parser.core.models.ParseOptions
 import org.http4k.core.*
 import org.sollecitom.chassis.http4k.utils.lens.contentType
 import org.sollecitom.chassis.openapi.parser.OpenApi
 import java.nio.ByteBuffer
 import com.atlassian.oai.validator.model.Request as OpenApiRequest
 
-// TODO target an OpenApi file instead (move resolution outside of this module in terms of responsibility?)
 class StandardHttp4KOpenApiValidator(openApi: OpenAPI, rejectUnknownRequestParameters: Boolean = true, rejectUnknownResponseHeaders: Boolean = true, jsonSchemasDirectoryName: String = ResponseJsonBodyValidator.defaultJsonSchemasDirectory) : Http4kOpenApiValidator {
 
     init {
-        OpenApi.enableVersion310OrHigher() // TODO check if it works without and remove it
+        OpenApi.bindMultipleTypesToASingleType()
     }
 
     private val responseJsonBodyValidator = ResponseJsonBodyValidator(jsonSchemasDirectoryName = jsonSchemasDirectoryName)
     private val requestValidator: OpenApiInteractionValidator = OpenApiInteractionValidator.createFor(openApi).withRejectUnknownRequestHeaders(rejectUnknownRequestParameters).build()
-    private val responseValidator: OpenApiInteractionValidator = OpenApiInteractionValidator.createFor(openApi).withParseOptions(ParseOptions().apply {
-        isResolve = true
-        isFlattenComposedSchemas = false
-        isResolveFully = false
-    }).withRejectUnknownResponseHeaders(rejectUnknownResponseHeaders).withCustomResponseValidation(responseJsonBodyValidator).build()
+    private val responseValidator: OpenApiInteractionValidator = OpenApiInteractionValidator.createFor(openApi).withRejectUnknownResponseHeaders(rejectUnknownResponseHeaders).withCustomResponseValidation(responseJsonBodyValidator).build()
 
     override fun validate(request: Request) {
 
