@@ -14,4 +14,5 @@ dependencies {
     testImplementation(projects.chassisTestUtils)
     testImplementation(projects.chassisOpenapiCheckingTestUtils)
     testImplementation(projects.chassisResourceUtils)
+    testImplementation(projects.chassisOpenapiValidationHttp4kTestUtils)
 }
