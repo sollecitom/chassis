@@ -18,6 +18,15 @@ sealed class ValidationReportError(val key: String) {
 
     sealed class Response(key: String) : ValidationReportError(key) {
 
+        data object MissingRequiredHeader : Request("validation.response.header.missing")
+
         data object UnknownHeader : Response("validation.response.header.unknown")
+
+        sealed class Body(key: String) : Response(key) {
+
+            data object MissingRequiredField : Body("validation.response.body.schema.required")
+
+            data object InvalidType : Body("validation.response.body.schema.type")
+        }
     }
 }

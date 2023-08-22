@@ -127,7 +127,7 @@ private class Http4kRequestOpenApiValidationTests {
 
             val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
 
-            assertThat(report).hasErrors()
+            assertThat(report).containsOnly(ValidationReportError.Response.MissingRequiredHeader)
         }
 
         @Test
@@ -139,7 +139,7 @@ private class Http4kRequestOpenApiValidationTests {
 
             val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
 
-            assertThat(report).hasErrors()
+            assertThat(report).containsOnly(ValidationReportError.Response.UnknownHeader)
         }
 
         @Test
@@ -150,7 +150,7 @@ private class Http4kRequestOpenApiValidationTests {
 
             val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
 
-            assertThat(report).hasErrors()
+            assertThat(report).containsOnly(ValidationReportError.Response.Body.MissingRequiredField)
         }
 
         @Test
@@ -162,7 +162,7 @@ private class Http4kRequestOpenApiValidationTests {
 
             val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
 
-            assertThat(report).hasErrors()
+            assertThat(report).containsOnly(ValidationReportError.Response.Body.InvalidType)
         }
 
         @Test
