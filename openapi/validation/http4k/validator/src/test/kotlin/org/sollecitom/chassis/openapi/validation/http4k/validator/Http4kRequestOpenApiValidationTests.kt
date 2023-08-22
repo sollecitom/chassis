@@ -16,14 +16,14 @@ import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.openapi.parser.OpenApiReader
+import org.sollecitom.chassis.openapi.validation.http4k.validator.implementation.invoke
 import org.sollecitom.chassis.test.utils.assertions.failedThrowing
 
-// TODO refactor this whole mess
 @TestInstance(PER_CLASS)
 private class Http4kRequestOpenApiValidationTests {
 
     private val openApi = OpenApiReader.parse(API_FILE_LOCATION)
-    private val validator = StandardHttp4KOpenApiValidator(openApi = openApi)
+    private val validator = Http4kOpenApiValidator(openApi = openApi)
 
     @Nested
     inner class Requests {

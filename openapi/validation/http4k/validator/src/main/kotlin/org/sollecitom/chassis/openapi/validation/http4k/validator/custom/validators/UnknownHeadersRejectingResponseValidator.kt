@@ -1,9 +1,10 @@
-package org.sollecitom.chassis.openapi.validation.http4k.validator
+package org.sollecitom.chassis.openapi.validation.http4k.validator.custom.validators
 
 import com.atlassian.oai.validator.interaction.response.CustomResponseValidator
 import com.atlassian.oai.validator.model.ApiOperation
 import com.atlassian.oai.validator.model.Response
 import com.atlassian.oai.validator.report.ValidationReport
+import org.sollecitom.chassis.openapi.validation.http4k.validator.model.ResponseWithHeadersAdapter
 
 internal object UnknownHeadersRejectingResponseValidator : CustomResponseValidator {
 

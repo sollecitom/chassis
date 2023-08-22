@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.openapi.validation.http4k.validator
+package org.sollecitom.chassis.openapi.validation.http4k.validator.custom.validators
 
 import com.atlassian.oai.validator.interaction.response.CustomResponseValidator
 import com.atlassian.oai.validator.model.ApiOperation
@@ -14,6 +14,7 @@ import org.json.JSONObject
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.validate
 import org.sollecitom.chassis.kotlin.extensions.optional.asNullable
+import org.sollecitom.chassis.openapi.validation.http4k.validator.model.ResponseWithHeadersAdapter
 import java.nio.charset.Charset
 
 internal class ResponseJsonBodyValidator(val jsonSchemasDirectoryName: String = defaultJsonSchemasDirectory) : CustomResponseValidator {

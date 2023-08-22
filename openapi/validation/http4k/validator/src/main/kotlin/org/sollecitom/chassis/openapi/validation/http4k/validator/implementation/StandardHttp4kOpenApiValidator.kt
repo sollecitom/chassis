@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.openapi.validation.http4k.validator
+package org.sollecitom.chassis.openapi.validation.http4k.validator.implementation
 
 import com.atlassian.oai.validator.OpenApiInteractionValidator
 import com.atlassian.oai.validator.model.SimpleRequest
@@ -7,18 +7,28 @@ import com.atlassian.oai.validator.report.ValidationReport
 import io.swagger.v3.oas.models.OpenAPI
 import org.http4k.core.*
 import org.sollecitom.chassis.http4k.utils.lens.contentType
+import org.sollecitom.chassis.kotlin.extensions.bytes.toByteArray
 import org.sollecitom.chassis.openapi.parser.OpenApi
-import java.nio.ByteBuffer
+import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidationException
+import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
+import org.sollecitom.chassis.openapi.validation.http4k.validator.custom.validators.ResponseJsonBodyValidator
+import org.sollecitom.chassis.openapi.validation.http4k.validator.custom.validators.UnknownHeadersRejectingRequestValidator
+import org.sollecitom.chassis.openapi.validation.http4k.validator.custom.validators.UnknownHeadersRejectingResponseValidator
+import org.sollecitom.chassis.openapi.validation.http4k.validator.model.ResponseWithHeaders
+import org.sollecitom.chassis.openapi.validation.http4k.validator.model.ResponseWithHeadersAdapter
+import org.sollecitom.chassis.openapi.validation.http4k.validator.utils.toMultiMap
 import com.atlassian.oai.validator.model.Request as OpenApiRequest
 
-class StandardHttp4KOpenApiValidator(openApi: OpenAPI, rejectUnknownRequestParameters: Boolean = true, rejectUnknownResponseHeaders: Boolean = true, jsonSchemasDirectoryName: String = ResponseJsonBodyValidator.defaultJsonSchemasDirectory) : Http4kOpenApiValidator {
+operator fun Http4kOpenApiValidator.Companion.invoke(openApi: OpenAPI, rejectUnknownRequestParameters: Boolean = true, rejectUnknownResponseHeaders: Boolean = true, jsonSchemasDirectoryName: String = ResponseJsonBodyValidator.defaultJsonSchemasDirectory): Http4kOpenApiValidator = StandardHttp4kOpenApiValidator(openApi, rejectUnknownRequestParameters, rejectUnknownResponseHeaders, jsonSchemasDirectoryName)
+
+internal class StandardHttp4kOpenApiValidator(openApi: OpenAPI, rejectUnknownRequestParameters: Boolean = true, rejectUnknownResponseHeaders: Boolean = true, jsonSchemasDirectoryName: String = ResponseJsonBodyValidator.defaultJsonSchemasDirectory) : Http4kOpenApiValidator {
 
     init {
         OpenApi.bindMultipleTypesToASingleType()
     }
 
-    private val responseJsonBodyValidator = ResponseJsonBodyValidator(jsonSchemasDirectoryName = jsonSchemasDirectoryName)
     private val requestValidator: OpenApiInteractionValidator = OpenApiInteractionValidator.createFor(openApi).withRejectUnknownRequestHeaders(rejectUnknownRequestParameters).build()
+    private val responseJsonBodyValidator = ResponseJsonBodyValidator(jsonSchemasDirectoryName = jsonSchemasDirectoryName)
     private val responseValidator: OpenApiInteractionValidator = OpenApiInteractionValidator.createFor(openApi).withRejectUnknownResponseHeaders(rejectUnknownResponseHeaders).withCustomResponseValidation(responseJsonBodyValidator).build()
 
     override fun validate(request: Request) {
@@ -44,13 +54,6 @@ class StandardHttp4KOpenApiValidator(openApi: OpenAPI, rejectUnknownRequestParam
 
     private fun Method.adapted(): OpenApiRequest.Method = OpenApiRequest.Method.valueOf(name)
 
-    private fun ByteBuffer.toByteArray(): ByteArray { // TODO check
-
-        val byteArray = ByteArray(capacity())
-        get(byteArray)
-        return byteArray
-    }
-
     private fun Request.adapted(): SimpleRequest {
 
         val builder = when (method) {
@@ -63,7 +66,7 @@ class StandardHttp4KOpenApiValidator(openApi: OpenAPI, rejectUnknownRequestParam
             Method.PATCH -> SimpleRequest.Builder::patch
             Method.PURGE -> { path -> SimpleRequest.Builder("purge", path) }
             Method.HEAD -> SimpleRequest.Builder::head
-        }.invoke(uri.path) // url.encodedPath
+        }.invoke(uri.path)
 
         with(builder) {
             withBody(body)
@@ -85,7 +88,8 @@ class StandardHttp4KOpenApiValidator(openApi: OpenAPI, rejectUnknownRequestParam
 
     private fun SimpleRequest.Builder.withBody(body: Body) {
         when (body) {
-            Body.EMPTY -> { /* nothing to do here */
+            Body.EMPTY -> { // TODO do we need this difference?
+                // nothing to do here
             }
             // TODO treat the StreamBody differently?
             else -> withBody(body.payload.toByteArray())
@@ -94,7 +98,8 @@ class StandardHttp4KOpenApiValidator(openApi: OpenAPI, rejectUnknownRequestParam
 
     private fun SimpleResponse.Builder.withBody(body: Body) {
         when (body) {
-            Body.EMPTY -> { /* nothing to do here */
+            Body.EMPTY -> { // TODO do we need this difference?
+                // nothing to do here
             }
             // TODO treat the StreamBody differently?
             else -> withBody(body.payload.toByteArray())

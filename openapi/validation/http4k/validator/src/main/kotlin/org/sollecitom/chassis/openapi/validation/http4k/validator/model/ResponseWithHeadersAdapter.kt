@@ -1,9 +1,9 @@
-package org.sollecitom.chassis.openapi.validation.http4k.validator
+package org.sollecitom.chassis.openapi.validation.http4k.validator.model
 
 import com.atlassian.oai.validator.model.Response
 import com.atlassian.oai.validator.model.SimpleResponse
 import org.http4k.core.Headers
-import org.http4k.core.toParametersMap
+import org.sollecitom.chassis.openapi.validation.http4k.validator.utils.toMultiMap
 
 internal class ResponseWithHeadersAdapter(val delegate: SimpleResponse, http4kHeaders: Headers, override val acceptHeader: String) : Response by delegate, ResponseWithHeaders {
 
@@ -11,6 +11,3 @@ internal class ResponseWithHeadersAdapter(val delegate: SimpleResponse, http4kHe
 
     override fun getResponseBody() = delegate.responseBody
 }
-
-// TODO move
-fun Headers.toMultiMap(): Map<String, Collection<String>> = toParametersMap().mapValues { it.value.filterNotNull() }

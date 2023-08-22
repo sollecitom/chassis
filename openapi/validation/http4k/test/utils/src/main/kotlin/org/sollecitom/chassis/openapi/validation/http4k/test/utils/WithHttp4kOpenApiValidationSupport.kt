@@ -9,6 +9,7 @@ import org.http4k.core.Request
 import org.http4k.core.Response
 import org.sollecitom.chassis.http4k.utils.lens.contentType
 import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
+import org.sollecitom.chassis.openapi.validation.http4k.validator.validate
 
 // TODO add tests
 interface WithHttp4kOpenApiValidationSupport {
@@ -17,7 +18,7 @@ interface WithHttp4kOpenApiValidationSupport {
 
     suspend fun Response.ensureCompliantWith(path: String, method: Method, contentType: ContentType) {
 
-        val result = runCatching { openApiValidator.validate(path, method, contentType.toString(), this) }
+        val result = runCatching { openApiValidator.validate(path, method, contentType, this) }
         assertThat(result).isSuccess()
     }
 

@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.openapi.validation.http4k.validator
+package org.sollecitom.chassis.openapi.validation.http4k.validator.model
 
 import com.atlassian.oai.validator.model.Response
 

@@ -39,14 +39,6 @@ components:
         minLength: 1
       required: true
       description: an example request header.
-    contentType:
-      name: content-type
-      in: header
-      schema:
-        type: string
-        minLength: 1
-      required: true
-      description: Content type
   headers:
     X-A-Response-Header:
       description: an example response header.
