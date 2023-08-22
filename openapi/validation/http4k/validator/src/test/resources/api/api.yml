@@ -1,0 +1,98 @@
+openapi: 3.1.0
+info:
+  version: "1.0"
+  title: Template Person end point
+  description: Template service exposing rest service to add a person.
+
+paths:
+  /people:
+    post:
+      summary: Allows a Person Request to be added
+      operationId: addPersonEndpoint
+      parameters:
+        - $ref: '#/components/parameters/aRequestHeader'
+      requestBody:
+        description: "Person details"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/json/AddPersonRequest.json'
+      responses:
+        202:
+          description: Person Add Response Success
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/json/AddPersonResponse.json'
+          headers:
+            X-A-Response-Header:
+              $ref: '#/components/headers/X-A-Response-Header'
+            content-type:
+              $ref: '#/components/headers/contentType'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        422:
+          description: Request body violated some domain constraints.
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/json/ErrorsList.json'
+          headers:
+            content-type:
+              $ref: '#/components/headers/contentType'
+        500:
+          $ref: '#/components/responses/UnexpectedError'
+        502:
+          $ref: '#/components/responses/UnavailableServer'
+components:
+  parameters:
+    aRequestHeader:
+      name: X-A-Request-Header
+      in: header
+      schema:
+        type: string
+        minLength: 1
+      required: true
+      description: an example request header.
+    contentType:
+      name: content-type
+      in: header
+      schema:
+        type: string
+        minLength: 1
+      required: true
+      description: Content type
+  headers:
+    X-A-Response-Header:
+      description: an example response header.
+      schema:
+        type: string
+        minLength: 1
+      required: true
+    contentType:
+      description: Content type
+      schema:
+        type: string
+        minLength: 1
+      required: true
+
+  responses:
+    BadRequest:
+      description: The request could not be understood e.g., headers, query parameters or request body are malformed.
+      content:
+        text/plain:
+          schema:
+            type: string
+    UnavailableServer:
+      description: A dependent service is not responding
+      content:
+        text/plain:
+          schema:
+            type: string
+    UnexpectedError:
+      description: Something went wrong unexpectedly.
+      content:
+        text/plain:
+          schema:
+            type: string

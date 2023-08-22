@@ -1,0 +1,3 @@
+package org.sollecitom.chassis.openapi.validation.http4k.validator
+
+interface Http4kOpenApiValidator : Http4kRequestOpenApiValidator, Http4kResponseOpenApiValidator

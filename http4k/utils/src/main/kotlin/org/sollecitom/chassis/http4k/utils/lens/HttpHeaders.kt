@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.web.api.utils
+package org.sollecitom.chassis.http4k.utils.lens
 
 object HttpHeaders {
 

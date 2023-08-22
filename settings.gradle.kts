@@ -35,10 +35,11 @@ module("openapi", "checking", "tests")
 module("openapi", "checking", "test", "utils")
 module("openapi", "builder")
 module("openapi", "validation", "request", "validator")
+module("openapi", "validation", "http4k", "validator")
 
 module("web", "service", "domain")
 module("web", "api", "test", "utils")
-module("web", "api", "utils")
+module("web", "api", "utils") // TODO remove if not useful
 
 module("example", "service", "write-endpoint", "configuration")
 module("example", "service", "write-endpoint", "domain")

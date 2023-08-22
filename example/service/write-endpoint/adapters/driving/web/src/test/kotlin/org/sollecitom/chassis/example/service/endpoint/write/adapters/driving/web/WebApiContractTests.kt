@@ -21,8 +21,8 @@ import org.sollecitom.chassis.example.service.endpoint.write.application.user.Re
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.configureLogging
-import org.sollecitom.chassis.web.api.utils.body
-import org.sollecitom.chassis.web.api.utils.contentType
+import org.sollecitom.chassis.http4k.utils.lens.body
+import org.sollecitom.chassis.http4k.utils.lens.contentType
 
 @TestInstance(PER_CLASS)
 private class WebApiContractTests {

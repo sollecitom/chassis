@@ -3,7 +3,6 @@ package org.sollecitom.chassis.example.service.endpoint.write.system.test.specif
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import kotlinx.coroutines.test.runTest
-import org.http4k.core.ContentType
 import org.http4k.core.Method
 import org.http4k.core.Request
 import org.http4k.core.Status
@@ -13,8 +12,7 @@ import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.web.api.test.utils.MonitoringEndpointsTestSpecification
 import org.sollecitom.chassis.web.api.test.utils.httpURLWithPath
-import org.sollecitom.chassis.web.api.utils.HttpHeaders
-import org.sollecitom.chassis.web.api.utils.body
+import org.sollecitom.chassis.http4k.utils.lens.body
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
