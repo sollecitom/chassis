@@ -24,7 +24,6 @@ private class Http4kRequestOpenApiValidationTests {
 
     private val openApi = OpenApiReader.parse(API_FILE_LOCATION)
     private val validator = StandardHttp4KOpenApiValidator(openApi = openApi, jsonSchemasDirectoryName = "", rejectUnknownRequestParameters = true, rejectUnknownResponseHeaders = true)
-//    private val validator = StandardHttp4KOpenApiValidator(openApi = openApi, jsonSchemasDirectoryName = "schemas/json", rejectUnknownRequestParameters = true, rejectUnknownResponseHeaders = true)
 
     @Nested
     inner class Requests {
