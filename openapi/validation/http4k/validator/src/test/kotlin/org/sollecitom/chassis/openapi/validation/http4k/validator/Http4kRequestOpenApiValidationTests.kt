@@ -15,13 +15,15 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.logger.core.loggable.Loggable
+import org.sollecitom.chassis.openapi.parser.OpenApiReader
 import org.sollecitom.chassis.test.utils.assertions.failedThrowing
 
 // TODO refactor this whole mess
 @TestInstance(PER_CLASS)
 private class Http4kRequestOpenApiValidationTests {
 
-    private val validator = StandardHttp4KOpenApiValidator(swaggerFileName = API_FILE_LOCATION, rejectUnknownRequestParameters = true, rejectUnknownResponseHeaders = true)
+    private val openApi = OpenApiReader.parse(API_FILE_LOCATION)
+    private val validator = StandardHttp4KOpenApiValidator(openApi = openApi, rejectUnknownRequestParameters = true, rejectUnknownResponseHeaders = true)
 
     @Nested
     inner class Requests {
@@ -29,6 +31,13 @@ private class Http4kRequestOpenApiValidationTests {
         private val requiredRequestHeaderName = "X-A-Request-Header"
         private fun validRequest(json: JSONObject, path: String = PATH) = Request(Method.POST, uri(path)).body(json).header(requiredRequestHeaderName, "value")
         private fun validRequest(json: JSONArray, path: String = PATH) = Request(Method.POST, uri(path)).body(json).header(requiredRequestHeaderName, "value")
+
+        @Test
+        fun `parsing the OpenAPI file`() {
+
+            val api = OpenApiReader.parse(API_FILE_LOCATION)
+            println(api)
+        }
 
         @Test
         fun `are confirmed valid when valid`() {
@@ -93,8 +102,8 @@ private class Http4kRequestOpenApiValidationTests {
     inner class Responses {
 
         private val requiredResponseHeaderName = "X-A-Response-Header"
-        private fun validResponse(json: JSONObject) = Response(Status.ACCEPTED).body(json).header(requiredResponseHeaderName, "value")
-        private fun validResponse(json: JSONArray) = Response(Status.ACCEPTED).body(json).header(requiredResponseHeaderName, "value")
+        private fun validResponse(json: JSONObject, status: Status = Status.ACCEPTED) = Response(status).body(json).header(requiredResponseHeaderName, "value")
+        private fun validResponse(json: JSONArray, status: Status = Status.ACCEPTED) = Response(status).body(json).header(requiredResponseHeaderName, "value")
 
         @Test
         fun `are confirmed valid when valid`() {
@@ -159,7 +168,7 @@ private class Http4kRequestOpenApiValidationTests {
         fun `are confirmed valid when valid with nested objects`() {
 
             val json = JSONObject("""{"errors":[{"message":"First name cannot be equal to last name"}]}""")
-            val response = validResponse(json)
+            val response = validResponse(json = json, status = Status.UNPROCESSABLE_ENTITY)
 
             val result = runCatching { validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response) }
 

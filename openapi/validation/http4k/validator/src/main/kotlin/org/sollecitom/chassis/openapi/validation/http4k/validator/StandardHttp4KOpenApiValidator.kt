@@ -4,6 +4,7 @@ import com.atlassian.oai.validator.OpenApiInteractionValidator
 import com.atlassian.oai.validator.model.SimpleRequest
 import com.atlassian.oai.validator.model.SimpleResponse
 import com.atlassian.oai.validator.report.ValidationReport
+import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.parser.core.models.ParseOptions
 import org.http4k.core.*
 import org.sollecitom.chassis.http4k.utils.lens.contentType
@@ -12,15 +13,15 @@ import java.nio.ByteBuffer
 import com.atlassian.oai.validator.model.Request as OpenApiRequest
 
 // TODO target an OpenApi file instead (move resolution outside of this module in terms of responsibility?)
-class StandardHttp4KOpenApiValidator(swaggerFileName: String, rejectUnknownRequestParameters: Boolean, rejectUnknownResponseHeaders: Boolean) : Http4kOpenApiValidator {
+class StandardHttp4KOpenApiValidator(openApi: OpenAPI, rejectUnknownRequestParameters: Boolean, rejectUnknownResponseHeaders: Boolean) : Http4kOpenApiValidator {
 
     init {
         OpenApi.enableVersion310OrHigher() // TODO check if it works without and remove it
     }
 
     private val responseJsonBodyValidator = ResponseJsonBodyValidator() // TODO pass paths?
-    private val requestValidator: OpenApiInteractionValidator = OpenApiInteractionValidator.createForSpecificationUrl(swaggerFileName).withRejectUnknownRequestHeaders(rejectUnknownRequestParameters).build()
-    private val responseValidator: OpenApiInteractionValidator = OpenApiInteractionValidator.createForSpecificationUrl(swaggerFileName).withParseOptions(ParseOptions().apply {
+    private val requestValidator: OpenApiInteractionValidator = OpenApiInteractionValidator.createFor(openApi).withRejectUnknownRequestHeaders(rejectUnknownRequestParameters).build()
+    private val responseValidator: OpenApiInteractionValidator = OpenApiInteractionValidator.createFor(openApi).withParseOptions(ParseOptions().apply {
         isResolve = true
         isFlattenComposedSchemas = false
         isResolveFully = false

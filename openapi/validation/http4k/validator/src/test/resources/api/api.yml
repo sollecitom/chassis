@@ -20,27 +20,11 @@ paths:
               $ref: './schemas/json/AddPersonRequest.json'
       responses:
         202:
-          description: Person Add Response Success
-          content:
-            application/json:
-              schema:
-                $ref: './schemas/json/AddPersonResponse.json'
-          headers:
-            X-A-Response-Header:
-              $ref: '#/components/headers/X-A-Response-Header'
-            content-type:
-              $ref: '#/components/headers/contentType'
+          $ref: '#/components/responses/Accepted'
         400:
           $ref: '#/components/responses/BadRequest'
         422:
-          description: Request body violated some domain constraints.
-          content:
-            application/json:
-              schema:
-                $ref: './schemas/json/ErrorsList.json'
-          headers:
-            content-type:
-              $ref: '#/components/headers/contentType'
+          $ref: '#/components/responses/UnprocessableEntity'
         500:
           $ref: '#/components/responses/UnexpectedError'
         502:
@@ -78,12 +62,39 @@ components:
       required: true
 
   responses:
+    Accepted:
+      description: Add person successful response
+      content:
+        application/json:
+          schema:
+            $ref: './schemas/json/AddPersonResponse.json'
+      headers:
+        X-A-Response-Header:
+          $ref: '#/components/headers/X-A-Response-Header'
+        content-type:
+          $ref: '#/components/headers/contentType'
     BadRequest:
       description: The request could not be understood e.g., headers, query parameters or request body are malformed.
       content:
         text/plain:
           schema:
             type: string
+      headers:
+        X-A-Response-Header:
+          $ref: '#/components/headers/X-A-Response-Header'
+        content-type:
+          $ref: '#/components/headers/contentType'
+    UnprocessableEntity:
+      description: The request could not be processed because it violated some domain constraints.
+      content:
+        application/json:
+          schema:
+            $ref: './schemas/json/ErrorsList.json'
+      headers:
+        X-A-Response-Header:
+          $ref: '#/components/headers/X-A-Response-Header'
+        content-type:
+          $ref: '#/components/headers/contentType'
     UnavailableServer:
       description: A dependent service is not responding
       content:
