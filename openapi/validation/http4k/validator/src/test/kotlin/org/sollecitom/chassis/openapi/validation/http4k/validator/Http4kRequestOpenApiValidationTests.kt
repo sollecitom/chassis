@@ -1,7 +1,6 @@
 package org.sollecitom.chassis.openapi.validation.http4k.validator
 
 import assertk.assertThat
-import assertk.assertions.isSuccess
 import org.http4k.core.Method
 import org.http4k.core.Request
 import org.http4k.core.Response
@@ -17,7 +16,10 @@ import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.openapi.parser.OpenApiReader
 import org.sollecitom.chassis.openapi.validation.http4k.validator.implementation.invoke
-import org.sollecitom.chassis.test.utils.assertions.failedThrowing
+import org.sollecitom.chassis.openapi.validation.request.validator.ValidationReportError
+import org.sollecitom.chassis.openapi.validation.request.validator.test.utils.containsOnly
+import org.sollecitom.chassis.openapi.validation.request.validator.test.utils.hasErrors
+import org.sollecitom.chassis.openapi.validation.request.validator.test.utils.hasNoErrors
 
 @TestInstance(PER_CLASS)
 private class Http4kRequestOpenApiValidationTests {
@@ -45,44 +47,44 @@ private class Http4kRequestOpenApiValidationTests {
             val json = validPersonDetails.toJson()
             val request = validRequest(json)
 
-            val result = runCatching { validator.validate(request) }
+            val report = validator.validate(request)
 
-            assertThat(result).isSuccess()
+            assertThat(report).hasNoErrors()
         }
 
         @Test
         fun `are rejected as invalid when a required header is missing`() {
 
-
             val json = validPersonDetails.toJson()
             val request = validRequest(json).removeHeader(requiredRequestHeaderName)
 
-            val result = runCatching { validator.validate(request) }
+            val report = validator.validate(request)
 
-            assertThat(result).failedThrowing<Http4kOpenApiValidationException>()
+            assertThat(report).containsOnly(ValidationReportError.Request.MissingRequiredHeader)
         }
 
         @Test
         fun `are rejected as invalid when an unknown header is specified`() {
 
             val json = validPersonDetails.toJson()
-            val request = Request(Method.POST, uri(PATH)).body(json).header("Unknown-Header", "unknown header value")
+            val request = validRequest(json).body(json).header("Unknown-Header", "unknown header value")
 
-            val result = runCatching { validator.validate(request) }
+            val report = validator.validate(request)
 
-            assertThat(result).failedThrowing<Http4kOpenApiValidationException>()
+            assertThat(report).containsOnly(ValidationReportError.Request.UnknownHeader)
         }
+
+        // TODO finish converting all `hasErrors()` statements to use `containsOnly(ValidationReportError)` instead
 
         @Test
         fun `are rejected as invalid when the body is invalid`() {
 
-
             val invalidJson = validPersonDetails.toJson().apply { remove("firstName") }
-            val request = Request(Method.POST, uri(PATH)).body(invalidJson)
+            val request = validRequest(invalidJson).body(invalidJson)
 
-            val result = runCatching { validator.validate(request) }
+            val report = validator.validate(request)
 
-            assertThat(result).failedThrowing<Http4kOpenApiValidationException>()
+            assertThat(report).hasErrors()
         }
 
         @Test
@@ -92,9 +94,9 @@ private class Http4kRequestOpenApiValidationTests {
             val json = sequenceOf(validPersonDetails.toJson(), validPersonDetails.toJson()).fold(JSONArray(), JSONArray::put)
             val request = validRequest(json)
 
-            val result = runCatching { validator.validate(request) }
+            val report = validator.validate(request)
 
-            assertThat(result).failedThrowing<Http4kOpenApiValidationException>()
+            assertThat(report).hasErrors()
         }
     }
 
@@ -111,9 +113,9 @@ private class Http4kRequestOpenApiValidationTests {
             val json = validPersonDetails.toJson()
             val response = validResponse(json)
 
-            val result = runCatching { validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response) }
+            val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
 
-            assertThat(result).isSuccess()
+            assertThat(report).hasNoErrors()
         }
 
         @Test
@@ -123,9 +125,9 @@ private class Http4kRequestOpenApiValidationTests {
             val json = validPersonDetails.toJson()
             val response = validResponse(json).removeHeader(requiredResponseHeaderName)
 
-            val result = runCatching { validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response) }
+            val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
 
-            assertThat(result).failedThrowing<Http4kOpenApiValidationException>()
+            assertThat(report).hasErrors()
         }
 
         @Test
@@ -135,9 +137,9 @@ private class Http4kRequestOpenApiValidationTests {
             val json = validPersonDetails.toJson()
             val response = validResponse(json).header("Unknown-Response-Header", "value")
 
-            val result = runCatching { validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response) }
+            val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
 
-            assertThat(result).failedThrowing<Http4kOpenApiValidationException>()
+            assertThat(report).hasErrors()
         }
 
         @Test
@@ -146,9 +148,9 @@ private class Http4kRequestOpenApiValidationTests {
             val invalidJson = validPersonDetails.toJson().apply { remove("firstName") }
             val response = validResponse(invalidJson)
 
-            val result = runCatching { validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response) }
+            val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
 
-            assertThat(result).failedThrowing<Http4kOpenApiValidationException>()
+            assertThat(report).hasErrors()
         }
 
         @Test
@@ -158,9 +160,9 @@ private class Http4kRequestOpenApiValidationTests {
             val json = sequenceOf(validPersonDetails.toJson(), validPersonDetails.toJson()).fold(JSONArray(), JSONArray::put)
             val response = validResponse(json)
 
-            val result = runCatching { validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response) }
+            val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
 
-            assertThat(result).failedThrowing<Http4kOpenApiValidationException>()
+            assertThat(report).hasErrors()
         }
 
         @Test
@@ -169,9 +171,9 @@ private class Http4kRequestOpenApiValidationTests {
             val json = JSONObject("""{"errors":[{"message":"First name cannot be equal to last name"}]}""")
             val response = validResponse(json = json, status = Status.UNPROCESSABLE_ENTITY)
 
-            val result = runCatching { validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response) }
+            val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
 
-            assertThat(result).isSuccess()
+            assertThat(report).hasNoErrors()
         }
     }
 

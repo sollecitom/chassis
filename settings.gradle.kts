@@ -35,6 +35,8 @@ module("openapi", "checking", "tests")
 module("openapi", "checking", "test", "utils")
 module("openapi", "builder")
 module("openapi", "validation", "request", "validator")
+module("openapi", "validation", "request", "validator", "tests")
+module("openapi", "validation", "request", "validator", "test", "utils")
 module("openapi", "validation", "http4k", "validator")
 module("openapi", "validation", "http4k", "test", "utils")
 

@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.openapi.validation.request.validator
+package org.sollecitom.chassis.openapi.validation.request.validator.tests
 
 import assertk.Assert
 import assertk.assertThat
@@ -12,6 +12,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.openapi.builder.*
 import org.sollecitom.chassis.openapi.builder.OpenApiBuilder.OpenApiVersion.V3_1_0
+import org.sollecitom.chassis.openapi.validation.request.validator.test.utils.hasNoErrors
 
 @TestInstance(PER_CLASS)
 private class OpenApiRequestValidationTests {
@@ -47,13 +48,4 @@ private class OpenApiRequestValidationTests {
 
         assertThat(report).hasNoErrors()
     }
-}
-
-// TODO move
-fun Assert<ValidationReport>.hasNoErrors() = given { report ->
-
-    if (report.hasErrors()) {
-        println(SimpleValidationReportFormat.getInstance().apply(report))
-    }
-    assertk.assertThat(report.hasErrors()).isFalse()
 }

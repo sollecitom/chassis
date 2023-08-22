@@ -3,13 +3,11 @@ package org.sollecitom.chassis.openapi.validation.http4k.validator.implementatio
 import com.atlassian.oai.validator.OpenApiInteractionValidator
 import com.atlassian.oai.validator.model.SimpleRequest
 import com.atlassian.oai.validator.model.SimpleResponse
-import com.atlassian.oai.validator.report.ValidationReport
 import io.swagger.v3.oas.models.OpenAPI
 import org.http4k.core.*
 import org.sollecitom.chassis.http4k.utils.lens.contentType
 import org.sollecitom.chassis.kotlin.extensions.bytes.toByteArray
 import org.sollecitom.chassis.openapi.parser.OpenApi
-import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidationException
 import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
 import org.sollecitom.chassis.openapi.validation.http4k.validator.custom.validators.ResponseJsonBodyValidator
 import org.sollecitom.chassis.openapi.validation.http4k.validator.custom.validators.UnknownHeadersRejectingRequestValidator
@@ -31,21 +29,9 @@ internal class StandardHttp4kOpenApiValidator(openApi: OpenAPI, rejectUnknownReq
     private val responseJsonBodyValidator = ResponseJsonBodyValidator(jsonSchemasDirectoryName = jsonSchemasDirectoryName)
     private val responseValidator: OpenApiInteractionValidator = OpenApiInteractionValidator.createFor(openApi).withRejectUnknownResponseHeaders(rejectUnknownResponseHeaders).withCustomResponseValidation(responseJsonBodyValidator).build()
 
-    override fun validate(request: Request) {
+    override fun validate(request: Request) = requestValidator.validateRequest(request.adapted())
 
-        val validationReport = requestValidator.validateRequest(request.adapted())
-        return validationReport.orThrowValidationException()
-    }
-
-    override fun validate(path: String, method: Method, acceptHeader: String, response: Response) {
-
-        val validationReport = responseValidator.validateResponse(path, method.adapted(), response.adapted(acceptHeader))
-        return validationReport.orThrowValidationException()
-    }
-
-    private fun ValidationReport.orThrowValidationException() { // TODO return the report instead?
-        if (messages.isNotEmpty()) throw Http4kOpenApiValidationException(messages.map { "${it.key}: ${it.message}" })
-    }
+    override fun validate(path: String, method: Method, acceptHeader: String, response: Response) = responseValidator.validateResponse(path, method.adapted(), response.adapted(acceptHeader))
 
     private fun Response.adapted(acceptHeader: String): ResponseWithHeaders = SimpleResponse.Builder.status(status.code).apply {
         withBody(body)

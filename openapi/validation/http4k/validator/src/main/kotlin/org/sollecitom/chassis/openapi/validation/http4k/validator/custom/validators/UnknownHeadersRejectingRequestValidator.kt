@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.parameters.Parameter
 import org.sollecitom.chassis.http4k.utils.lens.HttpHeaders
 import org.sollecitom.chassis.openapi.validation.http4k.validator.utils.inHeader
 import org.sollecitom.chassis.openapi.validation.http4k.validator.utils.parameters
+import org.sollecitom.chassis.openapi.validation.request.validator.ValidationReportError
 
 // TODO create similar ones for query params, etc.?
 internal object UnknownHeadersRejectingRequestValidator : CustomRequestValidator {
@@ -18,7 +19,7 @@ internal object UnknownHeadersRejectingRequestValidator : CustomRequestValidator
 
         val operationHeaders = apiOperation.parameters().inHeader().toSet()
         val unknownHeaderNames = request.headers.notDeclaredIn(operationHeaders)
-        return if (unknownHeaderNames.isNotEmpty()) ValidationReport.from(unknownHeaderNames.map { ValidationReport.Message.create(it, "Unknown header parameter").build() }) else ValidationReport.empty()
+        return if (unknownHeaderNames.isNotEmpty()) ValidationReport.from(unknownHeaderNames.map { ValidationReport.Message.create(ValidationReportError.Request.UnknownHeader.key, "Unknown request headers ${unknownHeaderNames.joinToString(separator = ",", prefix = "[", postfix = "]")}").build() }) else ValidationReport.empty()
     }
 
     private fun Map<String, Collection<String>>.notDeclaredIn(knownHeaders: Set<Parameter>): Set<String> {
