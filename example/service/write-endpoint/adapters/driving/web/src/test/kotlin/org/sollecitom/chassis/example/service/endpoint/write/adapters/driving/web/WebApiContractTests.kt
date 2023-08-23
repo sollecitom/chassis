@@ -71,6 +71,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
 
         val response = api(request)
 
+        assertThat(response).compliesWithOpenApiForRequest(request)
         assertThat(response.status).isEqualTo(Status.UNPROCESSABLE_ENTITY)
     }
 

@@ -8,6 +8,7 @@ import org.http4k.format.auto
 import org.http4k.lens.ContentNegotiation
 import org.http4k.routing.bind
 import org.http4k.routing.routes
+import org.json.JSONObject
 import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.Endpoint
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.serde.serde
@@ -41,7 +42,12 @@ sealed class RegisterUserCommandsEndpoint {
 
         private fun RegisterUser.V1.Result.toHttpResponse(): Response = when (this) {
             is RegisterUser.V1.Result.Accepted -> Response(Status.ACCEPTED).body(this, RegisterUser.V1.Result.Accepted.serde)
-            is RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse -> Response(Status.UNPROCESSABLE_ENTITY).body("Email address is already used by another user") // TODO switch to JSON body
+            is RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse -> Response(Status.UNPROCESSABLE_ENTITY).body(error("Email address is already used by another user"))
+        }
+
+        // TODO move
+        fun error(message: String): JSONObject = JSONObject().apply {
+            put("message", message)
         }
 
         companion object : Loggable() {
