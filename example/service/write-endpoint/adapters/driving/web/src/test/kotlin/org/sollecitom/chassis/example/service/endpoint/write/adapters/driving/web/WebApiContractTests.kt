@@ -123,12 +123,9 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
         assertThat(response.status).isEqualTo(Status.BAD_REQUEST)
     }
 
-    // TODO move
-    // to test invalid email addresses
-    fun registerUserPayload(emailAddress: EmailAddress) = registerUserPayload(emailAddress.value)
+    private fun registerUserPayload(emailAddress: EmailAddress) = registerUserPayload(emailAddress.value)
 
-    // TODO move and share with the system test specification
-    fun registerUserPayload(emailAddress: String): JSONObject = JSONObject().put("email", JSONObject().put("address", emailAddress))
+    private fun registerUserPayload(emailAddress: String): JSONObject = JSONObject().put("email", JSONObject().put("address", emailAddress))
 
     private class StubbedApplication(private val handleRegisterUserV1: suspend (RegisterUser.V1) -> RegisterUser.V1.Result = { Accepted }) : Application {
 
