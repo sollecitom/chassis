@@ -99,6 +99,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
 
         val response = api(request)
 
+        assertThat(response).compliesWithOpenApiForRequest(request)
         assertThat(response.status).isEqualTo(Status.UNSUPPORTED_MEDIA_TYPE)
     }
 
@@ -112,6 +113,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
 
         val response = api(request)
 
+        assertThat(response).doesNotComplyWithOpenApiForRequest(request, ValidationReportError.Request.UnknownPath)
         assertThat(response.status).isEqualTo(Status.BAD_REQUEST)
     }
 
@@ -125,6 +127,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
 
         val response = api(request)
 
+        assertThat(response).doesNotComplyWithOpenApiForRequest(request, ValidationReportError.Request.UnknownPath)
         assertThat(response.status).isEqualTo(Status.BAD_REQUEST)
     }
 

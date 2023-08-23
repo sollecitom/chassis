@@ -4,6 +4,7 @@ import org.http4k.core.Body
 import org.http4k.core.Method
 import org.http4k.core.Response
 import org.http4k.core.Status
+import org.http4k.core.Status.Companion.UNPROCESSABLE_ENTITY
 import org.http4k.format.auto
 import org.http4k.lens.ContentNegotiation
 import org.http4k.routing.bind
@@ -17,7 +18,6 @@ import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.jsonObject
 import org.sollecitom.chassis.http4k.utils.lens.map
 import org.sollecitom.chassis.logger.core.loggable.Loggable
-import org.sollecitom.chassis.web.api.utils.Error
 
 sealed class RegisterUserCommandsEndpoint {
 
@@ -42,7 +42,7 @@ sealed class RegisterUserCommandsEndpoint {
 
         private fun RegisterUser.V1.Result.toHttpResponse(): Response = when (this) {
             is RegisterUser.V1.Result.Accepted -> Response(Status.ACCEPTED).body(this, RegisterUser.V1.Result.Accepted.serde)
-            is RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse -> Response(Status.UNPROCESSABLE_ENTITY).body(Error.withMessage("Email address is already used by another user"))
+            is RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse -> Response(UNPROCESSABLE_ENTITY.description("Email address is already used by another user"))
         }
 
         companion object : Loggable() {

@@ -24,6 +24,8 @@ paths:
           $ref: '#/components/responses/Accepted'
         "400":
           $ref: '#/components/responses/BadRequest'
+        "415":
+          $ref: '#/components/responses/UnsupportedMediaType'
         422:
           $ref: '#/components/responses/UnprocessableEntity'
         500:
@@ -101,18 +103,10 @@ components:
           $ref: '#/components/headers/contentLength'
     BadRequest:
       description: The request could not be understood e.g., headers, query parameters or request body are malformed.
+    UnsupportedMediaType:
+      description: The content type in the request body is not supported.
     UnprocessableEntity:
       description: The request body violated domain constraints.
-      content:
-        application/json:
-          schema:
-            $ref: '/api/schemas/json/Error.json'
-          example: { "message": "Something went wrong" }
-      headers:
-        content-type:
-          $ref: '#/components/headers/contentType'
-        content-length:
-          $ref: '#/components/headers/contentLength'
     BadGateway:
       description: A dependent service is not responding.
     UnexpectedError:
