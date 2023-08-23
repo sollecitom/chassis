@@ -23,6 +23,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.we
 import org.sollecitom.chassis.example.service.endpoint.write.application.Application
 import org.sollecitom.chassis.http4k.server.utils.SuspendingHttpHandler
 import org.sollecitom.chassis.http4k.server.utils.asBlockingHandler
+import org.sollecitom.chassis.http4k.utils.lens.AddContentLength
 import org.sollecitom.chassis.http4k.utils.lens.HttpHeaders
 import org.sollecitom.chassis.http4k.utils.lens.replaceHeader
 import org.sollecitom.chassis.logger.core.loggable.Loggable
@@ -59,9 +60,6 @@ class WebAPI(private val configuration: Configuration, application: Application)
         val healthAppPort = configuration.healthPort.value
         return mainApp.asBlockingHandler().asK8sServer(::JettyLoom, mainAppPort, healthApp, healthAppPort)
     }
-
-    // TODO move
-    val ResponseFilters.AddContentLength get() = Modify({ response -> response.body.length?.takeUnless { it == 0L }?.let { length -> response.replaceHeader(HttpHeaders.ContentLength, length.toString()) } ?: response })
 
     interface Configuration {
 

@@ -2,6 +2,7 @@ package org.sollecitom.chassis.http4k.utils.lens
 
 import org.http4k.core.ContentType
 import org.http4k.core.Response
+import org.http4k.filter.ResponseFilters
 import org.json.JSONArray
 import org.json.JSONObject
 import org.sollecitom.chassis.json.utils.serde.JsonDeserializer
@@ -22,3 +23,5 @@ fun Response.contentType(contentType: ContentType) = replaceHeader(HttpHeaders.C
 
 fun Response.contentLength(length: Int) = contentLength(length.toLong())
 fun Response.contentLength(length: Long) = replaceHeader(HttpHeaders.ContentLength, length.toString())
+
+val ResponseFilters.AddContentLength get() = Modify({ response -> response.body.length?.takeUnless { it == 0L }?.let { length -> response.replaceHeader(HttpHeaders.ContentLength, length.toString()) } ?: response })
