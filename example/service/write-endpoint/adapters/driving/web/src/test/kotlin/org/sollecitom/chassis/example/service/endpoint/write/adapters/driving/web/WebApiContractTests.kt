@@ -2,10 +2,8 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.w
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import org.http4k.core.*
 import org.http4k.core.ContentType.Companion.TEXT_PLAIN
-import org.http4k.core.Method
-import org.http4k.core.Request
-import org.http4k.core.Status
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -22,13 +20,17 @@ import org.sollecitom.chassis.example.service.endpoint.write.application.user.Re
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.ApplicationProperties
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.configureLogging
+import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 import org.sollecitom.chassis.http4k.utils.lens.body
+import org.sollecitom.chassis.http4k.utils.lens.contentLength
 import org.sollecitom.chassis.http4k.utils.lens.contentType
 import org.sollecitom.chassis.openapi.parser.OpenApiReader
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
 import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
 import org.sollecitom.chassis.openapi.validation.http4k.validator.implementation.invoke
 import org.sollecitom.chassis.openapi.validation.request.validator.ValidationReportError
+import java.io.InputStream
+import java.nio.ByteBuffer
 
 @TestInstance(PER_CLASS)
 private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
@@ -46,15 +48,35 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
     @Test
     fun `submitting a register user command for an unregistered user`() {
 
-        val api = webApi { Accepted }
+        val userId = ulid()
+        val api = webApi(handleRegisterUserV1 = { Accepted(user = User.WithPendingRegistration(userId)) })
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val request = Request(Method.POST, path("commands/${commandType.id.value}/v${commandType.version.value}")).body(json).ensureCompliantWithOpenApi()
 
         val response = api(request)
 
+        assertThat(response).compliesWithOpenApiForRequest(request)
         assertThat(response.status).isEqualTo(Status.ACCEPTED)
     }
+
+//    object ResponseBodyCacher : Filter {
+//        override fun invoke(next: HttpHandler): HttpHandler {
+//            return { request -> next(request).apply { body(body.cached()) } }
+//        }
+//
+//        private fun Body.cached(): Body = CachedBodyAdapter(this)
+//
+//            private class CachedBodyAdapter(private val delegate: Body) : Body by delegate {
+//
+//                override val length: Long?
+//                    get() = TODO("Not yet implemented")
+//                override val payload: ByteBuffer
+//                    get() = TODO("Not yet implemented")
+//                override val stream: InputStream
+//                    get() = TODO("Not yet implemented")
+//            }
+//    }
 
     @Test
     fun `submitting a register user command for an already registered user`() {
@@ -73,7 +95,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
     @Test
     fun `attempting to submit a register user command with an invalid email address`() {
 
-        val api = webApi { Accepted }
+        val api = webApi()
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("invalid")
         val request = Request(Method.POST, path("commands/${commandType.id.value}/v${commandType.version.value}")).body(json).ensureCompliantWithOpenApi()
@@ -86,10 +108,10 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
     @Test
     fun `attempting to submit a register user command with an invalid content type`() {
 
-        val api = webApi { Accepted }
+        val api = webApi()
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
-        val request = Request(Method.POST, path("commands/${commandType.id.value}/v${commandType.version.value}")).body(json.toString()).contentType(TEXT_PLAIN).ensureNonCompliantWithOpenApi(error = ValidationReportError.Request.ContentTypeNotAllowed)
+        val request = Request(Method.POST, path("commands/${commandType.id.value}/v${commandType.version.value}")).body(json.toString()).contentType(TEXT_PLAIN).contentLength(json.toString().length).ensureNonCompliantWithOpenApi(error = ValidationReportError.Request.ContentTypeNotAllowed)
 
         val response = api(request)
 
@@ -126,7 +148,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
 
     private fun registerUserPayload(emailAddress: String): JSONObject = JSONObject().put("email", JSONObject().put("address", emailAddress))
 
-    private class StubbedApplication(private val handleRegisterUserV1: suspend (RegisterUser.V1) -> RegisterUser.V1.Result = { Accepted }) : Application {
+    private class StubbedApplication(private val handleRegisterUserV1: suspend (RegisterUser.V1) -> RegisterUser.V1.Result) : Application {
 
         @Suppress("UNCHECKED_CAST")
         override suspend fun <RESULT> invoke(command: ApplicationCommand<RESULT>) = when (command) {
@@ -135,7 +157,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
         }
     }
 
-    private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend (RegisterUser.V1) -> RegisterUser.V1.Result = { Accepted }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration)
+    private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend (RegisterUser.V1) -> RegisterUser.V1.Result = { Accepted(user = User.WithPendingRegistration(id = ulid())) }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration)
 
     private fun path(value: String) = "http://localhost:0/$value"
 

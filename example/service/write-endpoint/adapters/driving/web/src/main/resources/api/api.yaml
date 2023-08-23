@@ -9,12 +9,8 @@ paths:
       operationId: registerUserV1
       summary: Submits a register user V1 command to register a new user.
       parameters:
-        - in: header
-          name: Accept
-          description: The media type accepted by the client.
-          required: false
-          schema:
-            type: string
+        - $ref: '#/components/parameters/accept'
+        - $ref: '#/components/parameters/contentLength'
       requestBody:
         description: Details of the new user to be registered.
         content:
@@ -35,6 +31,24 @@ paths:
         502:
           $ref: '#/components/responses/UnavailableServer'
 components:
+  parameters:
+    contentLength:
+      name: content-length
+      in: header
+      description: Length of the request body
+      required: true
+      style: simple
+      explode: false
+      schema:
+        minLength: 1
+        type: string
+    accept:
+      name: Accept
+      in: header
+      description: The media type accepted by the client.
+      required: false
+      schema:
+        type: string
   headers:
     location:
       schema:
@@ -75,17 +89,16 @@ components:
   responses:
     Accepted:
       description: The command was accepted.
+      content:
+        application/json:
+          schema:
+            $ref: '/api/schemas/json/RegisterUserCommandV1AcceptedResult.json'
+          example: { "user": { "id": "01H8HBDMX0S2EGDTR7WAGK0SC7" } }
       headers:
         content-type:
           $ref: '#/components/headers/contentType'
         content-length:
           $ref: '#/components/headers/contentLength'
-        date:
-          $ref: '#/components/headers/date'
-        connection:
-          $ref: '#/components/headers/connection'
-        transfer-encoding:
-          $ref: '#/components/headers/transferEncoding'
     BadRequest:
       description: The request could not be understood e.g., headers, query parameters or request body are malformed.
       content:
@@ -97,12 +110,6 @@ components:
           $ref: '#/components/headers/contentType'
         content-length:
           $ref: '#/components/headers/contentLength'
-        date:
-          $ref: '#/components/headers/date'
-        connection:
-          $ref: '#/components/headers/connection'
-        transfer-encoding:
-          $ref: '#/components/headers/transferEncoding'
     UnprocessableEntity:
       description: The request body violated domain constraints.
       content:
@@ -114,12 +121,6 @@ components:
           $ref: '#/components/headers/contentType'
         content-length:
           $ref: '#/components/headers/contentLength'
-        date:
-          $ref: '#/components/headers/date'
-        connection:
-          $ref: '#/components/headers/connection'
-        transfer-encoding:
-          $ref: '#/components/headers/transferEncoding'
     UnavailableServer:
       description: A dependent service is not responding.
       content:
@@ -131,12 +132,6 @@ components:
           $ref: '#/components/headers/contentType'
         content-length:
           $ref: '#/components/headers/contentLength'
-        date:
-          $ref: '#/components/headers/date'
-        connection:
-          $ref: '#/components/headers/connection'
-        transfer-encoding:
-          $ref: '#/components/headers/transferEncoding'
     UnexpectedError:
       description: Something went wrong unexpectedly.
       content:
@@ -148,9 +143,3 @@ components:
           $ref: '#/components/headers/contentType'
         content-length:
           $ref: '#/components/headers/contentLength'
-        date:
-          $ref: '#/components/headers/date'
-        connection:
-          $ref: '#/components/headers/connection'
-        transfer-encoding:
-          $ref: '#/components/headers/transferEncoding'

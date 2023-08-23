@@ -6,6 +6,7 @@ import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.example.service.endpoint.write.application.ApplicationCommand
+import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 
 sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT> {
 
@@ -28,7 +29,10 @@ sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT> {
 
         sealed interface Result {
 
-            data object Accepted : Result
+            data class Accepted(val user: User.WithPendingRegistration) : Result {
+
+                companion object
+            }
 
             sealed interface Rejected : Result {
 

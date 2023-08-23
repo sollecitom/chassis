@@ -6,7 +6,6 @@ import com.atlassian.oai.validator.model.SimpleResponse
 import io.swagger.v3.oas.models.OpenAPI
 import org.http4k.core.*
 import org.sollecitom.chassis.http4k.utils.lens.contentType
-import org.sollecitom.chassis.kotlin.extensions.bytes.toByteArray
 import org.sollecitom.chassis.openapi.parser.OpenApi
 import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
 import org.sollecitom.chassis.openapi.validation.http4k.validator.custom.validators.ResponseJsonBodyValidator
@@ -77,6 +76,7 @@ internal class StandardHttp4kOpenApiValidator(openApi: OpenAPI, rejectUnknownReq
             Body.EMPTY -> { // TODO do we need this difference?
                 // nothing to do here
             }
+
             else -> withBody(body.stream)
         }
     }
@@ -86,7 +86,8 @@ internal class StandardHttp4kOpenApiValidator(openApi: OpenAPI, rejectUnknownReq
             Body.EMPTY -> { // TODO do we need this difference?
                 // nothing to do here
             }
-            else -> withBody(body.stream)
+            is MemoryBody -> withBody(body.payload.array())
+            is StreamBody -> withBody(body.stream)
         }
     }
 }

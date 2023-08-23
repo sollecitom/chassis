@@ -13,6 +13,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.we
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.serde.serde
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.http4k.server.utils.toSuspending
+import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.jsonObject
 import org.sollecitom.chassis.http4k.utils.lens.map
 import org.sollecitom.chassis.logger.core.loggable.Loggable
@@ -39,8 +40,8 @@ sealed class RegisterUserCommandsEndpoint {
         }
 
         private fun RegisterUser.V1.Result.toHttpResponse(): Response = when (this) {
-            RegisterUser.V1.Result.Accepted -> Response(Status.ACCEPTED)
-            is RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse -> Response(Status.UNPROCESSABLE_ENTITY).body("Email address already in use by another user") // TODO switch to JSON body
+            is RegisterUser.V1.Result.Accepted -> Response(Status.ACCEPTED).body(this, RegisterUser.V1.Result.Accepted.serde)
+            is RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse -> Response(Status.UNPROCESSABLE_ENTITY).body("Email address is already used by another user") // TODO switch to JSON body
         }
 
         companion object : Loggable() {

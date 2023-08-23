@@ -19,15 +19,15 @@ interface WithHttp4kOpenApiValidationSupport {
 
     val openApiValidator: Http4kOpenApiValidator
 
-    suspend fun Response.ensureCompliantWith(path: String, method: Method, contentType: ContentType, printErrors: Boolean = true, errorsCount: Int? = null) {
+    fun Response.ensureCompliantWith(path: String, method: Method, contentType: ContentType, printErrors: Boolean = true, errorsCount: Int? = null) {
 
         val report = openApiValidator.validate(path, method, contentType, this)
         assertThat(report).hasNoErrors(printErrors = printErrors)
     }
 
-    suspend fun Assert<Response>.compliesWithOpenApi(path: String, method: Method, contentType: ContentType) = given { response -> response.ensureCompliantWith(path, method, contentType) }
+    fun Assert<Response>.compliesWithOpenApi(path: String, method: Method, contentType: ContentType) = given { response -> response.ensureCompliantWith(path, method, contentType) }
 
-    suspend fun Assert<Response>.compliesWithOpenApiForRequest(request: Request) = compliesWithOpenApi(request.uri.path, request.method, request.contentType!!)
+    fun Assert<Response>.compliesWithOpenApiForRequest(request: Request) = compliesWithOpenApi(request.uri.path, request.method, request.contentType!!)
 
     fun Request.ensureCompliantWithOpenApi(printErrors: Boolean = true): Request {
 

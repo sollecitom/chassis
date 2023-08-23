@@ -25,6 +25,8 @@ internal class DispatchingApplication(private val userWithEmailAddress: suspend 
 
         val user = userWithEmailAddress(command.emailAddress)
         val attempt = runCatching { user.submitRegistrationRequest() }
-        return attempt.map { Accepted }.recoverCatching { if (it is UserAlreadyRegisteredException) EmailAddressAlreadyInUse(user.id) else throw it }.getOrThrow()
+        return attempt.map { Accepted(user = user.withPendingRegistration()) }.recoverCatching { if (it is UserAlreadyRegisteredException) EmailAddressAlreadyInUse(user.id) else throw it }.getOrThrow()
     }
+
+    private fun User.withPendingRegistration() = User.WithPendingRegistration(id = id)
 }
