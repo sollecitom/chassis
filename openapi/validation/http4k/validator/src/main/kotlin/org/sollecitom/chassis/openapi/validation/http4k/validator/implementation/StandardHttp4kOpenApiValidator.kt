@@ -77,8 +77,7 @@ internal class StandardHttp4kOpenApiValidator(openApi: OpenAPI, rejectUnknownReq
             Body.EMPTY -> { // TODO do we need this difference?
                 // nothing to do here
             }
-            // TODO treat the StreamBody differently?
-            else -> withBody(body.payload.toByteArray())
+            else -> withBody(body.stream)
         }
     }
 
@@ -87,8 +86,7 @@ internal class StandardHttp4kOpenApiValidator(openApi: OpenAPI, rejectUnknownReq
             Body.EMPTY -> { // TODO do we need this difference?
                 // nothing to do here
             }
-            // TODO treat the StreamBody differently?
-            else -> withBody(body.payload.toByteArray())
+            else -> withBody(body.stream)
         }
     }
 }
