@@ -39,7 +39,6 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
     override val openApiValidator = Http4kOpenApiValidator(openApi)
 
     // TODO add invocation context
-    // TODO add the swagger compliance checks for responses
 
     init {
         configureLogging()
