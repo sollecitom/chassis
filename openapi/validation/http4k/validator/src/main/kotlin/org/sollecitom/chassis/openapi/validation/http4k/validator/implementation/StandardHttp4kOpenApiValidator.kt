@@ -71,17 +71,15 @@ internal class StandardHttp4kOpenApiValidator(openApi: OpenAPI, rejectUnknownReq
         else -> this
     }
 
-    private fun SimpleRequest.Builder.withBody(body: Body) {
-        when (body) {
-            is MemoryBody -> withBody(body.payload.array())
-            is StreamBody -> withBody(body.stream)
-        }
+    private fun SimpleRequest.Builder.withBody(body: Body): SimpleRequest.Builder = when (body) {
+        is MemoryBody -> withBody(body.payload.array())
+        is StreamBody -> withBody(body.stream)
+        else -> error("Unknown body type $body")
     }
 
-    private fun SimpleResponse.Builder.withBody(body: Body) {
-        when (body) {
-            is MemoryBody -> withBody(body.payload.array())
-            is StreamBody -> withBody(body.stream)
-        }
+    private fun SimpleResponse.Builder.withBody(body: Body): SimpleResponse.Builder = when (body) {
+        is MemoryBody -> withBody(body.payload.array())
+        is StreamBody -> withBody(body.stream)
+        else -> error("Unknown body type $body")
     }
 }
