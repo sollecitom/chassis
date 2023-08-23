@@ -10,6 +10,7 @@ dependencies {
     implementation(projects.chassisConfigurationUtils)
     implementation(projects.chassisLoggingStandardSlf4jConfiguration)
     implementation(projects.chassisKotlinExtensions)
+    runtimeOnly(projects.chassisWebApiJsonSchemas)
 
     testImplementation(projects.chassisTestUtils)
     testImplementation(projects.chassisOpenapiCheckingTestUtils)

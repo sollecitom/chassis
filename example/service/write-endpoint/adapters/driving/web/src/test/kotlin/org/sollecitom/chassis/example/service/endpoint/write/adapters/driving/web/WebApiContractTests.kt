@@ -38,7 +38,6 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
 
     // TODO add invocation context
     // TODO add the swagger compliance checks for responses
-    // TODO move Error.json to another module and import, so we can share it
 
     init {
         configureLogging()

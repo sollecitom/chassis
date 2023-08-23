@@ -42,7 +42,8 @@ module("openapi", "validation", "http4k", "test", "utils")
 
 module("web", "service", "domain")
 module("web", "api", "test", "utils")
-module("web", "api", "utils") // TODO remove if not useful
+module("web", "api", "json", "schemas")
+module("web", "api", "utils")
 
 module("example", "service", "write-endpoint", "configuration")
 module("example", "service", "write-endpoint", "domain")
