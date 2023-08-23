@@ -9,6 +9,7 @@ import org.http4k.core.Request
 import org.http4k.core.then
 import org.http4k.filter.DebuggingFilters.PrintRequestAndResponse
 import org.http4k.filter.RequestFilters.GunZip
+import org.http4k.filter.ResponseFilters
 import org.http4k.filter.ResponseFilters.GZip
 import org.http4k.filter.ServerFilters.CatchLensFailure
 import org.http4k.filter.inIntelliJOnly
@@ -22,6 +23,8 @@ import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.we
 import org.sollecitom.chassis.example.service.endpoint.write.application.Application
 import org.sollecitom.chassis.http4k.server.utils.SuspendingHttpHandler
 import org.sollecitom.chassis.http4k.server.utils.asBlockingHandler
+import org.sollecitom.chassis.http4k.utils.lens.HttpHeaders
+import org.sollecitom.chassis.http4k.utils.lens.replaceHeader
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 
 // TODO maybe turn this into a module?
@@ -45,7 +48,7 @@ class WebAPI(private val configuration: Configuration, application: Application)
 
     override fun invoke(request: Request) = mainApp(request)
 
-    private fun mainApp(vararg endpoints: Endpoint): HttpHandler = requestFilters().then(routes(*endpoints.map(Endpoint::route).toTypedArray())).withFilter(GZip())
+    private fun mainApp(vararg endpoints: Endpoint): HttpHandler = requestFilters().then(routes(*endpoints.map(Endpoint::route).toTypedArray())).withFilter(GZip().then(ResponseFilters.AddContentLength))
 
     private fun requestFilters(): Filter = CatchLensFailure.then(GunZip()).then(PrintRequestAndResponse().inIntelliJOnly())
 
@@ -56,6 +59,9 @@ class WebAPI(private val configuration: Configuration, application: Application)
         val healthAppPort = configuration.healthPort.value
         return mainApp.asBlockingHandler().asK8sServer(::JettyLoom, mainAppPort, healthApp, healthAppPort)
     }
+
+    // TODO move
+    val ResponseFilters.AddContentLength get() = Modify({ response -> response.body.length?.takeUnless { it == 0L }?.let { length -> response.replaceHeader(HttpHeaders.ContentLength, length.toString()) } ?: response })
 
     interface Configuration {
 

@@ -2,8 +2,10 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.w
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import org.http4k.core.*
 import org.http4k.core.ContentType.Companion.TEXT_PLAIN
+import org.http4k.core.Method
+import org.http4k.core.Request
+import org.http4k.core.Status
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -29,8 +31,6 @@ import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpe
 import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
 import org.sollecitom.chassis.openapi.validation.http4k.validator.implementation.invoke
 import org.sollecitom.chassis.openapi.validation.request.validator.ValidationReportError
-import java.io.InputStream
-import java.nio.ByteBuffer
 
 @TestInstance(PER_CLASS)
 private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
@@ -85,6 +85,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
 
         val response = api(request)
 
+        assertThat(response).compliesWithOpenApiForRequest(request)
         assertThat(response.status).isEqualTo(Status.BAD_REQUEST)
     }
 

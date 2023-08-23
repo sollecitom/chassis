@@ -28,8 +28,7 @@ internal class UnknownCommandsEndpoint : Endpoint {
 
         val commandType = commandType(request)
         logger.debug { "Received unknown command with type $commandType" }
-        // TODO use an error JSON response body instead
-        Response(Status.BAD_REQUEST).body("Unknown command type with name: ${commandType.id.value} and version: ${commandType.version.value}")
+        Response(Status.BAD_REQUEST.description("Unknown command type with name: ${commandType.id.value} and version: ${commandType.version.value}"))
     }
 
     companion object : Loggable() {

@@ -19,3 +19,6 @@ fun Response.header(header: HttpHeader, value: String) = header(header.name, val
 fun Response.replaceHeader(header: HttpHeader, value: String) = replaceHeader(header.name, value)
 
 fun Response.contentType(contentType: ContentType) = replaceHeader(HttpHeaders.ContentType, contentType.toHeaderValue())
+
+fun Response.contentLength(length: Int) = contentLength(length.toLong())
+fun Response.contentLength(length: Long) = replaceHeader(HttpHeaders.ContentLength, length.toString())
