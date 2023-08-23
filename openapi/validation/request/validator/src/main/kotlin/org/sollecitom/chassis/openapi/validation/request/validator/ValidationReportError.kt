@@ -8,6 +8,10 @@ sealed class ValidationReportError(val key: String) {
 
         data object UnknownHeader : Request("validation.request.parameter.header.unknown")
 
+        data object UnknownPath : Request("validation.request.path.missing")
+
+        data object ContentTypeNotAllowed : Request("validation.request.contentType.notAllowed")
+
         sealed class Body(key: String) : Request(key) {
 
             data object MissingRequiredField : Body("validation.request.body.schema.required")

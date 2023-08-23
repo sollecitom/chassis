@@ -28,6 +28,7 @@ import org.sollecitom.chassis.openapi.parser.OpenApiReader
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
 import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
 import org.sollecitom.chassis.openapi.validation.http4k.validator.implementation.invoke
+import org.sollecitom.chassis.openapi.validation.request.validator.ValidationReportError
 
 @TestInstance(PER_CLASS)
 private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
@@ -93,7 +94,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
         val api = webApi { Accepted }
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
-        val request = Request(Method.POST, path("commands/${commandType.id.value}/v${commandType.version.value}")).body(json.toString()).contentType(TEXT_PLAIN).ensureNonCompliantWithOpenApi()
+        val request = Request(Method.POST, path("commands/${commandType.id.value}/v${commandType.version.value}")).body(json.toString()).contentType(TEXT_PLAIN).ensureNonCompliantWithOpenApi(error = ValidationReportError.Request.ContentTypeNotAllowed)
 
         val response = api(request)
 
@@ -106,7 +107,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
         val api = webApi()
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
-        val request = Request(Method.POST, path("commands/${commandType.id.value}/!")).body(json).ensureNonCompliantWithOpenApi()
+        val request = Request(Method.POST, path("commands/${commandType.id.value}/!")).body(json).ensureNonCompliantWithOpenApi(error = ValidationReportError.Request.UnknownPath)
 
         val response = api(request)
 
@@ -119,7 +120,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
         val api = webApi()
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
-        val request = Request(Method.POST, path("commands/unknown/v${commandType.version.value}")).body(json).ensureNonCompliantWithOpenApi()
+        val request = Request(Method.POST, path("commands/unknown/v${commandType.version.value}")).body(json).ensureNonCompliantWithOpenApi(error = ValidationReportError.Request.UnknownPath)
 
         val response = api(request)
 
