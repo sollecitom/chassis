@@ -4,6 +4,7 @@ import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.parameters.Parameter
 import io.swagger.v3.oas.models.parameters.RequestBody
+import io.swagger.v3.oas.models.responses.ApiResponses
 
 fun OpenAPI.allParameters(): Set<ParameterWithLocation> = paths.asSequence().flatMap { (pathName, path) -> path.allParameters(pathName) }.toSet()
 
@@ -23,6 +24,7 @@ data class OperationWithContext(val operation: OperationWithMethod, val pathName
     val method: PathItem.HttpMethod get() = operation.method
     val operationId: String? get() = operation.operation.operationId
     val requestBody: RequestBody? = operation.requestBody
+    val responses: ApiResponses? = operation.responses
 }
 
 fun RequestBody.isRequired(): Boolean = required ?: false

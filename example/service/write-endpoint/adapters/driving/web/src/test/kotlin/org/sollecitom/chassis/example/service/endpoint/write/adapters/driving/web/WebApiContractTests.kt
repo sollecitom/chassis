@@ -60,24 +60,6 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport {
         assertThat(response.status).isEqualTo(Status.ACCEPTED)
     }
 
-//    object ResponseBodyCacher : Filter {
-//        override fun invoke(next: HttpHandler): HttpHandler {
-//            return { request -> next(request).apply { body(body.cached()) } }
-//        }
-//
-//        private fun Body.cached(): Body = CachedBodyAdapter(this)
-//
-//            private class CachedBodyAdapter(private val delegate: Body) : Body by delegate {
-//
-//                override val length: Long?
-//                    get() = TODO("Not yet implemented")
-//                override val payload: ByteBuffer
-//                    get() = TODO("Not yet implemented")
-//                override val stream: InputStream
-//                    get() = TODO("Not yet implemented")
-//            }
-//    }
-
     @Test
     fun `submitting a register user command for an already registered user`() {
 

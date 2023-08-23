@@ -4,11 +4,13 @@ import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.parameters.Parameter
 import io.swagger.v3.oas.models.parameters.RequestBody
+import io.swagger.v3.oas.models.responses.ApiResponses
 
 data class OperationWithMethod(val operation: Operation, val method: PathItem.HttpMethod) {
 
     val parameters: List<Parameter> = operation.parameters ?: emptyList()
     val requestBody: RequestBody? get() = operation.requestBody
+    val responses: ApiResponses? get() = operation.responses
 }
 
 fun PathItem.operations(pathName: String): Set<OperationWithContext> = operations().asSequence().map { OperationWithContext(it, pathName) }.toSet()

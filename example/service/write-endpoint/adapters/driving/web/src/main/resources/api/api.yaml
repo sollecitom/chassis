@@ -29,7 +29,7 @@ paths:
         500:
           $ref: '#/components/responses/UnexpectedError'
         502:
-          $ref: '#/components/responses/UnavailableServer'
+          $ref: '#/components/responses/BadGateway'
 components:
   parameters:
     contentLength:
@@ -102,9 +102,10 @@ components:
     BadRequest:
       description: The request could not be understood e.g., headers, query parameters or request body are malformed.
       content:
-        application/json:
+        text/plain:
           schema:
-            $ref: '/api/schemas/json/Error.json'
+            type: string
+          example: Something went wrong
       headers:
         content-type:
           $ref: '#/components/headers/contentType'
@@ -116,17 +117,19 @@ components:
         application/json:
           schema:
             $ref: '/api/schemas/json/Error.json'
+          example: { "message": "Something went wrong" }
       headers:
         content-type:
           $ref: '#/components/headers/contentType'
         content-length:
           $ref: '#/components/headers/contentLength'
-    UnavailableServer:
+    BadGateway:
       description: A dependent service is not responding.
       content:
-        application/json:
+        text/plain:
           schema:
-            $ref: '/api/schemas/json/Error.json'
+            type: string
+          example: Something went wrong
       headers:
         content-type:
           $ref: '#/components/headers/contentType'
@@ -135,9 +138,10 @@ components:
     UnexpectedError:
       description: Something went wrong unexpectedly.
       content:
-        application/json:
+        text/plain:
           schema:
-            $ref: '/api/schemas/json/Error.json'
+            type: string
+          example: Something went wrong
       headers:
         content-type:
           $ref: '#/components/headers/contentType'

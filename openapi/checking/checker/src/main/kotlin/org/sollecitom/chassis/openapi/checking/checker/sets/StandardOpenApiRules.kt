@@ -2,6 +2,7 @@ package org.sollecitom.chassis.openapi.checking.checker.sets
 
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem.HttpMethod.*
+import io.swagger.v3.oas.models.media.MediaType
 import org.sollecitom.chassis.kotlin.extensions.text.CharacterGroups.letters
 import org.sollecitom.chassis.kotlin.extensions.text.CharacterGroups.lowercaseCaseLetters
 import org.sollecitom.chassis.openapi.checking.checker.model.OpenApiField
@@ -12,6 +13,8 @@ import org.sollecitom.chassis.openapi.checking.checker.rules.field.MandatorySuff
 
 object StandardOpenApiRules : OpenApiRuleSet {
 
+    private val mediaTypesForRequestsThatMustHaveAnExample = setOf("application/json")
+    private val mediaTypesForResponsesThatMustHaveAnExample = setOf("application/json", "text/plain")
     private val textFieldMustEndWithFullStop = MandatorySuffixTextFieldRule(".", true)
     private val whitelistedPathAlphabet by lazy { (lowercaseCaseLetters + '-').toSet() }
     private val whitelistedPathParametersAlphabet by lazy { (lowercaseCaseLetters + '-').toSet() }
@@ -28,6 +31,8 @@ object StandardOpenApiRules : OpenApiRuleSet {
     private val parametersNameRule by lazy { WhitelistedAlphabetParameterNameRule(pathAlphabet = whitelistedPathParametersAlphabet, headerAlphabet = whitelistedHeadersAlphabet, queryAlphabet = whitelistedQueryParametersAlphabet, cookieAlphabet = whitelistedCookiesAlphabet) }
     private val mandatoryRequestBodyContentMediaTypeRule by lazy { MandatoryRequestBodyContentMediaTypesRule(methodsToCheck = setOf(POST, PUT, PATCH)) }
     private val mandatoryRequestBodyDescriptionRule by lazy { MandatoryRequestBodyDescriptionRule(methods = setOf(POST, PUT, PATCH)) }
+    private val mandatoryRequestBodyExampleRule by lazy { MandatoryRequestBodyExampleRule(methods = setOf(POST, PUT, PATCH), mediaTypesThatShouldHaveAnExample = mediaTypesForRequestsThatMustHaveAnExample) }
+    private val mandatoryResponseBodyExampleRule by lazy { MandatoryResponseBodyExampleRule(methods = setOf(POST, PUT, PATCH), mediaTypesThatShouldHaveAnExample = mediaTypesForResponsesThatMustHaveAnExample) }
     private val whitelistedOpenApiVersionFieldRule by lazy { WhitelistedOpenApiVersionFieldRule(whitelistedOpenApiVersions = whitelistedOpenApiVersions) }
     private val mandatoryInfoFieldsRule by lazy { MandatoryInfoFieldsRule(requiredFields = setOf(OpenApiFields.Info.title, OpenApiFields.Info.description)) }
 
@@ -52,7 +57,9 @@ object StandardOpenApiRules : OpenApiRuleSet {
             mandatoryRequestBodyDescriptionRule,
             operationTextFieldRules,
             whitelistedOpenApiVersionFieldRule,
-            mandatoryInfoFieldsRule
+            mandatoryInfoFieldsRule,
+            mandatoryRequestBodyExampleRule,
+            mandatoryResponseBodyExampleRule
         ) + StandardTracingHeadersOpenApiRules.rules
     }
 }
