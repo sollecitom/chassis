@@ -16,5 +16,6 @@ fun <VALUE : Any> Response.body(deserializer: JsonDeserializer<VALUE>): VALUE = 
 fun <VALUE : Any> Response.body(value: VALUE, serializer: JsonSerializer<VALUE>) = body(serializer.serialize(value))
 
 fun Response.header(header: HttpHeader, value: String) = header(header.name, value)
+fun Response.replaceHeader(header: HttpHeader, value: String) = replaceHeader(header.name, value)
 
-fun Response.contentType(contentType: ContentType) = header(HttpHeaders.ContentType, contentType.toHeaderValue())
+fun Response.contentType(contentType: ContentType) = replaceHeader(HttpHeaders.ContentType, contentType.toHeaderValue())

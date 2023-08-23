@@ -8,7 +8,6 @@ import org.http4k.core.Request
 import org.http4k.core.Response
 import org.sollecitom.chassis.http4k.utils.lens.contentType
 import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
-import org.sollecitom.chassis.openapi.validation.http4k.validator.validate
 import org.sollecitom.chassis.openapi.validation.request.validator.ValidationReportError
 import org.sollecitom.chassis.openapi.validation.request.validator.test.utils.containsOnly
 import org.sollecitom.chassis.openapi.validation.request.validator.test.utils.hasErrors

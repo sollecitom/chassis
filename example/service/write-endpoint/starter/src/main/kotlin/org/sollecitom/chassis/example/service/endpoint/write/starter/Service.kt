@@ -2,11 +2,12 @@ package org.sollecitom.chassis.example.service.endpoint.write.starter
 
 import org.http4k.cloudnative.env.Environment
 import org.sollecitom.chassis.configuration.utils.fromYamlResource
+import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.WebAPI
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.from
 import org.sollecitom.chassis.example.service.endpoint.write.application.Application
 import org.sollecitom.chassis.example.service.endpoint.write.application.ApplicationCommand
-import org.sollecitom.chassis.example.service.endpoint.write.application.invoke
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.ApplicationProperties
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
@@ -14,7 +15,9 @@ import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.service.domain.WebService
 
 // TODO add WithCoreGenerators to application, etc.
-class Service(private val environment: Environment) : WebService {
+class Service(private val environment: Environment, private val coreGenerators: WithCoreGenerators) : WebService, WithCoreGenerators by coreGenerators {
+
+    constructor(environment: Environment) : this(environment, WithCoreGenerators.provider(environment))
 
     private val application: Application = application()
     private val webAPI = webApi(application, environment)
@@ -33,12 +36,15 @@ class Service(private val environment: Environment) : WebService {
         logger.info { "Stopped" }
     }
 
-    private fun application(): Application = object : Application {
+    private fun application(): Application = object : Application { // TODO change and create the actual application
 
+        @Suppress("UNCHECKED_CAST")
         override suspend fun <RESULT> invoke(command: ApplicationCommand<RESULT>): RESULT {
-            return RegisterUser.V1.Result.Accepted as RESULT // TODO fix
+            val result: RegisterUser.V1.Result.Accepted = RegisterUser.V1.Result.Accepted(User.WithPendingRegistration(id = newId.ulid()))
+            return result as RESULT
         }
     }
+
     private fun webApi(application: Application, environment: Environment) = WebAPI(configuration = WebAPI.Configuration.from(environment), application = application)
 
     companion object : Loggable()

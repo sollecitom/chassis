@@ -11,6 +11,8 @@ paths:
       operationId: addPersonEndpoint
       parameters:
         - $ref: '#/components/parameters/aRequestHeader'
+        - $ref: '#/components/parameters/accept'
+        - $ref: '#/components/parameters/contentLength'
       requestBody:
         description: "Person details"
         required: true
@@ -31,6 +33,23 @@ paths:
           $ref: '#/components/responses/UnavailableServer'
 components:
   parameters:
+    contentLength:
+      name: content-length
+      in: header
+      description: Length of the request body
+      required: true
+      style: simple
+      explode: false
+      schema:
+        minLength: 1
+        type: string
+    accept:
+      name: Accept
+      in: header
+      description: The media type accepted by the client.
+      required: false
+      schema:
+        type: string
     aRequestHeader:
       name: X-A-Request-Header
       in: header
@@ -52,7 +71,12 @@ components:
         type: string
         minLength: 1
       required: true
-
+    contentLength:
+      schema:
+        type: string
+        minLength: 1
+      required: true
+      description: Content length
   responses:
     Accepted:
       description: Add person successful response
@@ -65,6 +89,8 @@ components:
           $ref: '#/components/headers/X-A-Response-Header'
         content-type:
           $ref: '#/components/headers/contentType'
+        content-length:
+          $ref: '#/components/headers/contentLength'
     BadRequest:
       description: The request could not be understood e.g., headers, query parameters or request body are malformed.
       content:
@@ -76,6 +102,8 @@ components:
           $ref: '#/components/headers/X-A-Response-Header'
         content-type:
           $ref: '#/components/headers/contentType'
+        content-length:
+          $ref: '#/components/headers/contentLength'
     UnprocessableEntity:
       description: The request could not be processed because it violated some domain constraints.
       content:
@@ -87,6 +115,8 @@ components:
           $ref: '#/components/headers/X-A-Response-Header'
         content-type:
           $ref: '#/components/headers/contentType'
+        content-length:
+          $ref: '#/components/headers/contentLength'
     UnavailableServer:
       description: A dependent service is not responding
       content:

@@ -30,9 +30,9 @@ internal class StandardHttp4kOpenApiValidator(openApi: OpenAPI, rejectUnknownReq
 
     override fun validate(request: Request) = requestValidator.validateRequest(request.adapted())
 
-    override fun validate(path: String, method: Method, acceptHeader: String, response: Response) = responseValidator.validateResponse(path, method.adapted(), response.adapted(acceptHeader))
+    override fun validate(path: String, method: Method, acceptHeader: ContentType, response: Response) = responseValidator.validateResponse(path, method.adapted(), response.adapted(acceptHeader))
 
-    private fun Response.adapted(acceptHeader: String): ResponseWithHeaders = SimpleResponse.Builder.status(status.code).apply {
+    private fun Response.adapted(acceptHeader: ContentType): ResponseWithHeaders = SimpleResponse.Builder.status(status.code).apply {
         withBody(body)
         headers.toMultiMap().forEach { header -> withHeader(header.key, header.value.toList()) }
     }.build().let { ResponseWithHeadersAdapter(it, headers, acceptHeader) }
@@ -73,19 +73,13 @@ internal class StandardHttp4kOpenApiValidator(openApi: OpenAPI, rejectUnknownReq
 
     private fun SimpleRequest.Builder.withBody(body: Body) {
         when (body) {
-            Body.EMPTY -> { // TODO do we need this difference?
-                // nothing to do here
-            }
-
-            else -> withBody(body.stream)
+            is MemoryBody -> withBody(body.payload.array())
+            is StreamBody -> withBody(body.stream)
         }
     }
 
     private fun SimpleResponse.Builder.withBody(body: Body) {
         when (body) {
-            Body.EMPTY -> { // TODO do we need this difference?
-                // nothing to do here
-            }
             is MemoryBody -> withBody(body.payload.array())
             is StreamBody -> withBody(body.stream)
         }

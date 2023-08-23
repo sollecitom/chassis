@@ -10,9 +10,7 @@ interface Http4kOpenApiValidator {
 
     fun validate(request: Request): ValidationReport
 
-    fun validate(path: String, method: Method, acceptHeader: String, response: Response): ValidationReport
+    fun validate(path: String, method: Method, acceptHeader: ContentType, response: Response): ValidationReport
 
     companion object
 }
-
-fun Http4kOpenApiValidator.validate(path: String, method: Method, acceptHeader: ContentType, response: Response) = validate(path, method, acceptHeader.toHeaderValue(), response)

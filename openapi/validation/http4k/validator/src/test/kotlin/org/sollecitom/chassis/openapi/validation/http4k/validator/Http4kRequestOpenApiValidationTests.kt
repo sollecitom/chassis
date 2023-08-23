@@ -1,10 +1,7 @@
 package org.sollecitom.chassis.openapi.validation.http4k.validator
 
 import assertk.assertThat
-import org.http4k.core.Method
-import org.http4k.core.Request
-import org.http4k.core.Response
-import org.http4k.core.Status
+import org.http4k.core.*
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.jupiter.api.Nested
@@ -18,7 +15,6 @@ import org.sollecitom.chassis.openapi.parser.OpenApiReader
 import org.sollecitom.chassis.openapi.validation.http4k.validator.implementation.invoke
 import org.sollecitom.chassis.openapi.validation.request.validator.ValidationReportError
 import org.sollecitom.chassis.openapi.validation.request.validator.test.utils.containsOnly
-import org.sollecitom.chassis.openapi.validation.request.validator.test.utils.hasErrors
 import org.sollecitom.chassis.openapi.validation.request.validator.test.utils.hasNoErrors
 
 @TestInstance(PER_CLASS)
@@ -113,7 +109,7 @@ private class Http4kRequestOpenApiValidationTests {
             val json = validPersonDetails.toJson()
             val response = validResponse(json)
 
-            val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
+            val report = validator.validate(PATH, Method.POST, defaultAcceptHeader, response)
 
             assertThat(report).hasNoErrors()
         }
@@ -125,7 +121,7 @@ private class Http4kRequestOpenApiValidationTests {
             val json = validPersonDetails.toJson()
             val response = validResponse(json).removeHeader(requiredResponseHeaderName)
 
-            val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
+            val report = validator.validate(PATH, Method.POST, defaultAcceptHeader, response)
 
             assertThat(report).containsOnly(ValidationReportError.Response.MissingRequiredHeader)
         }
@@ -137,7 +133,7 @@ private class Http4kRequestOpenApiValidationTests {
             val json = validPersonDetails.toJson()
             val response = validResponse(json).header("Unknown-Response-Header", "value")
 
-            val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
+            val report = validator.validate(PATH, Method.POST, defaultAcceptHeader, response)
 
             assertThat(report).containsOnly(ValidationReportError.Response.UnknownHeader)
         }
@@ -148,7 +144,7 @@ private class Http4kRequestOpenApiValidationTests {
             val invalidJson = validPersonDetails.toJson().apply { remove("firstName") }
             val response = validResponse(invalidJson)
 
-            val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
+            val report = validator.validate(PATH, Method.POST, defaultAcceptHeader, response)
 
             assertThat(report).containsOnly(ValidationReportError.Response.Body.MissingRequiredField)
         }
@@ -160,7 +156,7 @@ private class Http4kRequestOpenApiValidationTests {
             val json = sequenceOf(validPersonDetails.toJson(), validPersonDetails.toJson()).fold(JSONArray(), JSONArray::put)
             val response = validResponse(json)
 
-            val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
+            val report = validator.validate(PATH, Method.POST, defaultAcceptHeader, response)
 
             assertThat(report).containsOnly(ValidationReportError.Response.Body.InvalidType)
         }
@@ -171,7 +167,7 @@ private class Http4kRequestOpenApiValidationTests {
             val json = JSONObject("""{"errors":[{"message":"First name cannot be equal to last name"}]}""")
             val response = validResponse(json = json, status = Status.UNPROCESSABLE_ENTITY)
 
-            val report = validator.validate(PATH, Method.POST, DEFAULT_ACCEPT_HEADER, response)
+            val report = validator.validate(PATH, Method.POST, defaultAcceptHeader, response)
 
             assertThat(report).hasNoErrors()
         }
@@ -180,7 +176,7 @@ private class Http4kRequestOpenApiValidationTests {
     companion object : Loggable() {
 
         const val PATH = "/people"
-        const val DEFAULT_ACCEPT_HEADER = "application/json"
+        val defaultAcceptHeader = ContentType.APPLICATION_JSON
         val validPersonDetails = Person("Bruce".let(::Name), "Wayne".let(::Name), 36)
         const val API_FILE_LOCATION = "api/api.yml"
 

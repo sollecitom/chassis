@@ -6,6 +6,7 @@ import com.atlassian.oai.validator.model.Response
 import com.atlassian.oai.validator.report.ValidationReport
 import com.github.erosb.jsonsKema.Schema
 import com.github.erosb.jsonsKema.ValidationFailure
+import io.swagger.v3.oas.models.media.Content
 import io.swagger.v3.oas.models.responses.ApiResponse
 import org.http4k.core.ContentType
 import org.json.JSONArray
@@ -16,6 +17,7 @@ import org.sollecitom.chassis.json.utils.validate
 import org.sollecitom.chassis.kotlin.extensions.optional.asNullable
 import org.sollecitom.chassis.openapi.validation.http4k.validator.model.ResponseWithHeadersAdapter
 import java.nio.charset.Charset
+import io.swagger.v3.oas.models.media.Schema as SwaggerSchema
 
 internal class ResponseJsonBodyValidator(val jsonSchemasDirectoryName: String = defaultJsonSchemasDirectory) : CustomResponseValidator {
 
@@ -24,7 +26,7 @@ internal class ResponseJsonBodyValidator(val jsonSchemasDirectoryName: String = 
         val response = (rawResponse as ResponseWithHeadersAdapter)
         val bodyAsString = response.responseBody.asNullable()?.toString(Charset.defaultCharset())
         val responseDefinition = apiOperation.operation.responses[response.status.toString()]
-        val bodySwaggerSchema = responseDefinition?.content?.get(response.acceptHeader)?.schema
+        val bodySwaggerSchema = responseDefinition?.content?.get(response.acceptHeader.withNoDirectives().toHeaderValue())?.schema
         val bodySchema = bodySwaggerSchema?.`$ref`?.resolveAsSchemaLocation()?.let { jsonSchemaAt(it) }
         return when {
             !bodyAsString.isNullOrEmpty() && !bodySwaggerSchema.isDefined() && responseDefinition.declaresAJsonContentType() -> {
@@ -40,7 +42,7 @@ internal class ResponseJsonBodyValidator(val jsonSchemasDirectoryName: String = 
         }
     }
 
-    private fun io.swagger.v3.oas.models.media.Schema<*>?.isDefined(): Boolean = this != null && properties.isNotEmpty() // TODO check
+    private fun SwaggerSchema<*>?.isDefined(): Boolean = this != null && properties.isNotEmpty() // TODO check
 
     private fun ValidationFailure?.toValidationReport() = this?.let { ValidationReport.from(ValidationReport.Message.create("Response body", it.toString()).build()) } ?: ValidationReport.empty()
 
