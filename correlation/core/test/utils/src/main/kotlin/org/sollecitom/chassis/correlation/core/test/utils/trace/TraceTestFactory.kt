@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.correlation.core.test.utils
+package org.sollecitom.chassis.correlation.core.test.utils.trace
 
 import kotlinx.datetime.Instant
 import org.sollecitom.chassis.core.domain.identity.asStringId

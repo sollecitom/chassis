@@ -77,9 +77,9 @@ allprojects {
                     url = uri("https://maven.pkg.github.com/sollecitom/chassis")
                     credentials {
                         username = project.findProperty("sollecitom.github.user") as String?
-                                ?: System.getenv("GITHUB_USERNAME")
+                            ?: System.getenv("GITHUB_USERNAME")
                         password = project.findProperty("sollecitom.github.token") as String?
-                                ?: System.getenv("GITHUB_TOKEN")
+                            ?: System.getenv("GITHUB_TOKEN")
                     }
                 }
             }

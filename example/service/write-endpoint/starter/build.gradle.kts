@@ -55,8 +55,8 @@ configure<JibExtension> {
                 "build.git.hash.full" to gitVersionDetails.gitHashFull, "build.timestamp" to buildTimestamp
             )
         )
-        filesModificationTime.set(buildTimestamp)
-        creationTime.set(buildTimestamp) // TODO this is to achieve build reproducibility - think whether reproducibility is worth it
+        filesModificationTime.set(buildTimestamp) // TODO this screws up reproducibility - think whether reproducibility is worth achieving, even at the price of some nonsensical consequences
+        creationTime.set(buildTimestamp) // TODO this screws up reproducibility - think whether reproducibility is worth achieving, even at the price of some nonsensical consequences
         mainClass = "org.sollecitom.chassis.example.service.endpoint.write.starter.StarterKt"
     }
     from {
