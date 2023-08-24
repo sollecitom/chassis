@@ -10,8 +10,6 @@ class InvocationContextTestFactory internal constructor(coreGenerators: WithCore
 
     private val traceFactory = Trace.testFactory
 
-    fun create(trace: Trace<ULID>): InvocationContext<ULID> = InvocationContext(trace)
-
     fun create(timeNow: Instant = clock.now(), createTestTrace: TraceTestFactory.() -> Trace<ULID> = { traceFactory.create(timeNow = timeNow) }): InvocationContext<ULID> {
 
         val trace = traceFactory.createTestTrace()

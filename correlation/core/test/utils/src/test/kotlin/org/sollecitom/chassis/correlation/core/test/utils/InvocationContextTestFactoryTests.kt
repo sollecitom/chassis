@@ -4,7 +4,6 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isGreaterThanOrEqualTo
 import assertk.assertions.isLessThanOrEqualTo
-import assertk.assertions.isNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
@@ -24,9 +23,9 @@ private class InvocationContextTestFactoryTests : WithCoreGenerators by WithCore
 
         assertThat(context.trace.invocation.createdAt).isEqualTo(timestamp)
         assertThat(context.trace.invocation.id.timestamp).isGreaterThanOrEqualTo(timestamp)
-        assertThat(context.trace.parent?.id).isNotNull().isLessThanOrEqualTo(context.trace.invocation.id)
-        assertThat(context.trace.parent?.createdAt).isNotNull().isLessThanOrEqualTo(timestamp)
-        assertThat(context.trace.originating?.invocationId).isNotNull()
-        assertThat(context.trace.originating?.actionId).isNotNull()
+        assertThat(context.trace.parent.id).isLessThanOrEqualTo(context.trace.invocation.id)
+        assertThat(context.trace.parent.createdAt).isLessThanOrEqualTo(context.trace.invocation.createdAt)
+        assertThat(context.trace.originating.id).isLessThanOrEqualTo(context.trace.originating.id)
+        assertThat(context.trace.originating.createdAt).isLessThanOrEqualTo(context.trace.parent.createdAt)
     }
 }
