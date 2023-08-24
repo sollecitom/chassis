@@ -3,14 +3,19 @@ package org.sollecitom.chassis.correlation.core.tests
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isGreaterThanOrEqualTo
+import assertk.assertions.isLessThanOrEqualTo
+import assertk.assertions.isNotNull
 import kotlinx.datetime.Instant
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.identity.Id
+import org.sollecitom.chassis.core.domain.identity.StringId
+import org.sollecitom.chassis.core.domain.identity.asStringId
 import org.sollecitom.chassis.core.domain.identity.ulid.ULID
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.core.utils.provider
+import kotlin.time.Duration.Companion.seconds
 
 @TestInstance(PER_CLASS)
 private class CorrelationExampleTests : WithCoreGenerators by WithCoreGenerators.provider() {
@@ -24,6 +29,10 @@ private class CorrelationExampleTests : WithCoreGenerators by WithCoreGenerators
 
         assertThat(context.trace.invocation.createdAt).isEqualTo(timestamp)
         assertThat(context.trace.invocation.id.timestamp).isGreaterThanOrEqualTo(timestamp)
+        assertThat(context.trace.parent?.id).isNotNull().isLessThanOrEqualTo(context.trace.invocation.id)
+        assertThat(context.trace.parent?.createdAt).isNotNull().isLessThanOrEqualTo(timestamp)
+        assertThat(context.trace.originating?.invocationId).isNotNull()
+        assertThat(context.trace.originating?.actionId).isNotNull()
     }
 }
 
@@ -34,12 +43,15 @@ interface InvocationContext<out ID : Id<ID>> {
     companion object
 }
 
-data class Trace<out ID : Id<ID>>(val invocation: InvocationTrace<ID>) {
+data class Trace<out ID : Id<ID>>(val invocation: InvocationTrace<ID>, val parent: ParentTrace<ID>?, val originating: OriginatingTrace?) {
 
 }
 
-// TODO timestamp here?
+data class ParentTrace<out ID : Id<ID>>(val id: ID, val createdAt: Instant)
+
 data class InvocationTrace<out ID : Id<ID>>(val id: ID, val createdAt: Instant)
+
+data class OriginatingTrace(val invocationId: StringId, val actionId: StringId)
 
 context(WithCoreGenerators)
 val InvocationContext.Companion.testFactory: InvocationContextTestFactory
@@ -62,5 +74,5 @@ interface InvocationContextTestFactory : WithCoreGenerators {
 
     operator fun invoke(trace: Trace<ULID>): InvocationContext<ULID>
 
-    operator fun invoke(timeNow: Instant = clock.now(), invocationId: ULID = newId.ulid(timeNow)) = invoke(trace = Trace(invocation = InvocationTrace(id = invocationId, createdAt = timeNow)))
+    operator fun invoke(timeNow: Instant = clock.now(), originatingTrace: OriginatingTrace? = timeNow.minus(5.seconds).let { OriginatingTrace(invocationId = newId.ulid(it).asStringId(), actionId = newId.ulid(it).asStringId()) }, parentTrace: ParentTrace<ULID>? = timeNow.minus(2.seconds).let { ParentTrace(id = newId.ulid(it), createdAt = it) }, invocationId: ULID = newId.ulid(timeNow)) = invoke(trace = Trace(invocation = InvocationTrace(id = invocationId, createdAt = timeNow), parent = parentTrace, originating = originatingTrace))
 }

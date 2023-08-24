@@ -9,3 +9,4 @@ interface Id<out SELF : Id<SELF>> : StringSerializable, DataSerializable {
 
     companion object
 }
+
