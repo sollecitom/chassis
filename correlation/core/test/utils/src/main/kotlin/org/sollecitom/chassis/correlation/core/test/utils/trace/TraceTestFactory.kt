@@ -1,6 +1,7 @@
 package org.sollecitom.chassis.correlation.core.test.utils.trace
 
 import kotlinx.datetime.Instant
+import org.sollecitom.chassis.core.domain.identity.StringId
 import org.sollecitom.chassis.core.domain.identity.asStringId
 import org.sollecitom.chassis.core.domain.identity.ulid.ULID
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
@@ -26,3 +27,9 @@ fun Trace.ElapsedTimeSelector.sinceParentInvocationStarted() = sinceParentInvoca
 
 context(WithCoreGenerators)
 fun Trace.ElapsedTimeSelector.sinceOriginatingInvocationStarted() = sinceOriginatingInvocationStarted(clock.now())
+
+context(WithCoreGenerators)
+fun invocationTrace(id: ULID = newId.ulid(), createdAt: Instant = clock.now()) = InvocationTrace(id, createdAt)
+
+context(WithCoreGenerators)
+fun externalInvocationTrace(invocationId: StringId = newId.string(), actionId: StringId = newId.string()) = ExternalInvocationTrace(invocationId = invocationId, actionId = actionId)

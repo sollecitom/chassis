@@ -5,13 +5,13 @@ import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
-import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.trace.ExternalInvocationTrace
 
 @TestInstance(PER_CLASS)
-private class InvocationContextTestFactoryExampleTests : WithCoreGenerators by WithCoreGenerators.provider() {
+private class InvocationContextTestFactoryExampleTests : WithCoreGenerators by WithCoreGenerators.testProvider {
 
     @Test
     fun `customizing the trace`() {

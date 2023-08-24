@@ -7,12 +7,12 @@ import assertk.assertions.isLessThanOrEqualTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
-import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
 
 @TestInstance(PER_CLASS)
-private class TraceTestFactoryTests : WithCoreGenerators by WithCoreGenerators.provider() {
+private class TraceTestFactoryTests : WithCoreGenerators by WithCoreGenerators.testProvider {
 
     @Test
     fun `the trace for the generated invocation context is well-formed`() {

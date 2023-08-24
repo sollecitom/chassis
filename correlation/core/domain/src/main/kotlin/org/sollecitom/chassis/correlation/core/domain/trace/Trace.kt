@@ -6,6 +6,10 @@ import kotlin.time.Duration
 
 data class Trace<ID : SortableTimestampedUniqueIdentifier<ID>>(val invocation: InvocationTrace<ID>, val parent: InvocationTrace<ID> = invocation, val originating: InvocationTrace<ID> = parent, val external: ExternalInvocationTrace) {
 
+    init {
+        require(invocation != originating || invocation == parent) { "If invocation == originating, then invocation == parent must also be true" }
+    }
+
     fun fork(invocation: InvocationTrace<ID>) = Trace(parent = this.invocation, invocation = invocation, external = this.external)
 
     val elapsedTime: ElapsedTimeSelector = ElapsedTimeSelectorAdapter()
