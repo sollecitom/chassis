@@ -20,7 +20,7 @@ private class InvocationContextTestFactoryTests : WithCoreGenerators by WithCore
 
         val timestamp = clock.now()
 
-        val context = InvocationContext.testFactory(timeNow = timestamp)
+        val context = InvocationContext.testFactory.create(timeNow = timestamp)
 
         assertThat(context.trace.invocation.createdAt).isEqualTo(timestamp)
         assertThat(context.trace.invocation.id.timestamp).isGreaterThanOrEqualTo(timestamp)

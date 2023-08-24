@@ -1,17 +1,24 @@
 package org.sollecitom.chassis.correlation.core.test.utils
 
 import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.domain.identity.asStringId
 import org.sollecitom.chassis.core.domain.identity.ulid.ULID
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
-import org.sollecitom.chassis.correlation.core.domain.context.factory.InvocationContextFactory
-import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
-import org.sollecitom.chassis.correlation.core.domain.trace.OriginatingTrace
-import org.sollecitom.chassis.correlation.core.domain.trace.ParentTrace
+import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
-import kotlin.time.Duration.Companion.seconds
 
-interface InvocationContextTestFactory : InvocationContextFactory, WithCoreGenerators {
+class InvocationContextTestFactory internal constructor(coreGenerators: WithCoreGenerators) : WithCoreGenerators by coreGenerators {
 
-    operator fun invoke(timeNow: Instant = clock.now(), originatingTrace: OriginatingTrace? = timeNow.minus(5.seconds).let { OriginatingTrace(invocationId = newId.ulid(it).asStringId(), actionId = newId.ulid(it).asStringId()) }, parentTrace: ParentTrace<ULID>? = timeNow.minus(2.seconds).let { ParentTrace(id = newId.ulid(it), createdAt = it) }, invocationId: ULID = newId.ulid(timeNow)) = invoke(trace = Trace(invocation = InvocationTrace(id = invocationId, createdAt = timeNow), parent = parentTrace, originating = originatingTrace))
+    private val traceFactory = Trace.testFactory
+
+    fun create(trace: Trace<ULID>): InvocationContext<ULID> = InvocationContext(trace)
+
+    fun create(timeNow: Instant = clock.now(), createTestTrace: TraceTestFactory.() -> Trace<ULID> = { traceFactory.create(timeNow = timeNow) }): InvocationContext<ULID> {
+
+        val trace = traceFactory.createTestTrace()
+        return InvocationContext(trace)
+    }
 }
+
+context(WithCoreGenerators)
+val InvocationContext.Companion.testFactory: InvocationContextTestFactory
+    get() = InvocationContextTestFactory(this@WithCoreGenerators)
