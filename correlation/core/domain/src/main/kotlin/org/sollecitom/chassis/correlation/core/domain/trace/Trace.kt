@@ -19,7 +19,7 @@ data class Trace<ID : SortableTimestampedUniqueIdentifier<ID>>(val invocation: I
         fun sinceOriginatingInvocationStarted(timeNow: Instant): Duration
     }
 
-    inner class ElapsedTimeSelectorAdapter : ElapsedTimeSelector {
+    private inner class ElapsedTimeSelectorAdapter : ElapsedTimeSelector {
 
         override fun sinceInvocationStarted(timeNow: Instant) = timeNow - invocation.createdAt
 
