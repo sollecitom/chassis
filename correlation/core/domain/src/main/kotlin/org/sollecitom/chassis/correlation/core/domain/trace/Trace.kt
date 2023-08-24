@@ -12,6 +12,9 @@ data class Trace<ID : SortableTimestampedUniqueIdentifier<ID>>(val invocation: I
 
     fun fork(invocation: InvocationTrace<ID>) = Trace(parent = this.invocation, invocation = invocation, originating = originating, external = this.external)
 
+    val isOriginating: Boolean get() = invocation == originating
+    val isParent: Boolean get() = invocation == parent
+
     val elapsedTime: ElapsedTimeSelector = ElapsedTimeSelectorAdapter()
 
     interface ElapsedTimeSelector {
