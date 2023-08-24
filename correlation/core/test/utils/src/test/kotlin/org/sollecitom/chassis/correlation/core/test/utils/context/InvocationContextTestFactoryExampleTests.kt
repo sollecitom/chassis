@@ -5,11 +5,14 @@ import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.sollecitom.chassis.core.domain.networking.IpAddress
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import org.sollecitom.chassis.correlation.core.domain.origin.Origin
 import org.sollecitom.chassis.correlation.core.domain.trace.ExternalInvocationTrace
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
+import org.sollecitom.chassis.correlation.core.test.utils.origin.create
 import org.sollecitom.chassis.correlation.core.test.utils.trace.create
 
 @TestInstance(PER_CLASS)
@@ -18,12 +21,21 @@ private class InvocationContextTestFactoryExampleTests : WithCoreGenerators by W
     @Test
     fun `customizing the trace`() {
 
-        val externalActionId = newId.string()
-        val externalInvocationId = newId.string()
+        val actionId = newId.string()
+        val trace = Trace.create(externalInvocationTrace = ExternalInvocationTrace.create(actionId = actionId))
 
-        val context = InvocationContext.create(testTrace = { Trace.create(externalInvocationTrace = ExternalInvocationTrace(externalInvocationId, externalActionId)) })
+        val context = InvocationContext.create(testTrace = { trace })
 
-        assertThat(context.trace.external.invocationId).isEqualTo(externalInvocationId)
-        assertThat(context.trace.external.actionId).isEqualTo(externalActionId)
+        assertThat(context.trace).isEqualTo(trace)
+    }
+
+    @Test
+    fun `customizing the origin`() {
+
+        val origin = Origin.create(ipAddress = IpAddress.create("152.38.16.4"))
+
+        val context = InvocationContext.create(testOrigin = { origin })
+
+        assertThat(context.origin).isEqualTo(origin)
     }
 }
