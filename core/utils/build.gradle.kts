@@ -1,8 +1,8 @@
 dependencies {
     api(projects.chassisCoreDomain)
+    api(projects.chassisConfigurationUtils)
 
     implementation(projects.chassisLoggerCore)
-    implementation(projects.chassisConfigurationUtils)
 
     testImplementation(projects.chassisTestUtils)
 }
