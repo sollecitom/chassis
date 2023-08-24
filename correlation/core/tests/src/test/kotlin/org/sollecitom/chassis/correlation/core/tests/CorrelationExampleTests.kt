@@ -10,11 +10,15 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.identity.StringId
 import org.sollecitom.chassis.core.domain.identity.asStringId
 import org.sollecitom.chassis.core.domain.identity.ulid.ULID
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.core.utils.provider
+import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
+import org.sollecitom.chassis.correlation.core.domain.trace.OriginatingTrace
+import org.sollecitom.chassis.correlation.core.domain.trace.ParentTrace
+import org.sollecitom.chassis.correlation.core.domain.trace.Trace
 import kotlin.time.Duration.Companion.seconds
 
 @TestInstance(PER_CLASS)
@@ -35,23 +39,6 @@ private class CorrelationExampleTests : WithCoreGenerators by WithCoreGenerators
         assertThat(context.trace.originating?.actionId).isNotNull()
     }
 }
-
-interface InvocationContext<out ID : Id<ID>> {
-
-    val trace: Trace<ID>
-
-    companion object
-}
-
-data class Trace<out ID : Id<ID>>(val invocation: InvocationTrace<ID>, val parent: ParentTrace<ID>?, val originating: OriginatingTrace?) {
-
-}
-
-data class ParentTrace<out ID : Id<ID>>(val id: ID, val createdAt: Instant)
-
-data class InvocationTrace<out ID : Id<ID>>(val id: ID, val createdAt: Instant)
-
-data class OriginatingTrace(val invocationId: StringId, val actionId: StringId)
 
 context(WithCoreGenerators)
 val InvocationContext.Companion.testFactory: InvocationContextTestFactory
