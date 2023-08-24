@@ -10,7 +10,7 @@ data class Trace<ID : SortableTimestampedUniqueIdentifier<ID>>(val invocation: I
         require(invocation != originating || invocation == parent) { "If invocation == originating, then invocation == parent must also be true" }
     }
 
-    fun fork(invocation: InvocationTrace<ID>) = Trace(parent = this.invocation, invocation = invocation, external = this.external)
+    fun fork(invocation: InvocationTrace<ID>) = Trace(parent = this.invocation, invocation = invocation, originating = originating, external = this.external)
 
     val elapsedTime: ElapsedTimeSelector = ElapsedTimeSelectorAdapter()
 

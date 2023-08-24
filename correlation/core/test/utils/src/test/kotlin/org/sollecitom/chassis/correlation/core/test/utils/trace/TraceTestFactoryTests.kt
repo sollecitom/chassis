@@ -19,7 +19,7 @@ private class TraceTestFactoryTests : WithCoreGenerators by WithCoreGenerators.t
 
         val timestamp = clock.now()
 
-        val trace = Trace.testFactory.create(timeNow = timestamp)
+        val trace = Trace.create(timeNow = timestamp)
 
         assertThat(trace.invocation.createdAt).isEqualTo(timestamp)
         assertThat(trace.invocation.id.timestamp).isGreaterThanOrEqualTo(timestamp)
