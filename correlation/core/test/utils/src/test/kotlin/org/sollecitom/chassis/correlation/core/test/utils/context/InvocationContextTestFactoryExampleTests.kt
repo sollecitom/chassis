@@ -1,9 +1,7 @@
 package org.sollecitom.chassis.correlation.core.test.utils.context
 
 import assertk.assertThat
-import assertk.assertions.hasSameSizeAs
 import assertk.assertions.isEqualTo
-import assertk.assertions.isLessThanOrEqualTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
@@ -39,32 +37,5 @@ private class InvocationContextTestFactoryExampleTests : WithCoreGenerators by W
         val context = InvocationContext.create(testOrigin = { origin })
 
         assertThat(context.origin).isEqualTo(origin)
-    }
-
-    @Test
-    fun `bucket sort example`() {
-
-        val possibleElements = (4..15).toList()
-        val values = (1..100).map { possibleElements.random() }
-
-        val sorted = values.bucketSort(possibleElements)
-
-        println(values)
-        println(sorted)
-        assertThat(sorted).hasSameSizeAs(values)
-        sorted.zipWithNext().forEach { (current, next) ->
-            assertThat(current, "$current").isLessThanOrEqualTo(next)
-        }
-    }
-
-    fun <V> Iterable<V>.bucketSort(orderedPossibleElements: List<V>): List<V> {
-
-        val buckets = IntArray(orderedPossibleElements.size)
-        val indexForElement = orderedPossibleElements.withIndex().associate { it.value to it.index }
-        forEach { value ->
-            val bucketIndex = indexForElement[value]!!
-            buckets[bucketIndex]++
-        }
-        return buckets.withIndex().flatMap { (index, count) -> List(count) { orderedPossibleElements[index] } }
     }
 }
