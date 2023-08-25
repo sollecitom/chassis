@@ -1,9 +1,7 @@
 package org.sollecitom.chassis.correlation.core.test.utils.access
 
 import assertk.assertThat
-import assertk.assertions.isEqualTo
-import assertk.assertions.isFailure
-import assertk.assertions.isNull
+import assertk.assertions.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -14,16 +12,14 @@ import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
-import org.sollecitom.chassis.correlation.core.domain.access.actor.DirectActor
 import org.sollecitom.chassis.correlation.core.domain.access.authenticatedOrFailure
 import org.sollecitom.chassis.correlation.core.domain.access.authenticatedOrThrow
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
 import org.sollecitom.chassis.correlation.core.domain.origin.Origin
-import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
-import org.sollecitom.chassis.correlation.core.test.utils.access.authentication.credentialsBased
+import org.sollecitom.chassis.correlation.core.test.utils.access.actor.direct
 import org.sollecitom.chassis.correlation.core.test.utils.origin.create
-import org.sollecitom.chassis.correlation.core.test.utils.tenancy.create
 import org.sollecitom.chassis.test.utils.assertions.failedThrowing
+import org.sollecitom.chassis.test.utils.assertions.succeededWithResult
 
 @TestInstance(PER_CLASS)
 private class AccessExampleTests : WithCoreGenerators by WithCoreGenerators.testProvider {
@@ -35,12 +31,50 @@ private class AccessExampleTests : WithCoreGenerators by WithCoreGenerators.test
         fun `with given actor and origin`() {
 
             val origin = Origin.create()
-            val actor = DirectActor(account = Actor.UserAccount(id = newId.ulid(), tenant = Tenant.create()), Authentication.credentialsBased())
+            val actor = Actor.direct()
 
-            val access = Access.Authenticated(actor, origin)
+            val access = Access.authenticated(actor, origin)
 
             assertThat(access.actor).isEqualTo(actor)
             assertThat(access.origin).isEqualTo(origin)
+        }
+
+        @Test
+        fun `returns correctly whether it's authenticated`() {
+
+            val access: Access<ULID, Authentication> = Access.authenticated()
+
+            assertThat(access.isAuthenticated).isEqualTo(true)
+        }
+
+        @Test
+        fun `fluent handling`() {
+
+            val access: Access<ULID, Authentication> = Access.authenticated()
+
+            val authenticated = access.authenticatedOrNull()
+
+            assertThat(authenticated).isNotNull().isEqualTo(access)
+        }
+
+        @Test
+        fun `fluent handling with error`() {
+
+            val access: Access<ULID, Authentication> = Access.authenticated()
+
+            val attempt = runCatching { access.authenticatedOrThrow() }
+
+            assertThat(attempt).succeededWithResult(access)
+        }
+
+        @Test
+        fun `fluent handling with result`() {
+
+            val access: Access<ULID, Authentication> = Access.authenticated()
+
+            val result = access.authenticatedOrFailure()
+
+            assertThat(result).isSuccess()
         }
     }
 

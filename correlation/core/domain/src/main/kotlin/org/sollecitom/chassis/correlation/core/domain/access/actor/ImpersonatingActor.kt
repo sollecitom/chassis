@@ -11,3 +11,5 @@ data class ImpersonatingActor<out ID : Id<ID>, out AUTHENTICATION : Authenticati
     override val benefitingAccount: Actor.Account<ID>
         get() = impersonated
 }
+
+fun <ID : Id<ID>, AUTHENTICATION : Authentication> DirectActor<ID, AUTHENTICATION>.impersonating(impersonated: Actor.Account<ID>): ImpersonatingActor<ID, AUTHENTICATION> = ImpersonatingActor(impersonator = this.account, authentication = this.authentication, impersonated = impersonated)

@@ -7,4 +7,6 @@ data class DirectActor<out ID : Id<ID>, out AUTHENTICATION : Authentication>(ove
 
     override val benefitingAccount: Actor.Account<ID>
         get() = account
+
+    companion object
 }
