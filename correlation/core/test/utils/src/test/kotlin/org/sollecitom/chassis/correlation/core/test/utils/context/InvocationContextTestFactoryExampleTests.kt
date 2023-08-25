@@ -8,10 +8,14 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.networking.IpAddress
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.correlation.core.domain.authorization.AuthorizationPrincipal
+import org.sollecitom.chassis.correlation.core.domain.authorization.Roles
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.origin.Origin
 import org.sollecitom.chassis.correlation.core.domain.trace.ExternalInvocationTrace
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
+import org.sollecitom.chassis.correlation.core.test.utils.authorization.TestRoles
+import org.sollecitom.chassis.correlation.core.test.utils.authorization.create
 import org.sollecitom.chassis.correlation.core.test.utils.origin.create
 import org.sollecitom.chassis.correlation.core.test.utils.trace.create
 
@@ -37,5 +41,16 @@ private class InvocationContextTestFactoryExampleTests : WithCoreGenerators by W
         val context = InvocationContext.create(testOrigin = { origin })
 
         assertThat(context.origin).isEqualTo(origin)
+    }
+
+    @Test
+    fun `customizing the authorization principal`() {
+
+        val roles = Roles(setOf(TestRoles.user, TestRoles.projectAdmin))
+        val authorization = AuthorizationPrincipal.create(roles)
+
+        val context = InvocationContext.create(testAuthorization = { authorization })
+
+        assertThat(context.roles).isEqualTo(roles)
     }
 }
