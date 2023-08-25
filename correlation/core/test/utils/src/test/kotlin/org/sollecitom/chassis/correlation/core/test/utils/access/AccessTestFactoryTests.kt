@@ -31,7 +31,7 @@ private class AccessExampleTests : WithCoreGenerators by WithCoreGenerators.test
     inner class Authenticated {
 
         @Test
-        fun `with given actor and authentication`() {
+        fun `with given actor and origin`() {
 
             val token = Authentication.Token(id = newId.string(), validFrom = null, validTo = null)
             val session = SimpleSession(id = newId.string())
