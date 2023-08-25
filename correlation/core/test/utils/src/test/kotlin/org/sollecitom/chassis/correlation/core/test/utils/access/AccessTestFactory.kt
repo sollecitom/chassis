@@ -6,4 +6,4 @@ import org.sollecitom.chassis.correlation.core.test.utils.origin.create
 
 // TODO move
 context(WithCoreGenerators)
-fun Access.Companion.unknown(origin: Origin = Origin.create()): Access.Unauthenticated = Access.Unauthenticated(origin)
+fun Access.Companion.unauthenticated(origin: Origin = Origin.create()): Access.Unauthenticated = Access.Unauthenticated(origin)
