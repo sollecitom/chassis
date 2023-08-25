@@ -18,11 +18,9 @@ import org.sollecitom.chassis.correlation.core.domain.access.actor.DirectActor
 import org.sollecitom.chassis.correlation.core.domain.access.authenticatedOrFailure
 import org.sollecitom.chassis.correlation.core.domain.access.authenticatedOrThrow
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
-import org.sollecitom.chassis.correlation.core.domain.access.authentication.CredentialsBasedAuthentication
-import org.sollecitom.chassis.correlation.core.domain.access.session.SimpleSession
 import org.sollecitom.chassis.correlation.core.domain.origin.Origin
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
-import org.sollecitom.chassis.correlation.core.test.utils.access.authentication.create
+import org.sollecitom.chassis.correlation.core.test.utils.access.authentication.credentialsBased
 import org.sollecitom.chassis.correlation.core.test.utils.origin.create
 import org.sollecitom.chassis.correlation.core.test.utils.tenancy.create
 import org.sollecitom.chassis.test.utils.assertions.failedThrowing
@@ -36,9 +34,8 @@ private class AccessExampleTests : WithCoreGenerators by WithCoreGenerators.test
         @Test
         fun `with given actor and origin`() {
 
-            val session = SimpleSession(id = newId.string())
-            val actor = DirectActor(account = Actor.UserAccount(id = newId.ulid(), tenant = Tenant.create()), CredentialsBasedAuthentication(Authentication.Token.create(), session))
-            val origin = Origin.create(ipAddress = IpAddress.create("120.19.6.12"))
+            val origin = Origin.create()
+            val actor = DirectActor(account = Actor.UserAccount(id = newId.ulid(), tenant = Tenant.create()), Authentication.credentialsBased())
 
             val access = Access.Authenticated(actor, origin)
 

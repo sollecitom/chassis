@@ -1,11 +1,8 @@
 package org.sollecitom.chassis.correlation.core.test.utils.access.idp
 
-import org.sollecitom.chassis.core.domain.identity.StringId
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.access.idp.IdentityProvider
-import org.sollecitom.chassis.correlation.core.domain.access.session.Session
-import org.sollecitom.chassis.correlation.core.domain.access.session.SimpleSession
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 import org.sollecitom.chassis.correlation.core.test.utils.tenancy.create
 
