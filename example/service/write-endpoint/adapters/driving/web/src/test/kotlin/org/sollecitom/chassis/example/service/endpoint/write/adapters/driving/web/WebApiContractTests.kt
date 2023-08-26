@@ -11,9 +11,12 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.email.EmailAddress
+import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
 import org.sollecitom.chassis.core.domain.networking.SpecifiedPort
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.core.utils.provider
+import org.sollecitom.chassis.correlation.core.domain.access.Access
+import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.WebAPI
 import org.sollecitom.chassis.example.service.endpoint.write.application.Application
 import org.sollecitom.chassis.example.service.endpoint.write.application.ApplicationCommand
@@ -48,7 +51,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
     fun `submitting a register user command for an unregistered user`() {
 
         val userId = newId.ulid()
-        val api = webApi { Accepted(user = User.WithPendingRegistration(userId)) }
+        val api = webApi { _, _ -> Accepted(user = User.WithPendingRegistration(userId)) }
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val request = Request(Method.POST, path("commands/${commandType.id.value}/v${commandType.version.value}")).body(json).ensureCompliantWithOpenApi()
@@ -63,7 +66,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
     fun `submitting a register user command for an already registered user`() {
 
         val existingUserId = newId.ulid()
-        val api = webApi { EmailAddressAlreadyInUse(userId = existingUserId) }
+        val api = webApi { _, _ -> EmailAddressAlreadyInUse(userId = existingUserId) }
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val request = Request(Method.POST, path("commands/${commandType.id.value}/v${commandType.version.value}")).body(json)
@@ -139,16 +142,16 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
 
     private fun registerUserPayload(emailAddress: String): JSONObject = JSONObject().put("email", JSONObject().put("address", emailAddress))
 
-    private class StubbedApplication(private val handleRegisterUserV1: suspend (RegisterUser.V1) -> RegisterUser.V1.Result) : Application {
+    private class StubbedApplication(private val handleRegisterUserV1: suspend (RegisterUser.V1, InvocationContext<Access<SortableTimestampedUniqueIdentifier<*>>>) -> RegisterUser.V1.Result) : Application {
 
         @Suppress("UNCHECKED_CAST")
-        override suspend fun <RESULT> invoke(command: ApplicationCommand<RESULT>) = when (command) {
-            is RegisterUser.V1 -> handleRegisterUserV1(command) as RESULT
+        override suspend fun <RESULT, ACCESS : Access<SortableTimestampedUniqueIdentifier<*>>> invoke(command: ApplicationCommand<RESULT, ACCESS>, context: InvocationContext<ACCESS>) = when (command) {
+            is RegisterUser.V1 -> handleRegisterUserV1(command, context) as RESULT
             else -> error("Unknown command type ${command.type}")
         }
     }
 
-    private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend (RegisterUser.V1) -> RegisterUser.V1.Result = { Accepted(user = User.WithPendingRegistration(id = newId.ulid())) }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration)
+    private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend (RegisterUser.V1, InvocationContext<Access<SortableTimestampedUniqueIdentifier<*>>>) -> RegisterUser.V1.Result = { _, _ -> Accepted(user = User.WithPendingRegistration(id = newId.ulid())) }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration)
 
     private fun path(value: String) = "http://localhost:0/$value"
 

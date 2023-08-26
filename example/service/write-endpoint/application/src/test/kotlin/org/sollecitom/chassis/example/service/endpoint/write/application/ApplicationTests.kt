@@ -10,6 +10,9 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import org.sollecitom.chassis.correlation.core.test.utils.context.authenticated
+import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.ddd.domain.EventStore
 import org.sollecitom.chassis.ddd.test.utils.InMemoryEventStore
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
@@ -17,6 +20,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.application.user.Re
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.configureLogging
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRepository
+import org.sollecitom.chassis.test.utils.assertions.failedThrowing
 
 @TestInstance(PER_CLASS)
 private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testProvider {
@@ -34,10 +38,24 @@ private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testPr
             val application = newApplication()
             val emailAddress = "someone@somedomain.com".let(::EmailAddress)
             val registerUser = registerUser(emailAddress = emailAddress)
+            val context = InvocationContext.unauthenticated()
 
-            val result = application(registerUser)
+            val result = application(registerUser, context)
 
             assertThat(result).isInstanceOf<Accepted>()
+        }
+
+        @Test
+        fun `attempting to register a new user with an authenticated invocation context`() = runTest {
+
+            val application = newApplication()
+            val emailAddress = "someone@somedomain.com".let(::EmailAddress)
+            val registerUser = registerUser(emailAddress = emailAddress)
+            val context = InvocationContext.authenticated()
+
+            val attempt = runCatching { application(registerUser, context) }
+
+            assertThat(attempt).failedThrowing<IllegalStateException>()
         }
 
         @Test
@@ -46,10 +64,10 @@ private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testPr
             val application = newApplication()
             val emailAddress = "someone@somedomain.com".let(::EmailAddress)
             val registerUserAFirstTime = registerUser(emailAddress = emailAddress)
-            application(registerUserAFirstTime).let { check(it is Accepted) }
+            application(registerUserAFirstTime, InvocationContext.unauthenticated()).let { check(it is Accepted) }
 
             val registerUserASecondTime = registerUser(emailAddress = emailAddress)
-            val result = application(registerUserASecondTime)
+            val result = application(registerUserASecondTime, InvocationContext.unauthenticated())
 
             assertThat(result).isInstanceOf<EmailAddressAlreadyInUse>()
         }

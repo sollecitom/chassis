@@ -5,8 +5,9 @@ import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
+import org.sollecitom.chassis.ddd.domain.Event
 
-sealed class UserRegistrationRequestWasSubmitted(val emailAddress: EmailAddress, userId: SortableTimestampedUniqueIdentifier<*>, override val id: SortableTimestampedUniqueIdentifier<*>, override val timestamp: Instant, type: Type) : UserEvent(id, timestamp, type, userId) {
+sealed class UserRegistrationRequestWasSubmitted(val emailAddress: EmailAddress, userId: SortableTimestampedUniqueIdentifier<*>, override val id: SortableTimestampedUniqueIdentifier<*>, override val timestamp: Instant, context: Event.Context, type: Type) : UserEvent(id, timestamp, type, userId, context) {
 
     interface Type : UserEvent.Type
 
@@ -14,7 +15,7 @@ sealed class UserRegistrationRequestWasSubmitted(val emailAddress: EmailAddress,
         val typeId = "user-registration-request-submitted".let(::Name)
     }
 
-    class V1(emailAddress: EmailAddress, userId: SortableTimestampedUniqueIdentifier<*>, id: SortableTimestampedUniqueIdentifier<*>, timestamp: Instant) : UserRegistrationRequestWasSubmitted(emailAddress, userId, id, timestamp, Type) {
+    class V1(emailAddress: EmailAddress, userId: SortableTimestampedUniqueIdentifier<*>, id: SortableTimestampedUniqueIdentifier<*>, timestamp: Instant, context: Event.Context) : UserRegistrationRequestWasSubmitted(emailAddress, userId, id, timestamp, context, Type) {
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true

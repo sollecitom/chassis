@@ -4,11 +4,12 @@ import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
+import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.example.service.endpoint.write.application.ApplicationCommand
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 
-sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT> {
+sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT, Access.Unauthenticated> {
 
     val emailAddress: EmailAddress
 

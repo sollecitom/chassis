@@ -2,8 +2,11 @@ package org.sollecitom.chassis.example.service.endpoint.write.starter
 
 import org.http4k.cloudnative.env.Environment
 import org.sollecitom.chassis.configuration.utils.fromYamlResource
+import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.core.utils.provider
+import org.sollecitom.chassis.correlation.core.domain.access.Access
+import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.WebAPI
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.from
 import org.sollecitom.chassis.example.service.endpoint.write.application.Application
@@ -39,7 +42,7 @@ class Service(private val environment: Environment, private val coreGenerators: 
     private fun application(): Application = object : Application { // TODO change and create the actual application
 
         @Suppress("UNCHECKED_CAST")
-        override suspend fun <RESULT> invoke(command: ApplicationCommand<RESULT>): RESULT {
+        override suspend fun <RESULT, ACCESS : Access<SortableTimestampedUniqueIdentifier<*>>> invoke(command: ApplicationCommand<RESULT, ACCESS>, context: InvocationContext<ACCESS>): RESULT {
             val result: RegisterUser.V1.Result.Accepted = RegisterUser.V1.Result.Accepted(User.WithPendingRegistration(id = newId.ulid()))
             return result as RESULT
         }

@@ -5,6 +5,7 @@ dependencies {
     implementation(projects.chassisLoggingStandardSlf4jConfiguration)
 
     testImplementation(projects.chassisExampleServiceWriteEndpointConfiguration)
+    testImplementation(projects.chassisCorrelationCoreTestUtils)
     testImplementation(projects.chassisDddTestUtils)
     testImplementation(projects.chassisCoreTestUtils)
     testImplementation(projects.chassisTestUtils)

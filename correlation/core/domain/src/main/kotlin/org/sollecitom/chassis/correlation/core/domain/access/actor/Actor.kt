@@ -4,11 +4,11 @@ import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 
-sealed interface Actor<out ID : Id<ID>, out AUTHENTICATION : Authentication> {
+sealed interface Actor<out ID : Id<ID>> {
 
     val account: Account<ID>
     val benefitingAccount: Account<ID>
-    val authentication: AUTHENTICATION
+    val authentication: Authentication
 
     sealed interface Account<out ID : Id<ID>> {
         val id: ID
