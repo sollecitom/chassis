@@ -14,7 +14,7 @@ sealed interface Access<out ID : Id<ID>, out AUTHENTICATION : Authentication> {
 
     fun authenticatedOrNull(): Authenticated<ID, AUTHENTICATION>? = takeIf(Access<ID, AUTHENTICATION>::isAuthenticated)?.let { it as Authenticated<ID, AUTHENTICATION> }
 
-    data class Unauthenticated<out ID : Id<ID>, out AUTHENTICATION : Authentication>(override val origin: Origin, override val authorization: AuthorizationPrincipal) : Access<ID, AUTHENTICATION> {
+    data class Unauthenticated(override val origin: Origin, override val authorization: AuthorizationPrincipal) : Access<Nothing, Nothing> {
 
         override val isAuthenticated: Boolean
             get() = false
