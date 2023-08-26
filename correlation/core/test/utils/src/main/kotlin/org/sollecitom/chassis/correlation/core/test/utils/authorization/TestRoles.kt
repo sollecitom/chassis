@@ -10,5 +10,6 @@ object TestRoles {
     val user = "user".let(::Name).let(::Role)
     val projectAdmin = "project-admin".let(::Name).let(::Role)
 
-    val default = Roles(setOf(user))
+    val default = Roles(values = setOf(user))
+    val none = Roles(values = emptySet())
 }

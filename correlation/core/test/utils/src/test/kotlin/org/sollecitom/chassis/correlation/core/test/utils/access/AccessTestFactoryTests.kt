@@ -15,8 +15,10 @@ import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.access.authenticatedOrFailure
 import org.sollecitom.chassis.correlation.core.domain.access.authenticatedOrThrow
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
+import org.sollecitom.chassis.correlation.core.domain.authorization.AuthorizationPrincipal
 import org.sollecitom.chassis.correlation.core.domain.origin.Origin
 import org.sollecitom.chassis.correlation.core.test.utils.access.actor.direct
+import org.sollecitom.chassis.correlation.core.test.utils.authorization.create
 import org.sollecitom.chassis.correlation.core.test.utils.origin.create
 import org.sollecitom.chassis.test.utils.assertions.failedThrowing
 import org.sollecitom.chassis.test.utils.assertions.succeededWithResult
@@ -28,15 +30,17 @@ private class AccessExampleTests : WithCoreGenerators by WithCoreGenerators.test
     inner class Authenticated {
 
         @Test
-        fun `with given actor and origin`() {
+        fun `with given arguments`() {
 
             val origin = Origin.create()
             val actor = Actor.direct()
+            val authorization = AuthorizationPrincipal.create()
 
-            val access = Access.authenticated(actor, origin)
+            val access = Access.authenticated(actor, origin, authorization)
 
             assertThat(access.actor).isEqualTo(actor)
             assertThat(access.origin).isEqualTo(origin)
+            assertThat(access.authorization).isEqualTo(authorization)
         }
 
         @Test
@@ -82,11 +86,12 @@ private class AccessExampleTests : WithCoreGenerators by WithCoreGenerators.test
     inner class Unauthenticated {
 
         @Test
-        fun `with default test origin`() {
+        fun `with default arguments`() {
 
             val access = Access.unauthenticated()
 
             assertThat(access.origin.ipAddress).isEqualTo(IpAddress.V4.localhost)
+            assertThat(access.authorization.roles).isEmpty()
         }
 
         @Test
@@ -97,6 +102,16 @@ private class AccessExampleTests : WithCoreGenerators by WithCoreGenerators.test
             val access = Access.unauthenticated(origin = origin)
 
             assertThat(access.origin).isEqualTo(origin)
+        }
+
+        @Test
+        fun `with given authorization`() {
+
+            val authorization = AuthorizationPrincipal.create()
+
+            val access = Access.unauthenticated(authorization = authorization)
+
+            assertThat(access.authorization).isEqualTo(authorization)
         }
 
         @Test
