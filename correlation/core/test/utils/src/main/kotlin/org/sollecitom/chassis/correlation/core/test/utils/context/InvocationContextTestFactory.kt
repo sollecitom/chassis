@@ -24,7 +24,27 @@ fun InvocationContext.Companion.create(
     timeNow: Instant = clock.now(),
     access: (Instant) -> Access<ULID, Authentication> = { Access.authenticated() },
     trace: (Instant) -> Trace<ULID> = { Trace.create(timeNow = timeNow) },
-): InvocationContext<ULID, Authentication, ULID> {
+): InvocationContext<Access<ULID, Authentication>, ULID, Authentication, ULID> {
+
+    return InvocationContext(access = access(timeNow), trace = trace(timeNow))
+}
+
+context(WithCoreGenerators)
+fun InvocationContext.Companion.authenticated(
+    timeNow: Instant = clock.now(),
+    access: (Instant) -> Access.Authenticated<ULID, Authentication> = { Access.authenticated() },
+    trace: (Instant) -> Trace<ULID> = { Trace.create(timeNow = timeNow) },
+): InvocationContext<Access.Authenticated<ULID, Authentication>, ULID, Authentication, ULID> {
+
+    return InvocationContext(access = access(timeNow), trace = trace(timeNow))
+}
+
+context(WithCoreGenerators)
+fun InvocationContext.Companion.unauthenticated(
+    timeNow: Instant = clock.now(),
+    access: (Instant) -> Access.Unauthenticated = { Access.unauthenticated() },
+    trace: (Instant) -> Trace<ULID> = { Trace.create(timeNow = timeNow) },
+): InvocationContext<Access.Unauthenticated, ULID, Authentication, ULID> {
 
     return InvocationContext(access = access(timeNow), trace = trace(timeNow))
 }
@@ -37,7 +57,7 @@ fun InvocationContext.Companion.create(
     actor: (Instant) -> Actor<ULID, Authentication> = { Actor.direct() },
     origin: Origin = Origin.create(),
     trace: (Instant) -> Trace<ULID> = { Trace.create(timeNow = timeNow) },
-): InvocationContext<ULID, Authentication, ULID> {
+): InvocationContext<Access<ULID, Authentication>, ULID, Authentication, ULID> {
 
     val authorization = AuthorizationPrincipal.create(roles)
     val access = when {
