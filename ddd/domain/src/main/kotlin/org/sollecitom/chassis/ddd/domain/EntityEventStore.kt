@@ -1,11 +1,11 @@
 package org.sollecitom.chassis.ddd.domain
 
 import kotlinx.coroutines.flow.Flow
-import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
+import org.sollecitom.chassis.core.domain.identity.Id
 
 interface EntityEventStore {
 
-    val entityId: SortableTimestampedUniqueIdentifier<*>
+    val entityId: Id<*>
 
     val stream: Flow<EntityEvent>
 

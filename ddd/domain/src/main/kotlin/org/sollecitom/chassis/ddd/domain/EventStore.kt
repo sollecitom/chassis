@@ -1,7 +1,7 @@
 package org.sollecitom.chassis.ddd.domain
 
 import kotlinx.coroutines.flow.Flow
-import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
+import org.sollecitom.chassis.core.domain.identity.Id
 
 interface EventStore {
 
@@ -9,12 +9,12 @@ interface EventStore {
 
     fun history(): Flow<Event>
 
-    fun forEntity(entityId: SortableTimestampedUniqueIdentifier<*>): EntityEventStore
+    fun forEntity(entityId: Id<*>): EntityEventStore
 
     interface Mutable : EventStore {
 
         suspend fun publish(event: Event)
 
-        override fun forEntity(entityId: SortableTimestampedUniqueIdentifier<*>): EntityEventStore.Mutable
+        override fun forEntity(entityId: Id<*>): EntityEventStore.Mutable
     }
 }
