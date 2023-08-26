@@ -22,7 +22,7 @@ sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT> {
 
         override fun toString() = "RegisterUser(emailAddress=${emailAddress.value}, type=${type.id.value}, version=${version.value})"
 
-        object Type : Command.Type { // TODO turn into a class instance instead?
+        object Type : Command.Type {
             override val version = 1.let(::IntVersion)
             override val id = typeName
         }
