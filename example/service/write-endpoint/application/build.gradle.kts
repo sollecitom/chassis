@@ -1,5 +1,6 @@
 dependencies {
     api(projects.chassisExampleServiceWriteEndpointDomain)
+    api(projects.chassisDddApplication)
 
     implementation(projects.chassisKotlinExtensions)
     implementation(projects.chassisLoggingStandardSlf4jConfiguration)

@@ -20,7 +20,7 @@ import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 import org.sollecitom.chassis.core.domain.networking.SpecifiedPort
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.endpoints.RegisterUserCommandsEndpoint
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.endpoints.UnknownCommandsEndpoint
-import org.sollecitom.chassis.example.service.endpoint.write.application.Application
+import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.http4k.server.utils.SuspendingHttpHandler
 import org.sollecitom.chassis.http4k.server.utils.asBlockingHandler
 import org.sollecitom.chassis.http4k.utils.lens.AddContentLength

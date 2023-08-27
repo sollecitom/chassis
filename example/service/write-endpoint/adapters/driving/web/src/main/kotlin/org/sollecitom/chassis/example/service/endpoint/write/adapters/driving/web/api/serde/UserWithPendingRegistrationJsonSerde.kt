@@ -2,20 +2,20 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.w
 
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.ulid.ULID
-import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
+import org.sollecitom.chassis.example.service.endpoint.write.application.user.UserWithPendingRegistration
 import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
-val User.WithPendingRegistration.Companion.serde: JsonSerde<User.WithPendingRegistration> get() = UserWithPendingRegistrationJsonSerde
+val UserWithPendingRegistration.Companion.serde: JsonSerde<UserWithPendingRegistration> get() = UserWithPendingRegistrationJsonSerde
 
-private object UserWithPendingRegistrationJsonSerde : JsonSerde<User.WithPendingRegistration> {
+private object UserWithPendingRegistrationJsonSerde : JsonSerde<UserWithPendingRegistration> {
 
-    override fun serialize(value: User.WithPendingRegistration): JSONObject = JSONObject().put(Fields.ID, value.id.stringValue)
+    override fun serialize(value: UserWithPendingRegistration): JSONObject = JSONObject().put(Fields.ID, value.id.stringValue)
 
-    override fun deserialize(json: JSONObject): User.WithPendingRegistration {
+    override fun deserialize(json: JSONObject): UserWithPendingRegistration {
 
         val id = json.getRequiredString(Fields.ID).let(ULID::invoke)
-        return User.WithPendingRegistration(id)
+        return UserWithPendingRegistration(id)
     }
 
     private object Fields {

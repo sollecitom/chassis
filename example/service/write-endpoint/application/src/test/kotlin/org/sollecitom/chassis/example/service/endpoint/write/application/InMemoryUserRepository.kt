@@ -6,17 +6,15 @@ import kotlinx.coroutines.sync.withLock
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
-import org.sollecitom.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.EntityEventStore
 import org.sollecitom.chassis.ddd.domain.EventStore
-import org.sollecitom.chassis.ddd.domain.toEventContext
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserAlreadyRegisteredException
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRepository
 
+// TODO remove events from here, and pass a source of events instead
 class InMemoryUserRepository(private val events: EventStore.Mutable, private val coreGenerators: WithCoreGenerators) : UserRepository, WithCoreGenerators by coreGenerators {
 
     private val userByEmail = mutableMapOf<EmailAddress, User>()
@@ -39,17 +37,18 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
             require(events.entityId == id) { "The entity ID for the entity-specific event store '${events.entityId}' doesn't match the entity ID of the user '$id'" }
         }
 
-        override suspend fun submitRegistrationRequest(context: InvocationContext<Access.Unauthenticated>) = mutex.withLock {
+        override suspend fun submitRegistrationRequest() = mutex.withLock {
 
             ensureRegistrationWasNotAlreadySubmitted()
-            val event = registrationRequestWasSubmitted(context)
-            publish(event)
+            val event = registrationRequestWasSubmitted()
+            publish(event) // TODO remove this
+            event
         }
 
-        private fun registrationRequestWasSubmitted(context: InvocationContext<Access.Unauthenticated>): UserRegistrationRequestWasSubmitted.V1 {
+        private fun registrationRequestWasSubmitted(): UserRegistrationRequestWasSubmitted.V1 {
 
             val now = clock.now()
-            return UserRegistrationRequestWasSubmitted.V1(emailAddress = emailAddress, userId = id, id = newId.ulid(now), timestamp = now, context = context.toEventContext())
+            return UserRegistrationRequestWasSubmitted.V1(emailAddress = emailAddress, userId = id, id = newId.ulid(now), timestamp = now)
         }
 
         private suspend fun ensureRegistrationWasNotAlreadySubmitted() {

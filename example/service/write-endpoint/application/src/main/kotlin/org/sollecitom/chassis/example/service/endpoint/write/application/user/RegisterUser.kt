@@ -6,7 +6,7 @@ import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.ddd.domain.Command
-import org.sollecitom.chassis.example.service.endpoint.write.application.ApplicationCommand
+import org.sollecitom.chassis.ddd.application.ApplicationCommand
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 
 sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT, Access.Unauthenticated> {
@@ -30,7 +30,7 @@ sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT, Access.Unauth
 
         sealed interface Result {
 
-            data class Accepted(val user: User.WithPendingRegistration) : Result {
+            data class Accepted(val user: UserWithPendingRegistration) : Result {
 
                 companion object
             }

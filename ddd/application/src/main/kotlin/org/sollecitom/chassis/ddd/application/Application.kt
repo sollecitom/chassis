@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.service.endpoint.write.application
+package org.sollecitom.chassis.ddd.application
 
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext

@@ -3,6 +3,7 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.w
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
+import org.sollecitom.chassis.example.service.endpoint.write.application.user.UserWithPendingRegistration
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.getRequiredString
@@ -35,12 +36,12 @@ private object RegisterUserCommandSerde {
 
                 override fun serialize(value: RegisterUser.V1.Result.Accepted) = JSONObject().apply {
 
-                    setValue(Fields.USER, value.user, User.WithPendingRegistration.serde)
+                    setValue(Fields.USER, value.user, UserWithPendingRegistration.serde)
                 }
 
                 override fun deserialize(json: JSONObject): RegisterUser.V1.Result.Accepted {
 
-                    val user = json.getValue(Fields.USER, User.WithPendingRegistration.serde)
+                    val user = json.getValue(Fields.USER, UserWithPendingRegistration.serde)
                     return RegisterUser.V1.Result.Accepted(user)
                 }
 

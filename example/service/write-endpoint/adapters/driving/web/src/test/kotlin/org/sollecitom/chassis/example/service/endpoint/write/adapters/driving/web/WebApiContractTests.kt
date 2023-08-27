@@ -16,15 +16,15 @@ import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import org.sollecitom.chassis.ddd.application.Application
+import org.sollecitom.chassis.ddd.application.ApplicationCommand
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.WebAPI
-import org.sollecitom.chassis.example.service.endpoint.write.application.Application
-import org.sollecitom.chassis.example.service.endpoint.write.application.ApplicationCommand
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
+import org.sollecitom.chassis.example.service.endpoint.write.application.user.UserWithPendingRegistration
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.ApplicationProperties
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.configureLogging
-import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.contentLength
 import org.sollecitom.chassis.http4k.utils.lens.contentType
@@ -50,7 +50,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
     fun `submitting a register user command for an unregistered user`() {
 
         val userId = newId.ulid()
-        val api = webApi { _, _ -> Accepted(user = User.WithPendingRegistration(userId)) }
+        val api = webApi { _, _ -> Accepted(user = UserWithPendingRegistration(userId)) }
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).ensureCompliantWithOpenApi()
@@ -150,7 +150,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
         }
     }
 
-    private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend (RegisterUser.V1, InvocationContext<Access>) -> RegisterUser.V1.Result = { _, _ -> Accepted(user = User.WithPendingRegistration(id = newId.ulid())) }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration)
+    private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend (RegisterUser.V1, InvocationContext<Access>) -> RegisterUser.V1.Result = { _, _ -> Accepted(user = UserWithPendingRegistration(id = newId.ulid())) }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration)
 
     private fun path(value: String) = "http://localhost:0/$value"
 
