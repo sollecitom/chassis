@@ -42,7 +42,7 @@ sealed class UserRegistrationRequestWasSubmitted(val emailAddress: EmailAddress,
         override fun toString() = "UserRegistrationRequestWasSubmitted.V1(emailAddress=$emailAddress, userId=$userId, id=$id, timestamp=$timestamp)"
 
         object Type : UserRegistrationRequestWasSubmitted.Type {
-            override val id get() = typeId
+            override val name get() = typeId
             override val version = 1.let(::IntVersion)
         }
     }

@@ -1,6 +1,8 @@
 package org.sollecitom.chassis.core.domain.traits
 
-interface Identifiable<ID> {
+import org.sollecitom.chassis.core.domain.identity.Id
 
-    val id: ID
+interface Identifiable {
+
+    val id: Id
 }

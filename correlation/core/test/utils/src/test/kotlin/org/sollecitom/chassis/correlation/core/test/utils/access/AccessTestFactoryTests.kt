@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
-import org.sollecitom.chassis.core.domain.identity.ulid.ULID
 import org.sollecitom.chassis.core.domain.networking.IpAddress
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
@@ -15,7 +13,6 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.access.authenticatedOrFailure
 import org.sollecitom.chassis.correlation.core.domain.access.authenticatedOrThrow
-import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
 import org.sollecitom.chassis.correlation.core.domain.authorization.AuthorizationPrincipal
 import org.sollecitom.chassis.correlation.core.domain.origin.Origin
 import org.sollecitom.chassis.correlation.core.test.utils.access.actor.direct
@@ -47,7 +44,7 @@ private class AccessExampleTests : WithCoreGenerators by WithCoreGenerators.test
         @Test
         fun `returns correctly whether it's authenticated`() {
 
-            val access: Access<SortableTimestampedUniqueIdentifier<*>> = Access.authenticated()
+            val access: Access = Access.authenticated()
 
             assertThat(access.isAuthenticated).isEqualTo(true)
         }
@@ -55,7 +52,7 @@ private class AccessExampleTests : WithCoreGenerators by WithCoreGenerators.test
         @Test
         fun `fluent handling`() {
 
-            val access: Access<SortableTimestampedUniqueIdentifier<*>> = Access.authenticated()
+            val access: Access = Access.authenticated()
 
             val authenticated = access.authenticatedOrNull()
 
@@ -65,7 +62,7 @@ private class AccessExampleTests : WithCoreGenerators by WithCoreGenerators.test
         @Test
         fun `fluent handling with error`() {
 
-            val access: Access<SortableTimestampedUniqueIdentifier<*>> = Access.authenticated()
+            val access: Access = Access.authenticated()
 
             val attempt = runCatching { access.authenticatedOrThrow() }
 
@@ -75,7 +72,7 @@ private class AccessExampleTests : WithCoreGenerators by WithCoreGenerators.test
         @Test
         fun `fluent handling with result`() {
 
-            val access: Access<SortableTimestampedUniqueIdentifier<*>> = Access.authenticated()
+            val access: Access = Access.authenticated()
 
             val result = access.authenticatedOrFailure()
 
@@ -118,7 +115,7 @@ private class AccessExampleTests : WithCoreGenerators by WithCoreGenerators.test
         @Test
         fun `returns correctly whether it's authenticated`() {
 
-            val access: Access<ULID> = Access.unauthenticated()
+            val access: Access = Access.unauthenticated()
 
             assertThat(access.isAuthenticated).isEqualTo(false)
         }
@@ -126,7 +123,7 @@ private class AccessExampleTests : WithCoreGenerators by WithCoreGenerators.test
         @Test
         fun `fluent handling`() {
 
-            val access: Access<ULID> = Access.unauthenticated()
+            val access: Access = Access.unauthenticated()
 
             val authenticated = access.authenticatedOrNull()
 
@@ -136,7 +133,7 @@ private class AccessExampleTests : WithCoreGenerators by WithCoreGenerators.test
         @Test
         fun `fluent handling with error`() {
 
-            val access: Access<ULID> = Access.unauthenticated()
+            val access: Access = Access.unauthenticated()
 
             val attempt = runCatching { access.authenticatedOrThrow() }
 
@@ -146,7 +143,7 @@ private class AccessExampleTests : WithCoreGenerators by WithCoreGenerators.test
         @Test
         fun `fluent handling with result`() {
 
-            val access: Access<ULID> = Access.unauthenticated()
+            val access: Access = Access.unauthenticated()
 
             val result = access.authenticatedOrFailure()
 

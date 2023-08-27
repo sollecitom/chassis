@@ -1,10 +1,10 @@
 package org.sollecitom.chassis.logger.core
 
-import org.sollecitom.chassis.logger.core.implementation.ImmutableLoggingContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.slf4j.MDCContext
 import kotlinx.coroutines.withContext
 import org.slf4j.MDC
+import org.sollecitom.chassis.logger.core.implementation.ImmutableLoggingContext
 
 suspend inline fun <T> withCoroutineLoggingContext(map: Map<String, String?>, restorePrevious: Boolean = true, noinline body: suspend CoroutineScope.() -> T): T = withLoggingContext(map, restorePrevious) { withContext(MDCContext(), body) }
 

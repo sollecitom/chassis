@@ -6,7 +6,6 @@ import com.atlassian.oai.validator.model.Response
 import com.atlassian.oai.validator.report.ValidationReport
 import com.github.erosb.jsonsKema.Schema
 import com.github.erosb.jsonsKema.ValidationFailure
-import io.swagger.v3.oas.models.media.Content
 import io.swagger.v3.oas.models.responses.ApiResponse
 import org.http4k.core.ContentType
 import org.json.JSONArray

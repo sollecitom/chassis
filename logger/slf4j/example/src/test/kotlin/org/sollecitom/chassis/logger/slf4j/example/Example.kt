@@ -1,10 +1,13 @@
 package org.sollecitom.chassis.logger.slf4j.example
 
 import kotlinx.coroutines.runBlocking
-import org.sollecitom.chassis.logger.core.*
+import org.sollecitom.chassis.logger.core.JvmLoggerFactory
 import org.sollecitom.chassis.logger.core.LoggingLevel.*
 import org.sollecitom.chassis.logger.core.appender.PrintStreamAppender
 import org.sollecitom.chassis.logger.core.defaults.DefaultFormatToString
+import org.sollecitom.chassis.logger.core.loggingFunction
+import org.sollecitom.chassis.logger.core.loggingLevelEnabler
+import org.sollecitom.chassis.logger.core.withCoroutineLoggingContext
 
 fun main(): Unit = runBlocking {
 

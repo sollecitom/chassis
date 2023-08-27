@@ -7,7 +7,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.openapi.builder.*
 import org.sollecitom.chassis.openapi.checking.checker.checkAgainstRules
 import org.sollecitom.chassis.openapi.checking.checker.rules.LowercasePathNameRule
-import org.sollecitom.chassis.openapi.checking.test.utils.*
+import org.sollecitom.chassis.openapi.checking.test.utils.isNotCompliantWithOnlyViolation
 
 @TestInstance(PER_CLASS)
 private class CheckingSwaggerAgainstRulesExampleTest {

@@ -13,7 +13,10 @@ import org.sollecitom.chassis.openapi.checking.checker.rules.*
 import org.sollecitom.chassis.openapi.checking.checker.rules.field.MandatorySuffixTextFieldRule
 import org.sollecitom.chassis.openapi.checking.checker.sets.StandardOpenApiRules
 import org.sollecitom.chassis.openapi.checking.checker.sets.checkAgainstRules
-import org.sollecitom.chassis.openapi.checking.test.utils.*
+import org.sollecitom.chassis.openapi.checking.test.utils.hasSingleFieldViolation
+import org.sollecitom.chassis.openapi.checking.test.utils.isCompliant
+import org.sollecitom.chassis.openapi.checking.test.utils.isNotCompliantWithOnlyViolation
+import org.sollecitom.chassis.openapi.checking.test.utils.isNotCompliantWithViolation
 
 interface MethodTestSpecification : TracingHeadersTestSpecification {
 

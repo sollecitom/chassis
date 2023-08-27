@@ -24,8 +24,6 @@ import org.sollecitom.chassis.example.service.endpoint.write.application.Applica
 import org.sollecitom.chassis.http4k.server.utils.SuspendingHttpHandler
 import org.sollecitom.chassis.http4k.server.utils.asBlockingHandler
 import org.sollecitom.chassis.http4k.utils.lens.AddContentLength
-import org.sollecitom.chassis.http4k.utils.lens.HttpHeaders
-import org.sollecitom.chassis.http4k.utils.lens.replaceHeader
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 
 // TODO maybe turn this into a module?

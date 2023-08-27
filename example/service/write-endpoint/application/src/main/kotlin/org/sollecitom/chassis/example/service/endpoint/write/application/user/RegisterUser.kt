@@ -1,7 +1,7 @@
 package org.sollecitom.chassis.example.service.endpoint.write.application.user
 
 import org.sollecitom.chassis.core.domain.email.EmailAddress
-import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
+import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.correlation.core.domain.access.Access
@@ -21,11 +21,11 @@ sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT, Access.Unauth
 
         override val type: Command.Type get() = Type
 
-        override fun toString() = "RegisterUser(emailAddress=${emailAddress.value}, type=${type.id.value}, version=${version.value})"
+        override fun toString() = "RegisterUser(emailAddress=${emailAddress.value}, type=${type.name.value}, version=${version.value})"
 
         object Type : Command.Type {
             override val version = 1.let(::IntVersion)
-            override val id = typeName
+            override val name = typeName
         }
 
         sealed interface Result {
@@ -37,7 +37,7 @@ sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT, Access.Unauth
 
             sealed interface Rejected : Result {
 
-                data class EmailAddressAlreadyInUse(val userId: SortableTimestampedUniqueIdentifier<*>) : Rejected
+                data class EmailAddressAlreadyInUse(val userId: Id) : Rejected
             }
         }
 

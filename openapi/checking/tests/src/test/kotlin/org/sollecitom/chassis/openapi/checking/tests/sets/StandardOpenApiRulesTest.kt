@@ -20,7 +20,8 @@ import org.sollecitom.chassis.openapi.checking.checker.model.ParameterLocation
 import org.sollecitom.chassis.openapi.checking.checker.rules.*
 import org.sollecitom.chassis.openapi.checking.checker.sets.StandardOpenApiRules
 import org.sollecitom.chassis.openapi.checking.checker.sets.checkAgainstRules
-import org.sollecitom.chassis.openapi.checking.test.utils.*
+import org.sollecitom.chassis.openapi.checking.test.utils.isCompliant
+import org.sollecitom.chassis.openapi.checking.test.utils.isNotCompliantWithOnlyViolation
 
 @TestInstance(PER_CLASS)
 private class StandardOpenApiRulesTest : OpenApiTestSpecification {

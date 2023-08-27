@@ -1,12 +1,12 @@
 package org.sollecitom.chassis.logger.slf4j.provider
 
-import org.sollecitom.chassis.logger.slf4j.adapter.Slf4jLoggerFactory
-import org.sollecitom.chassis.logger.slf4j.adapter.Slf4jMDCAdapter
 import org.slf4j.ILoggerFactory
 import org.slf4j.IMarkerFactory
 import org.slf4j.helpers.BasicMarkerFactory
 import org.slf4j.spi.MDCAdapter
 import org.slf4j.spi.SLF4JServiceProvider
+import org.sollecitom.chassis.logger.slf4j.adapter.Slf4jLoggerFactory
+import org.sollecitom.chassis.logger.slf4j.adapter.Slf4jMDCAdapter
 
 class KLogSlf4jServiceProvider : SLF4JServiceProvider {
 

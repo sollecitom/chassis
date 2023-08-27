@@ -24,9 +24,9 @@ class InMemoryEventStore : EventStore.Mutable {
 
     override val stream: Flow<Event> get() = _stream
 
-    override fun forEntity(entityId: Id<*>): EntityEventStore.Mutable = EntityEventStoreView(entityId)
+    override fun forEntity(entityId: Id): EntityEventStore.Mutable = EntityEventStoreView(entityId)
 
-    private inner class EntityEventStoreView(override val entityId: Id<*>) : EntityEventStore.Mutable {
+    private inner class EntityEventStoreView(override val entityId: Id) : EntityEventStore.Mutable {
 
         override suspend fun publish(event: EntityEvent) {
 
@@ -38,7 +38,7 @@ class InMemoryEventStore : EventStore.Mutable {
 
         override val stream = this@InMemoryEventStore.stream.forEntity(entityId)
 
-        private fun Flow<Event>.forEntity(entityId: Id<*>): Flow<EntityEvent> = filterIsInstance<EntityEvent>().filter { it.entityId == entityId }
-        private fun EntityEvent.isForEntity(entityId: Id<*>): Boolean = this.entityId == entityId
+        private fun Flow<Event>.forEntity(entityId: Id): Flow<EntityEvent> = filterIsInstance<EntityEvent>().filter { it.entityId == entityId }
+        private fun EntityEvent.isForEntity(entityId: Id): Boolean = this.entityId == entityId
     }
 }

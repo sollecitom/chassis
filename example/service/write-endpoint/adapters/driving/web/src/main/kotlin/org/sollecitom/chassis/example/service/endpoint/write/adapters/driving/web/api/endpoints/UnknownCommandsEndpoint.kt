@@ -2,7 +2,6 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.w
 
 import org.http4k.core.Method
 import org.http4k.core.Response
-import org.http4k.core.Status
 import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.lens.Path
 import org.http4k.lens.int
@@ -29,7 +28,7 @@ internal class UnknownCommandsEndpoint : Endpoint {
 
         val commandType = commandType(request)
         logger.debug { "Received unknown command with type $commandType" }
-        Response(BAD_REQUEST.description("Unknown command type with name: ${commandType.id.value} and version: ${commandType.version.value}"))
+        Response(BAD_REQUEST.description("Unknown command type with name: ${commandType.name.value} and version: ${commandType.version.value}"))
     }
 
     companion object : Loggable() {

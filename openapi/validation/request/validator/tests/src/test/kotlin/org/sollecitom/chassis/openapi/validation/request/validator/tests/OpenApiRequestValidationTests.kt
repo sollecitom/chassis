@@ -1,12 +1,8 @@
 package org.sollecitom.chassis.openapi.validation.request.validator.tests
 
-import assertk.Assert
 import assertk.assertThat
-import assertk.assertions.isFalse
 import com.atlassian.oai.validator.OpenApiInteractionValidator
 import com.atlassian.oai.validator.model.SimpleRequest
-import com.atlassian.oai.validator.report.SimpleValidationReportFormat
-import com.atlassian.oai.validator.report.ValidationReport
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS

@@ -5,7 +5,7 @@ import org.sollecitom.chassis.core.domain.identity.Id
 
 interface EntityEventStore {
 
-    val entityId: Id<*>
+    val entityId: Id
 
     val stream: Flow<EntityEvent>
 

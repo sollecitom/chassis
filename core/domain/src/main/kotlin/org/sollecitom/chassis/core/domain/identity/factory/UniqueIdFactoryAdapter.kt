@@ -3,6 +3,7 @@ package org.sollecitom.chassis.core.domain.identity.factory
 import com.github.f4b6a3.ulid.UlidFactory
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.identity.StringId
 import org.sollecitom.chassis.core.domain.identity.ulid.ULID
 import org.sollecitom.chassis.core.domain.identity.ulid.ULIDFactory
@@ -12,7 +13,7 @@ import kotlin.random.asJavaRandom
 private class UniqueIdFactoryAdapter(random: Random = Random, clock: Clock = Clock.System) : UniqueIdFactory {
 
     override val ulid: ULIDFactory = UlidFactoryAdapter(random, clock)
-    override val string: UniqueIdentifierFactory<StringId> = StringFactoryAdapter(random) { ulid().stringValue }
+    override val string: UniqueIdentifierFactory<Id> = StringFactoryAdapter(random) { ulid().stringValue }
 
     private class UlidFactoryAdapter(random: Random, clock: Clock) : ULIDFactory {
 

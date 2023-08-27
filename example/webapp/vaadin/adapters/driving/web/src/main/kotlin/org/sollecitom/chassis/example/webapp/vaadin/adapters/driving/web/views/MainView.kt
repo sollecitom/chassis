@@ -9,7 +9,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.textfield.EmailField
 import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.router.Route
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 

@@ -1,15 +1,14 @@
 package org.sollecitom.chassis.correlation.core.domain.access.actor
 
-import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
 
-data class ImpersonatingActor<out ID : Id<ID>>(val impersonator: Actor.Account<ID>, val impersonated: Actor.Account<ID>, override val authentication: Authentication) : Actor<ID> {
+data class ImpersonatingActor(val impersonator: Actor.Account, val impersonated: Actor.Account, override val authentication: Authentication) : Actor {
 
-    override val account: Actor.Account<ID>
+    override val account: Actor.Account
         get() = impersonated
 
-    override val benefitingAccount: Actor.Account<ID>
+    override val benefitingAccount: Actor.Account
         get() = impersonated
 }
 
-fun <ID : Id<ID>> DirectActor<ID>.impersonating(impersonated: Actor.Account<ID>): ImpersonatingActor<ID> = ImpersonatingActor(impersonator = this.account, authentication = this.authentication, impersonated = impersonated)
+fun DirectActor.impersonating(impersonated: Actor.Account): ImpersonatingActor = ImpersonatingActor(impersonator = this.account, authentication = this.authentication, impersonated = impersonated)

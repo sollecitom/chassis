@@ -10,7 +10,6 @@ import org.http4k.lens.BiDiBodyLens
 import org.http4k.lens.ContentNegotiation
 import org.http4k.routing.bind
 import org.http4k.routing.routes
-import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.ddd.domain.Command
@@ -27,7 +26,7 @@ sealed class RegisterUserCommandsEndpoint {
 
     class V1(private val handle: suspend (RegisterUser.V1, InvocationContext<Access.Unauthenticated>) -> RegisterUser.V1.Result) : Endpoint {
 
-        override val path = "/commands/${COMMAND_TYPE.id.value}/v${COMMAND_TYPE.version.value}"
+        override val path = "/commands/${COMMAND_TYPE.name.value}/v${COMMAND_TYPE.version.value}"
         override val methods = setOf(Method.POST)
 
         override val route = routes(
@@ -59,8 +58,8 @@ sealed class RegisterUserCommandsEndpoint {
             private val negotiator = ContentNegotiation.auto(commandJson)
             private val command = negotiator.toBodyLens()
             private val unauthenticatedContext: BiDiBodyLens<InvocationContext<Access.Unauthenticated>> = TODO("implement") // TODO move
-            private val authenticatedContext: BiDiBodyLens<InvocationContext<Access.Authenticated<SortableTimestampedUniqueIdentifier<*>>>> = TODO("implement") // TODO move
-            private val context: BiDiBodyLens<InvocationContext<Access<SortableTimestampedUniqueIdentifier<*>>>> = TODO("implement") // TODO move
+            private val authenticatedContext: BiDiBodyLens<InvocationContext<Access.Authenticated>> = TODO("implement") // TODO move
+            private val context: BiDiBodyLens<InvocationContext<Access>> = TODO("implement") // TODO move
         }
     }
 }

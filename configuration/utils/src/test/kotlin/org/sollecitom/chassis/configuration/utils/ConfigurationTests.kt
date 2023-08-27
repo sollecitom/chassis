@@ -8,7 +8,8 @@ import assertk.assertions.isInstanceOf
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
 import org.http4k.cloudnative.env.fromYaml
-import org.http4k.lens.*
+import org.http4k.lens.LensFailure
+import org.http4k.lens.port
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS

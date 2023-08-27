@@ -1,7 +1,6 @@
 package org.sollecitom.chassis.example.service.endpoint.write.application
 
 import org.sollecitom.chassis.core.domain.email.EmailAddress
-import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.context.unauthenticatedOrThrow
@@ -13,7 +12,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserAlr
 
 internal class DispatchingApplication(private val userWithEmailAddress: suspend (EmailAddress) -> User) : Application {
 
-    override suspend fun <RESULT, ACCESS : Access<SortableTimestampedUniqueIdentifier<*>>> invoke(command: ApplicationCommand<RESULT, ACCESS>, context: InvocationContext<ACCESS>) = when (command) {
+    override suspend fun <RESULT, ACCESS : Access> invoke(command: ApplicationCommand<RESULT, ACCESS>, context: InvocationContext<ACCESS>) = when (command) {
 
         is RegisterUser -> processRegisterUserCommand(command, context.unauthenticatedOrThrow()) // TODO add a test case
         else -> error("Unknown application command $command")

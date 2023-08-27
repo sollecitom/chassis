@@ -1,10 +1,10 @@
 package org.sollecitom.chassis.correlation.core.domain.access.session
 
-import org.sollecitom.chassis.core.domain.identity.StringId
+import org.sollecitom.chassis.core.domain.identity.Id
 
 interface Session {
 
-    val id: StringId
+    val id: Id
 
     companion object
 }

@@ -9,12 +9,12 @@ interface EventStore {
 
     fun history(): Flow<Event>
 
-    fun forEntity(entityId: Id<*>): EntityEventStore
+    fun forEntity(entityId: Id): EntityEventStore
 
     interface Mutable : EventStore {
 
         suspend fun publish(event: Event)
 
-        override fun forEntity(entityId: Id<*>): EntityEventStore.Mutable
+        override fun forEntity(entityId: Id): EntityEventStore.Mutable
     }
 }

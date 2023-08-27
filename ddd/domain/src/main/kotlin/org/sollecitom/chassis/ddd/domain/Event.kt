@@ -1,13 +1,13 @@
 package org.sollecitom.chassis.ddd.domain
 
 import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
+import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.traits.Identifiable
 import org.sollecitom.chassis.core.domain.traits.Timestamped
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
 
-interface Event : Happening, Identifiable<SortableTimestampedUniqueIdentifier<*>>, Timestamped {
+interface Event : Happening, Identifiable, Timestamped {
 
     val context: Context
     override val type: Type
@@ -20,7 +20,7 @@ interface Event : Happening, Identifiable<SortableTimestampedUniqueIdentifier<*>
         companion object
     }
 
-    data class Reference(override val id: SortableTimestampedUniqueIdentifier<*>, val type: Type, override val timestamp: Instant) : Timestamped, Identifiable<SortableTimestampedUniqueIdentifier<*>> {
+    data class Reference(override val id: Id, val type: Type, override val timestamp: Instant) : Timestamped, Identifiable {
 
         companion object
     }
@@ -30,7 +30,7 @@ interface Event : Happening, Identifiable<SortableTimestampedUniqueIdentifier<*>
         companion object
     }
 
-    fun forkContext(invocation: InvocationTrace<SortableTimestampedUniqueIdentifier<*>>): Context = Context(invocation = context.invocation.fork(invocation), parent = reference, originating = context.originating ?: reference)
+    fun forkContext(invocation: InvocationTrace): Context = Context(invocation = context.invocation.fork(invocation), parent = reference, originating = context.originating ?: reference)
 }
 
 fun InvocationContext<*>.toEventContext(parentEvent: Event.Reference? = null, originatingEvent: Event.Reference? = null): Event.Context = Event.Context(this, parentEvent, originatingEvent)

@@ -1,8 +1,8 @@
 package org.sollecitom.chassis.correlation.core.domain.trace
 
-import org.sollecitom.chassis.core.domain.identity.StringId
+import org.sollecitom.chassis.core.domain.identity.Id
 
-data class ExternalInvocationTrace(val invocationId: StringId, val actionId: StringId) {
+data class ExternalInvocationTrace(val invocationId: Id, val actionId: Id) {
 
     companion object
 }

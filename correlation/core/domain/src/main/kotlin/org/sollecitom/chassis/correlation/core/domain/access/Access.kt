@@ -1,21 +1,20 @@
 package org.sollecitom.chassis.correlation.core.domain.access
 
-import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.authorization.AuthorizationPrincipal
 import org.sollecitom.chassis.correlation.core.domain.origin.Origin
 
-sealed interface Access<out ID : Id<ID>> {
+sealed interface Access {
 
     val origin: Origin
     val authorization: AuthorizationPrincipal
     val isAuthenticated: Boolean
 
-    fun authenticatedOrNull(): Authenticated<ID>? = takeIf(Access<ID>::isAuthenticated)?.let { it as Authenticated<ID> }
+    fun authenticatedOrNull(): Authenticated? = takeIf(Access::isAuthenticated)?.let { it as Authenticated }
 
-    fun unauthenticatedOrNull(): Unauthenticated? = takeUnless(Access<ID>::isAuthenticated)?.let { it as Unauthenticated }
+    fun unauthenticatedOrNull(): Unauthenticated? = takeUnless(Access::isAuthenticated)?.let { it as Unauthenticated }
 
-    data class Unauthenticated(override val origin: Origin, override val authorization: AuthorizationPrincipal) : Access<Nothing> {
+    data class Unauthenticated(override val origin: Origin, override val authorization: AuthorizationPrincipal) : Access {
 
         override val isAuthenticated: Boolean
             get() = false
@@ -23,7 +22,7 @@ sealed interface Access<out ID : Id<ID>> {
         companion object
     }
 
-    data class Authenticated<out ID : Id<ID>>(val actor: Actor<ID>, override val origin: Origin, override val authorization: AuthorizationPrincipal) : Access<ID> {
+    data class Authenticated(val actor: Actor, override val origin: Origin, override val authorization: AuthorizationPrincipal) : Access {
 
         override val isAuthenticated: Boolean
             get() = true
@@ -34,10 +33,10 @@ sealed interface Access<out ID : Id<ID>> {
     companion object
 }
 
-fun <ID : Id<ID>> Access<ID>.authenticatedOrThrow(): Access.Authenticated<ID> = authenticatedOrNull() ?: error("Access is unauthenticated")
+fun Access.authenticatedOrThrow(): Access.Authenticated = authenticatedOrNull() ?: error("Access is unauthenticated")
 
-fun <ID : Id<ID>> Access<ID>.unauthenticatedOrThrow(): Access.Unauthenticated = unauthenticatedOrNull() ?: error("Access is authenticated")
+fun Access.unauthenticatedOrThrow(): Access.Unauthenticated = unauthenticatedOrNull() ?: error("Access is authenticated")
 
-fun <ID : Id<ID>> Access<ID>.authenticatedOrFailure(): Result<Access.Authenticated<ID>> = runCatching { authenticatedOrThrow() }
+fun Access.authenticatedOrFailure(): Result<Access.Authenticated> = runCatching { authenticatedOrThrow() }
 
-fun <ID : Id<ID>> Access<ID>.unauthenticatedOrFailure(): Result<Access.Unauthenticated> = runCatching { unauthenticatedOrThrow() }
+fun Access.unauthenticatedOrFailure(): Result<Access.Unauthenticated> = runCatching { unauthenticatedOrThrow() }

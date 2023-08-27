@@ -5,7 +5,7 @@ import org.sollecitom.chassis.core.domain.naming.Name
 
 interface EntityEvent : Event {
 
-    val entityId: Id<*>
+    val entityId: Id
     val entityType: Name
 
     override val type: Type

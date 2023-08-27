@@ -2,7 +2,7 @@ package org.sollecitom.chassis.core.domain.identity.factory
 
 import org.sollecitom.chassis.core.domain.identity.Id
 
-interface UniqueIdentifierFactory<ID : Id<ID>> {
+interface UniqueIdentifierFactory<out ID : Id> {
 
     operator fun invoke(): ID
 

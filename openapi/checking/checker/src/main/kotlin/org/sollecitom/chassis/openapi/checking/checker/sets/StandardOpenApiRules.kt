@@ -2,7 +2,6 @@ package org.sollecitom.chassis.openapi.checking.checker.sets
 
 import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem.HttpMethod.*
-import io.swagger.v3.oas.models.media.MediaType
 import org.sollecitom.chassis.kotlin.extensions.text.CharacterGroups.letters
 import org.sollecitom.chassis.kotlin.extensions.text.CharacterGroups.lowercaseCaseLetters
 import org.sollecitom.chassis.openapi.checking.checker.model.OpenApiField

@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.test.utils.access
 
-import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
@@ -18,7 +17,7 @@ context(WithCoreGenerators)
 fun Access.Unauthenticated.Companion.create(origin: Origin = Origin.create(), authorization: AuthorizationPrincipal = AuthorizationPrincipal.withoutRoles()): Access.Unauthenticated = Access.Unauthenticated(origin, authorization)
 
 context(WithCoreGenerators)
-fun Access.Companion.authenticated(actor: Actor<SortableTimestampedUniqueIdentifier<*>> = Actor.direct(), origin: Origin = Origin.create(), authorization: AuthorizationPrincipal = AuthorizationPrincipal.create()): Access.Authenticated<SortableTimestampedUniqueIdentifier<*>> = Access.Authenticated(actor, origin, authorization)
+fun Access.Companion.authenticated(actor: Actor = Actor.direct(), origin: Origin = Origin.create(), authorization: AuthorizationPrincipal = AuthorizationPrincipal.create()): Access.Authenticated = Access.Authenticated(actor, origin, authorization)
 
 context(WithCoreGenerators)
-fun Access.Authenticated.Companion.authenticated(actor: Actor<SortableTimestampedUniqueIdentifier<*>> = Actor.direct(), origin: Origin = Origin.create(), authorization: AuthorizationPrincipal = AuthorizationPrincipal.create()): Access.Authenticated<SortableTimestampedUniqueIdentifier<*>> = Access.Authenticated(actor, origin, authorization)
+fun Access.Authenticated.Companion.authenticated(actor: Actor = Actor.direct(), origin: Origin = Origin.create(), authorization: AuthorizationPrincipal = AuthorizationPrincipal.create()): Access.Authenticated = Access.Authenticated(actor, origin, authorization)

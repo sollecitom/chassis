@@ -1,17 +1,15 @@
 package org.sollecitom.chassis.correlation.core.domain.trace
 
 import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
 import kotlin.time.Duration
 
-data class Trace<ID : Id<ID>>(val invocation: InvocationTrace<ID>, val parent: InvocationTrace<ID> = invocation, val originating: InvocationTrace<ID> = parent, val external: ExternalInvocationTrace) {
+data class Trace(val invocation: InvocationTrace, val parent: InvocationTrace = invocation, val originating: InvocationTrace = parent, val external: ExternalInvocationTrace) {
 
     init {
         require(invocation != originating || invocation == parent) { "If invocation == originating, then invocation == parent must also be true" }
     }
 
-    fun fork(invocation: InvocationTrace<ID>) = Trace(parent = this.invocation, invocation = invocation, originating = originating, external = this.external)
+    fun fork(invocation: InvocationTrace) = Trace(parent = this.invocation, invocation = invocation, originating = originating, external = this.external)
 
     val isOriginating: Boolean get() = invocation == originating
     val isParent: Boolean get() = invocation == parent
