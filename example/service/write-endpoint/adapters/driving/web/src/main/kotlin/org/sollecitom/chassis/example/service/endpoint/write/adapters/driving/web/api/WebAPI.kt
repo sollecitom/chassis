@@ -18,9 +18,9 @@ import org.http4k.server.JettyLoom
 import org.sollecitom.chassis.core.domain.lifecycle.Startable
 import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 import org.sollecitom.chassis.core.domain.networking.SpecifiedPort
+import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.endpoints.RegisterUserCommandsEndpoint
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.endpoints.UnknownCommandsEndpoint
-import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.http4k.server.utils.SuspendingHttpHandler
 import org.sollecitom.chassis.http4k.server.utils.asBlockingHandler
 import org.sollecitom.chassis.http4k.utils.lens.AddContentLength
@@ -49,7 +49,7 @@ class WebAPI(private val configuration: Configuration, application: Application)
 
     private fun mainApp(vararg endpoints: Endpoint): HttpHandler = requestFilters().then(routes(*endpoints.map(Endpoint::route).toTypedArray())).withFilter(GZip().then(ResponseFilters.AddContentLength))
 
-    private fun requestFilters(): Filter = CatchLensFailure.then(GunZip()).then(PrintRequestAndResponse().inIntelliJOnly())
+    private fun requestFilters(): Filter = CatchLensFailure.then(GunZip()).then(PrintRequestAndResponse().inIntelliJOnly()).then(InvocationContextFilter.AddState())
 
     private fun server(mainApp: SuspendingHttpHandler): Http4kK8sServer {
 
