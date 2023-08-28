@@ -8,6 +8,7 @@ import java.net.InetAddress
 sealed interface IpAddress { // TODO add tests :)
 
     val value: InetAddress
+    val stringValue: String get() = value.hostAddress
 
     @JvmInline
     value class V4(override val value: Inet4Address) : IpAddress {
