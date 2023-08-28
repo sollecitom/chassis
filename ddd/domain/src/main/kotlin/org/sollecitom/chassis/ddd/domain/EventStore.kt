@@ -2,7 +2,6 @@ package org.sollecitom.chassis.ddd.domain
 
 import kotlinx.coroutines.flow.Flow
 import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.naming.Name
 
 interface EventStore {
 
@@ -28,11 +27,6 @@ interface EventStore {
 
     interface Query<in EVENT : Event> {
 
-        val type: Name
-
-        object Unrestricted : Query<Event> {
-
-            override val type = "unrestricted-event-query".let(::Name)
-        }
+        data object Unrestricted : Query<Event>
     }
 }
