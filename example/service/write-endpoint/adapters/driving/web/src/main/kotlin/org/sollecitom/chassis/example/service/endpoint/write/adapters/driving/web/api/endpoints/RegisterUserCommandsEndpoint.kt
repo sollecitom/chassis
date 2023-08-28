@@ -6,7 +6,6 @@ import org.http4k.core.Response
 import org.http4k.core.Status
 import org.http4k.core.Status.Companion.UNPROCESSABLE_ENTITY
 import org.http4k.format.auto
-import org.http4k.lens.BiDiBodyLens
 import org.http4k.lens.ContentNegotiation
 import org.http4k.routing.bind
 import org.http4k.routing.routes
@@ -14,6 +13,7 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.Endpoint
+import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.InvocationContextFilter
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.serde.serde
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.http4k.server.utils.toSuspending
@@ -37,7 +37,7 @@ sealed class RegisterUserCommandsEndpoint {
 
             logger.debug { "Received command with type $COMMAND_TYPE" }
             val command = command(request)
-            val context = unauthenticatedContext(request)
+            val context = InvocationContextFilter.key.unauthenticated(request)
 
             val result = handle(command, context)
 
@@ -56,9 +56,6 @@ sealed class RegisterUserCommandsEndpoint {
             private val commandJson = Body.jsonObject().map(RegisterUser.V1.serde).toLens()
             private val negotiator = ContentNegotiation.auto(commandJson)
             private val command = negotiator.toBodyLens()
-            private val unauthenticatedContext: BiDiBodyLens<InvocationContext<Access.Unauthenticated>> = TODO("implement") // TODO move
-            private val authenticatedContext: BiDiBodyLens<InvocationContext<Access.Authenticated>> = TODO("implement") // TODO move
-            private val context: BiDiBodyLens<InvocationContext<Access>> = TODO("implement") // TODO move
         }
     }
 }

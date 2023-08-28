@@ -22,7 +22,7 @@ class Service(private val environment: Environment, private val coreGenerators: 
     constructor(environment: Environment) : this(environment, WithCoreGenerators.provider(environment))
 
     private val application: Application = application()
-    private val webAPI = webApi(application, environment)
+    private val webAPI = webApi(application, environment, coreGenerators)
 
     override val port: Int get() = webAPI.servicePort
     override val healthPort: Int get() = webAPI.healthPort
@@ -47,7 +47,7 @@ class Service(private val environment: Environment, private val coreGenerators: 
         }
     }
 
-    private fun webApi(application: Application, environment: Environment) = WebAPI(configuration = WebAPI.Configuration.from(environment), application = application)
+    private fun webApi(application: Application, environment: Environment, coreGenerators: WithCoreGenerators) = WebAPI(configuration = WebAPI.Configuration.from(environment), application = application, coreGenerators = coreGenerators)
 
     companion object : Loggable()
 }

@@ -3,14 +3,12 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.w
 import org.http4k.cloudnative.Http4kK8sServer
 import org.http4k.cloudnative.asK8sServer
 import org.http4k.cloudnative.health.Health
-import org.http4k.core.Filter
-import org.http4k.core.HttpHandler
-import org.http4k.core.Request
-import org.http4k.core.then
+import org.http4k.core.*
 import org.http4k.filter.DebuggingFilters.PrintRequestAndResponse
 import org.http4k.filter.RequestFilters.GunZip
 import org.http4k.filter.ResponseFilters
 import org.http4k.filter.ResponseFilters.GZip
+import org.http4k.filter.ServerFilters
 import org.http4k.filter.ServerFilters.CatchLensFailure
 import org.http4k.filter.inIntelliJOnly
 import org.http4k.routing.routes
@@ -18,6 +16,7 @@ import org.http4k.server.JettyLoom
 import org.sollecitom.chassis.core.domain.lifecycle.Startable
 import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 import org.sollecitom.chassis.core.domain.networking.SpecifiedPort
+import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.endpoints.RegisterUserCommandsEndpoint
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.endpoints.UnknownCommandsEndpoint
@@ -27,7 +26,7 @@ import org.sollecitom.chassis.http4k.utils.lens.AddContentLength
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 
 // TODO maybe turn this into a module?
-class WebAPI(private val configuration: Configuration, application: Application) : Startable, Stoppable, HttpHandler {
+class WebAPI(private val configuration: Configuration, application: Application, coreGenerators: WithCoreGenerators) : Startable, Stoppable, HttpHandler, WithCoreGenerators by coreGenerators {
 
     private val mainApp = mainApp(RegisterUserCommandsEndpoint.V1(application::invoke), UnknownCommandsEndpoint())
     private val server = server(mainApp)
@@ -49,7 +48,7 @@ class WebAPI(private val configuration: Configuration, application: Application)
 
     private fun mainApp(vararg endpoints: Endpoint): HttpHandler = requestFilters().then(routes(*endpoints.map(Endpoint::route).toTypedArray())).withFilter(GZip().then(ResponseFilters.AddContentLength))
 
-    private fun requestFilters(): Filter = CatchLensFailure.then(GunZip()).then(PrintRequestAndResponse().inIntelliJOnly()).then(InvocationContextFilter.AddState())
+    private fun requestFilters(): Filter = CatchLensFailure.then(GunZip()).then(PrintRequestAndResponse().inIntelliJOnly()).then(ServerFilters.InitialiseRequestContext(RequestContextsProvider.requestContexts)).then(InvocationContextFilter.ParseContextFromGatewayHeaders(this))
 
     private fun server(mainApp: SuspendingHttpHandler): Http4kK8sServer {
 
@@ -68,4 +67,9 @@ class WebAPI(private val configuration: Configuration, application: Application)
     }
 
     companion object : Loggable()
+}
+
+object RequestContextsProvider {
+
+    val requestContexts: RequestContexts by lazy { RequestContexts() }
 }
