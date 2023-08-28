@@ -24,15 +24,15 @@ interface EventStore {
         fun <EVENT : Event> all(query: Query<EVENT> = Query.Unrestricted): Flow<EVENT>
 
         suspend fun <EVENT : Event> firstOrNull(query: Query<EVENT>): EVENT?
+    }
 
-        interface Query<in EVENT : Event> {
+    interface Query<in EVENT : Event> {
 
-            val type: Name
+        val type: Name
 
-            object Unrestricted : Query<Event> {
+        object Unrestricted : Query<Event> {
 
-                override val type = "unrestricted-event-query".let(::Name)
-            }
+            override val type = "unrestricted-event-query".let(::Name)
         }
     }
 }

@@ -10,7 +10,6 @@ import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStore
 
 // TODO should this be in test utils? Might it be useful not for testing as well?
-// TODO create a default value
 class InMemoryEventStore(private val queryFactory: InMemoryQueryFactory = NoSupportedQueriesInMemoryQueryFactory) : EventStore.Mutable {
 
     private val _stream = MutableSharedFlow<Event>()

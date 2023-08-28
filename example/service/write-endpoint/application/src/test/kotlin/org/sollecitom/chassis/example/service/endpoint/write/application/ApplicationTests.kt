@@ -18,7 +18,7 @@ import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStore
 import org.sollecitom.chassis.ddd.test.utils.InMemoryEventStore
-import org.sollecitom.chassis.ddd.test.utils.InMemoryHistoryQuery
+import org.sollecitom.chassis.ddd.test.utils.InMemoryEventStoreQuery
 import org.sollecitom.chassis.ddd.test.utils.InMemoryQueryFactory
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Accepted
@@ -89,17 +89,15 @@ private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testPr
 object ApplicationEventQueryFactory : InMemoryQueryFactory {
 
     @Suppress("UNCHECKED_CAST")
-    override fun <IN_MEMORY_QUERY : InMemoryHistoryQuery<QUERY, EVENT>, QUERY : EventStore.History.Query<EVENT>, EVENT : Event> invoke(query: QUERY): IN_MEMORY_QUERY? {
-
-        return when (query) {
-            is ApplicationEventQuery.UserRegistrationWithEmailAddress -> InMemoryApplicationEventQuery.UserRegistrationWithEmailAddress(query) as IN_MEMORY_QUERY
-            else -> null
-        }
+    override fun <IN_MEMORY_QUERY : InMemoryEventStoreQuery<QUERY, EVENT>, QUERY : EventStore.Query<EVENT>, EVENT : Event> invoke(query: QUERY): IN_MEMORY_QUERY? = when (query) {
+        is EventStore.Query.Unrestricted -> InMemoryApplicationEventQuery.Unrestricted as IN_MEMORY_QUERY
+        is ApplicationEventQuery.UserRegistrationWithEmailAddress -> InMemoryApplicationEventQuery.UserRegistrationWithEmailAddress(query) as IN_MEMORY_QUERY
+        else -> null
     }
 }
 
 // TODO move
-sealed interface InMemoryApplicationEventQuery<QUERY : EventStore.History.Query<EVENT>, EVENT : Event> : InMemoryHistoryQuery<QUERY, EVENT> {
+sealed interface InMemoryApplicationEventQuery<QUERY : EventStore.Query<EVENT>, EVENT : Event> : InMemoryEventStoreQuery<QUERY, EVENT> {
 
     class UserRegistrationWithEmailAddress(private val delegate: ApplicationEventQuery.UserRegistrationWithEmailAddress) : InMemoryApplicationEventQuery<ApplicationEventQuery.UserRegistrationWithEmailAddress, UserRegistrationRequestWasSubmitted> {
 
@@ -107,10 +105,17 @@ sealed interface InMemoryApplicationEventQuery<QUERY : EventStore.History.Query<
 
         override fun invoke(event: UserRegistrationRequestWasSubmitted) = event.emailAddress == delegate.emailAddress
     }
+
+    data object Unrestricted : InMemoryApplicationEventQuery<EventStore.Query.Unrestricted, Event> {
+
+        override val eventType: KClass<Event> get() = Event::class
+
+        override fun invoke(event: Event) = true
+    }
 }
 
 // TODO move
-sealed interface ApplicationEventQuery<EVENT : Event> : EventStore.History.Query<EVENT> {
+sealed interface ApplicationEventQuery<EVENT : Event> : EventStore.Query<EVENT> {
 
     class UserRegistrationWithEmailAddress(val emailAddress: EmailAddress) : ApplicationEventQuery<UserRegistrationRequestWasSubmitted> {
 
