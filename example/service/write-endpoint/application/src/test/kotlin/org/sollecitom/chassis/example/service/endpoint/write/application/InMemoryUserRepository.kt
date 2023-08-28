@@ -12,7 +12,6 @@ import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStore
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.*
 
-// TODO remove events from here, and pass a source of events instead
 class InMemoryUserRepository(private val events: EventStore.Mutable, private val coreGenerators: WithCoreGenerators) : UserRepository, WithCoreGenerators by coreGenerators {
 
     override suspend fun withEmailAddress(emailAddress: EmailAddress) = eventSourcedUser(emailAddress)
