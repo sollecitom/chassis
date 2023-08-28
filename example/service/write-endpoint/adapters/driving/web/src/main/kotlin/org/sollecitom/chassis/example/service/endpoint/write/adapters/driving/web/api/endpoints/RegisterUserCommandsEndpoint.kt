@@ -53,7 +53,6 @@ sealed class RegisterUserCommandsEndpoint {
 
             private val COMMAND_TYPE: Command.Type = RegisterUser.V1.Type
 
-            // TODO use the swagger spec to create a Lens that validates the request against Swagger
             private val commandJson = Body.jsonObject().map(RegisterUser.V1.serde).toLens()
             private val negotiator = ContentNegotiation.auto(commandJson)
             private val command = negotiator.toBodyLens()
