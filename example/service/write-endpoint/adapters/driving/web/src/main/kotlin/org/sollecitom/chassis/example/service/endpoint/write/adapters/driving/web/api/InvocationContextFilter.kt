@@ -34,16 +34,7 @@ object InvocationContextFilter {
 
             val attempt = runCatching { invocationContext(request) }
             when {
-                attempt.isSuccess -> {
-                    try {
-                        val modifiedRequest = request.with(attempt.getOrThrow())
-                        next(modifiedRequest)
-                    } catch (error: Throwable) {
-                        error.printStackTrace()
-                        throw error
-                    }
-                }
-
+                attempt.isSuccess -> next(request.with(attempt.getOrThrow()))
                 else -> attempt.exceptionOrNull()!!.asResponse()
             }
         }
