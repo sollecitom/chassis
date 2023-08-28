@@ -10,7 +10,7 @@ import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.EntityEventStore
 import org.sollecitom.chassis.ddd.domain.EventStore
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
-import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserAlreadyRegisteredException
+import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasAlreadySubmitted
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRepository
 
@@ -37,9 +37,10 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
             require(events.entityId == id) { "The entity ID for the entity-specific event store '${events.entityId}' doesn't match the entity ID of the user '$id'" }
         }
 
+        // TODO refactor this and introduce the state pattern
         override suspend fun submitRegistrationRequest() = mutex.withLock {
 
-            ensureRegistrationWasNotAlreadySubmitted()
+            previousRegistration()?.let { return@withLock UserRegistrationRequestWasAlreadySubmitted.V1(emailAddress = it.emailAddress, userId = it.userId, id = newId.internal(), timestamp = clock.now()) }
             val event = registrationRequestWasSubmitted()
             publish(event) // TODO remove this
             event
@@ -51,9 +52,9 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
             return UserRegistrationRequestWasSubmitted.V1(emailAddress = emailAddress, userId = id, id = newId.internal(now), timestamp = now)
         }
 
-        private suspend fun ensureRegistrationWasNotAlreadySubmitted() {
+        private suspend fun previousRegistration(): UserRegistrationRequestWasSubmitted? {
 
-            history.firstOrNull { it is UserRegistrationRequestWasSubmitted && it.emailAddress == emailAddress }?.let { throw UserAlreadyRegisteredException(userId = id, emailAddress = emailAddress) }
+           return history.firstOrNull { it is UserRegistrationRequestWasSubmitted && it.emailAddress == emailAddress }?.let { it as UserRegistrationRequestWasSubmitted }
         }
 
         private suspend fun publish(event: EntityEvent) = _events.publish(event)

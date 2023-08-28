@@ -25,10 +25,11 @@ object InvocationContextFilter {
     data class Key(val generic: RequestContextLens<InvocationContext<Access>>, val authenticated: RequestContextLens<InvocationContext<Access.Authenticated>>, val unauthenticated: RequestContextLens<InvocationContext<Access.Unauthenticated>>)
 
     // TODO create 1 that acts as gateway itself
-    @Suppress("FunctionName")
-    fun ParseContextFromGatewayHeaders(coreGenerators: WithCoreGenerators): Filter = GatewayInfoContextParsingFilter(key, coreGenerators)
+    context(WithCoreGenerators)
+    fun parseContextFromGatewayHeaders(): Filter = GatewayInfoContextParsingFilter(key)
 
-    private class GatewayInfoContextParsingFilter(private val key: Key, coreGenerators: WithCoreGenerators) : Filter, WithCoreGenerators by coreGenerators {
+    context(WithCoreGenerators)
+    private class GatewayInfoContextParsingFilter(private val key: Key) : Filter {
 
         override fun invoke(next: HttpHandler) = { request: Request ->
 
