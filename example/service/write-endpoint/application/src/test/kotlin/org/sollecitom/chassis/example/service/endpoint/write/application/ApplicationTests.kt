@@ -82,17 +82,30 @@ private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testPr
         private fun registerUser(emailAddress: EmailAddress) = RegisterUser.V1(emailAddress = emailAddress)
     }
 
-    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(queryFactory = ApplicationEventQueryFactory), userRepository: UserRepository = InMemoryUserRepository(events = events, coreGenerators = this)): Application = Application(userRepository::withEmailAddress)
+    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(queryFactory = ApplicationInMemoryEventQueryFactory), userRepository: UserRepository = InMemoryUserRepository(events = events, coreGenerators = this)): Application = Application(userRepository::withEmailAddress)
 }
 
 // TODO move
-object ApplicationEventQueryFactory : InMemoryQueryFactory {
+object ApplicationInMemoryEventQueryFactory : InMemoryQueryFactory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <IN_MEMORY_QUERY : InMemoryEventStoreQuery<QUERY, EVENT>, QUERY : EventStore.Query<EVENT>, EVENT : Event> invoke(query: QUERY): IN_MEMORY_QUERY? = when (query) {
         is EventStore.Query.Unrestricted -> InMemoryApplicationEventQuery.Unrestricted as IN_MEMORY_QUERY
         is ApplicationEventQuery.UserRegistrationWithEmailAddress -> InMemoryApplicationEventQuery.UserRegistrationWithEmailAddress(query) as IN_MEMORY_QUERY
         else -> null
+    }
+}
+
+// TODO move
+sealed interface ApplicationEventQuery<EVENT : Event> : EventStore.Query<EVENT> {
+
+    class UserRegistrationWithEmailAddress(val emailAddress: EmailAddress) : ApplicationEventQuery<UserRegistrationRequestWasSubmitted> {
+
+        override val type: Name = Companion.type
+
+        companion object {
+            private val type = "user-registration-event-with-email-address".let(::Name)
+        }
     }
 }
 
@@ -111,18 +124,5 @@ sealed interface InMemoryApplicationEventQuery<QUERY : EventStore.Query<EVENT>, 
         override val eventType: KClass<Event> get() = Event::class
 
         override fun invoke(event: Event) = true
-    }
-}
-
-// TODO move
-sealed interface ApplicationEventQuery<EVENT : Event> : EventStore.Query<EVENT> {
-
-    class UserRegistrationWithEmailAddress(val emailAddress: EmailAddress) : ApplicationEventQuery<UserRegistrationRequestWasSubmitted> {
-
-        override val type: Name = Companion.type
-
-        companion object {
-            private val type = "user-registration-event-with-email-address".let(::Name)
-        }
     }
 }
