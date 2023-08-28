@@ -42,7 +42,7 @@ class Service(private val environment: Environment, private val coreGenerators: 
 
         @Suppress("UNCHECKED_CAST")
         override suspend fun <RESULT, ACCESS : Access> invoke(command: ApplicationCommand<RESULT, ACCESS>, context: InvocationContext<ACCESS>): RESULT {
-            val result: RegisterUser.V1.Result.Accepted = RegisterUser.V1.Result.Accepted(UserWithPendingRegistration(id = newId.ulid()))
+            val result: RegisterUser.V1.Result.Accepted = RegisterUser.V1.Result.Accepted(UserWithPendingRegistration(id = newId.internal()))
             return result as RESULT
         }
     }

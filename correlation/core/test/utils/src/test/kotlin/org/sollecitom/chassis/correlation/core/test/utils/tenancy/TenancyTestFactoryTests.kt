@@ -15,7 +15,7 @@ private class TenancyTestFactoryTests : WithCoreGenerators by WithCoreGenerators
     @Test
     fun `with an explicit ID`() {
 
-        val id = newId.string()
+        val id = newId.external()
 
         val tenant = Tenant.create(id = id)
 

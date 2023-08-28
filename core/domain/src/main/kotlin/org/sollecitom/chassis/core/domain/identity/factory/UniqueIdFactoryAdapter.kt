@@ -12,8 +12,8 @@ import kotlin.random.asJavaRandom
 
 private class UniqueIdFactoryAdapter(random: Random = Random, clock: Clock = Clock.System) : UniqueIdFactory {
 
-    override val ulid: ULIDFactory = UlidFactoryAdapter(random, clock)
-    override val string: UniqueIdentifierFactory<Id> = StringFactoryAdapter(random) { ulid().stringValue }
+    override val internal: ULIDFactory = UlidFactoryAdapter(random, clock)
+    override val external: UniqueIdentifierFactory<Id> = StringFactoryAdapter(random) { internal().stringValue }
 
     private class UlidFactoryAdapter(random: Random, clock: Clock) : ULIDFactory {
 

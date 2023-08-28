@@ -5,4 +5,4 @@ import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 
 context(WithCoreGenerators)
-fun Tenant.Companion.create(id: Id = newId.string()): Tenant = Tenant(id)
+fun Tenant.Companion.create(id: Id = newId.external()): Tenant = Tenant(id)

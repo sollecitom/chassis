@@ -20,7 +20,7 @@ private class InvocationContextTestFactoryExampleTests : WithCoreGenerators by W
     @Test
     fun `customizing the trace`() {
 
-        val actionId = newId.string()
+        val actionId = newId.external()
         val trace = Trace.create(externalInvocationTrace = ExternalInvocationTrace.create(actionId = actionId))
 
         val context = InvocationContext.create(trace = { trace })

@@ -26,7 +26,7 @@ private class AuthenticationTestFactoryTests : WithCoreGenerators by WithCoreGen
         @Test
         fun `with an explicit arguments`() {
 
-            val id = newId.string()
+            val id = newId.external()
             val validFrom = clock.now() - 1.hours
             val validTo = clock.now() + 2.hours
 

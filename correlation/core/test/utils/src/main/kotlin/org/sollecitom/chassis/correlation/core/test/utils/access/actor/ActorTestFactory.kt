@@ -10,16 +10,16 @@ import org.sollecitom.chassis.correlation.core.test.utils.access.authentication.
 import org.sollecitom.chassis.correlation.core.test.utils.tenancy.create
 
 context(WithCoreGenerators)
-fun Actor.Account.Companion.user(id: Id = newId.ulid(), tenant: Tenant = Tenant.create()): Actor.UserAccount = Actor.UserAccount(id, tenant)
+fun Actor.Account.Companion.user(id: Id = newId.internal(), tenant: Tenant = Tenant.create()): Actor.UserAccount = Actor.UserAccount(id, tenant)
 
 context(WithCoreGenerators)
-fun Actor.UserAccount.Companion.create(id: Id = newId.ulid(), tenant: Tenant = Tenant.create()): Actor.UserAccount = Actor.UserAccount(id, tenant)
+fun Actor.UserAccount.Companion.create(id: Id = newId.internal(), tenant: Tenant = Tenant.create()): Actor.UserAccount = Actor.UserAccount(id, tenant)
 
 context(WithCoreGenerators)
-fun Actor.Account.Companion.service(id: Id = newId.ulid(), tenant: Tenant = Tenant.create()): Actor.ServiceAccount = Actor.ServiceAccount(id, tenant)
+fun Actor.Account.Companion.service(id: Id = newId.internal(), tenant: Tenant = Tenant.create()): Actor.ServiceAccount = Actor.ServiceAccount(id, tenant)
 
 context(WithCoreGenerators)
-fun Actor.ServiceAccount.Companion.create(id: Id = newId.ulid(), tenant: Tenant = Tenant.create()): Actor.ServiceAccount = Actor.ServiceAccount(id, tenant)
+fun Actor.ServiceAccount.Companion.create(id: Id = newId.internal(), tenant: Tenant = Tenant.create()): Actor.ServiceAccount = Actor.ServiceAccount(id, tenant)
 
 context(WithCoreGenerators)
 fun Actor.Companion.direct(account: Actor.Account = Actor.UserAccount.create(), authentication: Authentication = Authentication.credentialsBased()): DirectActor = DirectActor(account, authentication)

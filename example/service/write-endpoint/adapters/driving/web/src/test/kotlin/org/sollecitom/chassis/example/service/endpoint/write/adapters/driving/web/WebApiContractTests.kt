@@ -49,7 +49,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
     @Test
     fun `submitting a register user command for an unregistered user`() {
 
-        val userId = newId.ulid()
+        val userId = newId.internal()
         val api = webApi { _, _ -> Accepted(user = UserWithPendingRegistration(userId)) }
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
@@ -64,7 +64,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
     @Test
     fun `submitting a register user command for an already registered user`() {
 
-        val existingUserId = newId.ulid()
+        val existingUserId = newId.internal()
         val api = webApi { _, _ -> EmailAddressAlreadyInUse(userId = existingUserId) }
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
@@ -150,7 +150,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
         }
     }
 
-    private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend (RegisterUser.V1, InvocationContext<Access>) -> RegisterUser.V1.Result = { _, _ -> Accepted(user = UserWithPendingRegistration(id = newId.ulid())) }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration)
+    private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend (RegisterUser.V1, InvocationContext<Access>) -> RegisterUser.V1.Result = { _, _ -> Accepted(user = UserWithPendingRegistration(id = newId.internal())) }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration)
 
     private fun path(value: String) = "http://localhost:0/$value"
 

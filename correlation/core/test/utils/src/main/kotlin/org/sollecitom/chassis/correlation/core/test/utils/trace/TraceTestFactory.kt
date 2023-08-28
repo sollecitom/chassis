@@ -19,10 +19,10 @@ context(WithCoreGenerators)
 fun Trace.ElapsedTimeSelector.sinceOriginatingInvocationStarted() = sinceOriginatingInvocationStarted(clock.now())
 
 context(WithCoreGenerators)
-fun InvocationTrace.Companion.create(id: SortableTimestampedUniqueIdentifier<*> = newId.ulid(), createdAt: Instant = clock.now()) = InvocationTrace(id, createdAt)
+fun InvocationTrace.Companion.create(id: SortableTimestampedUniqueIdentifier<*> = newId.internal(), createdAt: Instant = clock.now()) = InvocationTrace(id, createdAt)
 
 context(WithCoreGenerators)
-fun ExternalInvocationTrace.Companion.create(invocationId: Id = newId.string(), actionId: Id = newId.string()) = ExternalInvocationTrace(invocationId = invocationId, actionId = actionId)
+fun ExternalInvocationTrace.Companion.create(invocationId: Id = newId.external(), actionId: Id = newId.external()) = ExternalInvocationTrace(invocationId = invocationId, actionId = actionId)
 
 context(WithCoreGenerators)
-fun Trace.Companion.create(timeNow: Instant = clock.now(), externalInvocationTrace: ExternalInvocationTrace = ExternalInvocationTrace.create(), originatingTrace: InvocationTrace = timeNow.minus(3.seconds).let { InvocationTrace.create(id = newId.ulid(it), createdAt = it) }, parentTrace: InvocationTrace = timeNow.minus(2.seconds).let { InvocationTrace.create(id = newId.ulid(it), createdAt = it) }, invocationId: SortableTimestampedUniqueIdentifier<*> = newId.ulid(timeNow)): Trace = Trace(invocation = InvocationTrace.create(id = invocationId, createdAt = timeNow), parent = parentTrace, originating = originatingTrace, external = externalInvocationTrace)
+fun Trace.Companion.create(timeNow: Instant = clock.now(), externalInvocationTrace: ExternalInvocationTrace = ExternalInvocationTrace.create(), originatingTrace: InvocationTrace = timeNow.minus(3.seconds).let { InvocationTrace.create(id = newId.internal(it), createdAt = it) }, parentTrace: InvocationTrace = timeNow.minus(2.seconds).let { InvocationTrace.create(id = newId.internal(it), createdAt = it) }, invocationId: SortableTimestampedUniqueIdentifier<*> = newId.internal(timeNow)): Trace = Trace(invocation = InvocationTrace.create(id = invocationId, createdAt = timeNow), parent = parentTrace, originating = originatingTrace, external = externalInvocationTrace)

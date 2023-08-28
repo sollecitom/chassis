@@ -23,7 +23,7 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
 
     private fun createNewUser(emailAddress: EmailAddress): User {
 
-        val userId = newId.ulid()
+        val userId = newId.internal()
         return EventSourcedUser(_events = events.forEntity(userId), id = userId, emailAddress = emailAddress, coreGenerators = coreGenerators)
     }
 
@@ -48,7 +48,7 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
         private fun registrationRequestWasSubmitted(): UserRegistrationRequestWasSubmitted.V1 {
 
             val now = clock.now()
-            return UserRegistrationRequestWasSubmitted.V1(emailAddress = emailAddress, userId = id, id = newId.ulid(now), timestamp = now)
+            return UserRegistrationRequestWasSubmitted.V1(emailAddress = emailAddress, userId = id, id = newId.internal(now), timestamp = now)
         }
 
         private suspend fun ensureRegistrationWasNotAlreadySubmitted() {

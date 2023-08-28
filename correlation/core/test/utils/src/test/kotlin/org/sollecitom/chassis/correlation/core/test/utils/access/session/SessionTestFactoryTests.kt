@@ -23,7 +23,7 @@ private class SessionTestFactoryTests : WithCoreGenerators by WithCoreGenerators
         @Test
         fun `with given ID`() {
 
-            val id = newId.string()
+            val id = newId.external()
 
             val session = Session.simple(id = id)
 
@@ -37,7 +37,7 @@ private class SessionTestFactoryTests : WithCoreGenerators by WithCoreGenerators
         @Test
         fun `with given ID`() {
 
-            val id = newId.string()
+            val id = newId.external()
             val tenant = Tenant.create()
 
             val session = Session.federated(id = id, tenant = tenant)
@@ -49,7 +49,7 @@ private class SessionTestFactoryTests : WithCoreGenerators by WithCoreGenerators
         @Test
         fun `with given ID and identity provider`() {
 
-            val id = newId.string()
+            val id = newId.external()
             val identityProvider = IdentityProvider.create()
 
             val session = Session.federated(id = id, identityProvider = identityProvider)
@@ -61,7 +61,7 @@ private class SessionTestFactoryTests : WithCoreGenerators by WithCoreGenerators
         @Test
         fun `with given ID and tenant`() {
 
-            val id = newId.string()
+            val id = newId.external()
             val tenant = Tenant.create()
 
             val session = Session.federated(id = id, tenant = tenant)

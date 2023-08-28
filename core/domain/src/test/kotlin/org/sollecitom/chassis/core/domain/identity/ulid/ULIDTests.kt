@@ -21,7 +21,7 @@ private class ULIDTests {
         val timestamp = Clock.System.now()
         val clock = Clock.fixed(timestamp)
 
-        val id = Id.Factory(clock = clock).ulid()
+        val id = Id.Factory(clock = clock).internal()
 
         assertThat(id::timestamp).isEqualTo(timestamp.truncatedToMilliseconds())
     }
