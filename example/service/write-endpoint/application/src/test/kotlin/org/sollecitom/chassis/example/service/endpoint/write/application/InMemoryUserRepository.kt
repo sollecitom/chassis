@@ -23,7 +23,7 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
 
     private suspend fun EventStore.History.previousRegistration(emailAddress: EmailAddress): UserRegistrationRequestWasSubmitted? {
 
-        return firstOrNull(query = ApplicationEventQuery.UserRegistrationWithEmailAddress(emailAddress))
+        return firstOrNull(query = ServiceEventQuery.UserRegistrationWithEmailAddress(emailAddress))
     }
 
     context(WithCoreGenerators)

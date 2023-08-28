@@ -82,24 +82,24 @@ private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testPr
         private fun registerUser(emailAddress: EmailAddress) = RegisterUser.V1(emailAddress = emailAddress)
     }
 
-    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(queryFactory = ApplicationInMemoryEventQueryFactory), userRepository: UserRepository = InMemoryUserRepository(events = events, coreGenerators = this)): Application = Application(userRepository::withEmailAddress)
+    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(queryFactory = ServiceInMemoryEventQueryFactory), userRepository: UserRepository = InMemoryUserRepository(events = events, coreGenerators = this)): Application = Application(userRepository::withEmailAddress)
 }
 
-// TODO move
-object ApplicationInMemoryEventQueryFactory : InMemoryQueryFactory {
+// TODO move to the adapter
+object ServiceInMemoryEventQueryFactory : InMemoryQueryFactory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <IN_MEMORY_QUERY : InMemoryEventStoreQuery<QUERY, EVENT>, QUERY : EventStore.Query<EVENT>, EVENT : Event> invoke(query: QUERY): IN_MEMORY_QUERY? = when (query) {
-        is EventStore.Query.Unrestricted -> InMemoryApplicationEventQuery.Unrestricted as IN_MEMORY_QUERY
-        is ApplicationEventQuery.UserRegistrationWithEmailAddress -> InMemoryApplicationEventQuery.UserRegistrationWithEmailAddress(query) as IN_MEMORY_QUERY
+        is EventStore.Query.Unrestricted -> ServiceInMemoryEventQuery.Unrestricted as IN_MEMORY_QUERY
+        is ServiceEventQuery.UserRegistrationWithEmailAddress -> ServiceInMemoryEventQuery.UserRegistrationWithEmailAddress(query) as IN_MEMORY_QUERY
         else -> null
     }
 }
 
-// TODO move
-sealed interface ApplicationEventQuery<EVENT : Event> : EventStore.Query<EVENT> {
+// TODO move to the adapter
+sealed interface ServiceEventQuery<EVENT : Event> : EventStore.Query<EVENT> {
 
-    class UserRegistrationWithEmailAddress(val emailAddress: EmailAddress) : ApplicationEventQuery<UserRegistrationRequestWasSubmitted> {
+    class UserRegistrationWithEmailAddress(val emailAddress: EmailAddress) : ServiceEventQuery<UserRegistrationRequestWasSubmitted> {
 
         override val type: Name = Companion.type
 
@@ -109,17 +109,17 @@ sealed interface ApplicationEventQuery<EVENT : Event> : EventStore.Query<EVENT> 
     }
 }
 
-// TODO move
-sealed interface InMemoryApplicationEventQuery<QUERY : EventStore.Query<EVENT>, EVENT : Event> : InMemoryEventStoreQuery<QUERY, EVENT> {
+// TODO move to the adapter
+sealed interface ServiceInMemoryEventQuery<QUERY : EventStore.Query<EVENT>, EVENT : Event> : InMemoryEventStoreQuery<QUERY, EVENT> {
 
-    class UserRegistrationWithEmailAddress(private val delegate: ApplicationEventQuery.UserRegistrationWithEmailAddress) : InMemoryApplicationEventQuery<ApplicationEventQuery.UserRegistrationWithEmailAddress, UserRegistrationRequestWasSubmitted> {
+    class UserRegistrationWithEmailAddress(private val delegate: ServiceEventQuery.UserRegistrationWithEmailAddress) : ServiceInMemoryEventQuery<ServiceEventQuery.UserRegistrationWithEmailAddress, UserRegistrationRequestWasSubmitted> {
 
         override val eventType: KClass<UserRegistrationRequestWasSubmitted> get() = UserRegistrationRequestWasSubmitted::class
 
         override fun invoke(event: UserRegistrationRequestWasSubmitted) = event.emailAddress == delegate.emailAddress
     }
 
-    data object Unrestricted : InMemoryApplicationEventQuery<EventStore.Query.Unrestricted, Event> {
+    data object Unrestricted : ServiceInMemoryEventQuery<EventStore.Query.Unrestricted, Event> {
 
         override val eventType: KClass<Event> get() = Event::class
 
