@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.correlation.core.serialization.json
+package org.sollecitom.chassis.correlation.core.serialization.json.origin
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo

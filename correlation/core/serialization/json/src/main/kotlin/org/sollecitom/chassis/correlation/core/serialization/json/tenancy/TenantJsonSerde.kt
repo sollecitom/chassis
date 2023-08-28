@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.correlation.core.serialization.json
+package org.sollecitom.chassis.correlation.core.serialization.json.tenancy
 
 import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
@@ -10,7 +10,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 private object TenantJsonSerde : JsonSerde.SchemaAware<Tenant> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("Tenant.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("tenancy/Tenant.json") }
 
     override fun serialize(value: Tenant) = JSONObject().apply {
         put(Fields.ID, value.id.stringValue)

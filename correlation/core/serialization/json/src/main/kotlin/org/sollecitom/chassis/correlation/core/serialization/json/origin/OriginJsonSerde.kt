@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.correlation.core.serialization.json
+package org.sollecitom.chassis.correlation.core.serialization.json.origin
 
 import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
@@ -10,7 +10,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 private object OriginJsonSerde : JsonSerde.SchemaAware<Origin> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("Origin.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("origin/Origin.json") }
 
     override fun serialize(value: Origin) = JSONObject().apply {
         put(Fields.IP_ADDRESS, value.ipAddress.stringValue)
