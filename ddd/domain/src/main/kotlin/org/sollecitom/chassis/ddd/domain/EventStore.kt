@@ -21,7 +21,7 @@ interface EventStore {
 
     interface History {
 
-        fun all(): Flow<Event>
+        fun <EVENT : Event> all(query: Query<EVENT> = Query.Unrestricted): Flow<EVENT>
 
         suspend fun <EVENT : Event> firstOrNull(query: Query<EVENT>): EVENT?
 
@@ -29,7 +29,10 @@ interface EventStore {
 
             val type: Name
 
-//            object Unrestricted : Query // TODO add query: Query = Query.Unrestricted to the all() function
+            object Unrestricted : Query<Event> {
+
+                override val type = "unrestricted-event-query".let(::Name)
+            }
         }
     }
 }

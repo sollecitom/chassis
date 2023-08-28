@@ -9,14 +9,16 @@ import org.sollecitom.chassis.ddd.domain.EventStore
 
 internal class InMemoryHistory(private val historical: Flow<Event>, private val queryFactory: InMemoryQueryFactory) : EventStore.History {
 
-    override fun all(): Flow<Event> = historical
+    override fun <EVENT : Event> all(query: EventStore.History.Query<EVENT>): Flow<EVENT> = historical.selectedBy(query)
 
     override suspend fun <EVENT : Event> firstOrNull(query: EventStore.History.Query<EVENT>): EVENT? {
 
-        val inMemoryQuery = queryFactory(query) ?: error("Unsupported query type ${query.type.value}")
-        return all().selectedBy(inMemoryQuery).firstOrNull()
+        return all(query).firstOrNull()
     }
 
-    private fun <EVENT : Event> Flow<Event>.selectedBy(query: InMemoryHistoryQuery<*, EVENT>): Flow<EVENT> = filterIsInstance(query.eventType).filter { event -> query.invoke(event) }
-}
+    private val <QUERY : EventStore.History.Query<EVENT>, EVENT : Event> QUERY.inMemory: InMemoryHistoryQuery<QUERY, EVENT> get() = queryFactory(query = this) ?: error("Unsupported query type ${type.value}")
 
+    private fun <EVENT : Event> Flow<Event>.selectedBy(query: InMemoryHistoryQuery<*, EVENT>): Flow<EVENT> = filterIsInstance(query.eventType).filter { event -> query.invoke(event) }
+
+    private fun <EVENT : Event> Flow<Event>.selectedBy(query: EventStore.History.Query<EVENT>): Flow<EVENT> = selectedBy(query.inMemory)
+}
