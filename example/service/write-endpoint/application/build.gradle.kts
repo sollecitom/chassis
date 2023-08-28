@@ -10,4 +10,6 @@ dependencies {
     testImplementation(projects.chassisDddTestUtils)
     testImplementation(projects.chassisCoreTestUtils)
     testImplementation(projects.chassisTestUtils)
+
+    testImplementation(projects.chassisExampleServiceWriteEndpointAdaptersDrivenMemory) // TODO remove
 }

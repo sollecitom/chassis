@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.ddd.test.utils
+package org.sollecitom.chassis.ddd.store.memory
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStore
 
-internal class InMemoryHistory(private val historical: Flow<Event>, private val queryFactory: InMemoryQueryFactory) : EventStore.History {
+internal class InMemoryHistory(private val historical: Flow<Event>, private val queryFactory: InMemoryEventStoreQueryFactory) : EventStore.History {
 
     override fun <EVENT : Event> all(query: EventStore.Query<EVENT>): Flow<EVENT> = historical.selectedBy(query)
 

@@ -8,26 +8,21 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.email.EmailAddress
-import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.authenticated
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.ddd.application.Application
-import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStore
-import org.sollecitom.chassis.ddd.test.utils.InMemoryEventStore
-import org.sollecitom.chassis.ddd.test.utils.InMemoryEventStoreQuery
-import org.sollecitom.chassis.ddd.test.utils.InMemoryQueryFactory
+import org.sollecitom.chassis.ddd.store.memory.InMemoryEventStore
+import org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.memory.InMemoryUserRepository
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.configureLogging
-import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRepository
 import org.sollecitom.chassis.test.utils.assertions.failedThrowing
-import kotlin.reflect.KClass
 
 @TestInstance(PER_CLASS)
 private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testProvider {
@@ -82,5 +77,6 @@ private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testPr
         private fun registerUser(emailAddress: EmailAddress) = RegisterUser.V1(emailAddress = emailAddress)
     }
 
-    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(queryFactory = ServiceInMemoryEventQueryFactory), userRepository: UserRepository = InMemoryUserRepository(events = events, coreGenerators = this)): Application = Application(userRepository::withEmailAddress)
+    // TODO remove the in-memory adapter from here - use a stub instead
+    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(queryFactory = InMemoryUserRepository.eventQueryFactory), userRepository: UserRepository = InMemoryUserRepository(events = events, coreGenerators = this)): Application = Application(userRepository::withEmailAddress)
 }
