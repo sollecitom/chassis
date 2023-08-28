@@ -1,13 +1,11 @@
 package org.sollecitom.chassis.example.service.endpoint.write.application
 
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.EntityEventStore
-import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStore
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.*
 
@@ -16,7 +14,7 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
 
     override suspend fun withEmailAddress(emailAddress: EmailAddress) = eventSourcedUser(emailAddress)
 
-    private suspend fun eventSourcedUser(emailAddress: EmailAddress): User = when (val previousRegistration = previousRegistration(emailAddress, events.history())) {
+    private suspend fun eventSourcedUser(emailAddress: EmailAddress): User = when (val previousRegistration = events.history.previousRegistration(emailAddress)) {
         is UserRegistrationRequestWasSubmitted.V1 -> RegisteredUser(previousRegistration, events.forEntity(previousRegistration.entityId))
         null -> {
             val userId = newId.internal()
@@ -24,9 +22,9 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
         }
     }
 
-    private suspend fun previousRegistration(emailAddress: EmailAddress, history: Flow<Event>): UserRegistrationRequestWasSubmitted? {
+    private suspend fun EventStore.History.previousRegistration(emailAddress: EmailAddress): UserRegistrationRequestWasSubmitted? {
 
-        return history.firstOrNull { it is UserRegistrationRequestWasSubmitted && it.emailAddress == emailAddress }?.let { it as UserRegistrationRequestWasSubmitted }
+        return all().firstOrNull { it is UserRegistrationRequestWasSubmitted && it.emailAddress == emailAddress }?.let { it as UserRegistrationRequestWasSubmitted }
     }
 
     context(WithCoreGenerators)

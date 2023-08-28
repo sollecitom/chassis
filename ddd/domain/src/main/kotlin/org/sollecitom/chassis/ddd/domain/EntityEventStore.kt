@@ -9,7 +9,7 @@ interface EntityEventStore {
 
     val stream: Flow<EntityEvent>
 
-    fun history(): Flow<EntityEvent>
+    fun history(): EventStore.History
 
     interface Mutable : EntityEventStore {
 

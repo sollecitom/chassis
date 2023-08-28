@@ -7,7 +7,7 @@ interface EventStore {
 
     val stream: Flow<Event>
 
-    fun history(): Flow<Event>
+    val history: History
 
     fun forEntity(entityId: Id): EntityEventStore
 
@@ -16,5 +16,10 @@ interface EventStore {
         suspend fun publish(event: Event)
 
         override fun forEntity(entityId: Id): EntityEventStore.Mutable
+    }
+
+    interface History {
+
+        fun all(): Flow<Event>
     }
 }
