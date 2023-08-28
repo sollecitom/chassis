@@ -16,7 +16,7 @@ import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticate
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.EventStore
 import org.sollecitom.chassis.ddd.store.memory.InMemoryEventStore
-import org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.memory.InMemoryUserRepository
+import org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.memory.EventSourcedUserRepository
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
@@ -78,5 +78,5 @@ private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testPr
     }
 
     // TODO remove the in-memory adapter from here - use a stub instead
-    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(queryFactory = InMemoryUserRepository.eventQueryFactory), userRepository: UserRepository = InMemoryUserRepository(events = events, coreGenerators = this)): Application = Application(userRepository::withEmailAddress)
+    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(queryFactory = EventSourcedUserRepository.eventQueryFactory), userRepository: UserRepository = EventSourcedUserRepository(events = events, coreGenerators = this)): Application = Application(userRepository::withEmailAddress)
 }

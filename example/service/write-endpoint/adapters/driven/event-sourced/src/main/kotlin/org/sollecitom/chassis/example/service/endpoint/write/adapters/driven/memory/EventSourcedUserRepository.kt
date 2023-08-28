@@ -8,7 +8,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRepository
 
-class InMemoryUserRepository(private val events: EventStore.Mutable, private val coreGenerators: WithCoreGenerators) : UserRepository, WithCoreGenerators by coreGenerators {
+class EventSourcedUserRepository(private val events: EventStore.Mutable, private val coreGenerators: WithCoreGenerators) : UserRepository, WithCoreGenerators by coreGenerators {
 
     override suspend fun withEmailAddress(emailAddress: EmailAddress) = eventSourcedUser(emailAddress)
 

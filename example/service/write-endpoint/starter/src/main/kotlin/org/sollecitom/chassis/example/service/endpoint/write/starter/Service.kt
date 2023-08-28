@@ -4,24 +4,23 @@ import org.http4k.cloudnative.env.Environment
 import org.sollecitom.chassis.configuration.utils.fromYamlResource
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.core.utils.provider
-import org.sollecitom.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.ddd.application.Application
-import org.sollecitom.chassis.ddd.application.ApplicationCommand
+import org.sollecitom.chassis.ddd.store.memory.InMemoryEventStore
+import org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.memory.EventSourcedUserRepository
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.WebAPI
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.from
-import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
-import org.sollecitom.chassis.example.service.endpoint.write.application.user.UserWithPendingRegistration
+import org.sollecitom.chassis.example.service.endpoint.write.application.invoke
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.ApplicationProperties
+import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRepository
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.service.domain.WebService
 
-// TODO add WithCoreGenerators to application, etc.
 class Service(private val environment: Environment, private val coreGenerators: WithCoreGenerators) : WebService, WithCoreGenerators by coreGenerators {
 
     constructor(environment: Environment) : this(environment, WithCoreGenerators.provider(environment))
 
-    private val application: Application = application()
+    private val userRepository = userRepository()
+    private val application: Application = application(userRepository)
     private val webAPI = webApi(application, environment, coreGenerators)
 
     override val port: Int get() = webAPI.servicePort
@@ -38,14 +37,14 @@ class Service(private val environment: Environment, private val coreGenerators: 
         logger.info { "Stopped" }
     }
 
-    private fun application(): Application = object : Application { // TODO change and create the actual application
+    private fun userRepository(): UserRepository {
 
-        @Suppress("UNCHECKED_CAST")
-        override suspend fun <RESULT, ACCESS : Access> invoke(command: ApplicationCommand<RESULT, ACCESS>, context: InvocationContext<ACCESS>): RESULT {
-            val result: RegisterUser.V1.Result.Accepted = RegisterUser.V1.Result.Accepted(UserWithPendingRegistration(id = newId.internal()))
-            return result as RESULT
-        }
+        // TODO change this
+        val events = InMemoryEventStore(queryFactory = EventSourcedUserRepository.eventQueryFactory)
+        return EventSourcedUserRepository(events = events, coreGenerators = this)
     }
+
+    private fun application(userRepository: UserRepository): Application = Application(userRepository::withEmailAddress)
 
     private fun webApi(application: Application, environment: Environment, coreGenerators: WithCoreGenerators) = WebAPI(configuration = WebAPI.Configuration.from(environment), application = application, coreGenerators = coreGenerators)
 

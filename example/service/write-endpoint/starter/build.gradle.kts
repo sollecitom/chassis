@@ -18,10 +18,12 @@ plugins {
 dependencies {
     implementation(projects.chassisExampleServiceWriteEndpointAdaptersDrivingWeb)
     implementation(projects.chassisExampleServiceWriteEndpointAdaptersDrivenPulsar)
-    implementation(projects.chassisExampleServiceWriteEndpointAdaptersDrivenMemory)
+    implementation(projects.chassisExampleServiceWriteEndpointAdaptersDrivenEventSourced)
     implementation(projects.chassisExampleServiceWriteEndpointConfiguration)
     implementation(projects.chassisKotlinExtensions)
     implementation(projects.chassisWebServiceDomain)
+
+    implementation(projects.chassisDddStoreMemory) // TODO remove, and import an adapter instead
 }
 
 val versionDetails: Closure<VersionDetails> by extra
