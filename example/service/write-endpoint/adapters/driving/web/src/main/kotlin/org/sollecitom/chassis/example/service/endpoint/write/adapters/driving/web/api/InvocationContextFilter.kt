@@ -24,6 +24,7 @@ object InvocationContextFilter {
 
     data class Key(val generic: RequestContextLens<InvocationContext<Access>>, val authenticated: RequestContextLens<InvocationContext<Access.Authenticated>>, val unauthenticated: RequestContextLens<InvocationContext<Access.Unauthenticated>>)
 
+    // TODO add a filter that puts the context on the logging stack
     // TODO create 1 that acts as gateway itself
     context(WithCoreGenerators)
     fun parseContextFromGatewayHeaders(): Filter = GatewayInfoContextParsingFilter(key)
@@ -48,6 +49,7 @@ object InvocationContextFilter {
 
         private fun Throwable.asResponse() = Response(Status.BAD_REQUEST.description("Error while parsing the invocation context: $message"))
 
+        // TODO pass this from the constructor
         context(WithCoreGenerators)
         private fun invocationContext(request: Request): InvocationContext<Access> {
 
