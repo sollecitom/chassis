@@ -19,10 +19,10 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
     private fun eventSourcedUser(emailAddress: EmailAddress): User = runBlocking {
 
         when (val previousRegistration = previousRegistration(emailAddress, events.history())) {
-            is UserRegistrationRequestWasSubmitted.V1 -> RegisteredUser(previousRegistration, coreGenerators, events.forEntity(previousRegistration.entityId))
+            is UserRegistrationRequestWasSubmitted.V1 -> RegisteredUser(previousRegistration, events.forEntity(previousRegistration.entityId))
             null -> {
                 val userId = newId.internal()
-                UnregisteredUser(userId, emailAddress, events.forEntity(userId), this@InMemoryUserRepository)
+                UnregisteredUser(userId, emailAddress, events.forEntity(userId))
             }
         }
     }
@@ -32,7 +32,8 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
         return history.firstOrNull { it is UserRegistrationRequestWasSubmitted && it.emailAddress == emailAddress }?.let { it as UserRegistrationRequestWasSubmitted }
     }
 
-    private class RegisteredUser(private val pastEvent: UserRegistrationRequestWasSubmitted, coreGenerators: WithCoreGenerators, private val _events: EntityEventStore.Mutable) : User, WithCoreGenerators by coreGenerators {
+    context(WithCoreGenerators)
+    private class RegisteredUser(private val pastEvent: UserRegistrationRequestWasSubmitted, private val _events: EntityEventStore.Mutable) : User {
 
         override val events: EntityEventStore get() = _events
         override val id: Id get() = pastEvent.userId
@@ -53,7 +54,8 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
         private suspend fun publish(event: EntityEvent) = _events.publish(event)
     }
 
-    private class UnregisteredUser(override val id: Id, private val emailAddress: EmailAddress, private val _events: EntityEventStore.Mutable, coreGenerators: WithCoreGenerators) : User, WithCoreGenerators by coreGenerators {
+    context(WithCoreGenerators)
+    private class UnregisteredUser(override val id: Id, private val emailAddress: EmailAddress, private val _events: EntityEventStore.Mutable) : User {
 
         init {
             require(events.entityId == id) { "The entity ID for the entity-specific event store '${events.entityId}' doesn't match the entity ID of the user '$id'" }
