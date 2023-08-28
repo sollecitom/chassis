@@ -8,20 +8,26 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.email.EmailAddress
+import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.authenticated
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.ddd.application.Application
+import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStore
 import org.sollecitom.chassis.ddd.test.utils.InMemoryEventStore
+import org.sollecitom.chassis.ddd.test.utils.InMemoryHistoryQuery
+import org.sollecitom.chassis.ddd.test.utils.InMemoryQueryFactory
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.configureLogging
+import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRepository
 import org.sollecitom.chassis.test.utils.assertions.failedThrowing
+import kotlin.reflect.KClass
 
 @TestInstance(PER_CLASS)
 private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testProvider {
@@ -76,5 +82,42 @@ private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testPr
         private fun registerUser(emailAddress: EmailAddress) = RegisterUser.V1(emailAddress = emailAddress)
     }
 
-    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(), userRepository: UserRepository = InMemoryUserRepository(events = events, coreGenerators = this)): Application = Application(userRepository::withEmailAddress)
+    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(queryFactory = ApplicationEventQueryFactory), userRepository: UserRepository = InMemoryUserRepository(events = events, coreGenerators = this)): Application = Application(userRepository::withEmailAddress)
+}
+
+// TODO move
+object ApplicationEventQueryFactory : InMemoryQueryFactory {
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <IN_MEMORY_QUERY : InMemoryHistoryQuery<QUERY, EVENT>, QUERY : EventStore.History.Query<EVENT>, EVENT : Event> invoke(query: QUERY): IN_MEMORY_QUERY? {
+
+        return when (query) {
+            is ApplicationEventQuery.UserRegistrationWithEmailAddress -> InMemoryApplicationEventQuery.UserRegistrationWithEmailAddress(query) as IN_MEMORY_QUERY
+            else -> null
+        }
+    }
+}
+
+// TODO move
+sealed interface InMemoryApplicationEventQuery<QUERY : EventStore.History.Query<EVENT>, EVENT : Event> : InMemoryHistoryQuery<QUERY, EVENT> {
+
+    class UserRegistrationWithEmailAddress(private val delegate: ApplicationEventQuery.UserRegistrationWithEmailAddress) : InMemoryApplicationEventQuery<ApplicationEventQuery.UserRegistrationWithEmailAddress, UserRegistrationRequestWasSubmitted> {
+
+        override val eventType: KClass<UserRegistrationRequestWasSubmitted> get() = UserRegistrationRequestWasSubmitted::class
+
+        override fun invoke(event: UserRegistrationRequestWasSubmitted) = event.emailAddress == delegate.emailAddress
+    }
+}
+
+// TODO move
+sealed interface ApplicationEventQuery<EVENT : Event> : EventStore.History.Query<EVENT> {
+
+    class UserRegistrationWithEmailAddress(val emailAddress: EmailAddress) : ApplicationEventQuery<UserRegistrationRequestWasSubmitted> {
+
+        override val type: Name = Companion.type
+
+        companion object {
+            private val type = "user-registration-event-with-email-address".let(::Name)
+        }
+    }
 }

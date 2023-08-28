@@ -10,7 +10,8 @@ import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStore
 
 // TODO should this be in test utils? Might it be useful not for testing as well?
-class InMemoryEventStore : EventStore.Mutable {
+// TODO create a default value
+class InMemoryEventStore(private val queryFactory: InMemoryQueryFactory = NoSupportedQueriesInMemoryQueryFactory) : EventStore.Mutable {
 
     private val _stream = MutableSharedFlow<Event>()
     private val historical = mutableListOf<Event>()
@@ -21,7 +22,7 @@ class InMemoryEventStore : EventStore.Mutable {
         _stream.emit(event)
     }
 
-    override val history: EventStore.History = InMemoryHistory(historical.asFlow())
+    override val history: EventStore.History = InMemoryHistory(historical.asFlow(), queryFactory)
 
     override val stream: Flow<Event> get() = _stream
 
@@ -35,7 +36,7 @@ class InMemoryEventStore : EventStore.Mutable {
             this@InMemoryEventStore.publish(event)
         }
 
-        override fun history(): EventStore.History = InMemoryHistory(historical.asFlow().forEntity(entityId))
+        override fun history(): EventStore.History = InMemoryHistory(historical.asFlow().forEntity(entityId), queryFactory)
 
         override val stream = this@InMemoryEventStore.stream.forEntity(entityId)
 

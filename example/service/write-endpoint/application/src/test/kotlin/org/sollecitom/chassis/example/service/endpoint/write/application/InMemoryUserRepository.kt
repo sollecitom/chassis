@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.example.service.endpoint.write.application
 
-import kotlinx.coroutines.flow.firstOrNull
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
@@ -24,7 +23,7 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
 
     private suspend fun EventStore.History.previousRegistration(emailAddress: EmailAddress): UserRegistrationRequestWasSubmitted? {
 
-        return all().firstOrNull { it is UserRegistrationRequestWasSubmitted && it.emailAddress == emailAddress }?.let { it as UserRegistrationRequestWasSubmitted }
+        return firstOrNull(query = ApplicationEventQuery.UserRegistrationWithEmailAddress(emailAddress))
     }
 
     context(WithCoreGenerators)
