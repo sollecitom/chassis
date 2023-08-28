@@ -40,11 +40,13 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
         // TODO refactor this and introduce the state pattern
         override suspend fun submitRegistrationRequest() = mutex.withLock {
 
-            previousRegistration()?.let { return@withLock UserRegistrationRequestWasAlreadySubmitted.V1(emailAddress = it.emailAddress, userId = it.userId, id = newId.internal(), timestamp = clock.now()) }
+            previousRegistration()?.let { return@withLock it.alreadySubmitted() }
             val event = registrationRequestWasSubmitted()
             publish(event) // TODO remove this
             event
         }
+
+        private fun UserRegistrationRequestWasSubmitted.alreadySubmitted() = UserRegistrationRequestWasAlreadySubmitted.V1(emailAddress = emailAddress, userId = userId, id = newId.internal(), timestamp = clock.now())
 
         private fun registrationRequestWasSubmitted(): UserRegistrationRequestWasSubmitted.V1 {
 
@@ -54,7 +56,7 @@ class InMemoryUserRepository(private val events: EventStore.Mutable, private val
 
         private suspend fun previousRegistration(): UserRegistrationRequestWasSubmitted? {
 
-           return history.firstOrNull { it is UserRegistrationRequestWasSubmitted && it.emailAddress == emailAddress }?.let { it as UserRegistrationRequestWasSubmitted }
+            return history.firstOrNull { it is UserRegistrationRequestWasSubmitted && it.emailAddress == emailAddress }?.let { it as UserRegistrationRequestWasSubmitted }
         }
 
         private suspend fun publish(event: EntityEvent) = _events.publish(event)
