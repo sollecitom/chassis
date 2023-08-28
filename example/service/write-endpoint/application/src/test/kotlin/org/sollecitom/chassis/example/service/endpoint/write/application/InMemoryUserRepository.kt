@@ -2,7 +2,6 @@ package org.sollecitom.chassis.example.service.endpoint.write.application
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.runBlocking
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
@@ -12,18 +11,16 @@ import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStore
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.*
 
+// TODO move
 class InMemoryUserRepository(private val events: EventStore.Mutable, private val coreGenerators: WithCoreGenerators) : UserRepository, WithCoreGenerators by coreGenerators {
 
     override suspend fun withEmailAddress(emailAddress: EmailAddress) = eventSourcedUser(emailAddress)
 
-    private fun eventSourcedUser(emailAddress: EmailAddress): User = runBlocking {
-
-        when (val previousRegistration = previousRegistration(emailAddress, events.history())) {
-            is UserRegistrationRequestWasSubmitted.V1 -> RegisteredUser(previousRegistration, events.forEntity(previousRegistration.entityId))
-            null -> {
-                val userId = newId.internal()
-                UnregisteredUser(userId, emailAddress, events.forEntity(userId))
-            }
+    private suspend fun eventSourcedUser(emailAddress: EmailAddress): User = when (val previousRegistration = previousRegistration(emailAddress, events.history())) {
+        is UserRegistrationRequestWasSubmitted.V1 -> RegisteredUser(previousRegistration, events.forEntity(previousRegistration.entityId))
+        null -> {
+            val userId = newId.internal()
+            UnregisteredUser(userId, emailAddress, events.forEntity(userId))
         }
     }
 
