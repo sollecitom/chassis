@@ -17,6 +17,7 @@ private class ActorJsonSerializationTests : JsonSerdeTestSpecification<Actor>, W
 
     override val jsonSerde get() = Actor.jsonSerde
 
+    // TODO if additionalProperties is set to false for any actor type, the tests fail (the library might be broken)
     override fun arguments() = ParameterizedTestSupport.arguments(
         "direct" to Actor.direct(),
         "on-behalf" to Actor.direct().onBehalfOf(Actor.UserAccount.create()),
