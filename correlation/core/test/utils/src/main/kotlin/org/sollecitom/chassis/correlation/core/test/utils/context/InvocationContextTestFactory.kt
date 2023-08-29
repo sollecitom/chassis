@@ -6,15 +6,15 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.Roles
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
+import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
 import org.sollecitom.chassis.correlation.core.test.utils.access.actor.direct
 import org.sollecitom.chassis.correlation.core.test.utils.access.authenticated
-import org.sollecitom.chassis.correlation.core.test.utils.access.unauthenticated
 import org.sollecitom.chassis.correlation.core.test.utils.access.authorization.TestRoles
 import org.sollecitom.chassis.correlation.core.test.utils.access.authorization.create
 import org.sollecitom.chassis.correlation.core.test.utils.access.origin.create
+import org.sollecitom.chassis.correlation.core.test.utils.access.unauthenticated
 import org.sollecitom.chassis.correlation.core.test.utils.trace.create
 
 context(WithCoreGenerators)

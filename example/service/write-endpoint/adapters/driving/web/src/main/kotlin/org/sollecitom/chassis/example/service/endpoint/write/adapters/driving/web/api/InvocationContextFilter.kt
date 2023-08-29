@@ -7,7 +7,7 @@ import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.networking.IpAddress
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationInfo
+import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.Role
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.Roles
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
@@ -55,7 +55,7 @@ object InvocationContextFilter {
 
             // TODO fix this to parse this information from headers
             val origin = Origin(IpAddress.create("127.0.0.1"))
-            val authorization = AuthorizationInfo(roles = Roles(setOf(Role("admin".let(::Name)))))
+            val authorization = AuthorizationPrincipal(roles = Roles(setOf(Role("admin".let(::Name)))))
             val invocation = InvocationTrace(id = newId.internal(), createdAt = clock.now())
             val parent = InvocationTrace(id = newId.internal(), createdAt = clock.now())
             val originating = InvocationTrace(id = newId.internal(), createdAt = clock.now())

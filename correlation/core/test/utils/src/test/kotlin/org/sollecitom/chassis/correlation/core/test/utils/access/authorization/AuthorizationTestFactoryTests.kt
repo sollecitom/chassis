@@ -11,7 +11,6 @@ import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.Role
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.Roles
-import org.sollecitom.chassis.correlation.core.test.utils.access.authorization.TestRoles
 import org.sollecitom.chassis.correlation.core.test.utils.access.authorization.create
 
 @TestInstance(PER_CLASS)
