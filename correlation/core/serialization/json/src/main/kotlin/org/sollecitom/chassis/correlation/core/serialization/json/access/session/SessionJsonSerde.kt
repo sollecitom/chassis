@@ -19,8 +19,8 @@ private object SessionJsonSerde : JsonSerde.SchemaAware<Session> {
     }
 
     override fun deserialize(json: JSONObject) = when (val type = json.getRequiredString(Fields.TYPE)) {
-        SimpleSessionJsonSerde.TYPE_VALUE -> SimpleSessionJsonSerde.deserialize(json)
-        FederatedSessionJsonSerde.TYPE_VALUE -> FederatedSessionJsonSerde.deserialize(json)
+        SimpleSessionJsonSerde.TYPE_VALUE -> SimpleSession.jsonSerde.deserialize(json)
+        FederatedSessionJsonSerde.TYPE_VALUE -> FederatedSession.jsonSerde.deserialize(json)
         else -> error("Unsupported session type $type")
     }
 

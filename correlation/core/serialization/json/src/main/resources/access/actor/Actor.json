@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "type"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "direct",
+        "on-behalf",
+        "impersonating"
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "classpath://access/actor/DirectActor.json"
+    },
+    {
+      "$ref": "classpath://access/actor/ActorOnBehalf.json"
+    },
+    {
+      "$ref": "classpath://access/actor/ImpersonatingActor.json"
+    }
+  ]
+}
