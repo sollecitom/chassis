@@ -9,9 +9,7 @@
   "properties": {
     "type": {
       "type": "string",
-      "enum": [
-        "direct"
-      ]
+      "const": "direct"
     },
     "account": {
       "$ref": "classpath://access/actor/Account.json"

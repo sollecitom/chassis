@@ -10,9 +10,7 @@
   "properties": {
     "type": {
       "type": "string",
-      "enum": [
-        "on-behalf"
-      ]
+      "const": "on-behalf"
     },
     "account": {
       "$ref": "classpath://access/actor/Account.json"

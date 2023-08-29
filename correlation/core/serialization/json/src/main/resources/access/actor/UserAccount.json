@@ -10,9 +10,7 @@
   "properties": {
     "type": {
       "type": "string",
-      "enum": [
-        "user"
-      ]
+      "const": "user"
     },
     "id": {
       "type": "string",

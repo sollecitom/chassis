@@ -10,9 +10,7 @@
   "properties": {
     "type": {
       "type": "string",
-      "enum": [
-        "federated"
-      ]
+      "const": "federated"
     },
     "id": {
       "type": "string",

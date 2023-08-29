@@ -9,9 +9,7 @@
   "properties": {
     "type": {
       "type": "string",
-      "enum": [
-        "stateless"
-      ]
+      "const": "stateless"
     },
     "token": {
       "$ref": "classpath://access/authentication/AuthenticationToken.json"

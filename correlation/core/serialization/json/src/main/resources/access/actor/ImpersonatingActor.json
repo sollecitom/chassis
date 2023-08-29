@@ -10,9 +10,7 @@
   "properties": {
     "type": {
       "type": "string",
-      "enum": [
-        "impersonating"
-      ]
+      "const": "impersonating"
     },
     "impersonator": {
       "$ref": "classpath://access/actor/Account.json"

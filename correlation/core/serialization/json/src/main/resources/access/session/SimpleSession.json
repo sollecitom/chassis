@@ -9,9 +9,7 @@
   "properties": {
     "type": {
       "type": "string",
-      "enum": [
-        "simple"
-      ]
+      "const": "simple"
     },
     "id": {
       "type": "string",
