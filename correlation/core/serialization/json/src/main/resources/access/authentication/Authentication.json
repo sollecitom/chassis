@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "type"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "stateless",
+        "federated",
+        "credentials-based"
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "classpath://access/authentication/StatelessAuthentication.json"
+    },
+    {
+      "$ref": "classpath://access/authentication/FederatedAuthentication.json"
+    },
+    {
+      "$ref": "classpath://access/authentication/CredentialsBasedAuthentication.json"
+    }
+  ]
+}

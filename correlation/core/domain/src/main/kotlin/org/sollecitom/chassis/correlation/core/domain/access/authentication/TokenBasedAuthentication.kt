@@ -19,10 +19,5 @@ sealed interface TokenBasedAuthentication : Authentication {
         companion object
     }
 
-    data class Direct(override val token: Authentication.Token, override val session: SimpleSession) : SessionBased<SimpleSession> {
-
-        companion object
-    }
-
     companion object
 }

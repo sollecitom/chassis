@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "token",
+    "session"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "federated"
+      ]
+    },
+    "token": {
+      "$ref": "classpath://access/authentication/AuthenticationToken.json"
+    },
+    "session": {
+      "$ref": "classpath://access/session/FederatedSession.json"
+    }
+  }
+}

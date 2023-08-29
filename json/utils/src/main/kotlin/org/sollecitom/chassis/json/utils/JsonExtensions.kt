@@ -1,5 +1,6 @@
 package org.sollecitom.chassis.json.utils
 
+import kotlinx.datetime.Instant
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -28,3 +29,6 @@ fun JSONObject.deepHashCode() = toMap().hashCode()
 fun JSONArray.deepEquals(other: JSONArray) = toList() == other.toList()
 
 fun JSONArray.deepHashCode() = toList().hashCode()
+
+fun JSONObject.getInstantOrNull(key: String) = getStringOrNull(key)?.let(Instant.Companion::parse)
+fun JSONObject.getRequiredInstant(key: String) = getInstantOrNull(key)!!
