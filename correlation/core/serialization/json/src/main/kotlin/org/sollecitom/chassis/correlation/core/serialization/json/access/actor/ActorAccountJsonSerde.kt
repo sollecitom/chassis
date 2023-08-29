@@ -19,7 +19,7 @@ private object ActorAccountJsonSerde : JsonSerde.SchemaAware<Actor.Account> {
     override fun deserialize(json: JSONObject) = when (val type = json.getRequiredString(Fields.TYPE)) {
         UserAccountJsonSerde.TYPE_VALUE -> Actor.UserAccount.jsonSerde.deserialize(json)
         ServiceAccountJsonSerde.TYPE_VALUE -> Actor.ServiceAccount.jsonSerde.deserialize(json)
-        else -> error("Unsupported session type $type")
+        else -> error("Unsupported actor account type $type")
     }
 
     private object Fields {

@@ -9,6 +9,8 @@ data class ImpersonatingActor(val impersonator: Actor.Account, val impersonated:
 
     override val benefitingAccount: Actor.Account
         get() = impersonated
+
+    companion object
 }
 
 fun DirectActor.impersonating(impersonated: Actor.Account): ImpersonatingActor = ImpersonatingActor(impersonator = this.account, authentication = this.authentication, impersonated = impersonated)

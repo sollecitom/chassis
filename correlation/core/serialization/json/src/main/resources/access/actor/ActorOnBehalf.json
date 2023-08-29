@@ -12,7 +12,7 @@
     "type": {
       "type": "string",
       "enum": [
-        "direct"
+        "on-behalf"
       ]
     },
     "account": {

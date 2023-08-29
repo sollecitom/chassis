@@ -12,7 +12,7 @@
     "type": {
       "type": "string",
       "enum": [
-        "direct"
+        "impersonating"
       ]
     },
     "impersonator": {
