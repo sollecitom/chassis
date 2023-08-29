@@ -5,6 +5,7 @@ import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.identity.fromString
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
+import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
@@ -18,7 +19,7 @@ private object TenantJsonSerde : JsonSerde.SchemaAware<Tenant> {
 
     override fun deserialize(json: JSONObject): Tenant {
 
-        val id = json.getString(Fields.ID).let(Id.Companion::fromString)
+        val id = json.getRequiredString(Fields.ID).let(Id.Companion::fromString)
         return Tenant(id = id)
     }
 

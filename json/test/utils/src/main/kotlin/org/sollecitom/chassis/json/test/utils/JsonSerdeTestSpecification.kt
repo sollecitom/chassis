@@ -7,7 +7,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 interface JsonSerdeTestSpecification<VALUE : Any> {
 
-    fun values(): List<VALUE>
+    fun values(): List<VALUE> // TODO turn this into a parameterized test
     val jsonSerde: JsonSerde.SchemaAware<VALUE>
 
     @Test

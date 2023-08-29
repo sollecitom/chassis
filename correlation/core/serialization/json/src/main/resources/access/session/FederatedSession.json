@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "id",
+    "identity-provider"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "federated"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "identity-provider": {
+      "$ref": "classpath://access/idp/IdentityProvider.json"
+    }
+  }
+}

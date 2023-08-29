@@ -11,10 +11,10 @@ import org.sollecitom.chassis.correlation.core.test.utils.access.idp.create
 import org.sollecitom.chassis.correlation.core.test.utils.tenancy.create
 
 context(WithCoreGenerators)
-fun Session.Companion.simple(id: Id = newId.external()): SimpleSession = SimpleSession(id)
+fun Session.Companion.simple(id: Id = newId.internal()): SimpleSession = SimpleSession(id)
 
 context(WithCoreGenerators)
-fun Session.Companion.federated(tenant: Tenant = Tenant.create(), id: Id = newId.external(), identityProvider: IdentityProvider = IdentityProvider.create(tenant = tenant)): FederatedSession = FederatedSession(id, identityProvider)
+fun Session.Companion.federated(tenant: Tenant = Tenant.create(), id: Id = newId.internal(), identityProvider: IdentityProvider = IdentityProvider.create(tenant = tenant)): FederatedSession = FederatedSession(id, identityProvider)
 
 context(WithCoreGenerators)
-fun Session.Companion.federated(identityProvider: IdentityProvider, id: Id = newId.external()): FederatedSession = FederatedSession(id, identityProvider)
+fun Session.Companion.federated(identityProvider: IdentityProvider, id: Id = newId.internal()): FederatedSession = FederatedSession(id, identityProvider)

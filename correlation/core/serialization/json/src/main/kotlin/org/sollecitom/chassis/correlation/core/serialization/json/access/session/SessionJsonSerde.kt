@@ -1,0 +1,32 @@
+package org.sollecitom.chassis.correlation.core.serialization.json.access.session
+
+import com.github.erosb.jsonsKema.Schema
+import org.json.JSONObject
+import org.sollecitom.chassis.correlation.core.domain.access.session.FederatedSession
+import org.sollecitom.chassis.correlation.core.domain.access.session.Session
+import org.sollecitom.chassis.correlation.core.domain.access.session.SimpleSession
+import org.sollecitom.chassis.json.utils.getRequiredString
+import org.sollecitom.chassis.json.utils.jsonSchemaAt
+import org.sollecitom.chassis.json.utils.serde.JsonSerde
+
+private object SessionJsonSerde : JsonSerde.SchemaAware<Session> {
+
+    override val schema: Schema by lazy { jsonSchemaAt("access/session/Session.json") }
+
+    override fun serialize(value: Session) = when (value) {
+        is SimpleSession -> SimpleSession.jsonSerde.serialize(value)
+        is FederatedSession -> FederatedSession.jsonSerde.serialize(value)
+    }
+
+    override fun deserialize(json: JSONObject) = when (val type = json.getRequiredString(Fields.TYPE)) {
+        SimpleSessionJsonSerde.TYPE_VALUE -> SimpleSessionJsonSerde.deserialize(json)
+        FederatedSessionJsonSerde.TYPE_VALUE -> FederatedSessionJsonSerde.deserialize(json)
+        else -> error("Unsupported session type $type")
+    }
+
+    private object Fields {
+        const val TYPE = "type"
+    }
+}
+
+val Session.Companion.jsonSerde: JsonSerde.SchemaAware<Session> get() = SessionJsonSerde
