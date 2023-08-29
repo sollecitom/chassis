@@ -8,11 +8,14 @@ import org.sollecitom.chassis.correlation.core.domain.access.authorization.Autho
 import org.sollecitom.chassis.correlation.core.serialization.json.access.autorization.jsonSerde
 import org.sollecitom.chassis.correlation.core.test.utils.access.authorization.create
 import org.sollecitom.chassis.json.test.utils.JsonSerdeTestSpecification
+import org.sollecitom.chassis.test.utils.params.ParameterizedTestSupport
 
 @TestInstance(PER_CLASS)
 private class AuthorizationPrincipalJsonSerializationTests : JsonSerdeTestSpecification<AuthorizationPrincipal>, WithCoreGenerators by WithCoreGenerators.testProvider {
 
-    override fun values() = listOf(AuthorizationPrincipal.create())
-
     override val jsonSerde get() = AuthorizationPrincipal.jsonSerde
+
+    override fun arguments() = ParameterizedTestSupport.arguments(
+        "default-roles" to AuthorizationPrincipal.create()
+    )
 }

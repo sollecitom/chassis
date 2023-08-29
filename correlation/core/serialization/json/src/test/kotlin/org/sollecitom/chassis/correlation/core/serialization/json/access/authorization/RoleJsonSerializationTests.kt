@@ -8,11 +8,14 @@ import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.Role
 import org.sollecitom.chassis.correlation.core.serialization.json.access.autorization.jsonSerde
 import org.sollecitom.chassis.json.test.utils.JsonSerdeTestSpecification
+import org.sollecitom.chassis.test.utils.params.ParameterizedTestSupport
 
 @TestInstance(PER_CLASS)
 private class RoleJsonSerializationTests : JsonSerdeTestSpecification<Role>, WithCoreGenerators by WithCoreGenerators.testProvider {
 
-    override fun values() = listOf(Role("some-role".let(::Name)))
-
     override val jsonSerde get() = Role.jsonSerde
+
+    override fun arguments() = ParameterizedTestSupport.arguments(
+        "test-role" to Role("some-role".let(::Name))
+    )
 }

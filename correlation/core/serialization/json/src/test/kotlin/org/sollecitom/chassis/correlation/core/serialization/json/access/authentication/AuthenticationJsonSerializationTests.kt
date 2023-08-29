@@ -9,11 +9,16 @@ import org.sollecitom.chassis.correlation.core.test.utils.access.authentication.
 import org.sollecitom.chassis.correlation.core.test.utils.access.authentication.federated
 import org.sollecitom.chassis.correlation.core.test.utils.access.authentication.stateless
 import org.sollecitom.chassis.json.test.utils.JsonSerdeTestSpecification
+import org.sollecitom.chassis.test.utils.params.ParameterizedTestSupport
 
 @TestInstance(PER_CLASS)
 private class AuthenticationJsonSerializationTests : JsonSerdeTestSpecification<Authentication>, WithCoreGenerators by WithCoreGenerators.testProvider {
 
-    override fun values() = listOf(Authentication.credentialsBased(), Authentication.federated(), Authentication.stateless())
-
     override val jsonSerde get() = Authentication.jsonSerde
+
+    override fun arguments() = ParameterizedTestSupport.arguments(
+        "credentials-based" to Authentication.credentialsBased(),
+        "federated" to Authentication.federated(),
+        "stateless" to Authentication.stateless()
+    )
 }
