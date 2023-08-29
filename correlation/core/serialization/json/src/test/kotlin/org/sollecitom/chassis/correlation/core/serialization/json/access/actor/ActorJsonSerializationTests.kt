@@ -28,7 +28,7 @@ private class ActorJsonSerializationTests : JsonSerdeTestSpecification<Actor>, W
         "impersonating" to Actor.direct().impersonating(Actor.UserAccount.create()),
     )
 
-    // TODO remove
+    // TODO fix and remove!
     @ParameterizedTest
     @MethodSource("arguments")
     override fun `serializing and deserializing to and from JSON`(argument: ParameterizedTestSupport.InlineWrapper<Actor>) {
