@@ -7,18 +7,19 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 interface JsonSerdeTestSpecification<VALUE : Any> {
 
-    fun value(): VALUE
+    fun values(): List<VALUE>
     val jsonSerde: JsonSerde.SchemaAware<VALUE>
 
     @Test
     fun `serializing and deserializing to and from JSON`() {
 
-        val value = value()
+        values().forEach { value ->
 
-        val json = jsonSerde.serialize(value)
-        val deserialized = jsonSerde.deserialize(json)
+            val json = jsonSerde.serialize(value)
+            val deserialized = jsonSerde.deserialize(json)
 
-        assertThat(deserialized).isEqualTo(value)
-        assertThat(json).compliesWith(jsonSerde.schema)
+            assertThat(deserialized).isEqualTo(value)
+            assertThat(json).compliesWith(jsonSerde.schema)
+        }
     }
 }

@@ -12,7 +12,7 @@ import org.sollecitom.chassis.json.test.utils.JsonSerdeTestSpecification
 @TestInstance(PER_CLASS)
 private class AuthorizationPrincipalJsonSerializationTests : JsonSerdeTestSpecification<AuthorizationPrincipal>, WithCoreGenerators by WithCoreGenerators.testProvider {
 
-    override fun value() = AuthorizationPrincipal.create()
+    override fun values() = listOf(AuthorizationPrincipal.create())
 
     override val jsonSerde get() = AuthorizationPrincipal.jsonSerde
 }

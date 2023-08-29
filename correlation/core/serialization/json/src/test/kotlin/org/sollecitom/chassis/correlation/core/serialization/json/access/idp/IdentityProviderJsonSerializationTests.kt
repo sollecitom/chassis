@@ -13,7 +13,7 @@ import org.sollecitom.chassis.json.test.utils.JsonSerdeTestSpecification
 @TestInstance(PER_CLASS)
 private class IdentityProviderJsonSerializationTests : JsonSerdeTestSpecification<IdentityProvider>, WithCoreGenerators by WithCoreGenerators.testProvider {
 
-    override fun value() = IdentityProvider(name = "Some IDP".let(::Name), tenant = Tenant.create())
+    override fun values() = listOf(IdentityProvider(name = "Some IDP".let(::Name), tenant = Tenant.create()))
 
     override val jsonSerde get() = IdentityProvider.jsonSerde
 }

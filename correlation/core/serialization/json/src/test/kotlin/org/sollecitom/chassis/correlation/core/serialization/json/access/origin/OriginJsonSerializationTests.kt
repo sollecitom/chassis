@@ -11,7 +11,7 @@ import org.sollecitom.chassis.json.test.utils.JsonSerdeTestSpecification
 @TestInstance(PER_CLASS)
 private class OriginJsonSerializationTests : JsonSerdeTestSpecification<Origin>, WithCoreGenerators by WithCoreGenerators.testProvider {
 
-    override fun value() = Origin.create()
+    override fun values() = listOf(Origin.create())
 
     override val jsonSerde get() = Origin.jsonSerde
 }
