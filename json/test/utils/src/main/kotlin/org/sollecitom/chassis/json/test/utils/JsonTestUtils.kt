@@ -27,3 +27,8 @@ fun Assert<JSONObject>.compliesWith(schema: Schema) = given { actual ->
         expected("JSON that complies with schema at :${show(schema.location)} but there were errors: ${show(failure.message)}") // TODO include all causes?
     }
 }
+
+fun Assert<JSONObject>.doesNotComplyWith(schema: Schema) = given { actual ->
+
+    schema.validate(actual) ?: expected("JSON that does not comply with schema at :${show(schema.location)} but there were no errors")
+}
