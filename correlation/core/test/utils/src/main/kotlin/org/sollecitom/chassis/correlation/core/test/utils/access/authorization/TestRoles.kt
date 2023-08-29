@@ -1,8 +1,8 @@
-package org.sollecitom.chassis.correlation.core.test.utils.authorization
+package org.sollecitom.chassis.correlation.core.test.utils.access.authorization
 
 import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.correlation.core.domain.authorization.Role
-import org.sollecitom.chassis.correlation.core.domain.authorization.Roles
+import org.sollecitom.chassis.correlation.core.domain.access.authorization.Role
+import org.sollecitom.chassis.correlation.core.domain.access.authorization.Roles
 
 object TestRoles {
     val admin = "admin".let(::Name).let(::Role)

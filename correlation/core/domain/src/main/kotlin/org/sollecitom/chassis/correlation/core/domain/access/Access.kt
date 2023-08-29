@@ -1,8 +1,8 @@
 package org.sollecitom.chassis.correlation.core.domain.access
 
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
-import org.sollecitom.chassis.correlation.core.domain.authorization.AuthorizationPrincipal
-import org.sollecitom.chassis.correlation.core.domain.origin.Origin
+import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
+import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
 
 sealed interface Access {
 

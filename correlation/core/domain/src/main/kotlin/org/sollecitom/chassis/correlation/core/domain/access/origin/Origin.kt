@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.correlation.core.domain.origin
+package org.sollecitom.chassis.correlation.core.domain.access.origin
 
 import org.sollecitom.chassis.core.domain.networking.IpAddress
 

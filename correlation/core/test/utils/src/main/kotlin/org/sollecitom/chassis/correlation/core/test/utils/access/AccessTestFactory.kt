@@ -3,12 +3,12 @@ package org.sollecitom.chassis.correlation.core.test.utils.access
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
-import org.sollecitom.chassis.correlation.core.domain.authorization.AuthorizationPrincipal
-import org.sollecitom.chassis.correlation.core.domain.origin.Origin
+import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
+import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
 import org.sollecitom.chassis.correlation.core.test.utils.access.actor.direct
-import org.sollecitom.chassis.correlation.core.test.utils.authorization.create
-import org.sollecitom.chassis.correlation.core.test.utils.authorization.withoutRoles
-import org.sollecitom.chassis.correlation.core.test.utils.origin.create
+import org.sollecitom.chassis.correlation.core.test.utils.access.authorization.create
+import org.sollecitom.chassis.correlation.core.test.utils.access.authorization.withoutRoles
+import org.sollecitom.chassis.correlation.core.test.utils.access.origin.create
 
 context(WithCoreGenerators)
 fun Access.Companion.unauthenticated(origin: Origin = Origin.create(), authorization: AuthorizationPrincipal = AuthorizationPrincipal.withoutRoles()): Access.Unauthenticated = Access.Unauthenticated(origin, authorization)

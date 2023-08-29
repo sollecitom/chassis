@@ -7,11 +7,11 @@ import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.networking.IpAddress
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.authorization.AuthorizationInfo
-import org.sollecitom.chassis.correlation.core.domain.authorization.Role
-import org.sollecitom.chassis.correlation.core.domain.authorization.Roles
+import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationInfo
+import org.sollecitom.chassis.correlation.core.domain.access.authorization.Role
+import org.sollecitom.chassis.correlation.core.domain.access.authorization.Roles
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
-import org.sollecitom.chassis.correlation.core.domain.origin.Origin
+import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
 import org.sollecitom.chassis.correlation.core.domain.trace.ExternalInvocationTrace
 import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace

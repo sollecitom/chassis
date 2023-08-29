@@ -13,11 +13,11 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.access.authenticatedOrFailure
 import org.sollecitom.chassis.correlation.core.domain.access.authenticatedOrThrow
-import org.sollecitom.chassis.correlation.core.domain.authorization.AuthorizationPrincipal
-import org.sollecitom.chassis.correlation.core.domain.origin.Origin
+import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
+import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
 import org.sollecitom.chassis.correlation.core.test.utils.access.actor.direct
-import org.sollecitom.chassis.correlation.core.test.utils.authorization.create
-import org.sollecitom.chassis.correlation.core.test.utils.origin.create
+import org.sollecitom.chassis.correlation.core.test.utils.access.authorization.create
+import org.sollecitom.chassis.correlation.core.test.utils.access.origin.create
 import org.sollecitom.chassis.test.utils.assertions.failedThrowing
 import org.sollecitom.chassis.test.utils.assertions.succeededWithResult
 
