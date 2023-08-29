@@ -8,6 +8,9 @@ data class IdempotencyContext(val namespace: Name?, val key: Name) {
 
     companion object {
 
+        fun combinedNamespace(firstPart: String, vararg parts: String): Name = listOf(firstPart, *parts).joinToString(NAMESPACE_SEPARATOR).let(::Name)
+
         const val DEFAULT_IDEMPOTENCY_ID_SEGMENTS_SEPARATOR = "-"
+        const val NAMESPACE_SEPARATOR = "-"
     }
 }
