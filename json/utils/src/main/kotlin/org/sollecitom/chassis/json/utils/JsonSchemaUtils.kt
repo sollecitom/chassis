@@ -12,12 +12,11 @@ import java.net.URI
 fun jsonSchemaAt(location: String): Schema = openAsStream(location).use {
 
     val schemaJson = JsonParser(it).parse()
-    val initialBaseURI = "mem://input"
-    SchemaLoader(
-        schemaJson = schemaJson, config = SchemaLoaderConfig(schemaClient = CustomSchemaClient(initialBaseURI), initialBaseURI = initialBaseURI)
-    ).load()
-//    SchemaLoader(schemaJson).load()
+    SchemaLoader(schemaJson, SchemaLoaderConfig(schemaClient, initialBaseURI)).load()
 }
+
+private const val initialBaseURI = "mem://input"
+private val schemaClient: SchemaClient = CustomSchemaClient(initialBaseURI)
 
 private class CustomSchemaClient(private val initialBaseURI: String) : SchemaClient {
 
