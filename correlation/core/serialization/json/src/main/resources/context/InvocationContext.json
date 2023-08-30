@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "access",
+    "trace"
+  ],
+  "properties": {
+    "access": {
+      "$ref": "classpath://access/Access.json"
+    },
+    "trace": {
+      "$ref": "classpath://trace/Trace.json"
+    }
+  }
+}
