@@ -25,6 +25,7 @@ import org.sollecitom.chassis.http4k.server.utils.asBlockingHandler
 import org.sollecitom.chassis.http4k.utils.lens.AddContentLength
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
+import org.sollecitom.chassis.web.api.utils.endpoint.Endpoint
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 

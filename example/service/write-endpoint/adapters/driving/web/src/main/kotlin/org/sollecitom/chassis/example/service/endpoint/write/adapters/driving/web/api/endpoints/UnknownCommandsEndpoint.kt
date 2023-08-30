@@ -8,7 +8,7 @@ import org.http4k.lens.int
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
-import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.Endpoint
+import org.sollecitom.chassis.web.api.utils.endpoint.Endpoint
 import org.sollecitom.chassis.example.service.endpoint.write.application.GenericCommandType
 import org.sollecitom.chassis.http4k.server.utils.toSuspending
 import org.sollecitom.chassis.http4k.utils.lens.composite

@@ -1,9 +1,9 @@
-package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api
+package org.sollecitom.chassis.web.api.utils.endpoint
 
 import org.http4k.core.Method
 import org.http4k.routing.RoutingHttpHandler
 
-interface Endpoint { // TODO move?
+interface Endpoint {
 
     val path: String
     val methods: Set<Method>
