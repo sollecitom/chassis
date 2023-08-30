@@ -10,7 +10,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 private object OriginJsonSerde : JsonSerde.SchemaAware<Origin> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/origin/Origin.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/origin/Origin.json") }
 
     override fun serialize(value: Origin) = JSONObject().apply {
         put(Fields.IP_ADDRESS, value.ipAddress.stringValue)

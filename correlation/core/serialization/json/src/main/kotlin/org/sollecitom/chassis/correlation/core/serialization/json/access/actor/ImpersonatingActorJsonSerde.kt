@@ -15,7 +15,7 @@ internal object ImpersonatingActorJsonSerde : JsonSerde.SchemaAware<Impersonatin
 
     const val TYPE_VALUE = "impersonating"
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/actor/ImpersonatingActor.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/actor/ImpersonatingActor.json") }
 
     override fun serialize(value: ImpersonatingActor) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

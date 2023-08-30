@@ -13,7 +13,7 @@ internal object StatelessAuthenticationJsonSerde : JsonSerde.SchemaAware<Statele
 
     const val TYPE_VALUE = "stateless"
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/authentication/StatelessAuthentication.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/authentication/StatelessAuthentication.json") }
 
     override fun serialize(value: StatelessAuthentication) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

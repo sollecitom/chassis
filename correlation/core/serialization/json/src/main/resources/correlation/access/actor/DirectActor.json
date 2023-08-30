@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "unevaluatedProperties": false,
+  "required": [
+    "type",
+    "account",
+    "authentication"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "direct"
+    },
+    "account": {
+      "$ref": "/correlation/access/actor/Account.json"
+    },
+    "authentication": {
+      "$ref": "/correlation/access/authentication/Authentication.json"
+    }
+  }
+}

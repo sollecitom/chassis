@@ -13,7 +13,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 private object InvocationContextJsonSerde : JsonSerde.SchemaAware<InvocationContext<*>> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("context/InvocationContext.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/context/InvocationContext.json") }
 
     override fun serialize(value: InvocationContext<*>) = JSONObject().apply {
         put(Fields.ACCESS, Access.jsonSerde.serialize(value.access))

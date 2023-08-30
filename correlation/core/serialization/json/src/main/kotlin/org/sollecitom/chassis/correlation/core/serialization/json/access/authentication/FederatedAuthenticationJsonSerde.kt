@@ -15,7 +15,7 @@ internal object FederatedAuthenticationJsonSerde : JsonSerde.SchemaAware<Federat
 
     const val TYPE_VALUE = "federated"
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/authentication/FederatedAuthentication.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/authentication/FederatedAuthentication.json") }
 
     override fun serialize(value: FederatedAuthentication) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

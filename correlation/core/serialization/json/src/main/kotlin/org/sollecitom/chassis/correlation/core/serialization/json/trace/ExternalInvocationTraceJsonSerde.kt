@@ -11,7 +11,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 private object ExternalInvocationTraceJsonSerde : JsonSerde.SchemaAware<ExternalInvocationTrace> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("trace/ExternalInvocationTrace.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/trace/ExternalInvocationTrace.json") }
 
     override fun serialize(value: ExternalInvocationTrace) = JSONObject().apply {
         put(Fields.INVOCATION_ID, Id.jsonSerde.serialize(value.invocationId))

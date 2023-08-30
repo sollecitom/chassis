@@ -9,6 +9,7 @@ paths:
       operationId: registerUserV1
       summary: Submits a register user V1 command to register a new user.
       parameters:
+        - $ref: '#/components/parameters/invocationContext'
         - $ref: '#/components/parameters/accept'
         - $ref: '#/components/parameters/contentLength'
       requestBody:
@@ -42,7 +43,7 @@ components:
       style: simple
       explode: false
       schema:
-        $ref: '/context/InvocationContext.json'
+        $ref: '/correlation/context/InvocationContext.json'
         # Move to a file?
         example: { "trace": { "originating": { "created-at": "2023-08-30T10:51:33.917751Z","id": { "type": "ulid","value": "01H9313XJP07FCQT6QTJVR79RW" } },"parent": { "created-at": "2023-08-30T10:51:34.917751Z","id": { "type": "ulid","value": "01H9313XJP07FCQT6QTJVR79RX" } },"invocation": { "created-at": "2023-08-30T10:51:36.917751Z","id": { "type": "ulid","value": "01H9313XJP07FCQT6QTJVR79RY" } },"external": { "action-id": { "type": "string","value": "01H9313XJP07FCQT6QTJVR79RV" },"invocation-id": { "type": "string","value": "01H9313XJP07FCQT6QTJVR79RT" } } },"access": { "authorization": { "roles": { "values": [ ] } },"origin": { "ip-address": "127.0.0.1" },"type": "unauthenticated" } }
     contentLength:

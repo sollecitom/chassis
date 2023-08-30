@@ -14,7 +14,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 private object TenantJsonSerde : JsonSerde.SchemaAware<Tenant> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("tenancy/Tenant.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/tenancy/Tenant.json") }
 
     override fun serialize(value: Tenant) = JSONObject().apply {
         put(Fields.ID, Id.jsonSerde.serialize(value.id))

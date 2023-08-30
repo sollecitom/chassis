@@ -15,7 +15,7 @@ internal object ActorOnBehalfJsonSerde : JsonSerde.SchemaAware<ActorOnBehalf> {
 
     const val TYPE_VALUE = "on-behalf"
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/actor/ActorOnBehalf.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/actor/ActorOnBehalf.json") }
 
     override fun serialize(value: ActorOnBehalf) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

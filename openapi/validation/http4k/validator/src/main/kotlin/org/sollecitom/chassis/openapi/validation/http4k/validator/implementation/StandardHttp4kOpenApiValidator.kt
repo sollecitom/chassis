@@ -3,6 +3,7 @@ package org.sollecitom.chassis.openapi.validation.http4k.validator.implementatio
 import com.atlassian.oai.validator.OpenApiInteractionValidator
 import com.atlassian.oai.validator.model.SimpleRequest
 import com.atlassian.oai.validator.model.SimpleResponse
+import com.atlassian.oai.validator.report.ValidationReport
 import io.swagger.v3.oas.models.OpenAPI
 import org.http4k.core.*
 import org.sollecitom.chassis.http4k.utils.lens.contentType
@@ -28,7 +29,9 @@ internal class StandardHttp4kOpenApiValidator(openApi: OpenAPI, rejectUnknownReq
     private val responseJsonBodyValidator = ResponseJsonBodyValidator(jsonSchemasDirectoryName = jsonSchemasDirectoryName)
     private val responseValidator: OpenApiInteractionValidator = OpenApiInteractionValidator.createFor(openApi).withRejectUnknownResponseHeaders(rejectUnknownResponseHeaders).withCustomResponseValidation(responseJsonBodyValidator).build()
 
-    override fun validate(request: Request) = requestValidator.validateRequest(request.adapted())
+    override fun validate(request: Request): ValidationReport {
+        return requestValidator.validateRequest(request.adapted())
+    }
 
     override fun validate(path: String, method: Method, acceptHeader: ContentType, response: Response) = responseValidator.validateResponse(path, method.adapted(), response.adapted(acceptHeader))
 

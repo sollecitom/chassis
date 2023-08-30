@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "unevaluatedProperties": false,
+  "required": [
+    "type",
+    "impersonator",
+    "impersonated",
+    "authentication"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "impersonating"
+    },
+    "impersonator": {
+      "$ref": "/correlation/access/actor/Account.json"
+    },
+    "impersonated": {
+      "$ref": "/correlation/access/actor/Account.json"
+    },
+    "authentication": {
+      "$ref": "/correlation/access/authentication/Authentication.json"
+    }
+  }
+}

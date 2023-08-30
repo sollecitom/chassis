@@ -18,7 +18,7 @@ internal object AuthenticatedAccessJsonSerde : JsonSerde.SchemaAware<Access.Auth
 
     const val TYPE_VALUE = "authenticated"
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/AuthenticatedAccess.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/AuthenticatedAccess.json") }
 
     override fun serialize(value: Access.Authenticated) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "actor",
+    "origin",
+    "authorization"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "authenticated"
+    },
+    "actor": {
+      "$ref": "/correlation/access/actor/Actor.json"
+    },
+    "origin": {
+      "$ref": "/correlation/access/origin/Origin.json"
+    },
+    "authorization": {
+      "$ref": "/correlation/access/authorization/AuthorizationPrincipal.json"
+    }
+  }
+}

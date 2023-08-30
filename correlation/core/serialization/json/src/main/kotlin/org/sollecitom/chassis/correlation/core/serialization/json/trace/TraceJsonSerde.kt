@@ -11,7 +11,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 private object TraceJsonSerde : JsonSerde.SchemaAware<Trace> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("trace/Trace.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/trace/Trace.json") }
 
     override fun serialize(value: Trace) = JSONObject().apply {
         put(Fields.INVOCATION, InvocationTrace.jsonSerde.serialize(value.invocation))

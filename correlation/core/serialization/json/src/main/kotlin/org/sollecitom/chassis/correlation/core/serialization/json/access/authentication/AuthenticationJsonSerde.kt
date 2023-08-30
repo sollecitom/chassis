@@ -9,7 +9,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 private object AuthenticationJsonSerde : JsonSerde.SchemaAware<Authentication> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/authentication/Authentication.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/authentication/Authentication.json") }
 
     override fun serialize(value: Authentication) = when (value) {
         is CredentialsBasedAuthentication -> CredentialsBasedAuthentication.jsonSerde.serialize(value)

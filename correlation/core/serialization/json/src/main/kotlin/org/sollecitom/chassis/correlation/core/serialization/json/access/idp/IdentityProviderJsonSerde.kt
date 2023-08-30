@@ -13,7 +13,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 private object IdentityProviderJsonSerde : JsonSerde.SchemaAware<IdentityProvider> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/idp/IdentityProvider.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/idp/IdentityProvider.json") }
 
     override fun serialize(value: IdentityProvider) = JSONObject().apply {
         put(Fields.TENANT, Tenant.jsonSerde.serialize(value.tenant))

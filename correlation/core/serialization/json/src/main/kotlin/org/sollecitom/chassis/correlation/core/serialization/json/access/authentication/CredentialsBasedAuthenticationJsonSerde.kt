@@ -15,7 +15,7 @@ internal object CredentialsBasedAuthenticationJsonSerde : JsonSerde.SchemaAware<
 
     const val TYPE_VALUE = "credentials-based"
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/authentication/CredentialsBasedAuthentication.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/authentication/CredentialsBasedAuthentication.json") }
 
     override fun serialize(value: CredentialsBasedAuthentication) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

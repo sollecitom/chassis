@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "type"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "simple",
+        "federated"
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "/correlation/access/session/SimpleSession.json"
+    },
+    {
+      "$ref": "/correlation/access/session/FederatedSession.json"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "invocation",
+    "parent",
+    "originating",
+    "external"
+  ],
+  "properties": {
+    "invocation": {
+      "$ref": "/correlation/trace/InvocationTrace.json"
+    },
+    "parent": {
+      "$ref": "/correlation/trace/InvocationTrace.json"
+    },
+    "originating": {
+      "$ref": "/correlation/trace/InvocationTrace.json"
+    },
+    "external": {
+      "$ref": "/correlation/trace/ExternalInvocationTrace.json"
+    }
+  }
+}

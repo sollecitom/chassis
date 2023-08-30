@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "type"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "user",
+        "service"
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "/correlation/access/actor/UserAccount.json"
+    },
+    {
+      "$ref": "/correlation/access/actor/ServiceAccount.json"
+    }
+  ]
+}

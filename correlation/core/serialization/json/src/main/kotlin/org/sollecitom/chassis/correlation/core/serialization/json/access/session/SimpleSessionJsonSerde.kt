@@ -16,7 +16,7 @@ internal object SimpleSessionJsonSerde : JsonSerde.SchemaAware<SimpleSession> {
 
     const val TYPE_VALUE = "simple"
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/session/SimpleSession.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/session/SimpleSession.json") }
 
     override fun serialize(value: SimpleSession) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

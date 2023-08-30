@@ -10,7 +10,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 private object AuthenticationPrincipalJsonSerde : JsonSerde.SchemaAware<AuthorizationPrincipal> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/authorization/AuthorizationPrincipal.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/authorization/AuthorizationPrincipal.json") }
 
     override fun serialize(value: AuthorizationPrincipal) = JSONObject().apply {
 

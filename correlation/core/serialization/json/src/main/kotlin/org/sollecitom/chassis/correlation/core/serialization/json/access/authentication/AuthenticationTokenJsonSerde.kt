@@ -15,7 +15,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 private object AuthenticationTokenJsonSerde : JsonSerde.SchemaAware<Authentication.Token> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/authentication/AuthenticationToken.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/authentication/AuthenticationToken.json") }
 
     override fun serialize(value: Authentication.Token) = JSONObject().apply {
         put(Fields.ID, Id.jsonSerde.serialize(value.id))

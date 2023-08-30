@@ -15,7 +15,7 @@ internal object DirectActorJsonSerde : JsonSerde.SchemaAware<DirectActor> {
 
     const val TYPE_VALUE = "direct"
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/actor/DirectActor.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/actor/DirectActor.json") }
 
     override fun serialize(value: DirectActor) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

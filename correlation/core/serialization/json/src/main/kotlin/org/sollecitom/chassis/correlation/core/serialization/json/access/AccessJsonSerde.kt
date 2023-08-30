@@ -9,7 +9,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 private object AccessJsonSerde : JsonSerde.SchemaAware<Access> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/Access.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/Access.json") }
 
     override fun serialize(value: Access) = when (value) {
         is Access.Authenticated -> Access.Authenticated.jsonSerde.serialize(value)

@@ -11,7 +11,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 private object SessionJsonSerde : JsonSerde.SchemaAware<Session> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/session/Session.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/session/Session.json") }
 
     override fun serialize(value: Session) = when (value) {
         is SimpleSession -> SimpleSession.jsonSerde.serialize(value)

@@ -10,7 +10,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 private object RoleJsonSerde : JsonSerde.SchemaAware<Role> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/authorization/Role.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/authorization/Role.json") }
 
     override fun serialize(value: Role) = JSONObject().apply {
 

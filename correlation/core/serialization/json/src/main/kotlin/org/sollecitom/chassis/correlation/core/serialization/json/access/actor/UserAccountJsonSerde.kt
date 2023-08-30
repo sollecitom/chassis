@@ -17,7 +17,7 @@ internal object UserAccountJsonSerde : JsonSerde.SchemaAware<Actor.UserAccount> 
 
     const val TYPE_VALUE = "user"
 
-    override val schema: Schema by lazy { jsonSchemaAt("access/actor/UserAccount.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/actor/UserAccount.json") }
 
     override fun serialize(value: Actor.UserAccount) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

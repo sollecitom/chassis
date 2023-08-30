@@ -16,6 +16,7 @@ import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.application.ApplicationCommand
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.WebAPI
@@ -28,6 +29,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.configuration.confi
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.contentLength
 import org.sollecitom.chassis.http4k.utils.lens.contentType
+import org.sollecitom.chassis.http4k.utils.lens.withInvocationContext
 import org.sollecitom.chassis.openapi.parser.OpenApiReader
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
 import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
@@ -53,7 +55,8 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
         val api = webApi { _, _ -> Accepted(user = UserWithPendingRegistration(userId)) }
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
-        val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json)
+        val invocationContext = InvocationContext.unauthenticated()
+        val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
         request.ensureCompliantWithOpenApi()
 
         val response = api(request)
@@ -150,6 +153,8 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
             else -> error("Unknown command type ${command.type}")
         }
     }
+
+    private fun Request.withInvocationContext(context: InvocationContext<*>) = withInvocationContext(WebAPI.headerNames.correlation.invocationContext, context)
 
     private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend (RegisterUser.V1, InvocationContext<Access>) -> RegisterUser.V1.Result = { _, _ -> Accepted(user = UserWithPendingRegistration(id = newId.internal())) }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration, coreGenerators = this)
 
