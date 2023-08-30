@@ -8,12 +8,10 @@
   ],
   "properties": {
     "invocation-id": {
-      "type": "string",
-      "minLength": 1
+      "$ref": "classpath://identity/Id.json"
     },
     "action-id": {
-      "type": "string",
-      "minLength": 1
+      "$ref": "classpath://identity/Id.json"
     }
   }
 }
