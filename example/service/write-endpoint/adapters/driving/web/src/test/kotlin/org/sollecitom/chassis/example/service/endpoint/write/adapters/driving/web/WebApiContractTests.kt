@@ -42,8 +42,6 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
     private val openApi = OpenApiReader.parse(ApplicationProperties.OPEN_API_FILE_LOCATION)
     override val openApiValidator = Http4kOpenApiValidator(openApi)
 
-    // TODO add invocation context
-
     init {
         configureLogging()
     }

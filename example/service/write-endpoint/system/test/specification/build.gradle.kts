@@ -1,5 +1,4 @@
 dependencies {
-    api(projects.chassisExampleServiceWriteEndpointApplication)
     api(projects.chassisWebServiceDomain)
     api(projects.chassisWebApiTestUtils)
     api(projects.chassisTestUtils)
