@@ -9,12 +9,13 @@ import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
+// TODO move (along with the json file and the tests) to another module
 private object IdJsonSerde : JsonSerde.SchemaAware<Id> {
 
     private const val TYPE_ULID = "ulid"
     private const val TYPE_STRING = "string"
 
-    override val schema: Schema by lazy { jsonSchemaAt("trace/ExternalInvocationTrace.json") }
+    override val schema: Schema by lazy { jsonSchemaAt("identity/Id.json") }
 
     override fun serialize(value: Id) = JSONObject().apply {
         put(Fields.VALUE, value.stringValue)
