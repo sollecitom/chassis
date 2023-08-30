@@ -12,7 +12,7 @@
       "const": "stateless"
     },
     "token": {
-      "$ref": "classpath://access/authentication/AuthenticationToken.json"
+      "$ref": "/access/authentication/AuthenticationToken.json"
     }
   }
 }

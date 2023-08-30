@@ -9,7 +9,7 @@
     "values": {
       "type": "array",
       "items": {
-        "$ref": "classpath://access/authorization/Role.json"
+        "$ref": "/access/authorization/Role.json"
       }
     }
   }

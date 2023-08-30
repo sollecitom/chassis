@@ -48,7 +48,7 @@ class WebAPI(private val configuration: Configuration, application: Application,
 
     private fun mainApp(vararg endpoints: Endpoint): HttpHandler = requestFilters().then(routes(*endpoints.map(Endpoint::route).toTypedArray())).withFilter(GZip().then(ResponseFilters.AddContentLength))
 
-    private fun requestFilters(): Filter = CatchLensFailure.then(GunZip()).then(PrintRequestAndResponse().inIntelliJOnly()).then(ServerFilters.InitialiseRequestContext(RequestContextsProvider.requestContexts)).then(InvocationContextFilter.parseContextFromGatewayHeaders())
+    private fun requestFilters(): Filter = CatchLensFailure.then(GunZip()).then(PrintRequestAndResponse().inIntelliJOnly()).then(ServerFilters.InitialiseRequestContext(RequestContextsProvider.requestContexts)).then(InvocationContextFilter.parseContextFromGatewayHeaders(headerNames = headerNames.correlation))
 
     private fun server(mainApp: SuspendingHttpHandler): Http4kK8sServer {
 
@@ -66,7 +66,10 @@ class WebAPI(private val configuration: Configuration, application: Application,
         companion object
     }
 
-    companion object : Loggable()
+    companion object : Loggable() {
+        // TODO introduce an HttpApi interface?
+        val headerNames: HttpHeaderNames = CompanySpecificHttpHeaderNames("acme")
+    }
 }
 
 object RequestContextsProvider {

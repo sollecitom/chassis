@@ -8,10 +8,10 @@
   ],
   "properties": {
     "access": {
-      "$ref": "classpath://access/Access.json"
+      "$ref": "/access/Access.json"
     },
     "trace": {
-      "$ref": "classpath://trace/Trace.json"
+      "$ref": "/trace/Trace.json"
     }
   }
 }

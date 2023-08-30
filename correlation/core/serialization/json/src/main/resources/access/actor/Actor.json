@@ -16,13 +16,13 @@
   },
   "oneOf": [
     {
-      "$ref": "classpath://access/actor/DirectActor.json"
+      "$ref": "/access/actor/DirectActor.json"
     },
     {
-      "$ref": "classpath://access/actor/ActorOnBehalf.json"
+      "$ref": "/access/actor/ActorOnBehalf.json"
     },
     {
-      "$ref": "classpath://access/actor/ImpersonatingActor.json"
+      "$ref": "/access/actor/ImpersonatingActor.json"
     }
   ]
 }

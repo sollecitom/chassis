@@ -14,13 +14,13 @@
       "const": "on-behalf"
     },
     "account": {
-      "$ref": "classpath://access/actor/Account.json"
+      "$ref": "/access/actor/Account.json"
     },
     "benefiting-account": {
-      "$ref": "classpath://access/actor/Account.json"
+      "$ref": "/access/actor/Account.json"
     },
     "authentication": {
-      "$ref": "classpath://access/authentication/Authentication.json"
+      "$ref": "/access/authentication/Authentication.json"
     }
   }
 }

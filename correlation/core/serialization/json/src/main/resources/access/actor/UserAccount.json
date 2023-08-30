@@ -13,10 +13,10 @@
       "const": "user"
     },
     "id": {
-      "$ref": "classpath://identity/Id.json"
+      "$ref": "/identity/Id.json"
     },
     "tenant": {
-      "$ref": "classpath://tenancy/Tenant.json"
+      "$ref": "/tenancy/Tenant.json"
     }
   }
 }

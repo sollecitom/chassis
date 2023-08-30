@@ -15,10 +15,10 @@
   },
   "oneOf": [
     {
-      "$ref": "classpath://access/AuthenticatedAccess.json"
+      "$ref": "/access/AuthenticatedAccess.json"
     },
     {
-      "$ref": "classpath://access/UnauthenticatedAccess.json"
+      "$ref": "/access/UnauthenticatedAccess.json"
     }
   ]
 }

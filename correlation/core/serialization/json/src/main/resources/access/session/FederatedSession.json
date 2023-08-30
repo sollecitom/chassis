@@ -13,10 +13,10 @@
       "const": "federated"
     },
     "id": {
-      "$ref": "classpath://identity/Id.json"
+      "$ref": "/identity/Id.json"
     },
     "identity-provider": {
-      "$ref": "classpath://access/idp/IdentityProvider.json"
+      "$ref": "/access/idp/IdentityProvider.json"
     }
   }
 }

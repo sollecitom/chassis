@@ -16,13 +16,13 @@
   },
   "oneOf": [
     {
-      "$ref": "classpath://access/authentication/StatelessAuthentication.json"
+      "$ref": "/access/authentication/StatelessAuthentication.json"
     },
     {
-      "$ref": "classpath://access/authentication/FederatedAuthentication.json"
+      "$ref": "/access/authentication/FederatedAuthentication.json"
     },
     {
-      "$ref": "classpath://access/authentication/CredentialsBasedAuthentication.json"
+      "$ref": "/access/authentication/CredentialsBasedAuthentication.json"
     }
   ]
 }

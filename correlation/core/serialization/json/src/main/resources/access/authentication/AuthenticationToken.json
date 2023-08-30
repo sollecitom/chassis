@@ -7,7 +7,7 @@
   ],
   "properties": {
     "id": {
-      "$ref": "classpath://identity/Id.json"
+      "$ref": "/identity/Id.json"
     },
     "valid-from": {
       "type": "string",

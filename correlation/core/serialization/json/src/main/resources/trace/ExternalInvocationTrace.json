@@ -8,10 +8,10 @@
   ],
   "properties": {
     "invocation-id": {
-      "$ref": "classpath://identity/Id.json"
+      "$ref": "/identity/Id.json"
     },
     "action-id": {
-      "$ref": "classpath://identity/Id.json"
+      "$ref": "/identity/Id.json"
     }
   }
 }

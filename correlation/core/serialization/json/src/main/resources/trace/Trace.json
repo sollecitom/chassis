@@ -10,16 +10,16 @@
   ],
   "properties": {
     "invocation": {
-      "$ref": "classpath://trace/InvocationTrace.json"
+      "$ref": "/trace/InvocationTrace.json"
     },
     "parent": {
-      "$ref": "classpath://trace/InvocationTrace.json"
+      "$ref": "/trace/InvocationTrace.json"
     },
     "originating": {
-      "$ref": "classpath://trace/InvocationTrace.json"
+      "$ref": "/trace/InvocationTrace.json"
     },
     "external": {
-      "$ref": "classpath://trace/ExternalInvocationTrace.json"
+      "$ref": "/trace/ExternalInvocationTrace.json"
     }
   }
 }

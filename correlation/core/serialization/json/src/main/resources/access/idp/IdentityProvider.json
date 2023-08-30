@@ -12,7 +12,7 @@
       "minLength": 1
     },
     "tenant": {
-      "$ref": "classpath://tenancy/Tenant.json"
+      "$ref": "/tenancy/Tenant.json"
     }
   }
 }

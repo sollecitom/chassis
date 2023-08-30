@@ -12,7 +12,7 @@
       "const": "simple"
     },
     "id": {
-      "$ref": "classpath://identity/Id.json"
+      "$ref": "/identity/Id.json"
     }
   }
 }

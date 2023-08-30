@@ -7,7 +7,7 @@
   ],
   "properties": {
     "roles": {
-      "$ref": "classpath://access/authorization/Roles.json"
+      "$ref": "/access/authorization/Roles.json"
     }
   }
 }

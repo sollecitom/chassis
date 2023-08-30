@@ -3,18 +3,11 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.w
 import org.http4k.core.*
 import org.http4k.lens.RequestContextKey
 import org.http4k.lens.RequestContextLens
-import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.core.domain.networking.IpAddress
+import org.json.JSONObject
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
-import org.sollecitom.chassis.correlation.core.domain.access.authorization.Role
-import org.sollecitom.chassis.correlation.core.domain.access.authorization.Roles
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
-import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
-import org.sollecitom.chassis.correlation.core.domain.trace.ExternalInvocationTrace
-import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
-import org.sollecitom.chassis.correlation.core.domain.trace.Trace
+import org.sollecitom.chassis.correlation.core.serialization.json.context.jsonSerde
 
 // TODO move
 object InvocationContextFilter {
@@ -27,14 +20,14 @@ object InvocationContextFilter {
     // TODO add a filter that puts the context on the logging stack
     // TODO create 1 Filter that acts as an embedded gateway itself
     context(WithCoreGenerators)
-    fun parseContextFromGatewayHeaders(): Filter = GatewayInfoContextParsingFilter(key)
+    fun parseContextFromGatewayHeaders(headerNames: HttpHeaderNames.Correlation): Filter = GatewayInfoContextParsingFilter(key, headerNames)
 
     context(WithCoreGenerators)
-    private class GatewayInfoContextParsingFilter(private val key: Key) : Filter {
+    private class GatewayInfoContextParsingFilter(private val key: Key, private val headerNames: HttpHeaderNames.Correlation) : Filter {
 
         override fun invoke(next: HttpHandler) = { request: Request ->
 
-            val attempt = runCatching { invocationContext(request) }
+            val attempt = runCatching { invocationContext(request, headerNames) }
             when {
                 attempt.isSuccess -> next(request.with(attempt.getOrThrow()))
                 else -> attempt.exceptionOrNull()!!.asResponse()
@@ -49,19 +42,12 @@ object InvocationContextFilter {
 
         private fun Throwable.asResponse() = Response(Status.BAD_REQUEST.description("Error while parsing the invocation context: $message"))
 
-        // TODO pass the name of a header from the constructor, read a JSON payload from it, and use a JSON deserializer here
         context(WithCoreGenerators)
-        private fun invocationContext(request: Request): InvocationContext<Access> {
+        private fun invocationContext(request: Request, headerNames: HttpHeaderNames.Correlation): InvocationContext<Access> {
 
-            // TODO fix this to parse this information from headers
-            val origin = Origin(IpAddress.create("127.0.0.1"))
-            val authorization = AuthorizationPrincipal(roles = Roles(setOf(Role("admin".let(::Name)))))
-            val invocation = InvocationTrace(id = newId.internal(), createdAt = clock.now())
-            val parent = InvocationTrace(id = newId.internal(), createdAt = clock.now())
-            val originating = InvocationTrace(id = newId.internal(), createdAt = clock.now())
-            val external = ExternalInvocationTrace(invocationId = newId.external(), actionId = newId.external())
-            val trace = Trace(invocation = invocation, parent = parent, originating = originating, external = external)
-            return InvocationContext(Access.Unauthenticated(origin, authorization), trace)
+            val rawValue = request.header(headerNames.invocationContext) ?: error("Missing mandatory invocation context header ${headerNames.invocationContext}")
+            val jsonValue = runCatching { JSONObject(rawValue) }.getOrElse { error("Invalid value for header ${headerNames.invocationContext}. Must be a JSON object.") }
+            return InvocationContext.jsonSerde.deserialize(jsonValue)
         }
     }
 }

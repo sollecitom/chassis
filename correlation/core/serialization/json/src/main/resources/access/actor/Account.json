@@ -15,10 +15,10 @@
   },
   "oneOf": [
     {
-      "$ref": "classpath://access/actor/UserAccount.json"
+      "$ref": "/access/actor/UserAccount.json"
     },
     {
-      "$ref": "classpath://access/actor/ServiceAccount.json"
+      "$ref": "/access/actor/ServiceAccount.json"
     }
   ]
 }

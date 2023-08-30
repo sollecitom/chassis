@@ -8,7 +8,7 @@
   ],
   "properties": {
     "id": {
-      "$ref": "classpath://identity/Id.json"
+      "$ref": "/identity/Id.json"
     },
     "created-at": {
       "type": "string",

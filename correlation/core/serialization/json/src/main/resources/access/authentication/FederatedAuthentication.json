@@ -13,10 +13,10 @@
       "const": "federated"
     },
     "token": {
-      "$ref": "classpath://access/authentication/AuthenticationToken.json"
+      "$ref": "/access/authentication/AuthenticationToken.json"
     },
     "session": {
-      "$ref": "classpath://access/session/FederatedSession.json"
+      "$ref": "/access/session/FederatedSession.json"
     }
   }
 }

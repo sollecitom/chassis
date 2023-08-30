@@ -15,10 +15,10 @@
   },
   "oneOf": [
     {
-      "$ref": "classpath://access/session/SimpleSession.json"
+      "$ref": "/access/session/SimpleSession.json"
     },
     {
-      "$ref": "classpath://access/session/FederatedSession.json"
+      "$ref": "/access/session/FederatedSession.json"
     }
   ]
 }

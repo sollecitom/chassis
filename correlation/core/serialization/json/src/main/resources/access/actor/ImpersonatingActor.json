@@ -14,13 +14,13 @@
       "const": "impersonating"
     },
     "impersonator": {
-      "$ref": "classpath://access/actor/Account.json"
+      "$ref": "/access/actor/Account.json"
     },
     "impersonated": {
-      "$ref": "classpath://access/actor/Account.json"
+      "$ref": "/access/actor/Account.json"
     },
     "authentication": {
-      "$ref": "classpath://access/authentication/Authentication.json"
+      "$ref": "/access/authentication/Authentication.json"
     }
   }
 }

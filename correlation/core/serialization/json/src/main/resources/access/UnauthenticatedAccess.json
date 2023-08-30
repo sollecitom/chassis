@@ -13,10 +13,10 @@
       "const": "unauthenticated"
     },
     "origin": {
-      "$ref": "classpath://access/origin/Origin.json"
+      "$ref": "/access/origin/Origin.json"
     },
     "authorization": {
-      "$ref": "classpath://access/authorization/AuthorizationPrincipal.json"
+      "$ref": "/access/authorization/AuthorizationPrincipal.json"
     }
   }
 }
