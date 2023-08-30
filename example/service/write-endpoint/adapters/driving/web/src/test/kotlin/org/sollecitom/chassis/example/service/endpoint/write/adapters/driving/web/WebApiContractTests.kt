@@ -53,7 +53,8 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
         val api = webApi { _, _ -> Accepted(user = UserWithPendingRegistration(userId)) }
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
-        val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).ensureCompliantWithOpenApi()
+        val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json)
+        request.ensureCompliantWithOpenApi()
 
         val response = api(request)
 
