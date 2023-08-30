@@ -4,6 +4,8 @@ import com.github.erosb.jsonsKema.*
 import org.json.JSONArray
 import org.json.JSONObject
 import org.sollecitom.chassis.resource.utils.ResourceLoader.openAsStream
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.net.URI
 
@@ -16,7 +18,20 @@ fun jsonSchemaAt(location: String): Schema = openAsStream(location).use {
 }
 
 private const val initialBaseURI = "mem://input"
-private val schemaClient: SchemaClient = CustomSchemaClient(initialBaseURI)
+private val schemaClient: SchemaClient by lazy { CachedSchemaClient(CustomSchemaClient(initialBaseURI)) }
+
+private class CachedSchemaClient(private val delegate: SchemaClient) : SchemaClient by delegate {
+
+    private val cache: MutableMap<URI, ByteArray> = mutableMapOf()
+
+    override fun get(uri: URI): InputStream = ByteArrayInputStream(
+        cache.computeIfAbsent(uri) {
+            val out = ByteArrayOutputStream()
+            delegate.get(it).transferTo(out)
+            out.toByteArray()
+        }
+    )
+}
 
 private class CustomSchemaClient(private val initialBaseURI: String) : SchemaClient {
 
