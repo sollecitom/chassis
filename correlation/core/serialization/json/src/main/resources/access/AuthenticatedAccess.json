@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "actor",
+    "origin",
+    "authorization"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "authenticated"
+    },
+    "actor": {
+      "$ref": "classpath://access/actor/Actor.json"
+    },
+    "origin": {
+      "$ref": "classpath://access/origin/Origin.json"
+    },
+    "authorization": {
+      "$ref": "classpath://access/authorization/AuthorizationPrincipal.json"
+    }
+  }
+}

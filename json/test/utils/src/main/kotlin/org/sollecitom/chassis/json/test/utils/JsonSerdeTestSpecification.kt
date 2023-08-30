@@ -15,7 +15,7 @@ interface JsonSerdeTestSpecification<VALUE : Any> {
 
     val jsonSerde: JsonSerde.SchemaAware<VALUE>
 
-    fun arguments(): Stream<Arguments>
+    fun arguments(): Stream<Arguments> // TODO try to remove this, and construct it instead from a typed one
 
     @ParameterizedTest
     @MethodSource("arguments")
