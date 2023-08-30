@@ -11,7 +11,10 @@
         "authenticated",
         "unauthenticated"
       ]
-    }
+    },
+    "actor": {},
+    "origin": {},
+    "authorization": {}
   },
   "oneOf": [
     {

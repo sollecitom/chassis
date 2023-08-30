@@ -21,6 +21,7 @@ object OpenApiReader : OpenApiValidator, OpenApiParser {
         parseOptions.isResolve = true
         parseOptions.isResolveFully = true
         parseOptions.isResolveRequestBody = true
+        parseOptions.isResolveCombinators = true
         return OpenAPIV3Parser().readLocation(openApiLocation, emptyList(), parseOptions)
     }
 
