@@ -9,14 +9,13 @@ import org.sollecitom.chassis.correlation.core.domain.access.idp.IdentityProvide
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 import org.sollecitom.chassis.correlation.core.test.utils.tenancy.create
 import org.sollecitom.chassis.json.test.utils.JsonSerdeTestSpecification
-import org.sollecitom.chassis.test.utils.params.ParameterizedTestSupport
 
 @TestInstance(PER_CLASS)
 private class IdentityProviderJsonSerializationTests : JsonSerdeTestSpecification<IdentityProvider>, WithCoreGenerators by WithCoreGenerators.testProvider {
 
     override val jsonSerde get() = IdentityProvider.jsonSerde
 
-    override fun arguments() = ParameterizedTestSupport.arguments(
+    override fun parameterizedArguments() = listOf(
         "test-IDP" to IdentityProvider(name = "Some IDP".let(::Name), tenant = Tenant.create())
     )
 }

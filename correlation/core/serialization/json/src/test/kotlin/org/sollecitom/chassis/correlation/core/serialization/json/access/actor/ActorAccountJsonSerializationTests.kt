@@ -15,8 +15,8 @@ private class ActorAccountJsonSerializationTests : JsonSerdeTestSpecification<Ac
 
     override val jsonSerde get() = Actor.Account.jsonSerde
 
-    override fun arguments() = ParameterizedTestSupport.arguments(
+    override fun parameterizedArguments() = listOf(
         "user" to Actor.Account.user(),
-        "service" to Actor.Account.service(),
+        "service" to Actor.Account.service()
     )
 }

@@ -8,15 +8,14 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.test.utils.access.authenticated
 import org.sollecitom.chassis.correlation.core.test.utils.access.unauthenticated
 import org.sollecitom.chassis.json.test.utils.JsonSerdeTestSpecification
-import org.sollecitom.chassis.test.utils.params.ParameterizedTestSupport
 
 @TestInstance(PER_CLASS)
 private class AccessJsonSerializationTests : JsonSerdeTestSpecification<Access>, WithCoreGenerators by WithCoreGenerators.testProvider {
 
     override val jsonSerde get() = Access.jsonSerde
 
-    override fun arguments() = ParameterizedTestSupport.arguments(
+    override fun parameterizedArguments() = listOf(
         "authenticated" to Access.authenticated(),
-        "unauthenticated" to Access.unauthenticated(),
+        "unauthenticated" to Access.unauthenticated()
     )
 }

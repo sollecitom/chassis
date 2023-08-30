@@ -10,17 +10,15 @@ import org.sollecitom.chassis.correlation.core.domain.access.actor.onBehalfOf
 import org.sollecitom.chassis.correlation.core.test.utils.access.actor.create
 import org.sollecitom.chassis.correlation.core.test.utils.access.actor.direct
 import org.sollecitom.chassis.json.test.utils.JsonSerdeTestSpecification
-import org.sollecitom.chassis.test.utils.params.ParameterizedTestSupport
 
 @TestInstance(PER_CLASS)
 private class ActorJsonSerializationTests : JsonSerdeTestSpecification<Actor>, WithCoreGenerators by WithCoreGenerators.testProvider {
 
     override val jsonSerde get() = Actor.jsonSerde
 
-    // TODO if additionalProperties is set to false for any actor type, the tests fail (the library might be broken)
-    override fun arguments() = ParameterizedTestSupport.arguments(
+    override fun parameterizedArguments() = listOf(
         "direct" to Actor.direct(),
         "on-behalf" to Actor.direct().onBehalfOf(Actor.UserAccount.create()),
-        "impersonating" to Actor.direct().impersonating(Actor.UserAccount.create()),
+        "impersonating" to Actor.direct().impersonating(Actor.UserAccount.create())
     )
 }

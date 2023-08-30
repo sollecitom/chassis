@@ -4,6 +4,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.correlation.core.domain.access.authorization.Role
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.Roles
 import org.sollecitom.chassis.correlation.core.serialization.json.access.autorization.jsonSerde
 import org.sollecitom.chassis.correlation.core.test.utils.access.authorization.TestRoles
@@ -15,7 +16,7 @@ private class RolesJsonSerializationTests : JsonSerdeTestSpecification<Roles>, W
 
     override val jsonSerde get() = Roles.jsonSerde
 
-    override fun arguments() = ParameterizedTestSupport.arguments(
+    override fun parameterizedArguments() = listOf(
         "test-roles" to TestRoles.default
     )
 }
