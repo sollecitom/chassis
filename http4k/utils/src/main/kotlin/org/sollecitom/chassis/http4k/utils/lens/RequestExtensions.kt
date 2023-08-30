@@ -3,8 +3,6 @@ package org.sollecitom.chassis.http4k.utils.lens
 import org.http4k.core.ContentType
 import org.http4k.core.Request
 import org.http4k.lens.Header
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
-import org.sollecitom.chassis.correlation.core.serialization.json.context.jsonSerde
 import org.sollecitom.chassis.json.utils.serde.JsonSerializer
 
 val Request.contentType: ContentType? get() = Header.CONTENT_TYPE(this)
@@ -18,5 +16,3 @@ fun Request.contentType(contentType: ContentType) = replaceHeader(HttpHeaders.Co
 
 fun Request.contentLength(contentLength: Int) = contentLength(contentLength.toLong())
 fun Request.contentLength(contentLength: Long) = replaceHeader(HttpHeaders.ContentLength, contentLength.toString())
-
-fun Request.withInvocationContext(headerName: String, context: InvocationContext<*>): Request = header(headerName, InvocationContext.jsonSerde.serialize(context).toString())

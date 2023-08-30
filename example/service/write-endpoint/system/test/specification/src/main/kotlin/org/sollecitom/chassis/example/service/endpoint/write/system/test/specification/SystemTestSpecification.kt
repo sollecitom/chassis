@@ -13,9 +13,9 @@ import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.http4k.utils.lens.body
-import org.sollecitom.chassis.http4k.utils.lens.withInvocationContext
 import org.sollecitom.chassis.web.api.test.utils.MonitoringEndpointsTestSpecification
 import org.sollecitom.chassis.web.api.test.utils.httpURLWithPath
+import org.sollecitom.chassis.web.api.utils.withInvocationContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 

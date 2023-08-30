@@ -29,12 +29,12 @@ import org.sollecitom.chassis.example.service.endpoint.write.configuration.confi
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.contentLength
 import org.sollecitom.chassis.http4k.utils.lens.contentType
-import org.sollecitom.chassis.http4k.utils.lens.withInvocationContext
 import org.sollecitom.chassis.openapi.parser.OpenApiReader
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
 import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
 import org.sollecitom.chassis.openapi.validation.http4k.validator.implementation.invoke
 import org.sollecitom.chassis.openapi.validation.request.validator.ValidationReportError
+import org.sollecitom.chassis.web.api.utils.withInvocationContext
 
 @TestInstance(PER_CLASS)
 private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCoreGenerators by WithCoreGenerators.provider() {

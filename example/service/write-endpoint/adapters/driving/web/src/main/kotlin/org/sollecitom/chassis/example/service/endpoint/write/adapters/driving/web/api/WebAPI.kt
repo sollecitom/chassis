@@ -24,6 +24,8 @@ import org.sollecitom.chassis.http4k.server.utils.SuspendingHttpHandler
 import org.sollecitom.chassis.http4k.server.utils.asBlockingHandler
 import org.sollecitom.chassis.http4k.utils.lens.AddContentLength
 import org.sollecitom.chassis.logger.core.loggable.Loggable
+import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
+import org.sollecitom.chassis.web.api.utils.headers.of
 
 // TODO maybe turn this into a module?
 class WebAPI(private val configuration: Configuration, application: Application, coreGenerators: WithCoreGenerators) : Startable, Stoppable, HttpHandler, WithCoreGenerators by coreGenerators {
@@ -68,7 +70,7 @@ class WebAPI(private val configuration: Configuration, application: Application,
 
     companion object : Loggable() {
         // TODO introduce an HttpApi interface?
-        val headerNames: HttpHeaderNames = CompanySpecificHttpHeaderNames("acme")
+        val headerNames: HttpHeaderNames = HttpHeaderNames.of(companyName = "acme")
     }
 }
 
