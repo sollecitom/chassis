@@ -12,7 +12,9 @@
         "federated",
         "credentials-based"
       ]
-    }
+    },
+    "token": {},
+    "session": {}
   },
   "oneOf": [
     {

@@ -12,7 +12,12 @@
         "on-behalf",
         "impersonating"
       ]
-    }
+    },
+    "account": {},
+    "authentication": {},
+    "impersonator": {},
+    "impersonated": {},
+    "benefiting-account": {}
   },
   "oneOf": [
     {

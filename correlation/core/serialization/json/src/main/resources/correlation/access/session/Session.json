@@ -11,7 +11,9 @@
         "simple",
         "federated"
       ]
-    }
+    },
+    "id": {},
+    "identity-provider": {}
   },
   "oneOf": [
     {
