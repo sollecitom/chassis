@@ -34,7 +34,10 @@ import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpe
 import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
 import org.sollecitom.chassis.openapi.validation.http4k.validator.implementation.invoke
 import org.sollecitom.chassis.openapi.validation.request.validator.ValidationReportError
-import org.sollecitom.chassis.web.api.utils.withInvocationContext
+import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
+import org.sollecitom.chassis.web.api.utils.api.withInvocationContext
+import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
+import org.sollecitom.chassis.web.api.utils.headers.of
 
 @TestInstance(PER_CLASS)
 private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCoreGenerators by WithCoreGenerators.provider() {
@@ -157,9 +160,6 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
         }
     }
 
-    // TODO remove this duplication in SystemTestSpecification somehow
-    private fun Request.withInvocationContext(context: InvocationContext<*>) = withInvocationContext(WebAPI.headerNames.correlation.invocationContext, context)
-
     private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend (RegisterUser.V1, InvocationContext<Access>) -> RegisterUser.V1.Result = { _, _ -> Accepted(user = UserWithPendingRegistration(id = newId.internal())) }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration, coreGenerators = this)
 
     private fun path(value: String) = "http://localhost:0/$value"
@@ -167,4 +167,9 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
     private fun WebAPI.Configuration.Companion.programmatic(servicePort: Int = 0, healthPort: Int = 0): WebAPI.Configuration = ProgrammaticWebAPIConfiguration(servicePort.let(::SpecifiedPort), healthPort.let(::SpecifiedPort))
 
     private data class ProgrammaticWebAPIConfiguration(override val servicePort: SpecifiedPort, override val healthPort: SpecifiedPort) : WebAPI.Configuration
+
+    companion object : HttpApiDefinition {
+
+        override val headerNames: HttpHeaderNames = HttpHeaderNames.of(companyName = "acme")
+    }
 }

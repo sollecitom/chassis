@@ -15,7 +15,10 @@ import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticate
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.web.api.test.utils.MonitoringEndpointsTestSpecification
 import org.sollecitom.chassis.web.api.test.utils.httpURLWithPath
-import org.sollecitom.chassis.web.api.utils.withInvocationContext
+import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
+import org.sollecitom.chassis.web.api.utils.api.withInvocationContext
+import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
+import org.sollecitom.chassis.web.api.utils.headers.of
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -29,11 +32,15 @@ interface SystemTestSpecification : WithCoreGenerators, MonitoringEndpointsTestS
         val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
         val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
         val invocationContext = InvocationContext.unauthenticated()
-        // TODO remove this x-acme hardcoded header somehow
-        val request = Request(Method.POST, webService.httpURLWithPath("commands/register-user/v1")).body(json).withInvocationContext("x-acme-invocation-context", invocationContext)
+        val request = Request(Method.POST, webService.httpURLWithPath("commands/register-user/v1")).body(json).withInvocationContext(invocationContext)
 
         val response = httpClient(request)
 
         assertThat(response.status).isEqualTo(Status.ACCEPTED)
+    }
+
+    companion object : HttpApiDefinition {
+
+        override val headerNames: HttpHeaderNames = HttpHeaderNames.of(companyName = "acme")
     }
 }

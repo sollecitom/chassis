@@ -8,6 +8,7 @@ import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.serialization.json.context.jsonSerde
+import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 
 // TODO move
@@ -22,6 +23,9 @@ object InvocationContextFilter {
     // TODO create 1 Filter that acts as an embedded gateway itself
     context(WithCoreGenerators)
     fun parseContextFromGatewayHeaders(headerNames: HttpHeaderNames.Correlation): Filter = GatewayInfoContextParsingFilter(key, headerNames)
+
+    context(WithCoreGenerators, HttpApiDefinition)
+    fun parseContextFromGatewayHeaders(): Filter = parseContextFromGatewayHeaders(headerNames.correlation)
 
     context(WithCoreGenerators)
     private class GatewayInfoContextParsingFilter(private val key: Key, private val headerNames: HttpHeaderNames.Correlation) : Filter {

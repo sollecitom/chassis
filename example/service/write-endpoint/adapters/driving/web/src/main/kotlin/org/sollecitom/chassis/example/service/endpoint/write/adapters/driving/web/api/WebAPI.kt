@@ -24,6 +24,7 @@ import org.sollecitom.chassis.http4k.server.utils.SuspendingHttpHandler
 import org.sollecitom.chassis.http4k.server.utils.asBlockingHandler
 import org.sollecitom.chassis.http4k.utils.lens.AddContentLength
 import org.sollecitom.chassis.logger.core.loggable.Loggable
+import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 
@@ -50,7 +51,7 @@ class WebAPI(private val configuration: Configuration, application: Application,
 
     private fun mainApp(vararg endpoints: Endpoint): HttpHandler = requestFilters().then(routes(*endpoints.map(Endpoint::route).toTypedArray())).withFilter(GZip().then(ResponseFilters.AddContentLength))
 
-    private fun requestFilters(): Filter = CatchLensFailure.then(GunZip()).then(PrintRequestAndResponse().inIntelliJOnly()).then(ServerFilters.InitialiseRequestContext(RequestContextsProvider.requestContexts)).then(InvocationContextFilter.parseContextFromGatewayHeaders(headerNames = headerNames.correlation))
+    private fun requestFilters(): Filter = CatchLensFailure.then(GunZip()).then(PrintRequestAndResponse().inIntelliJOnly()).then(ServerFilters.InitialiseRequestContext(RequestContextsProvider.requestContexts)).then(InvocationContextFilter.parseContextFromGatewayHeaders())
 
     private fun server(mainApp: SuspendingHttpHandler): Http4kK8sServer {
 
@@ -68,9 +69,9 @@ class WebAPI(private val configuration: Configuration, application: Application,
         companion object
     }
 
-    companion object : Loggable() {
-        // TODO introduce an HttpApi interface?
-        val headerNames: HttpHeaderNames = HttpHeaderNames.of(companyName = "acme")
+    companion object : Loggable(), HttpApiDefinition {
+
+        override val headerNames: HttpHeaderNames = HttpHeaderNames.of(companyName = "acme")
     }
 }
 
