@@ -72,7 +72,8 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
         val api = webApi { _, _ -> EmailAddressAlreadyInUse(userId = existingUserId) }
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
-        val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json)
+        val invocationContext = InvocationContext.unauthenticated()
+        val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
         request.ensureCompliantWithOpenApi()
 
         val response = api(request)
@@ -87,7 +88,8 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
         val api = webApi()
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("invalid")
-        val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json)
+        val invocationContext = InvocationContext.unauthenticated()
+        val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
         request.ensureCompliantWithOpenApi()
 
         val response = api(request)
@@ -102,7 +104,8 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
         val api = webApi()
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
-        val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json.toString()).contentType(TEXT_PLAIN).contentLength(json.toString().length)
+        val invocationContext = InvocationContext.unauthenticated()
+        val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json.toString()).contentType(TEXT_PLAIN).contentLength(json.toString().length).withInvocationContext(invocationContext)
         request.ensureNonCompliantWithOpenApi(error = ValidationReportError.Request.ContentTypeNotAllowed)
 
         val response = api(request)
@@ -117,7 +120,8 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
         val api = webApi()
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
-        val request = Request(Method.POST, path("commands/${commandType.name.value}/!")).body(json)
+        val invocationContext = InvocationContext.unauthenticated()
+        val request = Request(Method.POST, path("commands/${commandType.name.value}/!")).body(json).withInvocationContext(invocationContext)
         request.ensureNonCompliantWithOpenApi(error = ValidationReportError.Request.UnknownPath)
 
         val response = api(request)
@@ -132,7 +136,8 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
         val api = webApi()
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
-        val request = Request(Method.POST, path("commands/unknown/v${commandType.version.value}")).body(json)
+        val invocationContext = InvocationContext.unauthenticated()
+        val request = Request(Method.POST, path("commands/unknown/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
         request.ensureNonCompliantWithOpenApi(error = ValidationReportError.Request.UnknownPath)
 
         val response = api(request)
@@ -154,6 +159,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
         }
     }
 
+    // TODO remove this duplication in SystemTestSpecification somehow
     private fun Request.withInvocationContext(context: InvocationContext<*>) = withInvocationContext(WebAPI.headerNames.correlation.invocationContext, context)
 
     private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend (RegisterUser.V1, InvocationContext<Access>) -> RegisterUser.V1.Result = { _, _ -> Accepted(user = UserWithPendingRegistration(id = newId.internal())) }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration, coreGenerators = this)

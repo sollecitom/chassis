@@ -9,14 +9,18 @@ import org.http4k.core.Status
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.sollecitom.chassis.core.domain.email.EmailAddress
+import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.http4k.utils.lens.body
+import org.sollecitom.chassis.http4k.utils.lens.withInvocationContext
 import org.sollecitom.chassis.web.api.test.utils.MonitoringEndpointsTestSpecification
 import org.sollecitom.chassis.web.api.test.utils.httpURLWithPath
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-interface SystemTestSpecification : MonitoringEndpointsTestSpecification {
+interface SystemTestSpecification : WithCoreGenerators, MonitoringEndpointsTestSpecification {
 
     override val timeout: Duration get() = 30.seconds
 
@@ -26,7 +30,9 @@ interface SystemTestSpecification : MonitoringEndpointsTestSpecification {
         val commandType = RegisterUser.V1.Type
         val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
         val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
-        val request = Request(Method.POST, webService.httpURLWithPath("commands/${commandType.name.value}/v${commandType.version.value}")).body(json)
+        val invocationContext = InvocationContext.unauthenticated()
+        // TODO remove this x-acme hardcoded header somehow
+        val request = Request(Method.POST, webService.httpURLWithPath("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext("x-acme-invocation-context", invocationContext)
 
         val response = httpClient(request)
 

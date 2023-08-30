@@ -35,17 +35,20 @@ object InvocationContextFilter {
         }
 
         @Suppress("UNCHECKED_CAST")
-        private fun Request.with(context: InvocationContext<*>): Request = when {
-            context.access.isAuthenticated -> with(key.generic of context, key.authenticated of (context as InvocationContext<Access.Authenticated>))
-            else -> with(key.generic of context, key.unauthenticated of (context as InvocationContext<Access.Unauthenticated>))
+        private fun Request.with(context: InvocationContext<*>?): Request {
+            if (context == null) return this
+            return when {
+                context.access.isAuthenticated -> with(key.generic of context, key.authenticated of (context as InvocationContext<Access.Authenticated>))
+                else -> with(key.generic of context, key.unauthenticated of (context as InvocationContext<Access.Unauthenticated>))
+            }
         }
 
         private fun Throwable.asResponse() = Response(Status.BAD_REQUEST.description("Error while parsing the invocation context: $message"))
 
         context(WithCoreGenerators)
-        private fun invocationContext(request: Request, headerNames: HttpHeaderNames.Correlation): InvocationContext<Access> {
+        private fun invocationContext(request: Request, headerNames: HttpHeaderNames.Correlation): InvocationContext<Access>? {
 
-            val rawValue = request.header(headerNames.invocationContext) ?: error("Missing mandatory invocation context header ${headerNames.invocationContext}")
+            val rawValue = request.header(headerNames.invocationContext) ?: return null
             val jsonValue = runCatching { JSONObject(rawValue) }.getOrElse { error("Invalid value for header ${headerNames.invocationContext}. Must be a JSON object.") }
             return InvocationContext.jsonSerde.deserialize(jsonValue)
         }

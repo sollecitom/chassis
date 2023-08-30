@@ -3,6 +3,8 @@ dependencies {
     api(projects.chassisWebServiceDomain)
     api(projects.chassisWebApiTestUtils)
     api(projects.chassisTestUtils)
+    api(projects.chassisCorrelationCoreTestUtils)
+
     implementation(projects.chassisKotlinExtensions)
 
     api(platform(libs.http4k.bom))

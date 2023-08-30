@@ -21,6 +21,7 @@ dependencies {
     containerBasedSystemTestImplementation(projects.chassisExampleServiceWriteEndpointConfiguration) // TODO remove
     containerBasedSystemTestImplementation(projects.chassisExampleServiceWriteEndpointSystemTestSpecification)
     containerBasedSystemTestImplementation(projects.chassisTestContainersUtils)
+    containerBasedSystemTestImplementation(projects.chassisCoreTestUtils)
 }
 
 // TODO enable this
