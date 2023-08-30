@@ -5,7 +5,10 @@ import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.identity.fromString
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
+import org.sollecitom.chassis.correlation.core.serialization.json.access.actor.ServiceAccountJsonSerde
+import org.sollecitom.chassis.correlation.core.serialization.json.identity.jsonSerde
 import org.sollecitom.chassis.json.utils.getInstantOrNull
+import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
@@ -15,14 +18,14 @@ private object AuthenticationTokenJsonSerde : JsonSerde.SchemaAware<Authenticati
     override val schema: Schema by lazy { jsonSchemaAt("access/authentication/AuthenticationToken.json") }
 
     override fun serialize(value: Authentication.Token) = JSONObject().apply {
-        put(Fields.ID, value.id.stringValue)
+        put(Fields.ID, Id.jsonSerde.serialize(value.id))
         put(Fields.VALID_FROM, value.validFrom?.toString())
         put(Fields.VALID_TO, value.validTo?.toString())
     }
 
     override fun deserialize(json: JSONObject): Authentication.Token {
 
-        val id = json.getRequiredString(Fields.ID).let(Id.Companion::fromString)
+        val id = json.getRequiredJSONObject(Fields.ID).let(Id.jsonSerde::deserialize)
         val validFrom = json.getInstantOrNull(Fields.VALID_FROM)
         val validTo = json.getInstantOrNull(Fields.VALID_TO)
         return Authentication.Token(id = id, validFrom = validFrom, validTo = validTo)

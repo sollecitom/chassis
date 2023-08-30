@@ -6,6 +6,7 @@ import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.identity.fromString
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
+import org.sollecitom.chassis.correlation.core.serialization.json.identity.jsonSerde
 import org.sollecitom.chassis.correlation.core.serialization.json.tenancy.jsonSerde
 import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.getRequiredString
@@ -20,7 +21,7 @@ internal object UserAccountJsonSerde : JsonSerde.SchemaAware<Actor.UserAccount> 
 
     override fun serialize(value: Actor.UserAccount) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)
-        put(Fields.ID, value.id.stringValue)
+        put(Fields.ID, Id.jsonSerde.serialize(value.id))
         put(Fields.TENANT, Tenant.jsonSerde.serialize(value.tenant))
     }
 
@@ -28,7 +29,7 @@ internal object UserAccountJsonSerde : JsonSerde.SchemaAware<Actor.UserAccount> 
 
         val type = json.getRequiredString(Fields.TYPE)
         check(type == TYPE_VALUE) { "Invalid type '$type'. Must be '$TYPE_VALUE'" }
-        val id = json.getRequiredString(Fields.ID).let(Id.Companion::fromString)
+        val id = json.getRequiredJSONObject(Fields.ID).let(Id.jsonSerde::deserialize)
         val tenant = json.getRequiredJSONObject(Fields.TENANT).let(Tenant.jsonSerde::deserialize)
         return Actor.UserAccount(id = id, tenant = tenant)
     }

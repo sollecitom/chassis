@@ -3,21 +3,17 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "id"
+    "invocation-id",
+    "action-id"
   ],
   "properties": {
-    "id": {
-      "$ref": "classpath://identity/Id.json"
-    },
-    "valid-from": {
+    "invocation-id": {
       "type": "string",
-      "minLength": 1,
-      "format": "date-time"
+      "minLength": 1
     },
-    "valid-to": {
+    "action-id": {
       "type": "string",
-      "minLength": 1,
-      "format": "date-time"
+      "minLength": 1
     }
   }
 }

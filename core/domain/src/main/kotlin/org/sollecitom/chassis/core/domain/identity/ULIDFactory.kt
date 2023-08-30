@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.core.domain.identity.ulid
+package org.sollecitom.chassis.core.domain.identity
 
 import org.sollecitom.chassis.core.domain.identity.factory.SortableTimestampedUniqueIdentifierFactory
 

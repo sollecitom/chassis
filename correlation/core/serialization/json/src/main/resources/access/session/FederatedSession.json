@@ -13,8 +13,7 @@
       "const": "federated"
     },
     "id": {
-      "type": "string",
-      "minLength": 1
+      "$ref": "classpath://identity/Id.json"
     },
     "identity-provider": {
       "$ref": "classpath://access/idp/IdentityProvider.json"

@@ -5,6 +5,9 @@ import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.identity.fromString
 import org.sollecitom.chassis.correlation.core.domain.access.session.SimpleSession
+import org.sollecitom.chassis.correlation.core.serialization.json.access.actor.ServiceAccountJsonSerde
+import org.sollecitom.chassis.correlation.core.serialization.json.identity.jsonSerde
+import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
@@ -17,14 +20,14 @@ internal object SimpleSessionJsonSerde : JsonSerde.SchemaAware<SimpleSession> {
 
     override fun serialize(value: SimpleSession) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)
-        put(Fields.ID, value.id.stringValue)
+        put(Fields.ID, Id.jsonSerde.serialize(value.id))
     }
 
     override fun deserialize(json: JSONObject): SimpleSession {
 
         val type = json.getRequiredString(Fields.TYPE)
         check(type == TYPE_VALUE) { "Invalid type '$type'. Must be '$TYPE_VALUE'" }
-        val id = json.getRequiredString(Fields.ID).let(Id.Companion::fromString)
+        val id = json.getRequiredJSONObject(Fields.ID).let(Id.jsonSerde::deserialize)
         return SimpleSession(id = id)
     }
 

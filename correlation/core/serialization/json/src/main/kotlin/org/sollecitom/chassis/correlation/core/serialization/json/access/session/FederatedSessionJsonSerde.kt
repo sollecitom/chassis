@@ -6,7 +6,9 @@ import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.identity.fromString
 import org.sollecitom.chassis.correlation.core.domain.access.idp.IdentityProvider
 import org.sollecitom.chassis.correlation.core.domain.access.session.FederatedSession
+import org.sollecitom.chassis.correlation.core.serialization.json.access.actor.ServiceAccountJsonSerde
 import org.sollecitom.chassis.correlation.core.serialization.json.access.idp.jsonSerde
+import org.sollecitom.chassis.correlation.core.serialization.json.identity.jsonSerde
 import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
@@ -20,7 +22,7 @@ internal object FederatedSessionJsonSerde : JsonSerde.SchemaAware<FederatedSessi
 
     override fun serialize(value: FederatedSession) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)
-        put(Fields.ID, value.id.stringValue)
+        put(Fields.ID, Id.jsonSerde.serialize(value.id))
         put(Fields.IDENTITY_PROVIDER, IdentityProvider.jsonSerde.serialize(value.identityProvider))
     }
 
@@ -28,7 +30,7 @@ internal object FederatedSessionJsonSerde : JsonSerde.SchemaAware<FederatedSessi
 
         val type = json.getRequiredString(Fields.TYPE)
         check(type == TYPE_VALUE) { "Invalid type '$type'. Must be '${TYPE_VALUE}'" }
-        val id = json.getRequiredString(Fields.ID).let(Id.Companion::fromString)
+        val id = json.getRequiredJSONObject(Fields.ID).let(Id.jsonSerde::deserialize)
         val identityProvider = json.getRequiredJSONObject(Fields.IDENTITY_PROVIDER).let(IdentityProvider.jsonSerde::deserialize)
         return FederatedSession(id = id, identityProvider = identityProvider)
     }

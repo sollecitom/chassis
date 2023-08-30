@@ -5,8 +5,8 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.identity.StringId
-import org.sollecitom.chassis.core.domain.identity.ulid.ULID
-import org.sollecitom.chassis.core.domain.identity.ulid.ULIDFactory
+import org.sollecitom.chassis.core.domain.identity.ULID
+import org.sollecitom.chassis.core.domain.identity.ULIDFactory
 import kotlin.random.Random
 import kotlin.random.asJavaRandom
 

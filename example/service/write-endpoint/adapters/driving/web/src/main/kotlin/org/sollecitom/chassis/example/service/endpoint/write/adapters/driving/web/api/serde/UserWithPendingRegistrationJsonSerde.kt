@@ -1,7 +1,7 @@
 package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.serde
 
 import org.json.JSONObject
-import org.sollecitom.chassis.core.domain.identity.ulid.ULID
+import org.sollecitom.chassis.core.domain.identity.ULID
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.UserWithPendingRegistration
 import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.serde.JsonSerde

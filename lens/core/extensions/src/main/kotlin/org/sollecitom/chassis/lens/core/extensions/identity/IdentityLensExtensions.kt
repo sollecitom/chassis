@@ -1,7 +1,7 @@
 package org.sollecitom.chassis.lens.core.extensions.identity
 
 import org.http4k.lens.*
-import org.sollecitom.chassis.core.domain.identity.ulid.ULID
+import org.sollecitom.chassis.core.domain.identity.ULID
 import org.sollecitom.chassis.lens.core.extensions.map
 
 fun Path.ulid() = map(StringBiDiMappings.ulid())

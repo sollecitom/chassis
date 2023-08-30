@@ -4,19 +4,16 @@
   "additionalProperties": false,
   "required": [
     "type",
-    "id",
-    "tenant"
+    "value"
   ],
   "properties": {
     "type": {
       "type": "string",
-      "const": "user"
+      "minLength": 1
     },
-    "id": {
-      "$ref": "classpath://identity/Id.json"
-    },
-    "tenant": {
-      "$ref": "classpath://tenancy/Tenant.json"
+    "value": {
+      "type": "string",
+      "minLength": 1
     }
   }
 }

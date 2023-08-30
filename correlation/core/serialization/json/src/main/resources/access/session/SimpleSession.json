@@ -12,8 +12,7 @@
       "const": "simple"
     },
     "id": {
-      "type": "string",
-      "minLength": 1
+      "$ref": "classpath://identity/Id.json"
     }
   }
 }
