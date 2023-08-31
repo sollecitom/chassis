@@ -4,7 +4,6 @@ import org.http4k.core.*
 import org.http4k.lens.RequestContextKey
 import org.http4k.lens.RequestContextLens
 import org.json.JSONObject
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.serialization.json.context.jsonSerde
@@ -21,13 +20,11 @@ object InvocationContextFilter {
 
     // TODO add a filter that puts the context on the logging stack
     // TODO create 1 Filter that acts as an embedded gateway itself
-    context(WithCoreGenerators)
     fun parseContextFromGatewayHeaders(headerNames: HttpHeaderNames.Correlation): Filter = GatewayInfoContextParsingFilter(key, headerNames)
 
-    context(WithCoreGenerators, HttpApiDefinition)
+    context(HttpApiDefinition)
     fun parseContextFromGatewayHeaders(): Filter = parseContextFromGatewayHeaders(headerNames.correlation)
 
-    context(WithCoreGenerators)
     private class GatewayInfoContextParsingFilter(private val key: Key, private val headerNames: HttpHeaderNames.Correlation) : Filter {
 
         override fun invoke(next: HttpHandler) = { request: Request ->
@@ -50,7 +47,6 @@ object InvocationContextFilter {
 
         private fun Throwable.asResponse() = Response(Status.BAD_REQUEST.description("Error while parsing the invocation context: $message"))
 
-        context(WithCoreGenerators)
         private fun invocationContext(request: Request, headerNames: HttpHeaderNames.Correlation): InvocationContext<Access>? {
 
             val rawValue = request.header(headerNames.invocationContext) ?: return null
