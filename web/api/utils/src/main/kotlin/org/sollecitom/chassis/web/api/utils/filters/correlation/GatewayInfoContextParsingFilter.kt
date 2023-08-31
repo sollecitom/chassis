@@ -28,8 +28,8 @@ internal class GatewayInfoContextParsingFilter(private val key: InvocationContex
     private fun Request.with(context: InvocationContext<*>?): Request {
         if (context == null) return this
         return when {
-            context.access.isAuthenticated -> with(key.generic of context, key.authenticated of (context as InvocationContext<Access.Authenticated>))
-            else -> with(key.generic of context, key.unauthenticated of (context as InvocationContext<Access.Unauthenticated>))
+            context.access.isAuthenticated -> with(key.generic of context, key.optional of context, key.authenticated of (context as InvocationContext<Access.Authenticated>))
+            else -> with(key.generic of context, key.optional of context, key.unauthenticated of (context as InvocationContext<Access.Unauthenticated>))
         }
     }
 
