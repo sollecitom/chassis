@@ -13,7 +13,7 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.web.api.utils.endpoint.Endpoint
-import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.InvocationContextFilter
+import org.sollecitom.chassis.web.api.utils.filters.correlation.InvocationContextFilter
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.serde.serde
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.http4k.server.utils.toSuspending

@@ -3,7 +3,10 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.w
 import org.http4k.cloudnative.Http4kK8sServer
 import org.http4k.cloudnative.asK8sServer
 import org.http4k.cloudnative.health.Health
-import org.http4k.core.*
+import org.http4k.core.Filter
+import org.http4k.core.HttpHandler
+import org.http4k.core.Request
+import org.http4k.core.then
 import org.http4k.filter.DebuggingFilters.PrintRequestAndResponse
 import org.http4k.filter.RequestFilters.GunZip
 import org.http4k.filter.ResponseFilters
@@ -26,6 +29,8 @@ import org.sollecitom.chassis.http4k.utils.lens.AddContentLength
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
 import org.sollecitom.chassis.web.api.utils.endpoint.Endpoint
+import org.sollecitom.chassis.web.api.utils.filters.RequestContextsProvider
+import org.sollecitom.chassis.web.api.utils.filters.correlation.InvocationContextFilter
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 
@@ -74,9 +79,4 @@ class WebAPI(private val configuration: Configuration, application: Application,
 
         override val headerNames: HttpHeaderNames = HttpHeaderNames.of(companyName = "acme")
     }
-}
-
-object RequestContextsProvider {
-
-    val requestContexts: RequestContexts by lazy { RequestContexts() }
 }
