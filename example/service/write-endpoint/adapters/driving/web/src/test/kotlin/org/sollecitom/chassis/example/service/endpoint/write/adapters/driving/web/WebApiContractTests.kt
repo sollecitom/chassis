@@ -34,6 +34,7 @@ import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpe
 import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
 import org.sollecitom.chassis.openapi.validation.http4k.validator.implementation.invoke
 import org.sollecitom.chassis.openapi.validation.request.validator.ValidationReportError
+import org.sollecitom.chassis.test.utils.standard.output.withCapturedStandardOutput
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
 import org.sollecitom.chassis.web.api.utils.api.withInvocationContext
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
@@ -60,10 +61,11 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
         request.ensureCompliantWithOpenApi()
 
-        val response = api(request)
+        val (response, logs) = withCapturedStandardOutput { api(request) }
 
         assertThat(response).compliesWithOpenApiForRequest(request)
         assertThat(response.status).isEqualTo(Status.ACCEPTED)
+        println(logs)
     }
 
     @Test
