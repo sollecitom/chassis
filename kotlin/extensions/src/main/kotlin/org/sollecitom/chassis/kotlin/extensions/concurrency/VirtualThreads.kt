@@ -9,5 +9,3 @@ private val virtualThreadExecutor = Executors.newVirtualThreadPerTaskExecutor()
 private val virtualThreadDispatcher = virtualThreadExecutor.asCoroutineDispatcher()
 
 val Dispatchers.VirtualThreads: CoroutineDispatcher get() = virtualThreadDispatcher
-
-fun <R> runInVirtualThreads(action: () -> R): R = virtualThreadExecutor.run { action() }

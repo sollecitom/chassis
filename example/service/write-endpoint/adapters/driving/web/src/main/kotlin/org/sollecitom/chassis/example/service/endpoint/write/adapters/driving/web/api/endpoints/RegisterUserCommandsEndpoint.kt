@@ -35,7 +35,7 @@ sealed class RegisterUserCommandsEndpoint {
 
         private fun acceptCommand() = path bind Method.POST toSuspending { request ->
 
-            logger.debug { "Received command with type $COMMAND_TYPE" }
+            logger.info { "Received command with type '$COMMAND_TYPE'" } // TODO change to debug
             val command = command(request)
             val context = InvocationContextFilter.key.unauthenticated(request)
 

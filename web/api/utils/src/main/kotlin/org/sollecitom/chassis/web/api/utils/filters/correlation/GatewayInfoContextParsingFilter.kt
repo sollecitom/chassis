@@ -8,10 +8,10 @@ import org.sollecitom.chassis.correlation.core.serialization.json.context.jsonSe
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 
-fun InvocationContextFilter.parseContextFromGatewayHeaders(headerNames: HttpHeaderNames.Correlation): Filter = GatewayInfoContextParsingFilter(InvocationContextFilter.key, headerNames)
+fun InvocationContextFilter.parseInvocationContextFromGatewayHeader(headerNames: HttpHeaderNames.Correlation): Filter = GatewayInfoContextParsingFilter(InvocationContextFilter.key, headerNames)
 
 context(HttpApiDefinition)
-fun InvocationContextFilter.parseContextFromGatewayHeaders(): Filter = parseContextFromGatewayHeaders(headerNames.correlation)
+fun InvocationContextFilter.parseInvocationContextFromGatewayHeader(): Filter = parseInvocationContextFromGatewayHeader(headerNames.correlation)
 
 internal class GatewayInfoContextParsingFilter(private val key: InvocationContextFilter.Key, private val headerNames: HttpHeaderNames.Correlation) : Filter {
 

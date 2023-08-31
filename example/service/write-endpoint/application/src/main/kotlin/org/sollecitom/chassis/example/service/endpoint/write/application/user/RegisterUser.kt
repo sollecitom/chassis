@@ -5,9 +5,8 @@ import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.application.ApplicationCommand
-import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
+import org.sollecitom.chassis.ddd.domain.Command
 
 sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT, Access.Unauthenticated> {
 
@@ -23,9 +22,11 @@ sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT, Access.Unauth
 
         override fun toString() = "RegisterUser(emailAddress=${emailAddress.value}, type=${type.name.value}, version=${version.value})"
 
-        object Type : Command.Type {
+        data object Type : Command.Type {
             override val version = 1.let(::IntVersion)
             override val name = typeName
+
+            override fun toString() = "${name.value}-v${version.value}"
         }
 
         sealed interface Result {
