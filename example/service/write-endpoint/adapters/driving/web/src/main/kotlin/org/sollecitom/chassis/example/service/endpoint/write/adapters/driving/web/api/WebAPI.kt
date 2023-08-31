@@ -31,6 +31,7 @@ import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
 import org.sollecitom.chassis.web.api.utils.endpoint.Endpoint
 import org.sollecitom.chassis.web.api.utils.filters.RequestContextsProvider
 import org.sollecitom.chassis.web.api.utils.filters.correlation.InvocationContextFilter
+import org.sollecitom.chassis.web.api.utils.filters.correlation.parseContextFromGatewayHeaders
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 
