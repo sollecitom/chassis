@@ -1,5 +1,6 @@
 package org.sollecitom.chassis.logger.core.defaults
 
+import org.json.JSONObject
 import org.sollecitom.chassis.logger.core.FormatLogEntry
 import org.sollecitom.chassis.logger.core.LogEntry
 import org.sollecitom.chassis.logger.core.LoggingContext
@@ -15,7 +16,14 @@ object DefaultFormatToString : FormatLogEntry<String> {
         return "[${entry.level.formatted()}] ${entry.timestamp} (${entry.threadName}) - ${entry.loggerName}: ${entry.message} ${entry.context.formatted()}${errorStackTrace?.let { "\n${it.indent(4)}" } ?: ""}"
     }
 
-    private fun LoggingContext.formatted() = iterator().asSequence().joinToString(separator = ", ", transform = { entry -> "${entry.first}=${entry.second}" }).let { if (it.isNotEmpty()) "- context: {$it}" else it }
+    private fun LoggingContext.formatted(): String {
+
+        val json = JSONObject()
+        forEach { (key, value) ->
+            runCatching { JSONObject(value) }.onSuccess { json.put(key, it) }.onFailure { json.put(key, value) }.getOrNull()
+        }
+        return "- context: $json"
+    }
 
     private fun LoggingLevel.formatted() = name.padEnd(length = longestLoggingLevelNameLength)
 }
