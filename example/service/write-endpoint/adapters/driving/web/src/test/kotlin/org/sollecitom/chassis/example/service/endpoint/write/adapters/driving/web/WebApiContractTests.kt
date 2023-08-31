@@ -2,6 +2,7 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.w
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isNotEmpty
 import org.http4k.core.ContentType.Companion.TEXT_PLAIN
 import org.http4k.core.Method
 import org.http4k.core.Request
@@ -29,6 +30,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.configuration.confi
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.contentLength
 import org.sollecitom.chassis.http4k.utils.lens.contentType
+import org.sollecitom.chassis.kotlin.extensions.text.removeFromLast
 import org.sollecitom.chassis.openapi.parser.OpenApiReader
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
 import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
@@ -65,7 +67,15 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
 
         assertThat(response).compliesWithOpenApiForRequest(request)
         assertThat(response.status).isEqualTo(Status.ACCEPTED)
-        println(logs)
+        assertThat(logs).isNotEmpty() // really? how to ensure this when we put Debug back vs Info?
+        logs.forEach { logLine ->
+            val logLineWithoutContext = logLine.removeFromLast(" - context: ")
+            val rawContext = logLine.removePrefix(logLineWithoutContext).removePrefix(" - context: ")
+            // TODO - parse it back to an invocation context somehow, and compare it with the one above
+            println(logLine)
+            println(logLineWithoutContext)
+            println(rawContext)
+        }
     }
 
     @Test

@@ -8,6 +8,7 @@ import assertk.assertions.support.show
 import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.json.utils.validate
+import org.sollecitom.chassis.test.utils.assertions.containsSameEntriesAs
 
 fun Assert<JSONObject>.containsOnly(pair: Pair<String, Any>, vararg others: Pair<String, Any>) = given { actual ->
 
@@ -17,6 +18,11 @@ fun Assert<JSONObject>.containsOnly(pair: Pair<String, Any>, vararg others: Pair
 fun Assert<JSONObject>.containsAll(pair: Pair<String, Any>, vararg others: Pair<String, Any>) = given { actual ->
 
     assertThat(actual.toMap()).containsAll(*arrayOf(pair) + others)
+}
+
+fun Assert<JSONObject>.isEqualTo(expected: JSONObject) = given { actual ->
+
+    assertThat(actual.toMap()).containsSameEntriesAs(expected.toMap())
 }
 
 // TODO add tests for this

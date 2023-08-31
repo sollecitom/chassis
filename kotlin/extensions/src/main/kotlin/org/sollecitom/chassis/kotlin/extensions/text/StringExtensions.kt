@@ -13,4 +13,22 @@ fun String.replaceFrom(delimiter: String, replacement: String, missingDelimiterV
     return if (index == -1) missingDelimiterValue else replaceRange(index, length, replacement)
 }
 
+fun String.replaceFromLast(delimiter: String, replacement: String, missingDelimiterValue: String = this): String {
+
+    val index = lastIndexOf(delimiter)
+    return if (index == -1) missingDelimiterValue else replaceRange(index, length, replacement)
+}
+
+fun String.removeFrom(delimiter: String): String {
+
+    val index = indexOf(delimiter)
+    return if (index == -1) this else removeRange(index, length)
+}
+
+fun String.removeFromLast(delimiter: String): String {
+
+    val index = lastIndexOf(delimiter)
+    return if (index == -1) this else removeRange(index, length)
+}
+
 fun String.capitalized(): String = replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }

@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.json.test.utils.compliesWith
+import org.sollecitom.chassis.json.test.utils.isEqualTo
+import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.logger.core.LogEntry
 import org.sollecitom.chassis.logger.core.LoggingContext
 import org.sollecitom.chassis.logger.core.LoggingLevel
@@ -31,6 +33,33 @@ private class JsonFormattingTest {
         val entryAsString = DefaultFormatToJson(entry)
         val entryAsJsonObject = JSONObject(entryAsString)
 
+        assertThat(entryAsJsonObject).compliesWith(LogEntry.jsonSchema)
+    }
+
+    @Test
+    fun `the context can contain JSON objects`() = runBlocking {
+
+        val loggerName = "my-logger"
+        val message = "something urgent"
+        val threadName = "whatever-thread-1"
+        val timestamp = Instant.now()
+        val error = IllegalStateException("Boom!", IllegalArgumentException("Ouch!"))
+        val level = LoggingLevel.WARN
+        val jsonContextValue = JSONObject().apply {
+            put("key1", "value1")
+            put("key2", JSONObject().apply {
+                put("key3", "value3")
+            })
+        }
+        val context = LoggingContext.withEntries(mapOf("string-key" to "context-value-1", "json-key" to jsonContextValue.toString()))
+        val entry = LogEntry(loggerName, message, threadName, timestamp, error, level, context)
+
+        val entryAsString = DefaultFormatToJson(entry)
+        val entryAsJsonObject = JSONObject(entryAsString)
+
+        val loggedContext = entryAsJsonObject.getRequiredJSONObject("context")
+        val jsonKeyValue = loggedContext.getRequiredJSONObject("json-key")
+        assertThat(jsonKeyValue).isEqualTo(jsonContextValue)
         assertThat(entryAsJsonObject).compliesWith(LogEntry.jsonSchema)
     }
 }

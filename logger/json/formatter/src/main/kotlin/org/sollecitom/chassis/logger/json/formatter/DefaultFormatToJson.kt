@@ -23,7 +23,9 @@ object DefaultFormatToJson : FormatLogEntry<String> {
         error?.let { put(Fields.error, it.toJson()) }
     }
 
-    private fun LoggingContext.toJson(): JSONObject = asMap().entries.fold(JSONObject()) { json, entry -> json.put(entry.key, entry.value) }
+    private fun LoggingContext.toJson(): JSONObject = asMap().entries.fold(JSONObject()) { json, entry -> json.put(entry.key, jsonValue(entry.value)) }
+
+    private fun jsonValue(value: String): Any = runCatching { JSONObject(value) }.getOrElse { value }
 
     private fun Throwable.toJson(): JSONObject = JSONObject().apply {
         put(Fields.errorMessage, message)
