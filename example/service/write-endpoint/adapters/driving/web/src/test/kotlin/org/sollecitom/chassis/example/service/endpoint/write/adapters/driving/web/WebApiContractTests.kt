@@ -78,7 +78,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
     }
 
     // TODO move
-    private fun extractInvocationContext(logLine: String): InvocationContext<*>? { // TODO refactor; add support for JSON-formatted lines
+    private fun extractInvocationContext(logLine: String): InvocationContext<*>? { // TODO refactor
 
         return logLine.runCatching { JSONObject(this) }.map { json ->
             json.getJSONObjectOrNull("context")?.getJSONObjectOrNull("invocation")?.let(InvocationContext.jsonSerde::deserialize)
