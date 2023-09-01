@@ -2,8 +2,6 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.w
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import assertk.assertions.isNotEmpty
-import assertk.assertions.isNotNull
 import org.http4k.core.ContentType.Companion.TEXT_PLAIN
 import org.http4k.core.Method
 import org.http4k.core.Request
@@ -18,8 +16,8 @@ import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
-import org.sollecitom.chassis.correlation.core.serialization.json.context.jsonSerde
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
+import org.sollecitom.chassis.correlation.logging.test.utils.haveContext
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.application.ApplicationCommand
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.WebAPI
@@ -32,8 +30,6 @@ import org.sollecitom.chassis.example.service.endpoint.write.configuration.confi
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.contentLength
 import org.sollecitom.chassis.http4k.utils.lens.contentType
-import org.sollecitom.chassis.json.utils.getJSONObjectOrNull
-import org.sollecitom.chassis.kotlin.extensions.text.removeFromLast
 import org.sollecitom.chassis.logger.core.LoggingLevel.DEBUG
 import org.sollecitom.chassis.openapi.parser.OpenApiReader
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
@@ -71,22 +67,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
 
         assertThat(response).compliesWithOpenApiForRequest(request)
         assertThat(response.status).isEqualTo(Status.ACCEPTED)
-        assertThat(logs).isNotEmpty()
-        logs.forEach { logLine ->
-            val context = extractInvocationContext(logLine)
-            assertThat(context).isNotNull().isEqualTo(invocationContext)
-        }
-    }
-
-    // TODO move
-    private fun extractInvocationContext(logLine: String): InvocationContext<*>? { // TODO refactor
-
-        return logLine.runCatching { JSONObject(this) }.map { json ->
-            json.getJSONObjectOrNull("context")?.getJSONObjectOrNull("invocation")?.let(InvocationContext.jsonSerde::deserialize)
-        }.getOrElse {
-            val rawContext = logLine.removeFromLast(" - context: ").takeUnless { it == logLine }?.let { logLine.removePrefix(it).removePrefix(" - context: ") }
-            rawContext?.let { JSONObject(it).getJSONObjectOrNull("invocation")?.let(InvocationContext.jsonSerde::deserialize) }
-        }
+        assertThat(logs).haveContext(invocationContext)
     }
 
     @Test
