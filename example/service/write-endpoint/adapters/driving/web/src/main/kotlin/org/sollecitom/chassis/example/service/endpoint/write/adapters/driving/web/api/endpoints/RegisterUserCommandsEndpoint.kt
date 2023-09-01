@@ -12,8 +12,6 @@ import org.http4k.routing.routes
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.ddd.domain.Command
-import org.sollecitom.chassis.web.api.utils.endpoint.Endpoint
-import org.sollecitom.chassis.web.api.utils.filters.correlation.InvocationContextFilter
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.serde.serde
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.http4k.server.utils.toSuspending
@@ -21,6 +19,8 @@ import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.jsonObject
 import org.sollecitom.chassis.http4k.utils.lens.map
 import org.sollecitom.chassis.logger.core.loggable.Loggable
+import org.sollecitom.chassis.web.api.utils.endpoint.Endpoint
+import org.sollecitom.chassis.web.api.utils.filters.correlation.InvocationContextFilter
 
 sealed class RegisterUserCommandsEndpoint {
 
@@ -35,7 +35,7 @@ sealed class RegisterUserCommandsEndpoint {
 
         private fun acceptCommand() = path bind Method.POST toSuspending { request ->
 
-            logger.info { "Received command with type '$COMMAND_TYPE'" } // TODO change to debug
+            logger.debug { "Received command with type '$COMMAND_TYPE'" }
             val command = command(request)
             val context = InvocationContextFilter.key.unauthenticated(request)
 

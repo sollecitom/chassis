@@ -34,6 +34,7 @@ import org.sollecitom.chassis.http4k.utils.lens.contentLength
 import org.sollecitom.chassis.http4k.utils.lens.contentType
 import org.sollecitom.chassis.json.utils.getJSONObjectOrNull
 import org.sollecitom.chassis.kotlin.extensions.text.removeFromLast
+import org.sollecitom.chassis.logger.core.LoggingLevel.DEBUG
 import org.sollecitom.chassis.openapi.parser.OpenApiReader
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
 import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
@@ -52,7 +53,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
     override val openApiValidator = Http4kOpenApiValidator(openApi)
 
     init {
-        configureLogging()
+        configureLogging(defaultMinimumLoggingLevel = DEBUG)
     }
 
     @Test
@@ -70,7 +71,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
 
         assertThat(response).compliesWithOpenApiForRequest(request)
         assertThat(response.status).isEqualTo(Status.ACCEPTED)
-        assertThat(logs).isNotEmpty() // really? how to ensure this when we put Debug back vs Info?
+        assertThat(logs).isNotEmpty()
         logs.forEach { logLine ->
             val context = extractInvocationContext(logLine)
             assertThat(context).isNotNull().isEqualTo(invocationContext)
