@@ -4,7 +4,6 @@ import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.UserWithPendingRegistration
-import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
@@ -32,6 +31,7 @@ private object RegisterUserCommandSerde {
         }
 
         object Result {
+
             object Accepted : JsonSerde<RegisterUser.V1.Result.Accepted> {
 
                 override fun serialize(value: RegisterUser.V1.Result.Accepted) = JSONObject().apply {
