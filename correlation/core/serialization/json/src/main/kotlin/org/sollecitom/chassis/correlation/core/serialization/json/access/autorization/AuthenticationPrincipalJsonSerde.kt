@@ -4,22 +4,23 @@ import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.Roles
-import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
+import org.sollecitom.chassis.json.utils.serde.getValue
+import org.sollecitom.chassis.json.utils.serde.setValue
 
 private object AuthenticationPrincipalJsonSerde : JsonSerde.SchemaAware<AuthorizationPrincipal> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/authorization/AuthorizationPrincipal.json") }
+    private const val SCHEMA_LOCATION = "correlation/access/authorization/AuthorizationPrincipal.json"
+    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: AuthorizationPrincipal) = JSONObject().apply {
-
-        put(Fields.ROLES, Roles.jsonSerde.serialize(value.roles))
+        setValue(Fields.ROLES, value.roles, Roles.jsonSerde)
     }
 
     override fun deserialize(json: JSONObject): AuthorizationPrincipal {
 
-        val roles = json.getRequiredJSONObject(Fields.ROLES).let(Roles.jsonSerde::deserialize)
+        val roles = json.getValue(Fields.ROLES, Roles.jsonSerde)
         return AuthorizationPrincipal(roles = roles)
     }
 
