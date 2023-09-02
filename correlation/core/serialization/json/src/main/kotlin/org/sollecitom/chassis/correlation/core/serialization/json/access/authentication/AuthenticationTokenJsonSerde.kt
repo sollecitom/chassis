@@ -3,29 +3,28 @@ package org.sollecitom.chassis.correlation.core.serialization.json.access.authen
 import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.identity.fromString
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
-import org.sollecitom.chassis.correlation.core.serialization.json.access.actor.ServiceAccountJsonSerde
 import org.sollecitom.chassis.correlation.core.serialization.json.identity.jsonSerde
 import org.sollecitom.chassis.json.utils.getInstantOrNull
-import org.sollecitom.chassis.json.utils.getRequiredJSONObject
-import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
+import org.sollecitom.chassis.json.utils.serde.getValue
+import org.sollecitom.chassis.json.utils.serde.setValue
 
 private object AuthenticationTokenJsonSerde : JsonSerde.SchemaAware<Authentication.Token> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/authentication/AuthenticationToken.json") }
+    private const val SCHEMA_LOCATION = "correlation/access/authentication/AuthenticationToken.json"
+    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: Authentication.Token) = JSONObject().apply {
-        put(Fields.ID, Id.jsonSerde.serialize(value.id))
+        setValue(Fields.ID, value.id, Id.jsonSerde)
         put(Fields.VALID_FROM, value.validFrom?.toString())
         put(Fields.VALID_TO, value.validTo?.toString())
     }
 
     override fun deserialize(json: JSONObject): Authentication.Token {
 
-        val id = json.getRequiredJSONObject(Fields.ID).let(Id.jsonSerde::deserialize)
+        val id = json.getValue(Fields.ID, Id.jsonSerde)
         val validFrom = json.getInstantOrNull(Fields.VALID_FROM)
         val validTo = json.getInstantOrNull(Fields.VALID_TO)
         return Authentication.Token(id = id, validFrom = validFrom, validTo = validTo)
