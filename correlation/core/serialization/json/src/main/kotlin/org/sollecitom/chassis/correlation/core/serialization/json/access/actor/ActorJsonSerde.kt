@@ -12,7 +12,8 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
 private object ActorJsonSerde : JsonSerde.SchemaAware<Actor> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/actor/Actor.json") }
+    private const val SCHEMA_LOCATION = "correlation/access/actor/Actor.json"
+    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: Actor) = when (value) {
         is DirectActor -> DirectActor.jsonSerde.serialize(value)

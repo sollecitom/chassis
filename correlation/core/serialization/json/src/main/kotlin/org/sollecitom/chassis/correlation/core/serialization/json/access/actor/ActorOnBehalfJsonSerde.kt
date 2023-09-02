@@ -10,27 +10,29 @@ import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
+import org.sollecitom.chassis.json.utils.serde.getValue
+import org.sollecitom.chassis.json.utils.serde.setValue
 
 internal object ActorOnBehalfJsonSerde : JsonSerde.SchemaAware<ActorOnBehalf> {
 
     const val TYPE_VALUE = "on-behalf"
-
-    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/actor/ActorOnBehalf.json") }
+    private const val SCHEMA_LOCATION = "correlation/access/actor/ActorOnBehalf.json"
+    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: ActorOnBehalf) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)
-        put(Fields.ACCOUNT, Actor.Account.jsonSerde.serialize(value.account))
-        put(Fields.BENEFITING_ACCOUNT, Actor.Account.jsonSerde.serialize(value.benefitingAccount))
-        put(Fields.AUTHENTICATION, Authentication.jsonSerde.serialize(value.authentication))
+        setValue(Fields.ACCOUNT, value.account, Actor.Account.jsonSerde)
+        setValue(Fields.BENEFITING_ACCOUNT, value.benefitingAccount, Actor.Account.jsonSerde)
+        setValue(Fields.AUTHENTICATION, value.authentication, Authentication.jsonSerde)
     }
 
     override fun deserialize(json: JSONObject): ActorOnBehalf {
 
         val type = json.getRequiredString(Fields.TYPE)
         check(type == TYPE_VALUE) { "Invalid type '$type'. Must be '$TYPE_VALUE'" }
-        val account = json.getRequiredJSONObject(Fields.ACCOUNT).let(Actor.Account.jsonSerde::deserialize)
-        val benefitingAccount = json.getRequiredJSONObject(Fields.BENEFITING_ACCOUNT).let(Actor.Account.jsonSerde::deserialize)
-        val authentication = json.getRequiredJSONObject(Fields.AUTHENTICATION).let(Authentication.jsonSerde::deserialize)
+        val account = json.getValue(Fields.ACCOUNT, Actor.Account.jsonSerde)
+        val benefitingAccount = json.getValue(Fields.BENEFITING_ACCOUNT, Actor.Account.jsonSerde)
+        val authentication = json.getValue(Fields.AUTHENTICATION, Authentication.jsonSerde)
         return ActorOnBehalf(account = account, benefitingAccount = benefitingAccount, authentication = authentication)
     }
 
