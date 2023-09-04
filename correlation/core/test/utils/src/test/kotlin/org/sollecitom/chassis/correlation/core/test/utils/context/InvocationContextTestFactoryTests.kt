@@ -3,6 +3,7 @@ package org.sollecitom.chassis.correlation.core.test.utils.context
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
@@ -14,8 +15,10 @@ import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
+import org.sollecitom.chassis.correlation.core.domain.toggles.invoke
 import org.sollecitom.chassis.correlation.core.domain.toggles.standard.invocation.visibility.InvocationVisibility
-import org.sollecitom.chassis.correlation.core.domain.toggles.standard.invocation.visibility.withCustomInvocationVisibility
+import org.sollecitom.chassis.correlation.core.domain.toggles.withDefaultValue
+import org.sollecitom.chassis.correlation.core.domain.toggles.withToggle
 import org.sollecitom.chassis.correlation.core.domain.trace.ExternalInvocationTrace
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
 import org.sollecitom.chassis.correlation.core.test.utils.access.actor.direct
@@ -52,11 +55,31 @@ private class InvocationContextTestFactoryTests : WithCoreGenerators by WithCore
     @Test
     fun `customizing the toggles`() {
 
-        val toggles = Toggles().withCustomInvocationVisibility(visibility = InvocationVisibility.HIGH)
+        val invocationVisibility = Toggles.InvocationVisibility.withDefaultValue(InvocationVisibility.DEFAULT)
+        val overriddenVisibility = InvocationVisibility.HIGH
+        val toggles = Toggles().withToggle(Toggles.InvocationVisibility, overriddenVisibility)
 
         val context = InvocationContext.create(toggles = { toggles })
+        val visibility = invocationVisibility.invoke(context)
 
         assertThat(context.toggles).isEqualTo(toggles)
+        assertThat(visibility).isEqualTo(overriddenVisibility)
+    }
+
+    @Test
+    fun `accessing the toggles when there are no overrides`() {
+
+        val defaultValue = InvocationVisibility.DEFAULT
+        val invocationVisibility = Toggles.InvocationVisibility.withDefaultValue(defaultValue)
+        val toggles = Toggles()
+
+        val context = InvocationContext.create(toggles = { toggles })
+        val visibility = invocationVisibility(context)
+        val visibilityOrNull = Toggles.InvocationVisibility(context)
+
+        assertThat(context.toggles).isEqualTo(toggles)
+        assertThat(visibility).isEqualTo(defaultValue)
+        assertThat(visibilityOrNull).isNull()
     }
 
     @Test

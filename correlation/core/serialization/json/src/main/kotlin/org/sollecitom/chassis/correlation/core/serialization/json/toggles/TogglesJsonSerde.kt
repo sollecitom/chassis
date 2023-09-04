@@ -9,7 +9,6 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.json.utils.serde.getValues
 import org.sollecitom.chassis.json.utils.serde.setValues
 
-// TODO write a test for this
 private object TogglesJsonSerde : JsonSerde.SchemaAware<Toggles> {
 
     private const val SCHEMA_LOCATION = "correlation/toggles/Toggles.json"

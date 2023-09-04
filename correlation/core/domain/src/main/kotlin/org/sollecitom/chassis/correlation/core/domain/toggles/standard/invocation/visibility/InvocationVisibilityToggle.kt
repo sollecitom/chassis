@@ -2,18 +2,19 @@ package org.sollecitom.chassis.correlation.core.domain.toggles.standard.invocati
 
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.identity.StringId
-import org.sollecitom.chassis.correlation.core.domain.toggles.EnumToggleValue
-import org.sollecitom.chassis.correlation.core.domain.toggles.Toggle
-import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
-import org.sollecitom.chassis.correlation.core.domain.toggles.withToggle
+import org.sollecitom.chassis.correlation.core.domain.toggles.*
 
 private object InvocationVisibilityToggle : Toggle<InvocationVisibility, String> {
 
     override val id: Id = "invocation-visibility".let(::StringId)
 
+    override operator fun invoke(toggles: Toggles): InvocationVisibility? {
+
+        // TODO refactor
+        return toggles[id]?.let(ToggleValue<*>::value)?.let { it as String }?.let { InvocationVisibility.valueOf(it) }
+    }
+
     override fun invoke(value: InvocationVisibility) = EnumToggleValue(id = id, value = value.name)
 }
 
 val Toggles.Companion.InvocationVisibility: Toggle<InvocationVisibility, String> get() = InvocationVisibilityToggle
-
-fun Toggles.withCustomInvocationVisibility(visibility: InvocationVisibility): Toggles = withToggle(Toggles.InvocationVisibility, visibility)

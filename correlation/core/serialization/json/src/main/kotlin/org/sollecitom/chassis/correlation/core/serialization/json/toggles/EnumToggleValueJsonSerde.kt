@@ -11,7 +11,6 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.json.utils.serde.getValue
 import org.sollecitom.chassis.json.utils.serde.setValue
 
-// TODO write a test for this
 internal object EnumToggleValueJsonSerde : JsonSerde.SchemaAware<EnumToggleValue> {
 
     const val TYPE_VALUE = "enum"

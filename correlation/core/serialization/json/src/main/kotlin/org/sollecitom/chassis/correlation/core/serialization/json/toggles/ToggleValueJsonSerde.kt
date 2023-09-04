@@ -7,7 +7,6 @@ import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
-// TODO write a test for this
 private object ToggleValueJsonSerde : JsonSerde.SchemaAware<ToggleValue<*>> {
 
     private const val SCHEMA_LOCATION = "correlation/toggles/ToggleValue.json"
