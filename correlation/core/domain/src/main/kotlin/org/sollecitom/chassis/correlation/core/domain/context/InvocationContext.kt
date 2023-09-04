@@ -4,12 +4,13 @@ import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.idempotency.IdempotencyContext
+import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
 import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
 
 // TODO make logging work with per-invocation level override (like "make this request visible everywhere")
 // TODO add feature toggles overrides e.g. Map<Id, Boolean> (or maybe include a name as well) (to Access?)
-data class InvocationContext<out ACCESS : Access>(val access: ACCESS, val trace: Trace) {
+data class InvocationContext<out ACCESS : Access>(val access: ACCESS, val trace: Trace, val toggles: Toggles) {
 
     val idempotency: IdempotencyContext = IdempotencyContext(access.idempotencyNamespace, trace.idempotencyKey)
 

@@ -13,12 +13,16 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
+import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
+import org.sollecitom.chassis.correlation.core.domain.toggles.standard.invocation.visibility.InvocationVisibility
+import org.sollecitom.chassis.correlation.core.domain.toggles.standard.invocation.visibility.withCustomInvocationVisibility
 import org.sollecitom.chassis.correlation.core.domain.trace.ExternalInvocationTrace
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
 import org.sollecitom.chassis.correlation.core.test.utils.access.actor.direct
 import org.sollecitom.chassis.correlation.core.test.utils.access.actor.user
 import org.sollecitom.chassis.correlation.core.test.utils.access.authenticated
 import org.sollecitom.chassis.correlation.core.test.utils.access.unauthenticated
+import org.sollecitom.chassis.correlation.core.test.utils.toggles.create
 import org.sollecitom.chassis.correlation.core.test.utils.trace.create
 
 @TestInstance(PER_CLASS)
@@ -46,6 +50,16 @@ private class InvocationContextTestFactoryTests : WithCoreGenerators by WithCore
     }
 
     @Test
+    fun `customizing the toggles`() {
+
+        val toggles = Toggles().withCustomInvocationVisibility(visibility = InvocationVisibility.HIGH)
+
+        val context = InvocationContext.create(toggles = { toggles })
+
+        assertThat(context.toggles).isEqualTo(toggles)
+    }
+
+    @Test
     fun `deriving idempotency from access and trace`() {
 
         val invocationId = newId.external()
@@ -53,7 +67,8 @@ private class InvocationContextTestFactoryTests : WithCoreGenerators by WithCore
         val tenantId = newId.internal()
         val trace = Trace.create(externalInvocationTrace = ExternalInvocationTrace.create(invocationId = invocationId))
         val access = Access.authenticated(actor = Actor.direct(account = Actor.Account.user(id = actorId, tenant = Tenant(id = tenantId))))
-        val context = InvocationContext(access = access, trace = trace)
+        val toggles = Toggles.create()
+        val context = InvocationContext(access = access, trace = trace, toggles = toggles)
 
         val idempotency = context.idempotency
 

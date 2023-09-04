@@ -8,6 +8,7 @@ import org.sollecitom.chassis.correlation.core.domain.access.authorization.Autho
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.Roles
 import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
 import org.sollecitom.chassis.correlation.core.test.utils.access.actor.direct
 import org.sollecitom.chassis.correlation.core.test.utils.access.authenticated
@@ -15,6 +16,7 @@ import org.sollecitom.chassis.correlation.core.test.utils.access.authorization.T
 import org.sollecitom.chassis.correlation.core.test.utils.access.authorization.create
 import org.sollecitom.chassis.correlation.core.test.utils.access.origin.create
 import org.sollecitom.chassis.correlation.core.test.utils.access.unauthenticated
+import org.sollecitom.chassis.correlation.core.test.utils.toggles.create
 import org.sollecitom.chassis.correlation.core.test.utils.trace.create
 
 context(WithCoreGenerators)
@@ -22,9 +24,10 @@ fun InvocationContext.Companion.create(
     timeNow: Instant = clock.now(),
     access: (Instant) -> Access = { Access.authenticated() },
     trace: (Instant) -> Trace = { Trace.create(timeNow = timeNow) },
+    toggles: (Instant) -> Toggles = { Toggles.create() },
 ): InvocationContext<Access> {
 
-    return InvocationContext(access = access(timeNow), trace = trace(timeNow))
+    return InvocationContext(access = access(timeNow), trace = trace(timeNow), toggles = toggles(timeNow))
 }
 
 context(WithCoreGenerators)
@@ -32,9 +35,10 @@ fun InvocationContext.Companion.authenticated(
     timeNow: Instant = clock.now(),
     access: (Instant) -> Access.Authenticated = { Access.authenticated() },
     trace: (Instant) -> Trace = { Trace.create(timeNow = timeNow) },
+    toggles: (Instant) -> Toggles = { Toggles.create() },
 ): InvocationContext<Access.Authenticated> {
 
-    return InvocationContext(access = access(timeNow), trace = trace(timeNow))
+    return InvocationContext(access = access(timeNow), trace = trace(timeNow), toggles = toggles(timeNow))
 }
 
 context(WithCoreGenerators)
@@ -42,9 +46,10 @@ fun InvocationContext.Companion.unauthenticated(
     timeNow: Instant = clock.now(),
     access: (Instant) -> Access.Unauthenticated = { Access.unauthenticated() },
     trace: (Instant) -> Trace = { Trace.create(timeNow = timeNow) },
+    toggles: (Instant) -> Toggles = { Toggles.create() },
 ): InvocationContext<Access.Unauthenticated> {
 
-    return InvocationContext(access = access(timeNow), trace = trace(timeNow))
+    return InvocationContext(access = access(timeNow), trace = trace(timeNow), toggles = toggles(timeNow))
 }
 
 context(WithCoreGenerators)
@@ -55,6 +60,7 @@ fun InvocationContext.Companion.create(
     actor: (Instant) -> Actor = { Actor.direct() },
     origin: Origin = Origin.create(),
     trace: (Instant) -> Trace = { Trace.create(timeNow = timeNow) },
+    toggles: (Instant) -> Toggles = { Toggles.create() },
 ): InvocationContext<Access> {
 
     val authorization = AuthorizationPrincipal.create(roles)
@@ -62,5 +68,5 @@ fun InvocationContext.Companion.create(
         authenticated -> Access.authenticated(origin = origin, authorization = authorization, actor = actor(timeNow))
         else -> Access.unauthenticated(origin = origin, authorization = authorization)
     }
-    return InvocationContext(access = access, trace = trace(timeNow))
+    return InvocationContext(access = access, trace = trace(timeNow), toggles = toggles(timeNow))
 }

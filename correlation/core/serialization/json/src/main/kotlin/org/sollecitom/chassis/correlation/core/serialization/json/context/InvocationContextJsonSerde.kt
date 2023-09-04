@@ -4,8 +4,10 @@ import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
 import org.sollecitom.chassis.correlation.core.serialization.json.access.jsonSerde
+import org.sollecitom.chassis.correlation.core.serialization.json.toggles.jsonSerde
 import org.sollecitom.chassis.correlation.core.serialization.json.trace.jsonSerde
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
@@ -20,18 +22,21 @@ private object InvocationContextJsonSerde : JsonSerde.SchemaAware<InvocationCont
     override fun serialize(value: InvocationContext<*>) = JSONObject().apply {
         setValue(Fields.ACCESS, value.access, Access.jsonSerde)
         setValue(Fields.TRACE, value.trace, Trace.jsonSerde)
+        setValue(Fields.TOGGLES, value.toggles, Toggles.jsonSerde)
     }
 
     override fun deserialize(json: JSONObject): InvocationContext<*> {
 
         val access = json.getValue(Fields.ACCESS, Access.jsonSerde)
         val trace = json.getValue(Fields.TRACE, Trace.jsonSerde)
-        return InvocationContext(access = access, trace = trace)
+        val toggles = json.getValue(Fields.TOGGLES, Toggles.jsonSerde)
+        return InvocationContext(access = access, trace = trace, toggles = toggles)
     }
 
     private object Fields {
         const val ACCESS = "access"
         const val TRACE = "trace"
+        const val TOGGLES = "toggles"
     }
 }
 

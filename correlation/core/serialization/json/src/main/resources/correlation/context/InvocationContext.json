@@ -12,6 +12,9 @@
     },
     "trace": {
       "$ref": "/correlation/trace/Trace.json"
+    },
+    "toggles": {
+      "$ref": "/correlation/toggles/Toggles.json"
     }
   }
 }
