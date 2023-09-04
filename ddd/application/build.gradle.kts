@@ -1,6 +1,7 @@
 dependencies {
     api(projects.chassisDddDomain)
     api(projects.chassisCorrelationCoreDomain)
+    api(projects.chassisCorrelationLoggingUtils)
     api(projects.chassisKotlinExtensions)
 
     testImplementation(projects.chassisTestUtils)

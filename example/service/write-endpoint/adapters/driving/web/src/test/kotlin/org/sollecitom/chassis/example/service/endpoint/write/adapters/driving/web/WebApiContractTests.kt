@@ -16,6 +16,9 @@ import org.sollecitom.chassis.core.utils.WithCoreGenerators
 import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
+import org.sollecitom.chassis.correlation.core.domain.toggles.standard.invocation.visibility.InvocationVisibility
+import org.sollecitom.chassis.correlation.core.domain.toggles.withToggle
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.correlation.logging.test.utils.haveContext
 import org.sollecitom.chassis.ddd.application.Application
@@ -30,7 +33,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.configuration.confi
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.contentLength
 import org.sollecitom.chassis.http4k.utils.lens.contentType
-import org.sollecitom.chassis.logger.core.LoggingLevel.DEBUG
+import org.sollecitom.chassis.logger.core.LoggingLevel.INFO
 import org.sollecitom.chassis.openapi.parser.OpenApiReader
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
 import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
@@ -49,17 +52,17 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
     override val openApiValidator = Http4kOpenApiValidator(openApi)
 
     init {
-        configureLogging(defaultMinimumLoggingLevel = DEBUG) // TODO disable this and add the InvocationVisibility toggle to the context for the test where you capture the logs
+        configureLogging(defaultMinimumLoggingLevel = INFO)
     }
 
     @Test
     fun `submitting a register user command for an unregistered user`() {
 
         val userId = newId.internal()
-        val api = webApi { _, _ -> Accepted(user = UserWithPendingRegistration(userId)) }
+        val api = webApi { _ -> Accepted(user = UserWithPendingRegistration(userId)) }
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
-        val invocationContext = InvocationContext.unauthenticated()
+        val invocationContext = InvocationContext.unauthenticated().withToggle(Toggles.InvocationVisibility, InvocationVisibility.HIGH)
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
         request.ensureCompliantWithOpenApi()
 
@@ -74,7 +77,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
     fun `submitting a register user command for an already registered user`() {
 
         val existingUserId = newId.internal()
-        val api = webApi { _, _ -> EmailAddressAlreadyInUse(userId = existingUserId) }
+        val api = webApi { _ -> EmailAddressAlreadyInUse(userId = existingUserId) }
         val commandType = RegisterUser.V1.Type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated()
@@ -155,16 +158,20 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
 
     private fun registerUserPayload(emailAddress: String): JSONObject = JSONObject().put("email", JSONObject().put("address", emailAddress))
 
-    private class StubbedApplication(private val handleRegisterUserV1: suspend (RegisterUser.V1, InvocationContext<Access>) -> RegisterUser.V1.Result) : Application {
+    private class StubbedApplication(private val handleRegisterUserV1: suspend context(InvocationContext<Access>)(RegisterUser.V1) -> RegisterUser.V1.Result) : Application {
 
+        context(InvocationContext<ACCESS>)
         @Suppress("UNCHECKED_CAST")
-        override suspend fun <RESULT, ACCESS : Access> invoke(command: ApplicationCommand<RESULT, ACCESS>, context: InvocationContext<ACCESS>) = when (command) {
-            is RegisterUser.V1 -> handleRegisterUserV1(command, context) as RESULT
-            else -> error("Unknown command type ${command.type}")
+        override suspend operator fun <RESULT, ACCESS : Access> invoke(command: ApplicationCommand<RESULT, ACCESS>): RESULT {
+            val context = this@InvocationContext
+            return when (command) {
+                is RegisterUser.V1 -> handleRegisterUserV1(context, command) as RESULT
+                else -> error("Unknown command type ${command.type}")
+            }
         }
     }
 
-    private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend (RegisterUser.V1, InvocationContext<Access>) -> RegisterUser.V1.Result = { _, _ -> Accepted(user = UserWithPendingRegistration(id = newId.internal())) }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration, coreGenerators = this)
+    private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend context(InvocationContext<Access>)(RegisterUser.V1) -> RegisterUser.V1.Result = { _ -> Accepted(user = UserWithPendingRegistration(id = newId.internal())) }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration, coreGenerators = this)
 
     private fun path(value: String) = "http://localhost:0/$value"
 

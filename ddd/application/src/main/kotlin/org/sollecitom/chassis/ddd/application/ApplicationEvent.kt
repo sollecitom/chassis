@@ -32,4 +32,7 @@ fun <EVENT : Event, ACCESS : Access> EVENT.asApplicationEvent(context: Applicati
 
 fun <EVENT : Event, ACCESS : Access> EVENT.asApplicationEvent(context: InvocationContext<ACCESS>): ApplicationEvent<EVENT, ACCESS> = ApplicationEvent(this, context.toEventContext())
 
+context(InvocationContext<ACCESS>)
+fun <EVENT : Event, ACCESS : Access> EVENT.asApplicationEvent(): ApplicationEvent<EVENT, ACCESS> = ApplicationEvent(this, toEventContext())
+
 fun <ACCESS : Access> InvocationContext<ACCESS>.toEventContext(parentEvent: ApplicationEvent.Reference? = null, originatingEvent: ApplicationEvent.Reference? = null): ApplicationEvent.Context<ACCESS> = ApplicationEvent.Context(this, parentEvent, originatingEvent)

@@ -3,6 +3,7 @@ dependencies {
     api(projects.chassisCorrelationCoreSerializationJson)
     api(projects.chassisHttp4kServerUtils)
     api(projects.chassisLoggerCore)
+    api(projects.chassisCorrelationLoggingUtils)
 
     implementation(projects.chassisKotlinExtensions)
 

@@ -42,7 +42,7 @@ private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testPr
             val registerUser = registerUser(emailAddress = emailAddress)
             val context = InvocationContext.unauthenticated()
 
-            val result = application(registerUser, context)
+            val result = with(context) { application(registerUser) }
 
             assertThat(result).isInstanceOf<Accepted>()
         }
@@ -55,7 +55,7 @@ private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testPr
             val registerUser = registerUser(emailAddress = emailAddress)
             val context = InvocationContext.authenticated()
 
-            val attempt = runCatching { application(registerUser, context) }
+            val attempt = runCatching { with(context) { application(registerUser) } }
 
             assertThat(attempt).failedThrowing<IllegalStateException>()
         }
@@ -66,10 +66,10 @@ private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testPr
             val application = newApplication()
             val emailAddress = "someone@somedomain.com".let(::EmailAddress)
             val registerUserAFirstTime = registerUser(emailAddress = emailAddress)
-            application(registerUserAFirstTime, InvocationContext.unauthenticated()).let { check(it is Accepted) }
+            with(InvocationContext.unauthenticated()) { application(registerUserAFirstTime) }.let { check(it is Accepted) }
 
             val registerUserASecondTime = registerUser(emailAddress = emailAddress)
-            val result = application(registerUserASecondTime, InvocationContext.unauthenticated())
+            val result = with(InvocationContext.unauthenticated()) { application(registerUserASecondTime) }
 
             assertThat(result).isInstanceOf<EmailAddressAlreadyInUse>()
         }

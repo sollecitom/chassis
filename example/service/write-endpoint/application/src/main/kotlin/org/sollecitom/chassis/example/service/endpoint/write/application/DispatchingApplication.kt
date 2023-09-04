@@ -18,23 +18,25 @@ import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserReg
 
 internal class DispatchingApplication(private val userWithEmailAddress: suspend (EmailAddress) -> User) : Application {
 
-    override suspend fun <RESULT, ACCESS : Access> invoke(command: ApplicationCommand<RESULT, ACCESS>, context: InvocationContext<ACCESS>) = when (command) {
-
-        is RegisterUser -> processRegisterUserCommand(command, context.unauthenticatedOrThrow())
+    context(InvocationContext<ACCESS>)
+    override suspend fun <RESULT, ACCESS : Access> invoke(command: ApplicationCommand<RESULT, ACCESS>) = when (command) {
+        is RegisterUser -> with(unauthenticatedOrThrow()) { processRegisterUserCommand(command) }
         else -> error("Unknown application command $command")
     }
 
+    context(InvocationContext<Access.Unauthenticated>)
     @Suppress("UNCHECKED_CAST")
-    private suspend fun <RESULT> processRegisterUserCommand(command: RegisterUser<RESULT>, context: InvocationContext<Access.Unauthenticated>): RESULT = when (command) {
+    private suspend fun <RESULT> processRegisterUserCommand(command: RegisterUser<RESULT>): RESULT = when (command) {
 
-        is RegisterUser.V1 -> processRegisterUserCommandV1(command, context) as RESULT
+        is RegisterUser.V1 -> processRegisterUserCommandV1(command) as RESULT
     }
 
-    private suspend fun processRegisterUserCommandV1(command: RegisterUser.V1, context: InvocationContext<Access.Unauthenticated>): RegisterUser.V1.Result {
+    context(InvocationContext<Access.Unauthenticated>)
+    private suspend fun processRegisterUserCommandV1(command: RegisterUser.V1): RegisterUser.V1.Result {
 
         val user = userWithEmailAddress(command.emailAddress)
         val event = user.submitRegistrationRequest()
-        val applicationEvent = event.asApplicationEvent(context)
+        val applicationEvent = event.asApplicationEvent()
         // TODO publish the event
         return event.toOperationResult()
     }

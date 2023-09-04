@@ -11,20 +11,21 @@ import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import org.sollecitom.chassis.correlation.logging.utils.log
 import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.serde.serde
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser
-import org.sollecitom.chassis.http4k.server.utils.toSuspending
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.jsonObject
 import org.sollecitom.chassis.http4k.utils.lens.map
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.api.utils.endpoint.Endpoint
-import org.sollecitom.chassis.web.api.utils.filters.correlation.InvocationContextFilter
+import org.sollecitom.chassis.web.api.utils.endpoint.toUnauthenticated
 
+// TODO replace all logger.info and logger.debug with logger.log instead
 sealed class RegisterUserCommandsEndpoint {
 
-    class V1(private val handle: suspend (RegisterUser.V1, InvocationContext<Access.Unauthenticated>) -> RegisterUser.V1.Result) : Endpoint {
+    class V1(private val handle: suspend InvocationContext<Access.Unauthenticated>.(RegisterUser.V1) -> RegisterUser.V1.Result) : Endpoint {
 
         override val path = "/commands/${COMMAND_TYPE.name.value}/v${COMMAND_TYPE.version.value}"
         override val methods = setOf(Method.POST)
@@ -33,13 +34,12 @@ sealed class RegisterUserCommandsEndpoint {
             acceptCommand()
         )
 
-        private fun acceptCommand() = path bind Method.POST toSuspending { request ->
+        private fun acceptCommand() = path bind Method.POST toUnauthenticated { request ->
 
-            logger.debug { "Received command with type '$COMMAND_TYPE'" }
+            logger.log { "Received command with type '$COMMAND_TYPE'" }
             val command = command(request)
-            val context = InvocationContextFilter.key.unauthenticated(request)
 
-            val result = handle(command, context)
+            val result = handle(command)
 
             result.toHttpResponse()
         }
