@@ -7,6 +7,7 @@ import org.sollecitom.chassis.correlation.core.domain.idempotency.IdempotencyCon
 import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
 
+// TODO make logging work with per-invocation level override
 // TODO add feature toggles overrides e.g. Map<Id, Boolean> (or maybe include a name as well) (to Access?)
 data class InvocationContext<out ACCESS : Access>(val access: ACCESS, val trace: Trace) {
 
