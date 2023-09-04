@@ -49,7 +49,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
     override val openApiValidator = Http4kOpenApiValidator(openApi)
 
     init {
-        configureLogging(defaultMinimumLoggingLevel = DEBUG)
+        configureLogging(defaultMinimumLoggingLevel = DEBUG) // TODO disable this and add the InvocationVisibility toggle to the context for the test where you capture the logs
     }
 
     @Test
