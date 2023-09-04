@@ -35,7 +35,7 @@ internal object EnumToggleValueJsonSerde : JsonSerde.SchemaAware<EnumToggleValue
 
     private object Fields {
         const val ID = "id"
-        const val TYPE = "TYPE"
+        const val TYPE = "type"
         const val VALUE = "value"
     }
 }

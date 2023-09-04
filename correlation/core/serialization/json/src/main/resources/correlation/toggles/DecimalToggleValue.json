@@ -10,7 +10,7 @@
   "properties": {
     "type": {
       "type": "string",
-      "const": "boolean"
+      "const": "decimal"
     },
     "id": {
       "$ref": "/correlation/identity/Id.json"
