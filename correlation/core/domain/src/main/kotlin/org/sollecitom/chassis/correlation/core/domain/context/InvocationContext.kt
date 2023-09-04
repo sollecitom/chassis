@@ -7,6 +7,7 @@ import org.sollecitom.chassis.correlation.core.domain.idempotency.IdempotencyCon
 import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
 
+// TODO add feature toggles overrides e.g. Map<Id, Boolean> (or maybe include a name as well) (to Access?)
 data class InvocationContext<out ACCESS : Access>(val access: ACCESS, val trace: Trace) {
 
     val idempotency: IdempotencyContext = IdempotencyContext(access.idempotencyNamespace, trace.idempotencyKey)
