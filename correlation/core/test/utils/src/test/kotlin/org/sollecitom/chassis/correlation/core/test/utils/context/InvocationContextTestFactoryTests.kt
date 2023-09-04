@@ -22,7 +22,7 @@ import org.sollecitom.chassis.correlation.core.test.utils.access.unauthenticated
 import org.sollecitom.chassis.correlation.core.test.utils.trace.create
 
 @TestInstance(PER_CLASS)
-private class InvocationContextTestFactoryExampleTests : WithCoreGenerators by WithCoreGenerators.testProvider {
+private class InvocationContextTestFactoryTests : WithCoreGenerators by WithCoreGenerators.testProvider {
 
     @Test
     fun `customizing the trace`() {
