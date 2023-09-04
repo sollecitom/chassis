@@ -14,8 +14,8 @@ private object IdJsonSerde : JsonSerde.SchemaAware<Id> {
 
     private const val TYPE_ULID = "ulid"
     private const val TYPE_STRING = "string"
-
-    override val schema: Schema by lazy { jsonSchemaAt("correlation/identity/Id.json") }
+    private const val SCHEMA_LOCATION = "correlation/identity/Id.json"
+    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: Id) = JSONObject().apply {
         put(Fields.VALUE, value.stringValue)

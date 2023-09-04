@@ -3,26 +3,25 @@ package org.sollecitom.chassis.correlation.core.serialization.json.tenancy
 import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.identity.fromString
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
-import org.sollecitom.chassis.correlation.core.serialization.json.access.actor.ServiceAccountJsonSerde
 import org.sollecitom.chassis.correlation.core.serialization.json.identity.jsonSerde
-import org.sollecitom.chassis.json.utils.getRequiredJSONObject
-import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
+import org.sollecitom.chassis.json.utils.serde.getValue
+import org.sollecitom.chassis.json.utils.serde.setValue
 
 private object TenantJsonSerde : JsonSerde.SchemaAware<Tenant> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("correlation/tenancy/Tenant.json") }
+    private const val SCHEMA_LOCATION = "correlation/tenancy/Tenant.json"
+    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: Tenant) = JSONObject().apply {
-        put(Fields.ID, Id.jsonSerde.serialize(value.id))
+        setValue(Fields.ID, value.id, Id.jsonSerde)
     }
 
     override fun deserialize(json: JSONObject): Tenant {
 
-        val id = json.getRequiredJSONObject(Fields.ID).let(Id.jsonSerde::deserialize)
+        val id = json.getValue(Fields.ID, Id.jsonSerde)
         return Tenant(id = id)
     }
 

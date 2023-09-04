@@ -5,27 +5,29 @@ import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.trace.ExternalInvocationTrace
 import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
-import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
+import org.sollecitom.chassis.json.utils.serde.getValue
+import org.sollecitom.chassis.json.utils.serde.setValue
 
 private object TraceJsonSerde : JsonSerde.SchemaAware<Trace> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("correlation/trace/Trace.json") }
+    private const val SCHEMA_LOCATION = "correlation/trace/Trace.json"
+    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: Trace) = JSONObject().apply {
-        put(Fields.INVOCATION, InvocationTrace.jsonSerde.serialize(value.invocation))
-        put(Fields.PARENT, InvocationTrace.jsonSerde.serialize(value.parent))
-        put(Fields.ORIGINATING, InvocationTrace.jsonSerde.serialize(value.originating))
-        put(Fields.EXTERNAL, ExternalInvocationTrace.jsonSerde.serialize(value.external))
+        setValue(Fields.INVOCATION, value.invocation, InvocationTrace.jsonSerde)
+        setValue(Fields.PARENT, value.parent, InvocationTrace.jsonSerde)
+        setValue(Fields.ORIGINATING, value.originating, InvocationTrace.jsonSerde)
+        setValue(Fields.EXTERNAL, value.external, ExternalInvocationTrace.jsonSerde)
     }
 
     override fun deserialize(json: JSONObject): Trace {
 
-        val invocation = json.getRequiredJSONObject(Fields.INVOCATION).let(InvocationTrace.jsonSerde::deserialize)
-        val parent = json.getRequiredJSONObject(Fields.PARENT).let(InvocationTrace.jsonSerde::deserialize)
-        val originating = json.getRequiredJSONObject(Fields.ORIGINATING).let(InvocationTrace.jsonSerde::deserialize)
-        val external = json.getRequiredJSONObject(Fields.EXTERNAL).let(ExternalInvocationTrace.jsonSerde::deserialize)
+        val invocation = json.getValue(Fields.INVOCATION, InvocationTrace.jsonSerde)
+        val parent = json.getValue(Fields.PARENT, InvocationTrace.jsonSerde)
+        val originating = json.getValue(Fields.ORIGINATING, InvocationTrace.jsonSerde)
+        val external = json.getValue(Fields.EXTERNAL, ExternalInvocationTrace.jsonSerde)
         return Trace(invocation = invocation, parent = parent, originating = originating, external = external)
     }
 

@@ -7,23 +7,25 @@ import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
 import org.sollecitom.chassis.correlation.core.serialization.json.access.jsonSerde
 import org.sollecitom.chassis.correlation.core.serialization.json.trace.jsonSerde
-import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
+import org.sollecitom.chassis.json.utils.serde.getValue
+import org.sollecitom.chassis.json.utils.serde.setValue
 
 private object InvocationContextJsonSerde : JsonSerde.SchemaAware<InvocationContext<*>> {
 
-    override val schema: Schema by lazy { jsonSchemaAt("correlation/context/InvocationContext.json") }
+    private const val SCHEMA_LOCATION = "correlation/context/InvocationContext.json"
+    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: InvocationContext<*>) = JSONObject().apply {
-        put(Fields.ACCESS, Access.jsonSerde.serialize(value.access))
-        put(Fields.TRACE, Trace.jsonSerde.serialize(value.trace))
+        setValue(Fields.ACCESS, value.access, Access.jsonSerde)
+        setValue(Fields.TRACE, value.trace, Trace.jsonSerde)
     }
 
     override fun deserialize(json: JSONObject): InvocationContext<*> {
 
-        val access = json.getRequiredJSONObject(Fields.ACCESS).let(Access.jsonSerde::deserialize)
-        val trace = json.getRequiredJSONObject(Fields.TRACE).let(Trace.jsonSerde::deserialize)
+        val access = json.getValue(Fields.ACCESS, Access.jsonSerde)
+        val trace = json.getValue(Fields.TRACE, Trace.jsonSerde)
         return InvocationContext(access = access, trace = trace)
     }
 
