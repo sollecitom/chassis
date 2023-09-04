@@ -3,31 +3,30 @@ package org.sollecitom.chassis.correlation.core.serialization.json.access.sessio
 import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.identity.fromString
 import org.sollecitom.chassis.correlation.core.domain.access.session.SimpleSession
-import org.sollecitom.chassis.correlation.core.serialization.json.access.actor.ServiceAccountJsonSerde
 import org.sollecitom.chassis.correlation.core.serialization.json.identity.jsonSerde
-import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
+import org.sollecitom.chassis.json.utils.serde.getValue
+import org.sollecitom.chassis.json.utils.serde.setValue
 
 internal object SimpleSessionJsonSerde : JsonSerde.SchemaAware<SimpleSession> {
 
     const val TYPE_VALUE = "simple"
-
-    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/session/SimpleSession.json") }
+    private const val SCHEMA_LOCATION = "correlation/access/session/SimpleSession.json"
+    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: SimpleSession) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)
-        put(Fields.ID, Id.jsonSerde.serialize(value.id))
+        setValue(Fields.ID, value.id, Id.jsonSerde)
     }
 
     override fun deserialize(json: JSONObject): SimpleSession {
 
         val type = json.getRequiredString(Fields.TYPE)
         check(type == TYPE_VALUE) { "Invalid type '$type'. Must be '$TYPE_VALUE'" }
-        val id = json.getRequiredJSONObject(Fields.ID).let(Id.jsonSerde::deserialize)
+        val id = json.getValue(Fields.ID, Id.jsonSerde)
         return SimpleSession(id = id)
     }
 

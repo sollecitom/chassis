@@ -3,35 +3,34 @@ package org.sollecitom.chassis.correlation.core.serialization.json.access.sessio
 import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.identity.fromString
 import org.sollecitom.chassis.correlation.core.domain.access.idp.IdentityProvider
 import org.sollecitom.chassis.correlation.core.domain.access.session.FederatedSession
-import org.sollecitom.chassis.correlation.core.serialization.json.access.actor.ServiceAccountJsonSerde
 import org.sollecitom.chassis.correlation.core.serialization.json.access.idp.jsonSerde
 import org.sollecitom.chassis.correlation.core.serialization.json.identity.jsonSerde
-import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
+import org.sollecitom.chassis.json.utils.serde.getValue
+import org.sollecitom.chassis.json.utils.serde.setValue
 
 internal object FederatedSessionJsonSerde : JsonSerde.SchemaAware<FederatedSession> {
 
     const val TYPE_VALUE = "federated"
-
-    override val schema: Schema by lazy { jsonSchemaAt("correlation/access/session/FederatedSession.json") }
+    private const val SCHEMA_LOCATION = "correlation/access/session/FederatedSession.json\""
+    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: FederatedSession) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)
-        put(Fields.ID, Id.jsonSerde.serialize(value.id))
-        put(Fields.IDENTITY_PROVIDER, IdentityProvider.jsonSerde.serialize(value.identityProvider))
+        setValue(Fields.ID, value.id, Id.jsonSerde)
+        setValue(Fields.IDENTITY_PROVIDER, value.identityProvider, IdentityProvider.jsonSerde)
     }
 
     override fun deserialize(json: JSONObject): FederatedSession {
 
         val type = json.getRequiredString(Fields.TYPE)
         check(type == TYPE_VALUE) { "Invalid type '$type'. Must be '${TYPE_VALUE}'" }
-        val id = json.getRequiredJSONObject(Fields.ID).let(Id.jsonSerde::deserialize)
-        val identityProvider = json.getRequiredJSONObject(Fields.IDENTITY_PROVIDER).let(IdentityProvider.jsonSerde::deserialize)
+        val id = json.getValue(Fields.ID, Id.jsonSerde)
+        val identityProvider = json.getValue(Fields.IDENTITY_PROVIDER, IdentityProvider.jsonSerde)
         return FederatedSession(id = id, identityProvider = identityProvider)
     }
 
