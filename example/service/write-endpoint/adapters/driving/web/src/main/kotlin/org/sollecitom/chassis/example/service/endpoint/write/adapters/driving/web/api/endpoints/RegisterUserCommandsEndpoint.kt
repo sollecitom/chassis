@@ -22,7 +22,6 @@ import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.api.utils.endpoint.Endpoint
 import org.sollecitom.chassis.web.api.utils.endpoint.toUnauthenticated
 
-// TODO replace all logger.info and logger.debug with logger.log instead
 sealed class RegisterUserCommandsEndpoint {
 
     class V1(private val handle: suspend InvocationContext<Access.Unauthenticated>.(RegisterUser.V1) -> RegisterUser.V1.Result) : Endpoint {
