@@ -70,8 +70,6 @@ private class Http4kRequestOpenApiValidationTests {
             assertThat(report).containsOnly(ValidationReportError.Request.UnknownHeader)
         }
 
-        // TODO finish converting all `hasErrors()` statements to use `containsOnly(ValidationReportError)` instead
-
         @Test
         fun `are rejected as invalid when the body is invalid`() {
 

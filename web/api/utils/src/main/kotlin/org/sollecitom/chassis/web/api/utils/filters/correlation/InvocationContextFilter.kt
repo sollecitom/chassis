@@ -13,6 +13,5 @@ object InvocationContextFilter {
 
     data class Key(val generic: RequestContextLens<InvocationContext<Access>>, val optional: RequestContextLens<InvocationContext<Access>?>, val authenticated: RequestContextLens<InvocationContext<Access.Authenticated>>, val unauthenticated: RequestContextLens<InvocationContext<Access.Unauthenticated>>)
 
-    // TODO add a filter that puts the context on the logging stack
     // TODO create 1 Filter that acts as an embedded gateway itself
 }

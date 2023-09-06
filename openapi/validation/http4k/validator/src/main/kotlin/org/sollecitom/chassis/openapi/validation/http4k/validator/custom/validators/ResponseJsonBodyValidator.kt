@@ -41,7 +41,7 @@ internal class ResponseJsonBodyValidator(val jsonSchemasDirectoryName: String = 
         }
     }
 
-    private fun SwaggerSchema<*>?.isDefined(): Boolean = this != null && properties.isNotEmpty() // TODO check
+    private fun SwaggerSchema<*>?.isDefined(): Boolean = this != null && properties.isNotEmpty()
 
     private fun ValidationFailure?.toValidationReport() = this?.let { ValidationReport.from(ValidationReport.Message.create("Response body", it.toString()).build()) } ?: ValidationReport.empty()
 

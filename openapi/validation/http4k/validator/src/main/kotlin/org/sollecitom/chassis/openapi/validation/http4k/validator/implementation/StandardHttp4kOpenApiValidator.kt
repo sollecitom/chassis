@@ -58,7 +58,7 @@ internal class StandardHttp4kOpenApiValidator(openApi: OpenAPI, rejectUnknownReq
 
         with(builder) {
             withBody(body)
-            contentType?.let { contentType -> builder.withContentType(contentType.toHeaderValue()) } // TODO try withNoDirectives() if it doesn't work
+            contentType?.let { contentType -> builder.withContentType(contentType.toHeaderValue()) }
             headers.toMultiMap().forEach { header -> withHeader(header.key, header.value.toList()) }
         }
         return builder.build()

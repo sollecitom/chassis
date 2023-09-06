@@ -13,7 +13,6 @@ import org.sollecitom.chassis.openapi.validation.request.validator.test.utils.co
 import org.sollecitom.chassis.openapi.validation.request.validator.test.utils.hasErrors
 import org.sollecitom.chassis.openapi.validation.request.validator.test.utils.hasNoErrors
 
-// TODO add tests
 interface WithHttp4kOpenApiValidationSupport {
 
     val openApiValidator: Http4kOpenApiValidator

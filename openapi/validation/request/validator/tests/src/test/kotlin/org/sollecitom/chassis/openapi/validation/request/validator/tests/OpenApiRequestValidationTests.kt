@@ -13,8 +13,6 @@ import org.sollecitom.chassis.openapi.validation.request.validator.test.utils.ha
 @TestInstance(PER_CLASS)
 private class OpenApiRequestValidationTests {
 
-    // TODO test a file-based API
-    // TODO add a test with a templated path parameter
     @Test
     fun `validating a request against the declared OpenAPI specification`() {
 
