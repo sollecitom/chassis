@@ -34,7 +34,7 @@ fun ComponentSelectionWithCurrent.wouldDestabilizeAStableVersion(): Boolean = cu
 
 tasks.withType<DependencyUpdatesTask> {
 
-    checkConstraints = false // TODO these 2 should be enabled, to allow platform boms to work
+    checkConstraints = true
     checkBuildEnvironmentConstraints = false
     checkForGradleUpdate = true
     outputFormatter = "json,html"
