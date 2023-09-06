@@ -8,7 +8,7 @@ val integrationTestTask = tasks.register<Test>("containerBasedSystemTest") {
     testClassesDirs = containerBasedSystemTest.output.classesDirs
     classpath = configurations[containerBasedSystemTest.runtimeClasspathConfigurationName] + containerBasedSystemTest.output
 
-//    shouldRunAfter(tasks.test)
+    shouldRunAfter(tasks.test)
 }
 
 fun DependencyHandlerScope.containerBasedSystemTestImplementation(dependency: Any) {

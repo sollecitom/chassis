@@ -77,7 +77,6 @@ configure<JibExtension> {
 // TODO move the lines below into a plugin and import it instead
 fun PlatformParametersSpec.configureForOperatingSystem(currentOS: OperatingSystem, currentArchitecture: ArchitectureInternal) {
 
-    // TODO improve this "sophisticated" approach :-)
     when {
         currentOS.isMacOsX && currentArchitecture.isArm64 -> platform { appleSilicon() }
         else -> platform { linux() }
