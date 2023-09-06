@@ -34,15 +34,8 @@ tasks.withType<DependencyUpdatesTask> {
     outputDir = "build/dependencyUpdates"
     reportfileName = "report"
 
-    resolutionStrategy {
-        componentSelection {
-            all {
-                when {
-                    candidate.version.toVersionNumber().isStable && !currentVersion.toVersionNumber().isStable -> reject("Release candidate ${candidate.module}")
-                    candidate.version.toVersionNumber() < currentVersion.toVersionNumber() -> reject("Lower version ${candidate.module}")
-                }
-            }
-        }
+    rejectVersionIf {
+        (currentVersion.toVersionNumber() > candidate.version.toVersionNumber()) || (currentVersion.toVersionNumber().isStable && !candidate.version.toVersionNumber().isStable)
     }
 }
 
