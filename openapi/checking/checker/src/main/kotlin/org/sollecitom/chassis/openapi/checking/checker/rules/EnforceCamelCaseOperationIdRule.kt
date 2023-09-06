@@ -4,17 +4,16 @@ import io.swagger.v3.oas.models.OpenAPI
 import org.sollecitom.chassis.openapi.checking.checker.model.OperationWithContext
 import org.sollecitom.chassis.openapi.checking.checker.model.allOperations
 import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
-import org.sollecitom.chassis.openapi.checking.checker.rule.RuleResult
 
 object EnforceCamelCaseOperationIdRule : OpenApiRule {
 
     private const val camelCasePattern = "^[a-z][a-z0-9]*(([A-Z][a-z0-9]+)*[A-Z]?|([a-z0-9]+[A-Z])*|[A-Z])$"
     private val regex = camelCasePattern.toRegex()
 
-    override fun check(api: OpenAPI): RuleResult {
+    override fun invoke(api: OpenAPI): OpenApiRule.Result {
 
         val violations = api.allOperations().asSequence().mapNotNull { operation -> check(operation) }.toSet()
-        return RuleResult.withViolations(violations)
+        return OpenApiRule.Result.withViolations(violations)
     }
 
     private fun check(operation: OperationWithContext): Violation? {
@@ -29,7 +28,7 @@ object EnforceCamelCaseOperationIdRule : OpenApiRule {
 
     private fun String.isAssignableAsFunctionName(): Boolean = regex.matches(this)
 
-    data class Violation(val operation: OperationWithContext) : RuleResult.Violation {
+    data class Violation(val operation: OperationWithContext) : OpenApiRule.Result.Violation {
 
         override val message = "Operation ${operation.operation.method} on path ${operation.pathName} should have an operationId in camelCase, but doesn't"
     }

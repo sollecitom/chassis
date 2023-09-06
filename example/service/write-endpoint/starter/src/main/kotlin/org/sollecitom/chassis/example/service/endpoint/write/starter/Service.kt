@@ -24,7 +24,7 @@ class Service(private val environment: Environment, private val coreDataGenerato
 
     override val port: Int get() = webAPI.servicePort
     override val healthPort: Int get() = webAPI.healthPort
-    override val host = "localhost" // TODO fix
+    override val host = "localhost"
 
     override suspend fun start() {
         webAPI.start()

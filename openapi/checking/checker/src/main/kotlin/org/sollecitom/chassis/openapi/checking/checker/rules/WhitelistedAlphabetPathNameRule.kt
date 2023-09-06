@@ -2,14 +2,14 @@ package org.sollecitom.chassis.openapi.checking.checker.rules
 
 import io.swagger.v3.oas.models.OpenAPI
 import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
-import org.sollecitom.chassis.openapi.checking.checker.rule.RuleResult
+
 
 class WhitelistedAlphabetPathNameRule(val alphabet: Set<Char>, val templatedPathSegmentsAlphabet: Set<Char> = alphabet, private val versioningPathPrefixRule: MandatoryVersioningPathPrefixRule? = null, private val allowedPathSegments: Set<Regex> = emptySet()) : OpenApiRule {
 
-    override fun check(api: OpenAPI): RuleResult {
+    override fun invoke(api: OpenAPI): OpenApiRule.Result {
 
         val violations = api.paths.asSequence().map { it.key }.map { it.removeVersioningPath() }.mapNotNull { check(it) }.toSet()
-        return RuleResult.withViolations(violations)
+        return OpenApiRule.Result.withViolations(violations)
     }
 
     private fun check(path: Pair<String, String>): Violation? {
@@ -40,7 +40,7 @@ class WhitelistedAlphabetPathNameRule(val alphabet: Set<Char>, val templatedPath
         private const val pathSegmentSeparator = '/'
     }
 
-    data class Violation(val path: String, val alphabet: Set<Char>) : RuleResult.Violation {
+    data class Violation(val path: String, val alphabet: Set<Char>) : OpenApiRule.Result.Violation {
 
         override val message = "Path $path should only contain characters in $alphabet but doesn't"
     }

@@ -5,14 +5,13 @@ import org.sollecitom.chassis.kotlin.extensions.text.capitalized
 import org.sollecitom.chassis.openapi.checking.checker.model.ParameterWithLocation
 import org.sollecitom.chassis.openapi.checking.checker.model.allParameters
 import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
-import org.sollecitom.chassis.openapi.checking.checker.rule.RuleResult
 
 object DisallowReservedCharactersInParameterNameRule : OpenApiRule {
 
-    override fun check(api: OpenAPI): RuleResult {
+    override fun invoke(api: OpenAPI): OpenApiRule.Result {
 
         val violations = api.allParameters().asSequence().mapNotNull { parameter -> check(parameter) }.toSet()
-        return RuleResult.withViolations(violations)
+        return OpenApiRule.Result.withViolations(violations)
     }
 
     private fun check(parameter: ParameterWithLocation): Violation? {
@@ -25,7 +24,7 @@ object DisallowReservedCharactersInParameterNameRule : OpenApiRule {
 
     private fun ParameterWithLocation.isNotCompliant(): Boolean = (parameter.allowReserved ?: false)
 
-    data class Violation(val parameter: ParameterWithLocation) : RuleResult.Violation {
+    data class Violation(val parameter: ParameterWithLocation) : OpenApiRule.Result.Violation {
 
         override val message = "${parameter.location.value.capitalized()} parameter with name ${parameter.parameter.name} for operation ${parameter.location.operation.method} on path ${parameter.location.pathName} shouldn't allow reserved URL characters but does"
     }

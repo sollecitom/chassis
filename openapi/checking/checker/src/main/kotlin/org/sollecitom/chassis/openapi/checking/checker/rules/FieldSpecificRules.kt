@@ -6,16 +6,15 @@ import org.sollecitom.chassis.openapi.checking.checker.model.OpenApiField
 import org.sollecitom.chassis.openapi.checking.checker.model.OperationWithContext
 import org.sollecitom.chassis.openapi.checking.checker.model.allOperations
 import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
-import org.sollecitom.chassis.openapi.checking.checker.rule.RuleResult
 import org.sollecitom.chassis.openapi.checking.checker.rule.field.FieldRule
 import org.sollecitom.chassis.openapi.checking.checker.rule.field.FieldRulesViolation
 
 class FieldSpecificRules<VALUE : Any>(private val rulesByField: Map<OpenApiField<Operation, VALUE?>, Set<FieldRule<VALUE, *>>>) : OpenApiRule {
 
-    override fun check(api: OpenAPI): RuleResult {
+    override fun invoke(api: OpenAPI): OpenApiRule.Result {
 
         val violations = api.allOperations().asSequence().flatMap { operation -> operation.fields() }.mapNotNull { field -> check(field) }.toSet()
-        return RuleResult.withViolations(violations)
+        return OpenApiRule.Result.withViolations(violations)
     }
 
     private fun check(field: FieldWithContext<VALUE?>): FieldRulesViolation<VALUE>? {

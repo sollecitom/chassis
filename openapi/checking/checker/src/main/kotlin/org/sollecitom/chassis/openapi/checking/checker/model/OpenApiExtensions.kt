@@ -8,7 +8,6 @@ import io.swagger.v3.oas.models.responses.ApiResponses
 
 fun OpenAPI.allParameters(): Set<ParameterWithLocation> = paths.asSequence().flatMap { (pathName, path) -> path.allParameters(pathName) }.toSet()
 
-// TODO return sequence instead?
 fun OpenAPI.allOperations(): Set<OperationWithContext> = paths.asSequence().flatMap { (pathName, path) -> path.operations(pathName) }.toSet()
 
 fun PathItem.allParameters(pathName: String): Set<ParameterWithLocation> = operations().asSequence().flatMap { operation -> operation.allParameters(pathName) }.toSet()

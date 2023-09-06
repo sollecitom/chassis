@@ -6,7 +6,7 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
 import io.swagger.v3.oas.models.OpenAPI
 import org.sollecitom.chassis.openapi.checking.checker.ComplianceCheckResult
-import org.sollecitom.chassis.openapi.checking.checker.rule.RuleResult
+import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
 import org.sollecitom.chassis.openapi.checking.checker.rule.field.FieldRulesViolation
 import org.sollecitom.chassis.openapi.checking.checker.sets.OpenApiRuleSet
 import org.sollecitom.chassis.openapi.checking.checker.sets.checkAgainstRules
@@ -26,10 +26,10 @@ fun Assert<ComplianceCheckResult>.isCompliant() = given { result ->
     assertThat(result).isEqualTo(ComplianceCheckResult.Compliant)
 }
 
-fun Assert<ComplianceCheckResult>.isNotCompliantWithOnlyViolation(expectedViolation: RuleResult.Violation) = isNotCompliantWithViolations(expectedViolation)
+fun Assert<ComplianceCheckResult>.isNotCompliantWithOnlyViolation(expectedViolation: OpenApiRule.Result.Violation) = isNotCompliantWithViolations(expectedViolation)
 
 @Suppress("UNCHECKED_CAST")
-fun <VIOLATION : RuleResult.Violation> Assert<ComplianceCheckResult>.isNotCompliantWithOnlyViolation(check: (VIOLATION) -> Unit) = given { result ->
+fun <VIOLATION : OpenApiRule.Result.Violation> Assert<ComplianceCheckResult>.isNotCompliantWithOnlyViolation(check: (VIOLATION) -> Unit) = given { result ->
 
     assertThat(result).isInstanceOf(ComplianceCheckResult.NonCompliant::class)
     with(result as ComplianceCheckResult.NonCompliant) {
@@ -39,7 +39,7 @@ fun <VIOLATION : RuleResult.Violation> Assert<ComplianceCheckResult>.isNotCompli
     }
 }
 
-inline fun <reified VIOLATION : RuleResult.Violation> Assert<ComplianceCheckResult>.isNotCompliantWithViolation(check: (VIOLATION) -> Unit) = given { result ->
+inline fun <reified VIOLATION : OpenApiRule.Result.Violation> Assert<ComplianceCheckResult>.isNotCompliantWithViolation(check: (VIOLATION) -> Unit) = given { result ->
 
     assertThat(result).isInstanceOf(ComplianceCheckResult.NonCompliant::class)
     with(result as ComplianceCheckResult.NonCompliant) {
@@ -49,16 +49,16 @@ inline fun <reified VIOLATION : RuleResult.Violation> Assert<ComplianceCheckResu
 }
 
 @Suppress("UNCHECKED_CAST")
-fun <VIOLATION : RuleResult.Violation, VALUE : Any> Assert<FieldRulesViolation<VALUE>>.hasSingleFieldViolation(check: (VIOLATION) -> Unit) = given { violation ->
+fun <VIOLATION : OpenApiRule.Result.Violation, VALUE : Any> Assert<FieldRulesViolation<VALUE>>.hasSingleFieldViolation(check: (VIOLATION) -> Unit) = given { violation ->
 
     assertThat(violation.fieldViolations).hasSize(1)
     val fieldViolation = violation.fieldViolations.single() as VIOLATION
     check(fieldViolation)
 }
 
-fun Assert<ComplianceCheckResult>.isNotCompliantWithViolations(vararg expectedViolations: RuleResult.Violation) = isNotCompliantWithViolations(expectedViolations.toSet())
+fun Assert<ComplianceCheckResult>.isNotCompliantWithViolations(vararg expectedViolations: OpenApiRule.Result.Violation) = isNotCompliantWithViolations(expectedViolations.toSet())
 
-fun Assert<ComplianceCheckResult>.isNotCompliantWithViolations(expectedViolations: Set<RuleResult.Violation>) = given { result ->
+fun Assert<ComplianceCheckResult>.isNotCompliantWithViolations(expectedViolations: Set<OpenApiRule.Result.Violation>) = given { result ->
 
     assertThat(result).isInstanceOf(ComplianceCheckResult.NonCompliant::class)
     with(result as ComplianceCheckResult.NonCompliant) {

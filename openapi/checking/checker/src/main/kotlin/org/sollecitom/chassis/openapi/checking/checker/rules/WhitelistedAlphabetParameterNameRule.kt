@@ -6,14 +6,14 @@ import org.sollecitom.chassis.openapi.checking.checker.model.ParameterLocation
 import org.sollecitom.chassis.openapi.checking.checker.model.ParameterWithLocation
 import org.sollecitom.chassis.openapi.checking.checker.model.allParameters
 import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
-import org.sollecitom.chassis.openapi.checking.checker.rule.RuleResult
+
 
 class WhitelistedAlphabetParameterNameRule(val pathAlphabet: Set<Char>, val headerAlphabet: Set<Char> = pathAlphabet, val queryAlphabet: Set<Char> = pathAlphabet, val cookieAlphabet: Set<Char> = pathAlphabet) : OpenApiRule {
 
-    override fun check(api: OpenAPI): RuleResult {
+    override fun invoke(api: OpenAPI): OpenApiRule.Result {
 
         val violations = api.allParameters().asSequence().mapNotNull { parameter -> check(parameter) }.toSet()
-        return RuleResult.withViolations(violations)
+        return OpenApiRule.Result.withViolations(violations)
     }
 
     private fun check(parameter: ParameterWithLocation): Violation? {
@@ -34,7 +34,7 @@ class WhitelistedAlphabetParameterNameRule(val pathAlphabet: Set<Char>, val head
 
     private fun ParameterWithLocation.isNotCompliantWithNamingConvention(): Boolean = parameter.name.any { character -> character !in whitelistedAlphabet }
 
-    data class Violation(val parameter: ParameterWithLocation, val whitelistedAlphabet: Set<Char>) : RuleResult.Violation {
+    data class Violation(val parameter: ParameterWithLocation, val whitelistedAlphabet: Set<Char>) : OpenApiRule.Result.Violation {
 
         override val message = "${parameter.location.value.capitalized()} parameter with name ${parameter.parameter.name} for operation ${parameter.location.operation.method} on path ${parameter.location.pathName} should only contain characters in $whitelistedAlphabet but doesn't"
     }

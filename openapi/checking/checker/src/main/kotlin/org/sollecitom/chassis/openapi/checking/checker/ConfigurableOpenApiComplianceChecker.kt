@@ -2,7 +2,7 @@ package org.sollecitom.chassis.openapi.checking.checker
 
 import io.swagger.v3.oas.models.OpenAPI
 import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
-import org.sollecitom.chassis.openapi.checking.checker.rule.RuleResult
+
 import org.sollecitom.chassis.openapi.parser.OpenApiReader
 import org.sollecitom.chassis.openapi.parser.parse
 import java.net.URL
@@ -15,10 +15,10 @@ internal class ConfigurableOpenApiComplianceChecker(private val rules: Set<OpenA
 
     override fun check(openApi: OpenAPI): ComplianceCheckResult {
 
-        val problems = mutableSetOf<RuleResult.NonCompliant>()
+        val problems = mutableSetOf<OpenApiRule.Result.NonCompliant>()
         rules.forEach { rule ->
-            val result = rule.check(openApi)
-            if (result is RuleResult.NonCompliant) {
+            val result = rule(openApi)
+            if (result is OpenApiRule.Result.NonCompliant) {
                 problems += result
             }
         }

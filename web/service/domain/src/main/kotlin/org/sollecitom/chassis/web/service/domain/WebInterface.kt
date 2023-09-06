@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.web.service.domain
 
-// TODO refactor this thing
 interface WebInterface {
 
     val host: String

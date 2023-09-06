@@ -6,7 +6,7 @@ import org.sollecitom.chassis.openapi.checking.checker.model.OperationWithContex
 import org.sollecitom.chassis.openapi.checking.checker.model.allOperations
 import org.sollecitom.chassis.openapi.checking.checker.model.isRequired
 import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
-import org.sollecitom.chassis.openapi.checking.checker.rule.RuleResult
+
 
 class MandatoryRequestBodyRule(methods: Set<Pair<HttpMethod, Boolean>>) : OpenApiRule {
 
@@ -17,10 +17,10 @@ class MandatoryRequestBodyRule(methods: Set<Pair<HttpMethod, Boolean>>) : OpenAp
     private val methodsToCheck = methods.asSequence().map { it.first }.toSet()
     private val isBodyRequiredByMethod = methods.toMap()
 
-    override fun check(api: OpenAPI): RuleResult {
+    override fun invoke(api: OpenAPI): OpenApiRule.Result {
 
         val violations = api.allOperations().asSequence().filter { it.operation.method in methodsToCheck }.mapNotNull { operation -> check(operation) }.toSet()
-        return RuleResult.withViolations(violations)
+        return OpenApiRule.Result.withViolations(violations)
     }
 
     private fun check(operation: OperationWithContext): Violation? {
@@ -33,7 +33,7 @@ class MandatoryRequestBodyRule(methods: Set<Pair<HttpMethod, Boolean>>) : OpenAp
 
     private fun OperationWithContext.isNotCompliant(): Boolean = requestBody == null || (!requestBody.isRequired() && isBodyRequiredByMethod[operation.method]!!)
 
-    data class Violation(val operation: OperationWithContext, val requiredBody: Boolean) : RuleResult.Violation {
+    data class Violation(val operation: OperationWithContext, val requiredBody: Boolean) : OpenApiRule.Result.Violation {
 
         override val message = "Operation ${operation.operation.method} on path ${operation.pathName} should specify ${if (requiredBody) "a required" else "an optional"} request body, but doesn't"
     }

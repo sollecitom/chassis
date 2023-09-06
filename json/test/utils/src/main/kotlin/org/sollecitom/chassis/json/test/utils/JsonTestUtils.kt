@@ -25,12 +25,11 @@ fun Assert<JSONObject>.isEqualTo(expected: JSONObject) = given { actual ->
     assertThat(actual.toMap()).containsSameEntriesAs(expected.toMap())
 }
 
-// TODO add tests for this
 fun Assert<JSONObject>.compliesWith(schema: Schema) = given { actual ->
 
     val failure = schema.validate(actual)
     if (failure != null) {
-        expected("JSON that complies with schema at :${show(schema.location)} but there were errors: ${show(failure.message)}") // TODO include all causes?
+        expected("JSON that complies with schema at :${show(schema.location)} but there were errors: ${show(failure.message)}")
     }
 }
 

@@ -6,7 +6,7 @@ import io.swagger.v3.oas.models.media.MediaType
 import org.sollecitom.chassis.openapi.checking.checker.model.OperationWithContext
 import org.sollecitom.chassis.openapi.checking.checker.model.allOperations
 import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
-import org.sollecitom.chassis.openapi.checking.checker.rule.RuleResult
+
 
 class MandatoryRequestBodyExampleRule(private val methods: Set<HttpMethod>, private val mediaTypesThatShouldHaveAnExample: Set<String>) : OpenApiRule {
 
@@ -15,10 +15,10 @@ class MandatoryRequestBodyExampleRule(private val methods: Set<HttpMethod>, priv
         require(mediaTypesThatShouldHaveAnExample.isNotEmpty()) { "Must specify at least one media type name to check" }
     }
 
-    override fun check(api: OpenAPI): RuleResult {
+    override fun invoke(api: OpenAPI): OpenApiRule.Result {
 
         val violations = api.allOperations().asSequence().filter { it.operation.method in methods }.mapNotNull { operation -> check(operation) }.toSet()
-        return RuleResult.withViolations(violations)
+        return OpenApiRule.Result.withViolations(violations)
     }
 
     private fun check(operation: OperationWithContext): Violation? {
@@ -35,7 +35,7 @@ class MandatoryRequestBodyExampleRule(private val methods: Set<HttpMethod>, priv
 
     private fun OperationWithContext.violation(mediaTypesWithoutMandatoryExample: Set<String>) = Violation(this, mediaTypesThatShouldHaveAnExample, mediaTypesWithoutMandatoryExample)
 
-    class Violation(val operation: OperationWithContext, val mediaTypesThatShouldHaveAnExample: Set<String>, val mediaTypesWithoutMandatoryExample: Set<String>) : RuleResult.Violation {
+    class Violation(val operation: OperationWithContext, val mediaTypesThatShouldHaveAnExample: Set<String>, val mediaTypesWithoutMandatoryExample: Set<String>) : OpenApiRule.Result.Violation {
 
         override val message = "Operation ${operation.operation.method} on path ${operation.pathName} should have a request body example for media types ${mediaTypesThatShouldHaveAnExample.joinToString(prefix = "[", postfix = "]")}, but media types ${mediaTypesWithoutMandatoryExample.joinToString(prefix = "[", postfix = "]")} do not specify an example"
     }

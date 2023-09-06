@@ -2,16 +2,16 @@ package org.sollecitom.chassis.openapi.checking.checker.rules
 
 import io.swagger.v3.oas.models.OpenAPI
 import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
-import org.sollecitom.chassis.openapi.checking.checker.rule.RuleResult
+
 
 class MandatoryVersioningPathPrefixRule(private val minimumAllowedVersion: Int = 1) : OpenApiRule {
 
     val prefixRegex: Regex get() = Companion.prefixRegex
 
-    override fun check(api: OpenAPI): RuleResult {
+    override fun invoke(api: OpenAPI): OpenApiRule.Result {
 
         val violations = api.paths.asSequence().map { it.key }.mapNotNull { path -> check(path) }.toSet()
-        return RuleResult.withViolations(violations)
+        return OpenApiRule.Result.withViolations(violations)
     }
 
     private fun check(path: String): Violation? {
@@ -31,7 +31,7 @@ class MandatoryVersioningPathPrefixRule(private val minimumAllowedVersion: Int =
         return false
     }
 
-    data class Violation(val pathName: String, val minimumAllowedVersion: Int) : RuleResult.Violation {
+    data class Violation(val pathName: String, val minimumAllowedVersion: Int) : OpenApiRule.Result.Violation {
 
         override val message = "Path $pathName should start with versioning prefix e.g. \"v${minimumAllowedVersion}\" and specify a version greater than or equal to $minimumAllowedVersion, but doesn't"
     }

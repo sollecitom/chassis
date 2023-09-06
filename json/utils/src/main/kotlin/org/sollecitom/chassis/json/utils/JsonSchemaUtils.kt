@@ -9,8 +9,6 @@ import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.net.URI
 
-//TODO write tests
-
 fun jsonSchemaAt(location: String): Schema = openAsStream(location).use {
 
     val schemaJson = JsonParser(it).parse()

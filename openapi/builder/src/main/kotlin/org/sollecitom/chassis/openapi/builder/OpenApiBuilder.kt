@@ -54,8 +54,6 @@ fun PathItem.trace(builder: Operation.() -> Unit = {}) = operation(method = Path
 
 fun PathItem.operation(method: PathItem.HttpMethod, customize: Operation.() -> Unit = {}) = operation(method, Operation().apply(customize))
 
-// TODO rework this to remove these builders
-
 fun Operation.parameters(customize: ParametersBuilder.() -> Unit) {
 
     parameters = ParametersBuilder().apply(customize).build()
@@ -102,7 +100,6 @@ class ResponsesBuilder {
 
     private val responses = ApiResponses()
 
-    // TODO add a variant with HttpStatus (maybe)
     fun status(status: Int, customize: ApiResponse.() -> Unit = {}) {
 
         responses[status.toString()] = ApiResponse().apply(customize)
