@@ -13,14 +13,14 @@ class FieldSpecificRules<VALUE : Any>(private val rulesByField: Map<OpenApiField
 
     override fun invoke(api: OpenAPI): OpenApiRule.Result {
 
-        val violations = api.allOperations().asSequence().flatMap { operation -> operation.fields() }.mapNotNull { field -> check(field) }.toSet()
+        val violations = api.allOperations().asSequence().flatMap { operation -> operation.fields() }.mapNotNull { field -> check(field, api) }.toSet()
         return OpenApiRule.Result.withViolations(violations)
     }
 
-    private fun check(field: FieldWithContext<VALUE?>): FieldRulesViolation<VALUE>? {
+    private fun check(field: FieldWithContext<VALUE?>, api: OpenAPI): FieldRulesViolation<VALUE>? {
 
         val fieldRules = rulesByField[field.field] ?: emptySet()
-        val violations = fieldRules.mapNotNull { rule -> field.field.getter(field.operation.operation.operation)?.let { value -> rule.check(value) } }.toSet()
+        val violations = fieldRules.mapNotNull { rule -> field.field.getter(field.operation.operation.operation)?.let { value -> rule.check(value, api) } }.toSet()
         return violations.takeUnless { it.isEmpty() }?.let { FieldRulesViolation(field.operation, field.field, fieldRules, violations) }
     }
 

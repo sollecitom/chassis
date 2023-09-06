@@ -1,11 +1,12 @@
 package org.sollecitom.chassis.openapi.checking.checker.rules.field
 
+import io.swagger.v3.oas.models.OpenAPI
 import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
 import org.sollecitom.chassis.openapi.checking.checker.rule.field.FieldRule
 
 data class MandatorySuffixTextFieldRule(val suffix: String, val ignoreCase: Boolean) : FieldRule<String, MandatorySuffixTextFieldRule.Violation> {
 
-    override fun check(value: String): Violation? {
+    override fun check(value: String, api: OpenAPI): Violation? {
 
         if (!value.endsWith(suffix = suffix, ignoreCase = ignoreCase)) return Violation(value, suffix, ignoreCase)
         return null
