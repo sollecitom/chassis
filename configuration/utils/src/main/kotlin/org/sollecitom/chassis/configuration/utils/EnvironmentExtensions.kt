@@ -18,7 +18,7 @@ fun Environment.Companion.fromYamlResource(resourceName: String): Environment {
     return Environment.fromYaml(stream)
 }
 
-fun Environment.Companion.fromYaml(input: InputStream): Environment { // TODO suggest this to HTTP4K
+fun Environment.Companion.fromYaml(input: InputStream): Environment {
 
     val map = JacksonYaml.asA<Map<String, Any>>(InputStreamReader(input).use { it.readText() })
 

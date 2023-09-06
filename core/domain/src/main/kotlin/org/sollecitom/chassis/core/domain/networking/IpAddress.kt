@@ -5,7 +5,7 @@ import java.net.Inet4Address
 import java.net.Inet6Address
 import java.net.InetAddress
 
-sealed interface IpAddress { // TODO add tests :)
+sealed interface IpAddress {
 
     val value: InetAddress
     val stringValue: String get() = value.hostAddress

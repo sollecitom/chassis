@@ -26,7 +26,6 @@ internal class CoreGeneratorsProvider(private val environment: Environment, init
 
     private fun initialiseClock(): Clock {
 
-        // TODO we could allow to offset the system clock in either direction, or to fix it to be a specific instant
         val clock = Clock.System
         logger.info { "Initialised clock to be the system clock" }
         return clock
