@@ -10,7 +10,7 @@ import org.sollecitom.chassis.core.domain.identity.factory.invoke
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import kotlin.random.Random
 
-internal class CoreGeneratorsProvider(private val environment: Environment, initialisedClock: Clock? = null, initialisedRandom: Random? = null) : Loggable(), WithCoreGenerators {
+internal class CoreDataGeneratorProvider(private val environment: Environment, initialisedClock: Clock? = null, initialisedRandom: Random? = null) : Loggable(), CoreDataGenerator {
 
     override val random: Random = initialisedRandom ?: initialiseRandom()
     override val clock: Clock = initialisedClock ?: initialiseClock()
@@ -36,4 +36,4 @@ internal class CoreGeneratorsProvider(private val environment: Environment, init
     }
 }
 
-fun WithCoreGenerators.Companion.provider(environment: Environment = StandardEnvironment(), initialisedClock: Clock? = null, initialisedRandom: Random? = null): WithCoreGenerators = CoreGeneratorsProvider(environment)
+fun CoreDataGenerator.Companion.provider(environment: Environment = StandardEnvironment(), initialisedClock: Clock? = null, initialisedRandom: Random? = null): CoreDataGenerator = CoreDataGeneratorProvider(environment)

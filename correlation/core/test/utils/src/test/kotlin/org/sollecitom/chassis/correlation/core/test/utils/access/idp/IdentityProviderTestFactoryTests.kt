@@ -7,7 +7,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.test.utils.testProvider
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.idp.IdentityProvider
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 import org.sollecitom.chassis.correlation.core.test.utils.tenancy.create
@@ -15,7 +15,7 @@ import org.sollecitom.chassis.kotlin.extensions.text.CharacterGroups.letters
 import org.sollecitom.chassis.kotlin.extensions.text.string
 
 @TestInstance(PER_CLASS)
-private class IdentityProviderTestFactoryTests : WithCoreGenerators by WithCoreGenerators.testProvider {
+private class IdentityProviderTestFactoryTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     @Test
     fun `with given name and tenant`() {

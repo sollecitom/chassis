@@ -9,7 +9,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.test.utils.testProvider
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.authenticated
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
@@ -25,7 +25,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRep
 import org.sollecitom.chassis.test.utils.assertions.failedThrowing
 
 @TestInstance(PER_CLASS)
-private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testProvider {
+private class ApplicationTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     init {
         configureLogging()
@@ -78,5 +78,5 @@ private class ApplicationTests : WithCoreGenerators by WithCoreGenerators.testPr
     }
 
     // TODO remove the in-memory adapter from here - use a stub instead
-    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(queryFactory = EventSourcedUserRepository.eventQueryFactory), userRepository: UserRepository = EventSourcedUserRepository(events = events, coreGenerators = this)): Application = Application(userRepository::withEmailAddress)
+    private fun newApplication(events: EventStore.Mutable = InMemoryEventStore(queryFactory = EventSourcedUserRepository.eventQueryFactory), userRepository: UserRepository = EventSourcedUserRepository(events = events, coreDataGenerators = this)): Application = Application(userRepository::withEmailAddress)
 }

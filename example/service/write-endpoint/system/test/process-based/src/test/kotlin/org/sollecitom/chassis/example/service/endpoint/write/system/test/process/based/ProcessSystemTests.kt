@@ -8,7 +8,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.configuration.utils.from
 import org.sollecitom.chassis.core.test.utils.testProvider
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.configureLogging
 import org.sollecitom.chassis.example.service.endpoint.write.starter.Service
 import org.sollecitom.chassis.example.service.endpoint.write.system.test.specification.SystemTestSpecification
@@ -17,7 +17,7 @@ import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.LoggingLevel
 
 @TestInstance(PER_CLASS)
-private class ProcessSystemTests : SystemTestSpecification, WithCoreGenerators by WithCoreGenerators.testProvider {
+private class ProcessSystemTests : SystemTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
 
     init {
         configureLogging(defaultMinimumLoggingLevel = LoggingLevel.DEBUG)

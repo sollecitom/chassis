@@ -2,7 +2,7 @@ package org.sollecitom.chassis.example.service.endpoint.write.starter
 
 import org.http4k.cloudnative.env.Environment
 import org.sollecitom.chassis.configuration.utils.fromYamlResource
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.store.memory.InMemoryEventStore
@@ -15,13 +15,13 @@ import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRep
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.service.domain.WebService
 
-class Service(private val environment: Environment, private val coreGenerators: WithCoreGenerators) : WebService, WithCoreGenerators by coreGenerators {
+class Service(private val environment: Environment, private val coreDataGenerators: CoreDataGenerator) : WebService, CoreDataGenerator by coreDataGenerators {
 
-    constructor(environment: Environment) : this(environment, WithCoreGenerators.provider(environment))
+    constructor(environment: Environment) : this(environment, CoreDataGenerator.provider(environment))
 
     private val userRepository = userRepository()
     private val application: Application = application(userRepository)
-    private val webAPI = webApi(application, environment, coreGenerators)
+    private val webAPI = webApi(application, environment, coreDataGenerators)
 
     override val port: Int get() = webAPI.servicePort
     override val healthPort: Int get() = webAPI.healthPort
@@ -41,12 +41,12 @@ class Service(private val environment: Environment, private val coreGenerators: 
 
         // TODO change this
         val events = InMemoryEventStore(queryFactory = EventSourcedUserRepository.eventQueryFactory)
-        return EventSourcedUserRepository(events = events, coreGenerators = this)
+        return EventSourcedUserRepository(events = events, coreDataGenerators = this)
     }
 
     private fun application(userRepository: UserRepository): Application = Application(userRepository::withEmailAddress)
 
-    private fun webApi(application: Application, environment: Environment, coreGenerators: WithCoreGenerators) = WebAPI(configuration = WebAPI.Configuration.from(environment), application = application, coreGenerators = coreGenerators)
+    private fun webApi(application: Application, environment: Environment, coreDataGenerators: CoreDataGenerator) = WebAPI(configuration = WebAPI.Configuration.from(environment), application = application, coreDataGenerators = coreDataGenerators)
 
     companion object : Loggable()
 }

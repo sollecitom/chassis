@@ -3,14 +3,14 @@ package org.sollecitom.chassis.correlation.core.serialization.json.context
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.test.utils.testProvider
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.authenticated
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.json.test.utils.JsonSerdeTestSpecification
 
 @TestInstance(PER_CLASS)
-private class InvocationContextJsonSerializationTests : JsonSerdeTestSpecification<InvocationContext<*>>, WithCoreGenerators by WithCoreGenerators.testProvider {
+private class InvocationContextJsonSerializationTests : JsonSerdeTestSpecification<InvocationContext<*>>, CoreDataGenerator by CoreDataGenerator.testProvider {
 
     override val jsonSerde get() = InvocationContext.jsonSerde
 

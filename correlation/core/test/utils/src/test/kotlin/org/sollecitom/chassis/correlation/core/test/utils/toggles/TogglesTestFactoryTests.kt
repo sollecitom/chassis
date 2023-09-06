@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.test.utils.testProvider
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.toggles.BooleanToggleValue
 import org.sollecitom.chassis.correlation.core.domain.toggles.DecimalToggleValue
 import org.sollecitom.chassis.correlation.core.domain.toggles.EnumToggleValue
@@ -13,7 +13,7 @@ import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
 import org.sollecitom.chassis.test.utils.assertions.containsSameElementsAs
 
 @TestInstance(PER_CLASS)
-private class TogglesTestFactoryTests : WithCoreGenerators by WithCoreGenerators.testProvider {
+private class TogglesTestFactoryTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     @Test
     fun `with given values`() {

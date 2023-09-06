@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.test.utils.testProvider
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.idp.IdentityProvider
 import org.sollecitom.chassis.correlation.core.domain.access.session.Session
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
@@ -15,7 +15,7 @@ import org.sollecitom.chassis.correlation.core.test.utils.access.idp.create
 import org.sollecitom.chassis.correlation.core.test.utils.tenancy.create
 
 @TestInstance(PER_CLASS)
-private class SessionTestFactoryTests : WithCoreGenerators by WithCoreGenerators.testProvider {
+private class SessionTestFactoryTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     @Nested
     inner class Simple {

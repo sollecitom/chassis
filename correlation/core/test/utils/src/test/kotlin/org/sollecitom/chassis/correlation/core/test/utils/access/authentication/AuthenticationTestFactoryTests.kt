@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.test.utils.testProvider
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
 import org.sollecitom.chassis.correlation.core.domain.access.session.Session
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
@@ -18,7 +18,7 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
 @TestInstance(PER_CLASS)
-private class AuthenticationTestFactoryTests : WithCoreGenerators by WithCoreGenerators.testProvider {
+private class AuthenticationTestFactoryTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     @Nested
     inner class Token {

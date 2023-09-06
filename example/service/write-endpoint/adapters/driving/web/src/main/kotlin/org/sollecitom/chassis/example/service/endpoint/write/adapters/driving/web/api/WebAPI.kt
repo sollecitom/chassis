@@ -19,7 +19,7 @@ import org.http4k.server.JettyLoom
 import org.sollecitom.chassis.core.domain.lifecycle.Startable
 import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 import org.sollecitom.chassis.core.domain.networking.SpecifiedPort
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.endpoints.RegisterUserCommandsEndpoint
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.endpoints.UnknownCommandsEndpoint
@@ -37,7 +37,7 @@ import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 
 // TODO maybe turn this into a module?
-class WebAPI(private val configuration: Configuration, application: Application, coreGenerators: WithCoreGenerators) : Startable, Stoppable, HttpHandler, WithCoreGenerators by coreGenerators {
+class WebAPI(private val configuration: Configuration, application: Application, coreDataGenerators: CoreDataGenerator) : Startable, Stoppable, HttpHandler, CoreDataGenerator by coreDataGenerators {
 
     private val mainApp = mainApp(RegisterUserCommandsEndpoint.V1(application::invoke), UnknownCommandsEndpoint())
     private val server = server(mainApp)

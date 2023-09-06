@@ -12,7 +12,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.domain.networking.SpecifiedPort
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
@@ -46,7 +46,7 @@ import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 
 @TestInstance(PER_CLASS)
-private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCoreGenerators by WithCoreGenerators.provider() {
+private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, CoreDataGenerator by CoreDataGenerator.provider() {
 
     private val openApi = OpenApiReader.parse(ApplicationProperties.OPEN_API_FILE_LOCATION)
     override val openApiValidator = Http4kOpenApiValidator(openApi)
@@ -171,7 +171,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, WithCore
         }
     }
 
-    private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend context(InvocationContext<Access>)(RegisterUser.V1) -> RegisterUser.V1.Result = { _ -> Accepted(user = UserWithPendingRegistration(id = newId.internal())) }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration, coreGenerators = this)
+    private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend context(InvocationContext<Access>)(RegisterUser.V1) -> RegisterUser.V1.Result = { _ -> Accepted(user = UserWithPendingRegistration(id = newId.internal())) }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration, coreDataGenerators = this)
 
     private fun path(value: String) = "http://localhost:0/$value"
 

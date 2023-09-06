@@ -1,14 +1,14 @@
 package org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.memory
 
 import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.EntityEventStore
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasAlreadySubmitted
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasSubmitted
 
-context(WithCoreGenerators)
+context(CoreDataGenerator)
 internal class RegisteredUser(private val pastEvent: UserRegistrationRequestWasSubmitted, private val _events: EntityEventStore.Mutable) : User {
 
     override val events: EntityEventStore get() = _events

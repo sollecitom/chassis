@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.test.utils.testProvider
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.access.actor.impersonating
 import org.sollecitom.chassis.correlation.core.domain.access.actor.onBehalfOf
@@ -17,7 +17,7 @@ import org.sollecitom.chassis.correlation.core.test.utils.access.authentication.
 import org.sollecitom.chassis.correlation.core.test.utils.tenancy.create
 
 @TestInstance(PER_CLASS)
-private class ActorTestFactoryTests : WithCoreGenerators by WithCoreGenerators.testProvider {
+private class ActorTestFactoryTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     @Nested
     inner class Direct {

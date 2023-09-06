@@ -1,7 +1,7 @@
 package org.sollecitom.chassis.correlation.core.test.utils.context
 
 import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
@@ -19,7 +19,7 @@ import org.sollecitom.chassis.correlation.core.test.utils.access.unauthenticated
 import org.sollecitom.chassis.correlation.core.test.utils.toggles.create
 import org.sollecitom.chassis.correlation.core.test.utils.trace.create
 
-context(WithCoreGenerators)
+context(CoreDataGenerator)
 fun InvocationContext.Companion.create(
     timeNow: Instant = clock.now(),
     access: (Instant) -> Access = { Access.authenticated() },
@@ -30,7 +30,7 @@ fun InvocationContext.Companion.create(
     return InvocationContext(access = access(timeNow), trace = trace(timeNow), toggles = toggles(timeNow))
 }
 
-context(WithCoreGenerators)
+context(CoreDataGenerator)
 fun InvocationContext.Companion.authenticated(
     timeNow: Instant = clock.now(),
     access: (Instant) -> Access.Authenticated = { Access.authenticated() },
@@ -41,7 +41,7 @@ fun InvocationContext.Companion.authenticated(
     return InvocationContext(access = access(timeNow), trace = trace(timeNow), toggles = toggles(timeNow))
 }
 
-context(WithCoreGenerators)
+context(CoreDataGenerator)
 fun InvocationContext.Companion.unauthenticated(
     timeNow: Instant = clock.now(),
     access: (Instant) -> Access.Unauthenticated = { Access.unauthenticated() },
@@ -52,7 +52,7 @@ fun InvocationContext.Companion.unauthenticated(
     return InvocationContext(access = access(timeNow), trace = trace(timeNow), toggles = toggles(timeNow))
 }
 
-context(WithCoreGenerators)
+context(CoreDataGenerator)
 fun InvocationContext.Companion.create(
     timeNow: Instant = clock.now(),
     authenticated: Boolean = true,

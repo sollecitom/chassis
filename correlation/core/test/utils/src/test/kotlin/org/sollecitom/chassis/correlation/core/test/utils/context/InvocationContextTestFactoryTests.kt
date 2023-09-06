@@ -9,7 +9,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.test.utils.testProvider
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
@@ -29,7 +29,7 @@ import org.sollecitom.chassis.correlation.core.test.utils.toggles.create
 import org.sollecitom.chassis.correlation.core.test.utils.trace.create
 
 @TestInstance(PER_CLASS)
-private class InvocationContextTestFactoryTests : WithCoreGenerators by WithCoreGenerators.testProvider {
+private class InvocationContextTestFactoryTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     @Test
     fun `customizing the trace`() {

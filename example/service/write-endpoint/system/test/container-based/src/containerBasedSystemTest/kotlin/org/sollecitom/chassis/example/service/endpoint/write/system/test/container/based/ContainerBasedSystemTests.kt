@@ -6,14 +6,14 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.test.utils.testProvider
-import org.sollecitom.chassis.core.utils.WithCoreGenerators
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.example.service.endpoint.write.configuration.configureLogging
 import org.sollecitom.chassis.example.service.endpoint.write.system.test.specification.SystemTestSpecification
 import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.testcontainers.containers.Network
 
 @TestInstance(PER_CLASS)
-private class ContainerBasedSystemTests : SystemTestSpecification, WithCoreGenerators by WithCoreGenerators.testProvider {
+private class ContainerBasedSystemTests : SystemTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
 
     private val network = Network.newNetwork()
     private val serviceContainer by lazy { newExampleWriteEndpointServiceContainer().withNetwork(network) }
