@@ -32,7 +32,7 @@ val buildTimestamp: String = ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFo
 val dockerBaseImage: String by project
 val serviceName = "example-write-endpoint"
 val repository = "ghcr.io/sollecitom-chassis/"
-val serviceImage = "$repository$serviceName" // TODO change this to "$repository$serviceName" after GitHub actions
+val serviceImage = "$repository$serviceName"
 
 val tmpVolume = "/tmp"
 val maxRamPercentage = "70.000000"
@@ -74,7 +74,7 @@ configure<JibExtension> {
     }
 }
 
-// TODO move to a library and import it
+// TODO move the lines below into a plugin and import it instead
 fun PlatformParametersSpec.configureForOperatingSystem(currentOS: OperatingSystem, currentArchitecture: ArchitectureInternal) {
 
     // TODO improve this "sophisticated" approach :-)
