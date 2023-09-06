@@ -1,12 +1,12 @@
 [versions]
-# plugin versions
+# libraries
+semver4j = "3.1.0"
+# plugins
 kotlin = "1.9.10"
 palantir-git-plugin = "3.0.0"
 version-catalog-report-plugin = "0.47.0"
 version-catalog-update-plugin = "0.8.1"
 jib-plugin = "3.3.2"
-# for buildSrc
-semver4j = "3.1.0"
 
 [libraries]
 semver4j = { module = "com.vdurmont:semver4j", version.ref = "semver4j" }

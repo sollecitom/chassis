@@ -1,5 +1,5 @@
 [versions]
-# library versions
+# libraries
 kotlin = "1.9.10"
 kotlinx-coroutines = "1.7.3"
 slf4j = "2.0.9"
@@ -16,12 +16,11 @@ commons-codec = "1.16.0"
 test-containers = "1.19.0"
 swagger-parser = "2.1.16"
 atlassian-swagger-request-validator = "2.36.0"
-# plugin versions
+# plugins
 palantir-git-plugin = "3.0.0"
 version-catalog-report-plugin = "0.47.0"
 version-catalog-update-plugin = "0.8.1"
 jib-plugin = "3.3.2"
-# for buildSrc
 
 [libraries]
 kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines" }
