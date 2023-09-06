@@ -57,7 +57,7 @@ allprojects {
             showStandardStreams = false
             exceptionFormat = TestExceptionFormat.FULL
         }
-        jvmArgs = listOf("-XX:+AllowRedefinitionToAddDeleteMethods", "--enable-preview") // TODO read from buildSrc?
+        jvmArgs = JvmConfiguration.testArgs
     }
 
     subprojects {
@@ -70,19 +70,7 @@ allprojects {
         configure<JavaPluginExtension> { Plugins.JavaPlugin.configure(this) }
 
         publishing {
-            repositories {
-                mavenLocal()
-                maven {
-                    name = "GitHubPackages"
-                    url = uri("https://maven.pkg.github.com/sollecitom/chassis")
-                    credentials {
-                        username = project.findProperty("sollecitom.github.user") as String?
-                            ?: System.getenv("GITHUB_USERNAME")
-                        password = project.findProperty("sollecitom.github.token") as String?
-                            ?: System.getenv("GITHUB_TOKEN")
-                    }
-                }
-            }
+            repositories { RepositoryConfiguration.Publications.apply(this, project) }
             publications {
                 create<MavenPublication>("${name}-maven") {
                     groupId = this@allprojects.group.toString()
@@ -96,6 +84,8 @@ allprojects {
         }
     }
 }
+
+// TODO turn this whole dependency update thing into a plugin
 
 // TODO move to a library and refactor
 fun String.isNonStable(): Boolean {

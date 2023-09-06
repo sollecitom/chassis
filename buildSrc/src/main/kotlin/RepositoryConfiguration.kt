@@ -4,6 +4,8 @@ import java.net.URI
 
 object RepositoryConfiguration {
 
+    private const val internalGroup = "${ProjectSettings.rootGroupId}.*"
+
     object BuildScript {
 
         fun apply(config: RepositoryHandler) {
@@ -11,9 +13,33 @@ object RepositoryConfiguration {
         }
     }
 
-    object Modules {
+    object GithubPackages {
 
-        private const val internalGroup = "${ProjectSettings.rootGroupId}.*"
+        fun apply(config: RepositoryHandler, project: Project) {
+
+            config.maven {
+                url = URI.create("https://maven.pkg.github.com/sollecitom/*")
+                credentials {
+                    username = project.findProperty("sollecitom.github.user") as String? ?: System.getenv("GITHUB_USERNAME")
+                    password = project.findProperty("sollecitom.github.token") as String? ?: System.getenv("GITHUB_TOKEN")
+                }
+                content {
+                    includeGroupByRegex(internalGroup)
+                }
+            }
+        }
+    }
+
+    object Publications {
+
+        fun apply(config: RepositoryHandler, project: Project) {
+
+            config.mavenLocal()
+            GithubPackages.apply(config, project)
+        }
+    }
+
+    object Modules {
 
         fun apply(config: RepositoryHandler, project: Project) {
 
@@ -43,18 +69,7 @@ object RepositoryConfiguration {
                 }
             }
 
-            config.maven {
-                url = URI.create("https://maven.pkg.github.com/sollecitom/*")
-                credentials {
-                    username = project.findProperty("sollecitom.github.user") as String?
-                        ?: System.getenv("GITHUB_USERNAME")
-                    password = project.findProperty("sollecitom.github.token") as String?
-                        ?: System.getenv("GITHUB_TOKEN")
-                }
-                content {
-                    includeGroupByRegex(internalGroup)
-                }
-            }
+            GithubPackages.apply(config, project)
         }
     }
 }
