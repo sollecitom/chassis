@@ -1,4 +1,5 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import com.github.benmanes.gradle.versions.updates.resolutionstrategy.ComponentSelectionWithCurrent
 import com.palantir.gradle.gitversion.GitVersionPlugin
 import com.palantir.gradle.gitversion.VersionDetails
 import com.vdurmont.semver4j.Semver
@@ -86,9 +87,15 @@ allprojects {
     }
 }
 
-// TODO turn this whole dependency update thing into a plugin
+// TODO turn this whole dependency update thing into a plugin (then remove the lines below)
 
 fun String.toVersionNumber() = Semver(this)
+
+val ComponentSelectionWithCurrent.currentSemanticVersion: Semver get() = Semver(currentVersion)
+val ComponentSelectionWithCurrent.candidateSemanticVersion: Semver get() = Semver(candidate.version)
+
+fun ComponentSelectionWithCurrent.wouldDowngradeVersion(): Boolean = currentSemanticVersion > candidateSemanticVersion
+fun ComponentSelectionWithCurrent.wouldDestabilizeAStableVersion(): Boolean = currentSemanticVersion.isStable && !candidateSemanticVersion.isStable
 
 tasks.withType<DependencyUpdatesTask> {
 
@@ -100,7 +107,7 @@ tasks.withType<DependencyUpdatesTask> {
     reportfileName = "report"
 
     rejectVersionIf {
-        (currentVersion.toVersionNumber() > candidate.version.toVersionNumber()) || (currentVersion.toVersionNumber().isStable && !candidate.version.toVersionNumber().isStable)
+        wouldDowngradeVersion() || wouldDestabilizeAStableVersion()
     }
 }
 
