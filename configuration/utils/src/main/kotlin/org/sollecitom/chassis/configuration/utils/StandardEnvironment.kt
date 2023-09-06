@@ -9,5 +9,9 @@ object StandardEnvironment {
 
     val defaultYamlConfiguration: Environment by lazy { Environment.fromYamlResource(STANDARD_DEFAULT_CONFIGURATION_RESOURCE_NAME) }
 
-    operator fun invoke(files: List<File> = emptyList(), defaultConfiguration: Environment = Environment.EMPTY): Environment = Environment.fromFiles(files) overrides Environment.JVM_PROPERTIES overrides Environment.ENV overrides defaultConfiguration
+    operator fun invoke(additionalExternalConfigFiles: List<File> = emptyList(), defaultConfiguration: Environment = Environment.EMPTY): Environment {
+
+        val standardCascadingEnvironment = Environment.JVM_PROPERTIES overrides Environment.ENV overrides defaultConfiguration
+        return Environment.fromFiles(additionalExternalConfigFiles) overrides standardCascadingEnvironment
+    }
 }
