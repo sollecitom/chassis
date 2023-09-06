@@ -11,10 +11,12 @@ import java.security.SecureRandom
 
 internal data class JavaKEMPublicKeyAdapter(private val key: PublicKey, private val random: SecureRandom) : KEMPublicKey, CryptographicKey by CryptographicKeyAdapter(key) {
 
+    private val keyFactory = AESKeyAdapter.Factory(random)
+
     override fun generateEncapsulatedAESKey(): SymmetricKeyWithEncapsulation {
 
         val rawKeyAndEncapsulation = BouncyCastleUtils.generateAESEncryptionKey(key, algorithm, random)
-        return SymmetricKeyWithEncapsulation(key = AESKeyAdapter(rawKeyAndEncapsulation.encoded, random), encapsulation = rawKeyAndEncapsulation.encapsulation)
+        return SymmetricKeyWithEncapsulation(key = keyFactory.from(rawKeyAndEncapsulation.encoded), encapsulation = rawKeyAndEncapsulation.encapsulation)
     }
 
     override fun equals(other: Any?): Boolean {

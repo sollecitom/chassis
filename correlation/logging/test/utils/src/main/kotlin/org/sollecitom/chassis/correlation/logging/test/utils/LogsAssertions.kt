@@ -21,7 +21,7 @@ fun Assert<List<String>>.haveContext(invocationContext: InvocationContext<*>, al
     }
 }
 
-private fun extractInvocationContext(logLine: String): InvocationContext<*>? { // TODO refactor
+private fun extractInvocationContext(logLine: String): InvocationContext<*>? {
 
     return logLine.runCatching { JSONObject(this) }.map { json ->
         json.getJSONObjectOrNull("context")?.getJSONObjectOrNull("invocation")?.let(InvocationContext.jsonSerde::deserialize)

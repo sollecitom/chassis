@@ -9,7 +9,6 @@ import org.sollecitom.chassis.ddd.domain.EntityEventStore
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStore
 
-// TODO should this be in test utils? Might it be useful not for testing as well?
 class InMemoryEventStore(private val queryFactory: InMemoryEventStoreQueryFactory = NoSupportedQueriesInMemoryQueryFactory) : EventStore.Mutable {
 
     private val _stream = MutableSharedFlow<Event>()

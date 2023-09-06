@@ -117,5 +117,5 @@ interface CryptographyTestSpecification {
     val dilithium get() = cryptography.asymmetric.crystals.dilithium
     val aes get() = cryptography.symmetric.aes
 
-    // TODO 1 party, with 1 identity, and a number of CertificateAndKeyPair (a keypair, and a certificate binding the identity to the public key)
+    // TODO next up: 1 party, with 1 identity, and a number of CertificateAndKeyPair (a keypair, and a certificate binding the identity to the public key)
 }

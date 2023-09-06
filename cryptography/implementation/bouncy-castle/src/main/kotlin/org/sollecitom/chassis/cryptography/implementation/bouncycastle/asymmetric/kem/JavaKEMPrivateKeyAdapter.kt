@@ -11,10 +11,12 @@ import java.security.PrivateKey as JavaPrivateKey
 
 internal data class JavaKEMPrivateKeyAdapter(private val key: JavaPrivateKey, private val random: SecureRandom) : KEMPrivateKey, CryptographicKey by CryptographicKeyAdapter(key) {
 
+    private val keyFactory = AESKeyAdapter.Factory(random)
+
     override fun decryptEncapsulatedAESKey(encapsulatedKey: ByteArray): SymmetricKey {
 
         val rawEncodedSymmetricKey = BouncyCastleUtils.decryptEncapsulatedAESKey(key, encapsulatedKey, algorithm, random)
-        return AESKeyAdapter(rawEncodedSymmetricKey, random)
+        return keyFactory.from(rawEncodedSymmetricKey)
     }
 
     override fun equals(other: Any?): Boolean {
