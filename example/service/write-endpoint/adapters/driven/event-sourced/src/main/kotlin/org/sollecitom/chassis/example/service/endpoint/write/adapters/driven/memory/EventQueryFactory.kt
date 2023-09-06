@@ -11,29 +11,23 @@ import kotlin.reflect.KClass
 internal object EventQueryFactory : InMemoryEventStoreQueryFactory {
 
     @Suppress("UNCHECKED_CAST")
-    override fun <IN_MEMORY_QUERY : InMemoryEventStoreQuery<QUERY, EVENT>, QUERY : EventStore.Query<EVENT>, EVENT : Event> invoke(query: QUERY): IN_MEMORY_QUERY? = when (query) {
-        is EventStore.Query.Unrestricted -> ServiceInMemoryEventQuery.Unrestricted as IN_MEMORY_QUERY
-        is ServiceEventQuery.UserRegistrationWithEmailAddress -> ServiceInMemoryEventQuery.UserRegistrationWithEmailAddress(query) as IN_MEMORY_QUERY
+    override fun <EVENT : Event> invoke(query: EventStore.Query<EVENT>): InMemoryEventStoreQuery<EVENT>? = when (query) {
+        is EventStore.Query.Unrestricted -> ServiceEventQuery.Unrestricted as InMemoryEventStoreQuery<EVENT>
+        is ServiceEventQuery.UserRegistrationWithEmailAddress -> query as InMemoryEventStoreQuery<EVENT>
         else -> null
     }
 }
 
-// TODO do we need these 2 hierarchies of queries? Only if we make the types that use this generic (is that a good idea?). Otherwise, join these 2 hierarchies.
-internal sealed interface ServiceEventQuery<EVENT : Event> : EventStore.Query<EVENT> {
+internal sealed interface ServiceEventQuery<EVENT : Event> : InMemoryEventStoreQuery<EVENT> {
 
-    data class UserRegistrationWithEmailAddress(val emailAddress: EmailAddress) : ServiceEventQuery<UserRegistrationRequestWasSubmitted>
-}
-
-internal sealed interface ServiceInMemoryEventQuery<QUERY : EventStore.Query<EVENT>, EVENT : Event> : InMemoryEventStoreQuery<QUERY, EVENT> {
-
-    class UserRegistrationWithEmailAddress(private val delegate: ServiceEventQuery.UserRegistrationWithEmailAddress) : ServiceInMemoryEventQuery<ServiceEventQuery.UserRegistrationWithEmailAddress, UserRegistrationRequestWasSubmitted> {
+    data class UserRegistrationWithEmailAddress(val emailAddress: EmailAddress) : ServiceEventQuery<UserRegistrationRequestWasSubmitted> {
 
         override val eventType: KClass<UserRegistrationRequestWasSubmitted> get() = UserRegistrationRequestWasSubmitted::class
 
-        override fun invoke(event: UserRegistrationRequestWasSubmitted) = event.emailAddress == delegate.emailAddress
+        override fun invoke(event: UserRegistrationRequestWasSubmitted) = event.emailAddress == emailAddress
     }
 
-    data object Unrestricted : ServiceInMemoryEventQuery<EventStore.Query.Unrestricted, Event> {
+    data object Unrestricted : InMemoryEventStoreQuery<Event> {
 
         override val eventType: KClass<Event> get() = Event::class
 

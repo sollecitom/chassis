@@ -16,9 +16,9 @@ internal class InMemoryHistory(private val historical: Flow<Event>, private val 
         return all(query).firstOrNull()
     }
 
-    private val <QUERY : EventStore.Query<EVENT>, EVENT : Event> QUERY.inMemory: InMemoryEventStoreQuery<QUERY, EVENT> get() = queryFactory(query = this) ?: error("Unsupported query $this")
+    private val <QUERY : EventStore.Query<EVENT>, EVENT : Event> QUERY.inMemory: InMemoryEventStoreQuery<EVENT> get() = queryFactory(query = this) ?: error("Unsupported query $this")
 
-    private fun <EVENT : Event> Flow<Event>.selectedBy(query: InMemoryEventStoreQuery<*, EVENT>): Flow<EVENT> = filterIsInstance(query.eventType).filter { event -> query.invoke(event) }
+    private fun <EVENT : Event> Flow<Event>.selectedBy(query: InMemoryEventStoreQuery<EVENT>): Flow<EVENT> = filterIsInstance(query.eventType).filter { event -> query.invoke(event) }
 
     private fun <EVENT : Event> Flow<Event>.selectedBy(query: EventStore.Query<EVENT>): Flow<EVENT> = selectedBy(query.inMemory)
 }

@@ -4,7 +4,7 @@ import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStore
 import kotlin.reflect.KClass
 
-interface InMemoryEventStoreQuery<QUERY : EventStore.Query<EVENT>, EVENT : Event> {
+interface InMemoryEventStoreQuery<EVENT : Event> : EventStore.Query<EVENT> {
 
     val eventType: KClass<EVENT>
 

@@ -5,5 +5,5 @@ import org.sollecitom.chassis.ddd.domain.EventStore
 
 interface InMemoryEventStoreQueryFactory {
 
-    operator fun <IN_MEMORY_QUERY : InMemoryEventStoreQuery<QUERY, EVENT>, QUERY : EventStore.Query<EVENT>, EVENT : Event> invoke(query: QUERY): IN_MEMORY_QUERY?
+    operator fun <EVENT : Event> invoke(query: EventStore.Query<EVENT>): InMemoryEventStoreQuery<EVENT>?
 }
