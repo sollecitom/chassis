@@ -1,7 +1,6 @@
 package org.sollecitom.chassis.example.service.endpoint.write.starter
 
 import org.http4k.cloudnative.env.Environment
-import org.sollecitom.chassis.configuration.utils.fromYamlResource
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.ddd.application.Application
@@ -50,8 +49,3 @@ class Service(private val environment: Environment, private val coreDataGenerato
 
     companion object : Loggable()
 }
-
-// TODO move?
-// TODO to pass a file names to this, from command args (for config-map and secrets exposed as files)
-fun rawConfiguration(): Environment = Environment.JVM_PROPERTIES overrides Environment.ENV overrides Environment.fromYamlResource("default-configuration.yml")
-//fun rawConfiguration(): Environment = Environment.JVM_PROPERTIES overrides Environment.fromConfigFile(File("secrets.yml")) overrides Environment.fromConfigFile(File("configuration.yml")) overrides Environment.ENV overrides Environment.fromResource("default-configuration.yml")

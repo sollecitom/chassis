@@ -5,6 +5,7 @@ import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 
+// TODO move all these events into a shared types project (within the example directory)
 sealed class UserEvent(override val id: Id, override val timestamp: Instant, override val type: Type, val userId: Id) : EntityEvent {
 
     override val entityId = userId
