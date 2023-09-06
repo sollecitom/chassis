@@ -15,5 +15,10 @@ object OpenApiFields {
 
         val summary: OpenApiField<ApiOperation, String> by lazy { OpenApiField("summary", ApiOperation::getSummary) }
         val description: OpenApiField<ApiOperation, String> by lazy { OpenApiField("description", ApiOperation::getDescription) }
+
+        object RequestBody {
+
+            val description: OpenApiField<ApiOperation, String?> by lazy { OpenApiField("request.body.description") { it.requestBody?.description } }
+        }
     }
 }

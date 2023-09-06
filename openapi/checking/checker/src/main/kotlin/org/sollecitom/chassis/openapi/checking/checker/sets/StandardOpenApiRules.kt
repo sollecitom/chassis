@@ -38,7 +38,8 @@ object StandardOpenApiRules : OpenApiRuleSet {
     private val operationTextFieldRules by lazy {
         FieldSpecificRules(
             OpenApiFields.Operation.summary to setOf(textFieldMustEndWithFullStop),
-            OpenApiFields.Operation.description to setOf(textFieldMustEndWithFullStop)
+            OpenApiFields.Operation.description to setOf(textFieldMustEndWithFullStop),
+            OpenApiFields.Operation.RequestBody.description to setOf(textFieldMustEndWithFullStop)
         )
     }
 

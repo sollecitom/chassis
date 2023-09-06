@@ -353,7 +353,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
         }
 
         @Test
-        fun `cannot specify a blank request body description`() { // TODO add a test to enforce that the description for the request body ends with a full stop
+        fun `cannot specify a request body description that doesn't end with a full stop`() {
 
             val path = validPath
             val api = openApi {
@@ -362,7 +362,7 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
                         withValidFields()
                         requestBody {
                             withValidFields()
-                            description = "   "
+                            description = "A request body description not ending with a full stop"
                         }
                     }
                 }
@@ -370,9 +370,13 @@ interface MethodTestSpecification : TracingHeadersTestSpecification {
 
             val result = api.checkAgainstRules(StandardOpenApiRules)
 
-            assertThat(result).isNotCompliantWithOnlyViolation<MandatoryRequestBodyDescriptionRule.Violation> { violation ->
+            assertThat(result).isNotCompliantWithOnlyViolation<FieldRulesViolation<String>> { violation ->
                 assertThat(violation.operation.pathName).isEqualTo(path)
                 assertThat(violation.operation.method).isEqualTo(method)
+                assertThat(violation.field).isEqualTo(OpenApiFields.Operation.RequestBody.description)
+                assertThat(violation).hasSingleFieldViolation<MandatorySuffixTextFieldRule.Violation, String> { fieldViolation ->
+                    assertThat(fieldViolation.suffix).isEqualTo(".")
+                }
             }
         }
     }
