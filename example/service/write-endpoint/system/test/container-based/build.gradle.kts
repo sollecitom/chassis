@@ -17,8 +17,7 @@ fun DependencyHandlerScope.containerBasedSystemTestImplementation(dependency: An
 }
 
 dependencies {
-    containerBasedSystemTestImplementation(projects.chassisExampleServiceWriteEndpointStarter) // TODO maybe remove
-    containerBasedSystemTestImplementation(projects.chassisExampleServiceWriteEndpointConfiguration) // TODO remove
+    containerBasedSystemTestImplementation(projects.chassisExampleServiceWriteEndpointConfiguration)
     containerBasedSystemTestImplementation(projects.chassisExampleServiceWriteEndpointSystemTestSpecification)
     containerBasedSystemTestImplementation(projects.chassisTestContainersUtils)
     containerBasedSystemTestImplementation(projects.chassisCoreTestUtils)
