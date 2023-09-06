@@ -1,25 +1,21 @@
 [versions]
 # library versions
-kotlin = "1.9.0"
+kotlin = "1.9.10"
 kotlinx-coroutines = "1.7.3"
-slf4j = "2.0.7"
-http4k = "5.5.0.0"
+slf4j = "2.0.9"
+http4k = "5.8.0.0"
 junit-jupiter = "5.10.0"
 assertk = "0.26.1"
-kotlinx-datetime = "0.4.0"
-kotlinx-html = "0.9.1"
-ulid-creator = "5.2.1"
+kotlinx-datetime = "0.4.1"
+ulid-creator = "5.2.2"
 org-json = "20230618"
 erosb-json-schema = "0.8.0"
 guava = "32.1.2-jre"
 bouncy-castle = "1.76"
 commons-codec = "1.16.0"
-kweb = "1.4.8"
-vaadin = "24.1.4"
-spring-boot = "3.1.2"
-test-containers = "1.18.3"
+test-containers = "1.19.0"
 swagger-parser = "2.1.16"
-atlassian-swagger-request-validator = "2.35.2"
+atlassian-swagger-request-validator = "2.36.0"
 # plugin versions
 palantir-git-plugin = "3.0.0"
 version-catalog-report-plugin = "0.47.0"
@@ -36,8 +32,6 @@ kotlinx-coroutines-debug = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-
 kotlinx-coroutines-slf4j = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
-kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html", version.ref = "kotlinx-html" }
-kweb-core = { module = "io.kweb:kweb-core", version.ref = "kweb" }
 http4k-bom = { module = "org.http4k:http4k-bom", version.ref = "http4k" }
 http4k-core = { module = "org.http4k:http4k-core" }
 http4k-cloudnative = { module = "org.http4k:http4k-cloudnative" }
@@ -58,9 +52,6 @@ junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.re
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
-vaadin-spring-boot-starer = { module = "com.vaadin:vaadin-spring-boot-starter", version.ref = "vaadin" }
-spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
-spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot" }
 test-containers = { module = "org.testcontainers:junit-jupiter", version.ref = "test-containers" }
 swagger-parser = { module = "io.swagger.parser.v3:swagger-parser-v3", version.ref = "swagger-parser" }
 swagger-request-validator = { module = "com.atlassian.oai:swagger-request-validator-core", version.ref = "atlassian-swagger-request-validator" }
@@ -70,6 +61,4 @@ com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version.
 com-palantir-git-version = { id = "com.palantir.git-version", version.ref = "palantir-git-plugin" }
 nl-littlerobots-version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "version-catalog-update-plugin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
-vaadin = { id = "com.vaadin", version.ref = "vaadin" }
 jib = { id = "com.google.cloud.tools.jib", version.ref = "jib-plugin" }

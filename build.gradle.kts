@@ -1,6 +1,7 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.palantir.gradle.gitversion.GitVersionPlugin
 import com.palantir.gradle.gitversion.VersionDetails
+import com.vdurmont.semver4j.Semver
 import groovy.lang.Closure
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -87,16 +88,7 @@ allprojects {
 
 // TODO turn this whole dependency update thing into a plugin
 
-// TODO move to a library and refactor
-fun String.isNonStable(): Boolean {
-    val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { uppercase().contains(it) }
-    val regex = "^[0-9,.v-]+(-r)?$".toRegex()
-    val isStable = stableKeyword || regex.matches(this)
-    return !isStable
-}
-
-// TODO replace with a semver library of choice
-fun String.toVersionNumber() = VersionNumber.parse(this)
+fun String.toVersionNumber() = Semver(this)
 
 tasks.withType<DependencyUpdatesTask> {
 
@@ -111,7 +103,7 @@ tasks.withType<DependencyUpdatesTask> {
         componentSelection {
             all {
                 when {
-                    !candidate.version.isNonStable() && currentVersion.isNonStable() -> reject("Release candidate ${candidate.module}")
+                    candidate.version.toVersionNumber().isStable && !currentVersion.toVersionNumber().isStable -> reject("Release candidate ${candidate.module}")
                     candidate.version.toVersionNumber() < currentVersion.toVersionNumber() -> reject("Lower version ${candidate.module}")
                 }
             }
