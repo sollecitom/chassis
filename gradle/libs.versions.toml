@@ -21,6 +21,8 @@ palantir-git-plugin = "3.0.0"
 version-catalog-report-plugin = "0.47.0"
 version-catalog-update-plugin = "0.8.1"
 jib-plugin = "3.3.2"
+# for buildSrc
+semver4j = "3.1.0"
 
 [libraries]
 kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines" }
@@ -55,6 +57,7 @@ assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assert
 test-containers = { module = "org.testcontainers:junit-jupiter", version.ref = "test-containers" }
 swagger-parser = { module = "io.swagger.parser.v3:swagger-parser-v3", version.ref = "swagger-parser" }
 swagger-request-validator = { module = "com.atlassian.oai:swagger-request-validator-core", version.ref = "atlassian-swagger-request-validator" }
+semver4j = { module = "com.vdurmont:semver4j", version.ref = "semver4j" }
 
 [plugins]
 com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "version-catalog-report-plugin" }
