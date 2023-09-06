@@ -5,9 +5,10 @@ import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.serialization.json.context.jsonSerde
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 
-interface HttpApiDefinition { // TODO add things here
+interface HttpApiDefinition {
 
     val headerNames: HttpHeaderNames
+//    val openApiFileLocation: String
 }
 
 context(HttpApiDefinition)
