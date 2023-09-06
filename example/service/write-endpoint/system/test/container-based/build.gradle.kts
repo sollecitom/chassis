@@ -24,7 +24,7 @@ dependencies {
     containerBasedSystemTestImplementation(projects.chassisCoreTestUtils)
 }
 
-val containerBasedSystemTestTask = tasks.named("containerBasedSystemTest") {
+val containerBasedSystemTestTask: TaskProvider<Task> = tasks.named("containerBasedSystemTest") {
     dependsOn(":${projects.chassisExampleServiceWriteEndpointStarter.name}:jibDockerBuild")
 }
 
