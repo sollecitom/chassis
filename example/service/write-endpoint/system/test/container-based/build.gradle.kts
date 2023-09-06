@@ -2,7 +2,7 @@ val containerBasedSystemTest: SourceSet by sourceSets.creating
 
 val integrationTestTask = tasks.register<Test>("containerBasedSystemTest") {
     description = "Runs container-based system tests."
-//    group = "verification"
+    group = "verification"
     useJUnitPlatform()
 
     testClassesDirs = containerBasedSystemTest.output.classesDirs
@@ -24,7 +24,10 @@ dependencies {
     containerBasedSystemTestImplementation(projects.chassisCoreTestUtils)
 }
 
-// TODO enable this
-tasks.named("containerBasedSystemTest") {
+val containerBasedSystemTestTask = tasks.named("containerBasedSystemTest") {
     dependsOn(":${projects.chassisExampleServiceWriteEndpointStarter.name}:jibDockerBuild")
+}
+
+tasks.named("check") {
+    dependsOn(containerBasedSystemTestTask)
 }

@@ -20,6 +20,12 @@ An example write endpoint service.
 
 ```
 
+### Run and build all
+
+```bash
+./gradlew check
+```
+
 ### Run the Docker container
 
 #### Without a requested platform
