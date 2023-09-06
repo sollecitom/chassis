@@ -8,7 +8,6 @@ import org.sollecitom.chassis.ddd.store.memory.InMemoryEventStoreQueryFactory
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasSubmitted
 import kotlin.reflect.KClass
 
-// TODO rename
 internal object EventQueryFactory : InMemoryEventStoreQueryFactory {
 
     @Suppress("UNCHECKED_CAST")
