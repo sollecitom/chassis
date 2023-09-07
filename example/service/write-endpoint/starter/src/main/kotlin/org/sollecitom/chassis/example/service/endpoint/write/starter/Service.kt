@@ -14,6 +14,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRep
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.service.domain.WebService
 
+// TODO change the project's modules structure, so it's service/starter, service/tests, etc.
 class Service(private val environment: Environment, private val coreDataGenerators: CoreDataGenerator) : WebService, CoreDataGenerator by coreDataGenerators {
 
     constructor(environment: Environment) : this(environment, CoreDataGenerator.provider(environment))
