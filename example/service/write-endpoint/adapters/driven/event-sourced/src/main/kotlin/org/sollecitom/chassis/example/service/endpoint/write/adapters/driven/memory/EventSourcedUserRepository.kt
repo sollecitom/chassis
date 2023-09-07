@@ -19,10 +19,7 @@ class EventSourcedUserRepository(private val events: EventStore.Mutable, private
         }
     }
 
-    private suspend fun EventStore.History.previousRegistration(emailAddress: EmailAddress): UserRegistrationRequestWasSubmitted? {
-
-        return firstOrNull(query = ServiceEventQuery.UserRegistrationWithEmailAddress(emailAddress))
-    }
+    private suspend fun EventStore.History.previousRegistration(emailAddress: EmailAddress) = firstOrNull(query = ServiceEventQuery.UserRegistrationWithEmailAddress(emailAddress))
 
     companion object
 }

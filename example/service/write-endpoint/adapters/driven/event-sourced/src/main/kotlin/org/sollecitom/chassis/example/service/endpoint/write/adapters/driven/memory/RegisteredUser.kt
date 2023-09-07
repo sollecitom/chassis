@@ -9,10 +9,10 @@ import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserReg
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasSubmitted
 
 context(CoreDataGenerator)
-internal class RegisteredUser(private val pastEvent: UserRegistrationRequestWasSubmitted, private val _events: EntityEventStore.Mutable) : User {
+internal class RegisteredUser(private val pastUserRegistrationRequest: UserRegistrationRequestWasSubmitted, private val _events: EntityEventStore.Mutable) : User {
 
     override val events: EntityEventStore get() = _events
-    override val id: Id get() = pastEvent.userId
+    override val id: Id get() = pastUserRegistrationRequest.userId
 
     init {
         require(events.entityId == id) { "The entity ID for the entity-specific event store '${events.entityId}' doesn't match the entity ID of the user '$id'" }
@@ -20,7 +20,7 @@ internal class RegisteredUser(private val pastEvent: UserRegistrationRequestWasS
 
     override suspend fun submitRegistrationRequest(): UserRegistrationRequestWasAlreadySubmitted.V1 {
 
-        val event = pastEvent.alreadySubmitted()
+        val event = pastUserRegistrationRequest.alreadySubmitted()
         publish(event)
         return event
     }
