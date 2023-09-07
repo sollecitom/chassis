@@ -34,7 +34,8 @@ class InMemoryEventStore(private val queryFactory: InMemoryEventStoreQueryFactor
             this@InMemoryEventStore.publish(event)
         }
 
-        override fun history(): EventStore.History = InMemoryHistory(historical.asFlow().forEntity(entityId), queryFactory)
+        override val history: EventStore.History
+            get() = InMemoryHistory(historical.asFlow().forEntity(entityId), queryFactory)
 
         override val stream = this@InMemoryEventStore.stream.forEntity(entityId)
 
