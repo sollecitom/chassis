@@ -3,7 +3,6 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.me
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.EventStore
-import org.sollecitom.chassis.ddd.store.memory.InMemoryEventStoreQueryFactory
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRepository
@@ -25,8 +24,5 @@ class EventSourcedUserRepository(private val events: EventStore.Mutable, private
         return firstOrNull(query = ServiceEventQuery.UserRegistrationWithEmailAddress(emailAddress))
     }
 
-    companion object {
-
-        val eventQueryFactory: InMemoryEventStoreQueryFactory = EventQueryFactory
-    }
+    companion object
 }
