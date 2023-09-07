@@ -19,9 +19,10 @@ class Service(private val environment: Environment, private val coreDataGenerato
 
     constructor(environment: Environment) : this(environment, CoreDataGenerator.provider(environment))
 
+    // TODO change this to use modules instead? might be overkill here, but think about the modular monolith
     private val userRepository = userRepository()
     private val application: Application = application(userRepository)
-    private val webAPI = webApi(application, environment, coreDataGenerators)
+    private val webAPI = webApi(application, environment, coreDataGenerators) // TODO should each module return its endpoints, and you start the server?
 
     override val port: Int get() = webAPI.servicePort
     override val healthPort: Int get() = webAPI.healthPort
