@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.ddd.event.store.test.specification
+package org.sollecitom.chassis.ddd.events.test.specification
 
 import assertk.assertThat
 import kotlinx.coroutines.CoroutineStart

@@ -5,7 +5,7 @@ import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.Events
-import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEvents
+import org.sollecitom.chassis.ddd.events.memory.InMemoryEvents
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.memory.EventSourcedUserRepository
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.memory.UserEventQueryFactory
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.WebAPI

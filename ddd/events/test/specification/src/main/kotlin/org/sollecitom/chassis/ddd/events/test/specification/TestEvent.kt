@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.ddd.event.store.test.specification
+package org.sollecitom.chassis.ddd.events.test.specification
 
 import kotlinx.datetime.Instant
 import org.sollecitom.chassis.core.domain.identity.Id

@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.ddd.event.store.memory
+package org.sollecitom.chassis.ddd.events.memory
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
