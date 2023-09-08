@@ -1,5 +1,5 @@
 dependencies {
     api(projects.chassisDddDomain)
-    api(projects.chassisDddStoreMemory)
+    api(projects.chassisDddEventStoreMemory)
     api(projects.chassisTestUtils)
 }

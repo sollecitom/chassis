@@ -23,7 +23,7 @@ dependencies {
     implementation(projects.chassisKotlinExtensions)
     implementation(projects.chassisWebServiceDomain)
 
-    implementation(projects.chassisDddStoreMemory) // TODO remove, and import an adapter instead
+    implementation(projects.chassisDddEventStoreMemory) // TODO remove, and import an adapter instead
 }
 
 val versionDetails: Closure<VersionDetails> by extra
