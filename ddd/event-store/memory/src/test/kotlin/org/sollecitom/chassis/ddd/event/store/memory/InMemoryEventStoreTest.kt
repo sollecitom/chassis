@@ -78,13 +78,34 @@ interface EventStoreTestSpecification : CoreDataGenerator {
         val publishedEventsCount = 10
         val receivingEvents = async(start = UNDISPATCHED) { entityEvents.stream.onEach { receivedEvents += it }.take(publishedEventsCount).collect() }
         val afterSubscribingEvents = testEntityEvents(entityId = entityId).take(publishedEventsCount).toList()
+        val notAnEntityEvent = testEvent()
         val notForTheEntityEvent = testEntityEvent(entityId = newId.internal())
+        events.publish(notAnEntityEvent)
         events.publish(notForTheEntityEvent)
         afterSubscribingEvents.filterIndexed { index, _ -> index in 0..4 }.forEach { entityEvents.publish(it) }
         afterSubscribingEvents.filterIndexed { index, _ -> index in 5..9 }.forEach { events.publish(it) }
         receivingEvents.join()
 
         assertThat(receivedEvents).containsSameElementsAs(afterSubscribingEvents)
+    }
+
+    @Test
+    fun `consuming the history for a given entity`() = runTest(timeout = timeout) {
+
+        val entityId = newId.internal()
+        val events = eventStore()
+        val entityEvents = events.forEntity(entityId)
+        val notAnEntityEvent = testEvent()
+        val notForTheEntityEvent = testEntityEvent(entityId = newId.internal())
+        events.publish(notAnEntityEvent)
+        events.publish(notForTheEntityEvent)
+        val publishedEvents = testEntityEvents(entityId = entityId).take(12).toList()
+        publishedEvents.filterIndexed { index, _ -> index in 0..5 }.forEach { entityEvents.publish(it) }
+        publishedEvents.filterIndexed { index, _ -> index in 6..11 }.forEach { events.publish(it) }
+
+        val historicalEvents = entityEvents.history.all<TestEvent>().toList()
+
+        assertThat(historicalEvents).containsSameElementsAs(publishedEvents)
     }
 
     private fun testEvents(): Sequence<TestEvent> = sequence {
