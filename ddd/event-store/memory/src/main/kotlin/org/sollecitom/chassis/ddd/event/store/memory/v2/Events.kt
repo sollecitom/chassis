@@ -32,6 +32,8 @@ interface EventStream<out EVENT : Event> {
 
         suspend fun publish(event: EVENT)
     }
+
+    companion object
 }
 
 interface EventStore<in EVENT : Event> {
@@ -49,11 +51,13 @@ interface EventStore<in EVENT : Event> {
 
         data object Unrestricted : Query<Event> // TODO add other default queries e.g. timestamps, by ID, etc.
     }
+
+    companion object
 }
 
-fun Events.inMemory(): Events = InMemoryEvents()
+fun Events.Companion.inMemory(): Events = InMemoryEvents()
 
-class InMemoryEvents : Events {
+internal class InMemoryEvents : Events {
 
     override val stream = InMemoryEventStream()
     override val store = InMemoryEventStore()
@@ -63,8 +67,7 @@ class InMemoryEvents : Events {
     private inner class EntitySpecific(override val entityId: Id) : EntitySpecificEvents {
 
         override val stream = this@InMemoryEvents.stream.forEntityId(entityId)
-        override val store: EventStore<EntityEvent>
-            get() = TODO("Not yet implemented")
+        override val store = this@InMemoryEvents.store.forEntityId(entityId)
     }
 }
 
@@ -87,8 +90,6 @@ class InMemoryEventStream : EventStream.Mutable<Event> {
         }
 
         override val events: Flow<EntityEvent> get() = this@InMemoryEventStream.events.filterIsForEntityId(entityId)
-
-        private fun Flow<Event>.filterIsForEntityId(entityId: Id): Flow<EntityEvent> = filterIsInstance<EntityEvent>().filter { it.entityId == entityId }
     }
 }
 
@@ -101,11 +102,23 @@ class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory
         historical += event
     }
 
-    override fun <E : Event> all(query: EventStore.Query<E>): Flow<E> = historical.asFlow().selectedBy(query)
+    override fun <E : Event> all(query: EventStore.Query<E>) = historical.asFlow().selectedBy(query)
 
-    override suspend fun <E : Event> firstOrNull(query: EventStore.Query<E>): E? {
+    override suspend fun <E : Event> firstOrNull(query: EventStore.Query<E>) = all(query).firstOrNull()
 
-        return all(query).firstOrNull()
+    fun forEntityId(entityId: Id): EventStore.Mutable<EntityEvent> = EntitySpecific(entityId)
+
+    private inner class EntitySpecific(private val entityId: Id) : EventStore.Mutable<EntityEvent> {
+
+        override suspend fun add(event: EntityEvent) {
+
+            require(event.entityId == entityId) { "Cannot add an event with entity ID '${event.entityId.stringValue}' to an entity-specific event store with different entity ID '${entityId.stringValue}'" }
+            this@InMemoryEventStore.add(event)
+        }
+
+        override fun <E : EntityEvent> all(query: EventStore.Query<E>) = this@InMemoryEventStore.historical.asFlow().filterIsForEntityId(entityId).selectedBy(query)
+
+        override suspend fun <E : EntityEvent> firstOrNull(query: EventStore.Query<E>) = all(query).firstOrNull()
     }
 
     private val <QUERY : EventStore.Query<EVENT>, EVENT : Event> QUERY.inMemory: Query<EVENT> get() = queryFactory(query = this) ?: error("Unsupported query $this")
@@ -142,3 +155,5 @@ class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory
         }
     }
 }
+
+private fun Flow<Event>.filterIsForEntityId(entityId: Id): Flow<EntityEvent> = filterIsInstance<EntityEvent>().filter { it.entityId == entityId }
