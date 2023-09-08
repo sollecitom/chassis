@@ -8,7 +8,7 @@ import org.sollecitom.chassis.ddd.domain.EventStore
 
 // TODO could this be generic and shared across projects?
 // TODO pure pulsar vs pulsar and postgres?
-class PulsarEventStore : EventStore.Mutable {
+class MaterialisedPulsarEventStore : EventStore.Mutable {
 
     override suspend fun publish(event: Event) {
         TODO("Not yet implemented")
@@ -23,4 +23,21 @@ class PulsarEventStore : EventStore.Mutable {
 
     override val history: EventStore.History
         get() = TODO("Not yet implemented")
+}
+
+internal class MaterialisedHistory(val queryFactory: SqlEventStoreQueryFactory) : EventStore.History {
+
+    override fun <EVENT : Event> all(query: EventStore.Query<EVENT>): Flow<EVENT> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun <EVENT : Event> firstOrNull(query: EventStore.Query<EVENT>): EVENT? {
+        TODO("Not yet implemented")
+    }
+}
+
+// TODO SqlQueryFactory? Pulsar query factory? In-memory query factory?
+interface SqlEventStoreQueryFactory {
+
+    // TODO something that maps an EventStore.Query<EVENT> to something like a WHERE condition?
 }
