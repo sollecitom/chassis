@@ -9,15 +9,15 @@ import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRepository
 
-class EventSourcedUserRepository(private val events: Events, private val coreDataGenerators: CoreDataGenerator) : UserRepository, CoreDataGenerator by coreDataGenerators {
+class EventSourcedUserRepository(private val events: Events.Mutable, private val coreDataGenerators: CoreDataGenerator) : UserRepository, CoreDataGenerator by coreDataGenerators {
 
     override suspend fun withEmailAddress(emailAddress: EmailAddress) = eventSourcedUser(emailAddress)
 
-    private suspend fun eventSourcedUser(emailAddress: EmailAddress): User = when (val previousRegistration = events.store.previousRegistrationEvent(emailAddress)) {
-        is UserRegistrationRequestWasSubmitted.V1 -> RegisteredUser(previousRegistration)
+    private suspend fun eventSourcedUser(emailAddress: EmailAddress): User = when (val previousRegistration = events.previousRegistrationEvent(emailAddress)) {
+        is UserRegistrationRequestWasSubmitted.V1 -> RegisteredUser(previousRegistration, events::publish)
         null -> {
             val userId = newId.internal()
-            UnregisteredUser(userId, emailAddress)
+            UnregisteredUser(userId, emailAddress, events::publish)
         }
     }
 
