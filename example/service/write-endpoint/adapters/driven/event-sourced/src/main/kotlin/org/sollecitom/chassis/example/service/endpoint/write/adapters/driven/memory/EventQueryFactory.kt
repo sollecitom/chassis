@@ -14,7 +14,7 @@ internal object EventQueryFactory : InMemoryEventStoreQueryFactory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <EVENT : Event> invoke(query: EventStore.Query<EVENT>): InMemoryEventStoreQuery<EVENT>? = when (query) {
-        is EventStore.Query.Unrestricted -> ServiceEventQuery.Unrestricted as InMemoryEventStoreQuery<EVENT>
+        is EventStore.Query.Unrestricted -> InMemoryEventStoreQuery.Unrestricted as InMemoryEventStoreQuery<EVENT>
         is ServiceEventQuery.UserRegistrationWithEmailAddress -> query as InMemoryEventStoreQuery<EVENT>
         else -> null
     }
@@ -27,12 +27,5 @@ internal sealed interface ServiceEventQuery<EVENT : Event> : InMemoryEventStoreQ
         override val eventType: KClass<UserRegistrationRequestWasSubmitted> get() = UserRegistrationRequestWasSubmitted::class
 
         override fun invoke(event: UserRegistrationRequestWasSubmitted) = event.emailAddress == emailAddress
-    }
-
-    data object Unrestricted : InMemoryEventStoreQuery<Event> {
-
-        override val eventType: KClass<Event> get() = Event::class
-
-        override fun invoke(event: Event) = true
     }
 }

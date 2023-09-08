@@ -9,7 +9,7 @@ import org.sollecitom.chassis.ddd.domain.EntityEventStore
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStore
 
-class InMemoryEventStore(private val queryFactory: InMemoryEventStoreQueryFactory = NoSupportedQueriesInMemoryQueryFactory) : EventStore.Mutable {
+class InMemoryEventStore(private val queryFactory: InMemoryEventStoreQueryFactory = NoCustomQueriesInMemoryQueryFactory) : EventStore.Mutable {
 
     private val _stream = MutableSharedFlow<Event>()
     private val historical = mutableListOf<Event>()

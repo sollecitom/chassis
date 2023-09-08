@@ -4,9 +4,14 @@ import assertk.Assert
 import assertk.assertions.*
 import java.util.*
 
-inline fun <reified ELEMENT> Assert<Collection<ELEMENT>>.containsSameElementsAs(other: Collection<ELEMENT>) = given { actual ->
+inline fun <reified ELEMENT> Assert<Set<ELEMENT>>.containsSameElementsAs(other: Set<ELEMENT>) = given { actual ->
 
     assertThat(actual).containsOnly(*other.toTypedArray())
+}
+
+inline fun <reified ELEMENT> Assert<List<ELEMENT>>.containsSameElementsAs(other: List<ELEMENT>) = given { actual ->
+
+    assertThat(actual).containsExactly(*other.toTypedArray())
 }
 
 inline fun <reified ELEMENT> Assert<Collection<ELEMENT>>.containsAllElementsIn(other: Collection<ELEMENT>) = given { actual ->

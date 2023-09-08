@@ -6,6 +6,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import org.junit.jupiter.api.Test
@@ -49,6 +50,18 @@ interface EventStoreTestSpecification : CoreDataGenerator {
         receivingEvents.join()
 
         assertThat(receivedEvents).containsSameElementsAs(afterSubscribingEvents)
+    }
+
+    @Test
+    fun `consuming the history`() = runTest(timeout = timeout) {
+
+        val events = eventStore()
+        val publishedEvents = testEvents.take(15).toList()
+        publishedEvents.forEach { events.publish(it) }
+
+        val historicalEvents = events.history.all<TestEvent>().toList()
+
+        assertThat(historicalEvents).containsSameElementsAs(publishedEvents)
     }
 
     private val testEvents: Sequence<TestEvent>

@@ -63,6 +63,6 @@ fun Assert<ComplianceCheckResult>.isNotCompliantWithViolations(expectedViolation
     assertThat(result).isInstanceOf(ComplianceCheckResult.NonCompliant::class)
     with(result as ComplianceCheckResult.NonCompliant) {
         val violations = problems.flatMap { it.violations }
-        assertThat(violations).containsSameElementsAs(expectedViolations.toSet())
+        assertThat(violations.toSet()).containsSameElementsAs(expectedViolations)
     }
 }

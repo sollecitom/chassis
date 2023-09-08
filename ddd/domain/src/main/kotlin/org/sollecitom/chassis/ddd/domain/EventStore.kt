@@ -27,6 +27,6 @@ interface EventStore {
 
     interface Query<in EVENT : Event> {
 
-        data object Unrestricted : Query<Event>
+        data object Unrestricted : Query<Event> // TODO add other default queries e.g. timestamps, by ID, etc.
     }
 }
