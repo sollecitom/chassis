@@ -35,7 +35,7 @@ interface EventStoreTestSpecification : CoreDataGenerator {
     fun eventStore(): EventStore.Mutable
 
     @Test
-    fun `subscribing to the event stream`() = runTest(timeout = timeout) {
+    fun `subscribing to the stream of events`() = runTest(timeout = timeout) {
 
         val events = eventStore()
         val beforeSubscribingEvent = testEvent()
@@ -44,12 +44,19 @@ interface EventStoreTestSpecification : CoreDataGenerator {
         val receivedEvents = mutableListOf<Event>()
         val publishedEventsCount = 10
         val receivingEvents = async(start = UNDISPATCHED) { events.stream.onEach { receivedEvents += it }.take(publishedEventsCount).collect() }
-        val afterSubscribingEvents = (1..publishedEventsCount).map { testEvent() }
+        val afterSubscribingEvents = testEvents.take(publishedEventsCount).toList()
         afterSubscribingEvents.forEach { events.publish(it) }
         receivingEvents.join()
 
         assertThat(receivedEvents).containsSameElementsAs(afterSubscribingEvents)
     }
+
+    private val testEvents: Sequence<TestEvent>
+        get() = sequence {
+            while (true) {
+                yield(testEvent())
+            }
+        }
 
     private fun testEvent(id: Id = newId.internal(), timestamp: Instant = clock.now()) = TestEvent(id, timestamp)
 
