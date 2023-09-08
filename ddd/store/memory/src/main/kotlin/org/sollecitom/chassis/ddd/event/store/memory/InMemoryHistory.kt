@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.ddd.store.memory
+package org.sollecitom.chassis.ddd.event.store.memory
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter

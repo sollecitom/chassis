@@ -15,7 +15,7 @@ import org.sollecitom.chassis.correlation.core.test.utils.context.authenticated
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.EventStore
-import org.sollecitom.chassis.ddd.store.memory.InMemoryEventStore
+import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.memory.EventSourcedUserRepository
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.memory.UserEventQueryFactory
 import org.sollecitom.chassis.example.service.endpoint.write.application.user.RegisterUser

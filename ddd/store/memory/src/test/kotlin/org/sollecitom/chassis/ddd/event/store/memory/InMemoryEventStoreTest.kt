@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.ddd.store.memory
+package org.sollecitom.chassis.ddd.event.store.memory
 
 import assertk.assertThat
 import kotlinx.coroutines.CoroutineStart.UNDISPATCHED

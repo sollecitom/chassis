@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.ddd.store.memory
+package org.sollecitom.chassis.ddd.event.store.memory
 
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStore
