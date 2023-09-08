@@ -1,44 +1,72 @@
 package org.sollecitom.chassis.ddd.event.store.memory
 
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.ddd.domain.EntityEvent
-import org.sollecitom.chassis.ddd.domain.EntityEventStore
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStore
+import org.sollecitom.chassis.ddd.domain.filterIsForEntityId
+import kotlin.reflect.KClass
 
-class InMemoryEventStore(private val queryFactory: InMemoryEventStoreQueryFactory = NoCustomQueriesInMemoryQueryFactory) : EventStore.Mutable {
+class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory.WithoutCustomQueries) : EventStore.Mutable<Event> {
 
-    private val _stream = MutableSharedFlow<Event>()
     private val historical = mutableListOf<Event>()
-    private val mutex = Mutex()
 
-    override suspend fun publish(event: Event) = mutex.withLock {
+    override suspend fun add(event: Event) {
+
         historical += event
-        _stream.emit(event)
     }
 
-    override val history: EventStore.History = InMemoryHistory(historical.asFlow(), queryFactory)
+    override fun <E : Event> all(query: EventStore.Query<E>) = historical.asFlow().selectedBy(query)
 
-    override val stream: Flow<Event> get() = _stream
+    override suspend fun <E : Event> firstOrNull(query: EventStore.Query<E>) = all(query).firstOrNull()
 
-    override fun forEntity(entityId: Id): EntityEventStore.Mutable = EntityEventStoreView(entityId)
+    fun forEntityId(entityId: Id): EventStore.Mutable<EntityEvent> = EntitySpecific(entityId)
 
-    private inner class EntityEventStoreView(override val entityId: Id) : EntityEventStore.Mutable {
+    private inner class EntitySpecific(private val entityId: Id) : EventStore.Mutable<EntityEvent> {
 
-        override suspend fun publish(event: EntityEvent) {
+        override suspend fun add(event: EntityEvent) {
 
-            require(event.isForEntity(entityId)) { "Cannot publish event for entityId '${event.entityId.stringValue}'. Expected entityId is '${entityId.stringValue}'" }
-            this@InMemoryEventStore.publish(event)
+            require(event.entityId == entityId) { "Cannot add an event with entity ID '${event.entityId.stringValue}' to an entity-specific event store with different entity ID '${entityId.stringValue}'" }
+            this@InMemoryEventStore.add(event)
         }
 
-        override val history: EventStore.History get() = InMemoryHistory(historical.asFlow().forEntity(entityId), queryFactory)
+        override fun <E : EntityEvent> all(query: EventStore.Query<E>) = this@InMemoryEventStore.historical.asFlow().filterIsForEntityId(entityId).selectedBy(query)
 
-        override val stream = this@InMemoryEventStore.stream.forEntity(entityId)
+        override suspend fun <E : EntityEvent> firstOrNull(query: EventStore.Query<E>) = all(query).firstOrNull()
+    }
 
-        private fun Flow<Event>.forEntity(entityId: Id): Flow<EntityEvent> = filterIsInstance<EntityEvent>().filter { it.entityId == entityId }
-        private fun EntityEvent.isForEntity(entityId: Id): Boolean = this.entityId == entityId
+    private val <QUERY : EventStore.Query<EVENT>, EVENT : Event> QUERY.inMemory: Query<EVENT> get() = queryFactory(query = this) ?: error("Unsupported query $this")
+
+    private fun <EVENT : Event> Flow<Event>.selectedBy(query: Query<EVENT>): Flow<EVENT> = filterIsInstance(query.eventType).filter { event -> query.invoke(event) }
+
+    private fun <EVENT : Event> Flow<Event>.selectedBy(query: EventStore.Query<EVENT>): Flow<EVENT> = selectedBy(query.inMemory)
+
+    interface Query<EVENT : Event> : EventStore.Query<EVENT> {
+
+        val eventType: KClass<EVENT>
+
+        operator fun invoke(event: EVENT): Boolean
+
+        data object Unrestricted : Query<Event> {
+
+            override val eventType: KClass<Event> get() = Event::class
+
+            override fun invoke(event: Event) = true
+        }
+
+        interface Factory {
+
+            operator fun <EVENT : Event> invoke(query: EventStore.Query<EVENT>): Query<EVENT>?
+
+            object WithoutCustomQueries : Factory {
+
+                @Suppress("UNCHECKED_CAST")
+                override fun <EVENT : Event> invoke(query: EventStore.Query<EVENT>) = when (query) {
+                    is EventStore.Query.Unrestricted -> Unrestricted as Query<EVENT>
+                    else -> null
+                }
+            }
+        }
     }
 }

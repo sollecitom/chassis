@@ -1,32 +1,22 @@
 package org.sollecitom.chassis.ddd.domain
 
 import kotlinx.coroutines.flow.Flow
-import org.sollecitom.chassis.core.domain.identity.Id
 
-interface EventStore {
+interface EventStore<in EVENT : Event> {
 
-    val stream: Flow<Event>
+    fun <E : EVENT> all(query: Query<E> = Query.Unrestricted): Flow<E>
 
-    val history: History
+    suspend fun <E : EVENT> firstOrNull(query: Query<E>): E?
 
-    fun forEntity(entityId: Id): EntityEventStore
+    interface Mutable<in EVENT : Event> : EventStore<EVENT> {
 
-    interface Mutable : EventStore {
-
-        suspend fun publish(event: Event)
-
-        override fun forEntity(entityId: Id): EntityEventStore.Mutable
-    }
-
-    interface History {
-
-        fun <EVENT : Event> all(query: Query<EVENT> = Query.Unrestricted): Flow<EVENT>
-
-        suspend fun <EVENT : Event> firstOrNull(query: Query<EVENT>): EVENT?
+        suspend fun add(event: EVENT)
     }
 
     interface Query<in EVENT : Event> {
 
         data object Unrestricted : Query<Event> // TODO add other default queries e.g. timestamps, by ID, etc.
     }
+
+    companion object
 }

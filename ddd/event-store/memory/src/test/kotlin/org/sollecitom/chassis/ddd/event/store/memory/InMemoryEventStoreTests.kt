@@ -9,5 +9,5 @@ import org.sollecitom.chassis.ddd.event.store.test.specification.EventStoreTestS
 @TestInstance(PER_CLASS)
 private class InMemoryEventStoreTests : EventStoreTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
 
-    override fun eventStore() = InMemoryEventStore()
+    override fun events() = InMemoryEvents()
 }

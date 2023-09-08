@@ -4,8 +4,8 @@ import org.http4k.cloudnative.env.Environment
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.ddd.application.Application
-import org.sollecitom.chassis.ddd.domain.EventStore
-import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
+import org.sollecitom.chassis.ddd.domain.Events
+import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEvents
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.memory.EventSourcedUserRepository
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.memory.UserEventQueryFactory
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.WebAPI
@@ -22,8 +22,8 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
     constructor(environment: Environment) : this(environment, CoreDataGenerator.provider(environment))
 
     // TODO change this to use modules instead? might be overkill here, but think about the modular monolith
-    private val eventStore = eventStore()
-    private val userRepository = userRepository(eventStore = eventStore)
+    private val eventStore = events()
+    private val userRepository = userRepository(events = eventStore)
     private val application: Application = application(userRepository = userRepository)
     private val webAPI = webApi(application = application, environment = environment) // TODO should each module return its endpoints, and you start the server?
 
@@ -42,9 +42,9 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
     }
 
     // TODO change this to be the Pulsar-based event store
-    private fun eventStore(): EventStore.Mutable = InMemoryEventStore(queryFactory = UserEventQueryFactory)
+    private fun events(): Events.Mutable = InMemoryEvents(queryFactory = UserEventQueryFactory)
 
-    private fun userRepository(eventStore: EventStore.Mutable): UserRepository = EventSourcedUserRepository(events = eventStore, coreDataGenerators = this)
+    private fun userRepository(events: Events.Mutable): UserRepository = EventSourcedUserRepository(events = events, coreDataGenerators = this)
 
     private fun application(userRepository: UserRepository): Application = Application(userRepository::withEmailAddress)
 

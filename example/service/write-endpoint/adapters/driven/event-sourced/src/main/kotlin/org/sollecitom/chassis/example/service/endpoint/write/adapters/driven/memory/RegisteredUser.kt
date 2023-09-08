@@ -2,30 +2,17 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.me
 
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
-import org.sollecitom.chassis.ddd.domain.EntityEvent
-import org.sollecitom.chassis.ddd.domain.EntityEventStore
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasAlreadySubmitted
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasSubmitted
 
+// TODO replace with a single type that uses the event history instead
 context(CoreDataGenerator)
-internal class RegisteredUser(private val pastUserRegistrationRequest: UserRegistrationRequestWasSubmitted, private val _events: EntityEventStore.Mutable) : User {
+internal class RegisteredUser(private val pastUserRegistrationRequest: UserRegistrationRequestWasSubmitted) : User {
 
-    override val events: EntityEventStore get() = _events
     override val id: Id get() = pastUserRegistrationRequest.userId
 
-    init {
-        require(events.entityId == id) { "The entity ID for the entity-specific event store '${events.entityId}' doesn't match the entity ID of the user '$id'" }
-    }
-
-    override suspend fun submitRegistrationRequest(): UserRegistrationRequestWasAlreadySubmitted.V1 {
-
-        val event = pastUserRegistrationRequest.alreadySubmitted()
-        publish(event)
-        return event
-    }
+    override suspend fun submitRegistrationRequest() = pastUserRegistrationRequest.alreadySubmitted()
 
     private fun UserRegistrationRequestWasSubmitted.alreadySubmitted() = UserRegistrationRequestWasAlreadySubmitted.V1(emailAddress = emailAddress, userId = userId, id = newId.internal(), timestamp = clock.now())
-
-    private suspend fun publish(event: EntityEvent) = _events.publish(event)
 }
