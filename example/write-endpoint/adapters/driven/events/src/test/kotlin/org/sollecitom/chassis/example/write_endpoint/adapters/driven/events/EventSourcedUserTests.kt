@@ -1,6 +1,7 @@
 package org.sollecitom.chassis.example.write_endpoint.adapters.driven.events
 
 import assertk.assertThat
+import assertk.assertions.isBetween
 import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
 import kotlinx.coroutines.CoroutineStart.UNDISPATCHED
@@ -35,18 +36,20 @@ private class EventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator
         val events = eventFramework()
         val users = EventSourcedUserRepository(events = events, coreDataGenerators = this@EventSourcedEntitiesTests)
         val emailAddress = "bruce@waynecorps.com".let(::EmailAddress)
-        val user = users.withEmailAddress(emailAddress)
-        val invocationContext = InvocationContext.create()
 
+        val user = users.withEmailAddress(emailAddress)
         val receivingThePublishedEvent = async(start = UNDISPATCHED) { events.asFlow.first() }
+        val invocationContext = InvocationContext.create()
+        val beforeTheInvocation = clock.now()
         val event = with(invocationContext) { user.submitRegistrationRequest() }
+        val afterTheInvocation = clock.now()
 
         val publishedEvent = receivingThePublishedEvent.await()
         assertThat(event).isEqualTo(publishedEvent)
         assertThat(event).isInstanceOf<UserRegistrationRequestWasSubmitted.V1>().given {
-
             assertThat(it.emailAddress).isEqualTo(emailAddress)
             assertThat(it.entityId).isEqualTo(it.userId)
+            assertThat(it.timestamp).isBetween(beforeTheInvocation, afterTheInvocation)
             assertThat(it).hasInvocationContext(invocationContext)
             assertThat(it).isOriginating()
         }
@@ -58,21 +61,22 @@ private class EventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator
         val events = eventFramework()
         val users = EventSourcedUserRepository(events = events, coreDataGenerators = this@EventSourcedEntitiesTests)
         val emailAddress = "lucious@waynecorps.com".let(::EmailAddress)
-        val previousInvocationContext = InvocationContext.create()
-        with(previousInvocationContext) { users.withEmailAddress(emailAddress).submitRegistrationRequest() }
-        val invocationContext = InvocationContext.create()
-
+        with(InvocationContext.create()) { users.withEmailAddress(emailAddress).submitRegistrationRequest() }
         testScheduler.advanceUntilIdle()
+
         val user = users.withEmailAddress(emailAddress)
         val receivingThePublishedEvent = async(start = UNDISPATCHED) { events.asFlow.first() }
+        val invocationContext = InvocationContext.create()
+        val beforeTheInvocation = clock.now()
         val event = with(invocationContext) { user.submitRegistrationRequest() }
+        val afterTheInvocation = clock.now()
 
         val publishedEvent = receivingThePublishedEvent.await()
         assertThat(event).isEqualTo(publishedEvent)
         assertThat(event).isInstanceOf<UserRegistrationRequestWasAlreadySubmitted.V1>().given {
-
             assertThat(it.emailAddress).isEqualTo(emailAddress)
             assertThat(it.entityId).isEqualTo(it.userId)
+            assertThat(it.timestamp).isBetween(beforeTheInvocation, afterTheInvocation)
             assertThat(it).hasInvocationContext(invocationContext)
             assertThat(it).isOriginating()
         }
