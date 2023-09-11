@@ -8,6 +8,7 @@ import org.sollecitom.chassis.example.write_endpoint.domain.user.User
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRepository
 
+// TODO test this
 class EventSourcedUserRepository(private val events: EventStream.Mutable, private val historicalEvents: EventStore, private val coreDataGenerators: CoreDataGenerator) : UserRepository, CoreDataGenerator by coreDataGenerators {
 
     override suspend fun withEmailAddress(emailAddress: EmailAddress) = eventSourcedUser(emailAddress)
