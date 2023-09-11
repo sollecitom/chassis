@@ -83,5 +83,5 @@ private class ApplicationTests : CoreDataGenerator by CoreDataGenerator.testProv
     }
 
     // TODO remove the in-memory adapter from here - use a stub instead
-    private fun TestScope.newApplication(events: Events.Mutable = InMemoryEvents(queryFactory = UserEventQueryFactory, scope = this), userRepository: UserRepository = EventSourcedUserRepository(events = events, coreDataGenerators = this@ApplicationTests)): Application = Application(userRepository::withEmailAddress)
+    private fun TestScope.newApplication(events: Events.Mutable = InMemoryEvents(queryFactory = UserEventQueryFactory, scope = this), userRepository: UserRepository = EventSourcedUserRepository(events = events, historicalEvents = events, coreDataGenerators = this@ApplicationTests)): Application = Application(userRepository::withEmailAddress)
 }
