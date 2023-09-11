@@ -16,6 +16,8 @@ interface EventStream {
         suspend fun publish(event: Event)
 
         override fun forEntityId(entityId: Id): EntitySpecific.Mutable
+
+        companion object
     }
 
     interface EntitySpecific {

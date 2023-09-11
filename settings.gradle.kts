@@ -61,6 +61,9 @@ module("web", "api", "test", "utils")
 module("web", "api", "json", "schemas")
 module("web", "api", "utils")
 
+module("pulsar", "utils")
+module("pulsar", "test", "utils")
+
 module("example", "write-endpoint", "configuration")
 module("example", "write-endpoint", "domain")
 module("example", "write-endpoint", "application")

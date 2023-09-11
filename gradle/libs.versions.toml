@@ -16,6 +16,7 @@ commons-codec = "1.16.0"
 test-containers = "1.19.0"
 swagger-parser = "2.1.16"
 atlassian-swagger-request-validator = "2.36.0"
+pulsar = "3.1.0"
 # plugins
 palantir-git-plugin = "3.0.0"
 version-catalog-report-plugin = "0.47.0"
@@ -52,9 +53,11 @@ junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.re
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
-test-containers = { module = "org.testcontainers:junit-jupiter", version.ref = "test-containers" }
+test-containers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "test-containers" }
+test-containers-pulsar = { module = "org.testcontainers:pulsar", version.ref = "test-containers" }
 swagger-parser = { module = "io.swagger.parser.v3:swagger-parser-v3", version.ref = "swagger-parser" }
 swagger-request-validator = { module = "com.atlassian.oai:swagger-request-validator-core", version.ref = "atlassian-swagger-request-validator" }
+pulsarClientAdmin = { module = "org.apache.pulsar:pulsar-client-admin", version.ref = "pulsar" }
 
 [plugins]
 com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "version-catalog-report-plugin" }

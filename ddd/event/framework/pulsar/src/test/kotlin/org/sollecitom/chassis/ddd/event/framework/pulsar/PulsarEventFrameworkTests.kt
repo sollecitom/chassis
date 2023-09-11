@@ -6,21 +6,29 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.framework.CompositeEventFramework
+import org.sollecitom.chassis.ddd.domain.stream.EventStream
 import org.sollecitom.chassis.ddd.event.framework.test.specification.EventFrameworkTestSpecification
+import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
 
 @TestInstance(PER_CLASS)
 @Disabled
-private class PulsarEventsTests : EventFrameworkTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
+private class PulsarEventFrameworkTests : EventFrameworkTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
 
-    override fun events() = pulsarStreamWithMaterializedViewInPostgres()
+    override fun events() = pulsarStreamWithMaterializedViewInMemory()
 }
 
 fun pulsarStreamWithMaterializedViewInMemory(): CompositeEventFramework {
 
-    TODO("implement")
+    val pulsarEventStream = EventStream.Mutable.pulsar()
+    return CompositeEventFramework(stream = pulsarEventStream, store = InMemoryEventStore())
 }
 
 fun pulsarStreamWithMaterializedViewInPostgres(): CompositeEventFramework {
+
+    TODO("implement")
+}
+
+fun EventStream.Mutable.Companion.pulsar(): EventStream.Mutable {
 
     TODO("implement")
 }
