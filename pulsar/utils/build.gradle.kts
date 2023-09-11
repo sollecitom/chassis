@@ -1,5 +1,7 @@
 dependencies {
-    api(libs.pulsarClientAdmin) // TODO exclude com.google.protobuf:protobuf-java:3.15.3
+    api(libs.pulsarClientAdmin) {
+        exclude(group = "com.google.protobuf", module = "protobuf-java")
+    }
 
     testImplementation(projects.chassisCoreTestUtils)
 }
