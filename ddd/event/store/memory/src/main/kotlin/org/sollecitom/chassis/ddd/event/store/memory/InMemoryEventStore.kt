@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.*
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
-import org.sollecitom.chassis.ddd.domain.EventStore
+import org.sollecitom.chassis.ddd.domain.store.EventStore
 import org.sollecitom.chassis.ddd.domain.filterIsForEntityId
 import kotlin.reflect.KClass
 

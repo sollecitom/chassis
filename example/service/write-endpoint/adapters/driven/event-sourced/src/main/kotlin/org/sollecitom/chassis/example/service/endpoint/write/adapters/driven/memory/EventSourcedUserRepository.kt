@@ -2,10 +2,8 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.me
 
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
-import org.sollecitom.chassis.ddd.domain.Event
-import org.sollecitom.chassis.ddd.domain.EventStore
-import org.sollecitom.chassis.ddd.domain.EventStream
-import org.sollecitom.chassis.ddd.domain.Events
+import org.sollecitom.chassis.ddd.domain.store.EventStore
+import org.sollecitom.chassis.ddd.domain.stream.EventStream
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRepository

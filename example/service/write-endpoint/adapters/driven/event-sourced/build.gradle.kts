@@ -1,7 +1,7 @@
 dependencies {
     api(projects.chassisExampleServiceWriteEndpointDomain)
 
-    implementation(projects.chassisDddEventsMemory)
+    implementation(projects.chassisDddEventFrameworkMemory)
     implementation(projects.chassisLoggingStandardSlf4jConfiguration)
     implementation(projects.chassisKotlinExtensions)
 

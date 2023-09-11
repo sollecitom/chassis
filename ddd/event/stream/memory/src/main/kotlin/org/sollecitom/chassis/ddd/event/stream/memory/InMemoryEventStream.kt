@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
-import org.sollecitom.chassis.ddd.domain.EventStream
+import org.sollecitom.chassis.ddd.domain.stream.EventStream
 import org.sollecitom.chassis.ddd.domain.filterIsForEntityId
 
 class InMemoryEventStream : EventStream.Mutable {

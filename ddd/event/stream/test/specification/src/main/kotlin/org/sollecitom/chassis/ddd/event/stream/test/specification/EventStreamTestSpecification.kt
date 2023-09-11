@@ -10,7 +10,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.Event
-import org.sollecitom.chassis.ddd.domain.EventStream
+import org.sollecitom.chassis.ddd.domain.stream.EventStream
 import org.sollecitom.chassis.ddd.test.stubs.testEntityEvent
 import org.sollecitom.chassis.ddd.test.stubs.testEntityEvents
 import org.sollecitom.chassis.ddd.test.stubs.testEvent

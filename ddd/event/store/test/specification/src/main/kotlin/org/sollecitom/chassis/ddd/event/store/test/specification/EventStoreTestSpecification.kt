@@ -4,11 +4,8 @@ import assertk.assertThat
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
-import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
-import org.sollecitom.chassis.ddd.domain.EntityEvent
-import org.sollecitom.chassis.ddd.domain.Event
-import org.sollecitom.chassis.ddd.domain.EventStore
+import org.sollecitom.chassis.ddd.domain.store.EventStore
 import org.sollecitom.chassis.ddd.test.stubs.*
 import org.sollecitom.chassis.test.utils.assertions.containsSameElementsAs
 import kotlin.time.Duration

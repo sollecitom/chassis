@@ -4,8 +4,8 @@ import org.http4k.cloudnative.env.Environment
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.ddd.application.Application
-import org.sollecitom.chassis.ddd.domain.Events
-import org.sollecitom.chassis.ddd.events.memory.InMemoryEvents
+import org.sollecitom.chassis.ddd.domain.framework.EventFramework
+import org.sollecitom.chassis.ddd.event.framework.memory.inMemory
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.memory.EventSourcedUserRepository
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.memory.UserEventQueryFactory
 import org.sollecitom.chassis.example.service.endpoint.write.adapters.driving.web.api.WebAPI
@@ -42,9 +42,9 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
     }
 
     // TODO change this to be the Pulsar-based event store
-    private fun events(): Events.Mutable = InMemoryEvents(queryFactory = UserEventQueryFactory)
+    private fun events(): EventFramework.Mutable = EventFramework.Mutable.inMemory(queryFactory = UserEventQueryFactory)
 
-    private fun userRepository(events: Events.Mutable): UserRepository = EventSourcedUserRepository(events = events, historicalEvents = events, coreDataGenerators = this)
+    private fun userRepository(events: EventFramework.Mutable): UserRepository = EventSourcedUserRepository(events = events, historicalEvents = events, coreDataGenerators = this)
 
     private fun application(userRepository: UserRepository): Application = Application(userRepository::withEmailAddress)
 
