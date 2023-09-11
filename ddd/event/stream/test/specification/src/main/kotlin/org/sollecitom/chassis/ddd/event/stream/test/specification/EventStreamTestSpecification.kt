@@ -24,13 +24,13 @@ import kotlin.time.Duration.Companion.seconds
 interface EventStreamTestSpecification : CoreDataGenerator {
 
     val timeout: Duration get() = 10.seconds
-    fun events(): EventStream.Mutable<Event>
+    fun eventStream(): EventStream.Mutable<Event>
     fun EventStream.Mutable<Event>.forEntityId(entityId: Id): EventStream.Mutable<EntityEvent>
 
     @Test
     fun `subscribing to the stream of events`() = runTest(timeout = timeout) {
 
-        val events = events()
+        val events = eventStream()
         val beforeSubscribingEvent = testEvent()
         events.publish(beforeSubscribingEvent)
 
@@ -48,7 +48,7 @@ interface EventStreamTestSpecification : CoreDataGenerator {
     fun `subscribing to the stream of events for a given entity`() = runTest(timeout = timeout) {
 
         val entityId = newId.internal()
-        val events = events()
+        val events = eventStream()
         val entityEvents = events.forEntityId(entityId)
         val beforeSubscribingEvent = testEntityEvent(entityId = entityId)
         entityEvents.publish(beforeSubscribingEvent)
