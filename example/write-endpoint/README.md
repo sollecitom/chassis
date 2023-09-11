@@ -1,6 +1,6 @@
 # Example service - write endpoint
 
-An example write endpoint service.
+An example write endpoint service. The test strategy follows the approach mentioned on [this blog](https://sollecitom.github.io/software-product-development-blog/posts/2023/2023-09-07-stop-writing-unit-tests/).
 
 ## How to
 
