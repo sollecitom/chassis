@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.ddd.events.memory
+package org.sollecitom.chassis.ddd.event.store.memory
 
 import kotlinx.coroutines.flow.*
 import org.sollecitom.chassis.core.domain.identity.Id

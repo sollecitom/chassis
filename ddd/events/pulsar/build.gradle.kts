@@ -1,5 +1,7 @@
 dependencies {
-    api(projects.chassisDddDomain)
+    api(projects.chassisDddEventStreamPulsar)
+    api(projects.chassisDddEventStorePostgres)
+    api(projects.chassisDddEventStoreMemory) // TODO remove
 
     testImplementation(projects.chassisDddEventsTestSpecification)
 }

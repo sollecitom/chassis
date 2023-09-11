@@ -3,7 +3,7 @@ package org.sollecitom.chassis.example.service.endpoint.write.adapters.driven.me
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStore
-import org.sollecitom.chassis.ddd.events.memory.InMemoryEventStore
+import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasSubmitted
 import kotlin.reflect.KClass
 

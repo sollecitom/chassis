@@ -3,6 +3,8 @@ package org.sollecitom.chassis.ddd.events.memory
 import kotlinx.coroutines.*
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.ddd.domain.*
+import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
+import org.sollecitom.chassis.ddd.event.stream.memory.InMemoryEventStream
 import kotlin.time.Duration.Companion.seconds
 
 class InMemoryEvents private constructor(private val stream: InMemoryEventStream, private val store: InMemoryEventStore, private val scope: CoroutineScope) : Events.Mutable, EventStream.Mutable<Event> by stream, EventStore.Mutable<Event> by store {
@@ -13,7 +15,7 @@ class InMemoryEvents private constructor(private val stream: InMemoryEventStream
 
         stream.publish(event)
         scope.launch {
-            delay(1.seconds) // simulating a delay in a materialised view
+            delay(1.seconds) // simulating a delay in a materialised view (TODO remove)
             store.store(event)
         }
         Unit
@@ -29,7 +31,7 @@ class InMemoryEvents private constructor(private val stream: InMemoryEventStream
 
             stream.publish(event)
             scope.launch {
-                delay(1.seconds) // simulating a delay in a materialised view
+                delay(1.seconds) // simulating a delay in a materialised view (TODO remove)
                 store.store(event)
             }
             Unit
