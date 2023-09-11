@@ -4,7 +4,8 @@ import java.util.regex.Pattern
 
 sealed class PulsarTopic(val persistent: Boolean, val tenant: String, val namespace: String, val name: String) {
 
-    val fullName: String get() = fullTopicName(tenant, namespace, name, persistent)
+    val protocol: String get() = if (persistent) Persistent.PROTOCOL else NonPersistent.PROTOCOL
+    val fullName: String get() = fullRawName(protocol, tenant, namespace, name)
 
     class Persistent(tenant: String, namespace: String, name: String) : PulsarTopic(true, tenant, namespace, name) {
 
@@ -44,21 +45,21 @@ sealed class PulsarTopic(val persistent: Boolean, val tenant: String, val namesp
 
     companion object {
 
-        private const val topicPartsSeparator = "/"
-        private const val maximumAllowedParts = 5
-        private const val protocolPattern = "(persistent|non-persistent)"
-        private const val tenantPattern = "([a-zA-Z0-9\\-]+)"
-        private const val namespacePattern = "([a-zA-Z0-9\\-]+)"
-        private const val topicNamePattern = "([a-zA-Z0-9\\-]+)"
-        private const val pattern = "$protocolPattern://$tenantPattern/$namespacePattern/$topicNamePattern"
-        private val compiled by lazy { Pattern.compile(pattern) }
+        private const val SEPARATOR = "/"
+        private const val EXPECTED_PARTS_COUNT = 5
+        private const val PROTOCOL_GROUP = "(persistent|non-persistent)"
+        private const val TENANT_GROUP = "([a-zA-Z0-9\\-]+)"
+        private const val NAMESPACE_GROUP = "([a-zA-Z0-9\\-]+)"
+        private const val NAME_GROUP = "([a-zA-Z0-9\\-]+)"
+        private const val PATTERN = "$PROTOCOL_GROUP://$TENANT_GROUP/$NAMESPACE_GROUP/$NAME_GROUP"
+        private val compiled by lazy { Pattern.compile(PATTERN) }
 
         fun parse(rawTopic: String): PulsarTopic {
 
-            require(rawTopic.split(topicPartsSeparator).size <= maximumAllowedParts)
+            require(rawTopic.split(SEPARATOR).size == EXPECTED_PARTS_COUNT) { "Invalid Pulsar topic" }
             val matcher = compiled.matcher(rawTopic)
             if (!matcher.find()) {
-                error("Invalid raw topic format in $rawTopic does not match pattern $pattern")
+                error("Pulsar topic format '$rawTopic' does not match the expected pattern $PATTERN")
             }
             val protocol = matcher.group(1)
             val tenant = matcher.group(2)
@@ -72,6 +73,8 @@ sealed class PulsarTopic(val persistent: Boolean, val tenant: String, val namesp
             NonPersistent.PROTOCOL -> nonPersistent(tenant, namespace, name)
             else -> error("Unknown topic protocol $protocol")
         }
+
+        fun fullRawName(protocol: String, tenant: String, namespace: String, name: String) = "$protocol://$tenant/$namespace/$name"
 
         fun persistent(tenant: String, namespace: String, name: String): PulsarTopic = Persistent(tenant, namespace, name)
 
