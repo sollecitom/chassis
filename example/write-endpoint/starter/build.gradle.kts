@@ -17,7 +17,7 @@ plugins {
 
 dependencies {
     implementation(projects.chassisExampleWriteEndpointAdaptersDrivingWeb)
-    implementation(projects.chassisExampleWriteEndpointAdaptersDrivenEventSourced)
+    implementation(projects.chassisExampleWriteEndpointAdaptersDrivenEvents)
     implementation(projects.chassisExampleWriteEndpointConfiguration)
     implementation(projects.chassisKotlinExtensions)
     implementation(projects.chassisWebServiceDomain)
@@ -58,7 +58,7 @@ configure<JibExtension> {
         )
         filesModificationTime.set(buildTimestamp) // TODO this screws up reproducibility - think whether reproducibility is worth achieving, even at the price of some nonsensical consequences
         creationTime.set(buildTimestamp) // TODO this screws up reproducibility - think whether reproducibility is worth achieving, even at the price of some nonsensical consequences
-        mainClass = "org.sollecitom.chassis.example.service.endpoint.write.starter.StarterKt"
+        mainClass = "org.sollecitom.chassis.example.write_endpoint.starter.StarterKt"
     }
     from {
         image = dockerBaseImage

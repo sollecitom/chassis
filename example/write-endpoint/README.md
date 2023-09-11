@@ -23,7 +23,7 @@ An example write endpoint service.
 ### Run and build all
 
 ```bash
-./gradlew check
+./gradlew build check
 ```
 
 ### Run the Docker container
