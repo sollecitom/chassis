@@ -2,7 +2,8 @@ package org.sollecitom.chassis.pulsar.utils
 
 import java.util.regex.Pattern
 
-sealed class PulsarTopic(val persistent: Boolean, val tenant: String, val namespace: String, val name: String) {
+// TODO protocol, tenant, and namespace might be skipped - fix this
+sealed class PulsarTopic(val persistent: Boolean, val tenant: String?, val namespace: String?, val name: String) {
 
     val protocol: String get() = if (persistent) Persistent.PROTOCOL else NonPersistent.PROTOCOL
     val fullName: String get() = fullRawName(protocol, tenant, namespace, name)
@@ -56,7 +57,7 @@ sealed class PulsarTopic(val persistent: Boolean, val tenant: String, val namesp
 
         fun parse(rawTopic: String): PulsarTopic {
 
-            require(rawTopic.split(SEPARATOR).size == EXPECTED_PARTS_COUNT) { "Invalid Pulsar topic" }
+            require(rawTopic.split(SEPARATOR).size <= EXPECTED_PARTS_COUNT) { "Invalid Pulsar topic" }
             val matcher = compiled.matcher(rawTopic)
             if (!matcher.find()) {
                 error("Pulsar topic format '$rawTopic' does not match the expected pattern $PATTERN")
@@ -74,7 +75,12 @@ sealed class PulsarTopic(val persistent: Boolean, val tenant: String, val namesp
             else -> error("Unknown topic protocol $protocol")
         }
 
-        fun fullRawName(protocol: String, tenant: String, namespace: String, name: String) = "$protocol://$tenant/$namespace/$name"
+        fun fullRawName(protocol: String, tenant: String?, namespace: String?, name: String): String = buildString {
+            append(protocol).append("://")
+            tenant?.let { append(tenant).append("/") }
+            namespace?.let { append(namespace).append("/") }
+            append(name)
+        }
 
         fun persistent(tenant: String, namespace: String, name: String): PulsarTopic = Persistent(tenant, namespace, name)
 

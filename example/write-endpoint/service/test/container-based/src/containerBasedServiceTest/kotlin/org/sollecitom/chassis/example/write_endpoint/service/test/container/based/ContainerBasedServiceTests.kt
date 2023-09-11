@@ -1,8 +1,11 @@
 package org.sollecitom.chassis.example.write_endpoint.service.test.container.based
 
+import assertk.assertThat
+import assertk.assertions.isFalse
 import org.http4k.client.ApacheClient
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.test.utils.testProvider

@@ -1,5 +1,7 @@
 package org.sollecitom.chassis.ddd.event.framework.pulsar
 
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
@@ -14,7 +16,18 @@ import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
 @Disabled
 private class PulsarEventFrameworkTests : EventFrameworkTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
 
+//    private val pulsar = Pulsar
     override fun events() = pulsarStreamWithMaterializedViewInMemory()
+
+    @BeforeAll
+    fun beforeAll() {
+
+    }
+
+    @AfterAll
+    fun afterAll() {
+
+    }
 }
 
 fun pulsarStreamWithMaterializedViewInMemory(): CompositeEventFramework {
