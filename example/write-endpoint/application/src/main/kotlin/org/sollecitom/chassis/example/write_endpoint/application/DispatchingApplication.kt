@@ -6,7 +6,6 @@ import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.context.unauthenticatedOrThrow
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.application.ApplicationCommand
-import org.sollecitom.chassis.ddd.domain.asIntegrationEvent
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
@@ -35,10 +34,7 @@ internal class DispatchingApplication(private val userWithEmailAddress: suspend 
     private suspend fun processRegisterUserCommandV1(command: RegisterUser.V1): RegisterUser.V1.Result {
 
         val user = userWithEmailAddress(command.emailAddress)
-        val event = user.submitRegistrationRequest()
-        val applicationEvent = event.asIntegrationEvent() // TODO put back the invocation context in the base domain event, and remove this line
-        // TODO publish the event
-        return event.toOperationResult()
+        return user.submitRegistrationRequest().toOperationResult()
     }
 
     private fun UserRegistrationEvent.toOperationResult(): RegisterUser.V1.Result = when (this) {

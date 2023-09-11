@@ -6,7 +6,7 @@ import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.ddd.domain.Event
 
-data class TestEvent(override val id: Id, override val timestamp: Instant) : Event {
+data class TestEvent(override val id: Id, override val timestamp: Instant, override val context: Event.Context) : Event {
 
     override val type: Event.Type get() = Type
 

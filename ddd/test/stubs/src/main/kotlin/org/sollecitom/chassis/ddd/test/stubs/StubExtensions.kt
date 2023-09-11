@@ -3,6 +3,8 @@ package org.sollecitom.chassis.ddd.test.stubs
 import kotlinx.datetime.Instant
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
+import org.sollecitom.chassis.ddd.domain.Event
+import org.sollecitom.chassis.ddd.test.utils.create
 
 context(CoreDataGenerator)
 fun testEvents(): Sequence<TestEvent> = sequence {
@@ -19,7 +21,7 @@ fun testEntityEvents(entityId: Id? = null): Sequence<TestEntityEvent> = sequence
 }
 
 context(CoreDataGenerator)
-fun testEvent(id: Id = newId.internal(), timestamp: Instant = clock.now()) = TestEvent(id, timestamp)
+fun testEvent(id: Id = newId.internal(), timestamp: Instant = clock.now(), context: Event.Context = Event.Context.create()) = TestEvent(id, timestamp, context)
 
 context(CoreDataGenerator)
-fun testEntityEvent(entityId: Id = newId.internal(), id: Id = newId.internal(), timestamp: Instant = clock.now()) = TestEntityEvent(entityId, id, timestamp)
+fun testEntityEvent(entityId: Id = newId.internal(), id: Id = newId.internal(), timestamp: Instant = clock.now(), context: Event.Context = Event.Context.create()) = TestEntityEvent(entityId, id, timestamp, context)

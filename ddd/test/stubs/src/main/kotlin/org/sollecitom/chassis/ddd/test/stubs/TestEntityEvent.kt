@@ -5,8 +5,9 @@ import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.ddd.domain.EntityEvent
+import org.sollecitom.chassis.ddd.domain.Event
 
-data class TestEntityEvent(override val entityId: Id, override val id: Id, override val timestamp: Instant) : EntityEvent {
+data class TestEntityEvent(override val entityId: Id, override val id: Id, override val timestamp: Instant, override val context: Event.Context) : EntityEvent {
 
     override val entityType = "test-entity".let(::Name)
 

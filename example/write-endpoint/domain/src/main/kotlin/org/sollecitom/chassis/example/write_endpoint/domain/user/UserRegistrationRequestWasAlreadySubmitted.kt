@@ -5,8 +5,9 @@ import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
+import org.sollecitom.chassis.ddd.domain.Event
 
-sealed class UserRegistrationRequestWasAlreadySubmitted(val emailAddress: EmailAddress, userId: Id, override val id: Id, override val timestamp: Instant, type: Type) : UserRegistrationEvent(id, timestamp, type, userId) {
+sealed class UserRegistrationRequestWasAlreadySubmitted(val emailAddress: EmailAddress, userId: Id, id: Id, timestamp: Instant, type: Type, context: Event.Context) : UserRegistrationEvent(id, timestamp, type, userId, context) {
 
     interface Type : UserRegistrationEvent.Type
 
@@ -14,7 +15,7 @@ sealed class UserRegistrationRequestWasAlreadySubmitted(val emailAddress: EmailA
         val typeId = "user-registration-request-already-submitted".let(::Name)
     }
 
-    class V1(emailAddress: EmailAddress, userId: Id, id: Id, timestamp: Instant) : UserRegistrationRequestWasAlreadySubmitted(emailAddress, userId, id, timestamp, Type) {
+    class V1(emailAddress: EmailAddress, userId: Id, id: Id, timestamp: Instant, context: Event.Context) : UserRegistrationRequestWasAlreadySubmitted(emailAddress, userId, id, timestamp, Type, context) {
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
