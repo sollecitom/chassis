@@ -7,7 +7,6 @@ import org.sollecitom.chassis.example.write_endpoint.domain.user.UserEvent
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasAlreadySubmitted
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasSubmitted
 
-// TODO replace with a single type that uses the event history instead
 context(CoreDataGenerator)
 internal class RegisteredUser(private val pastUserRegistrationRequest: UserRegistrationRequestWasSubmitted, private val publish: suspend (UserEvent) -> Unit) : User {
 

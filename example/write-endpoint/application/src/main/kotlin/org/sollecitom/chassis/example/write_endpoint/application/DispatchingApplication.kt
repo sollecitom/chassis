@@ -36,7 +36,7 @@ internal class DispatchingApplication(private val userWithEmailAddress: suspend 
 
         val user = userWithEmailAddress(command.emailAddress)
         val event = user.submitRegistrationRequest()
-        val applicationEvent = event.asApplicationEvent()
+        val applicationEvent = event.asApplicationEvent() // TODO put back the invocation context in the base domain event, and remove this line
         // TODO publish the event
         return event.toOperationResult()
     }

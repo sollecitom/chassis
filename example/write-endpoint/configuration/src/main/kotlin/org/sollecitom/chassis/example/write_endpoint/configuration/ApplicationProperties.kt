@@ -1,5 +1,6 @@
 package org.sollecitom.chassis.example.write_endpoint.configuration
 
+// TODO rename to ServiceProperties, and move under service/starter
 object ApplicationProperties {
 
     const val SERVICE_STARTED_LOG_MESSAGE = "--Service started--"
