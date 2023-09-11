@@ -44,7 +44,7 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
     // TODO change this to be the Pulsar-based event store
     private fun events(): EventFramework.Mutable = EventFramework.Mutable.inMemory(queryFactory = UserEventQueryFactory)
 
-    private fun userRepository(events: EventFramework.Mutable): UserRepository = EventSourcedUserRepository(events = events, historicalEvents = events, coreDataGenerators = this)
+    private fun userRepository(events: EventFramework.Mutable): UserRepository = EventSourcedUserRepository(events = events, coreDataGenerators = this)
 
     private fun application(userRepository: UserRepository): Application = Application(userRepository::withEmailAddress)
 
