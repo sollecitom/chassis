@@ -6,5 +6,5 @@ interface EntitySpecificEvents : EventStream<EntityEvent>, EventStore<EntityEven
 
     val entityId: Id
 
-    interface Mutable : EntitySpecificEvents, EventStream.Mutable<EntityEvent>, EventStore<EntityEvent>
+    interface Mutable : EntitySpecificEvents, EventStream.Mutable<EntityEvent>, EventStore.Mutable<EntityEvent>
 }

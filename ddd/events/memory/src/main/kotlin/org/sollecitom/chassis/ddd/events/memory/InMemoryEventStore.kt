@@ -12,7 +12,7 @@ class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory
 
     private val historical = mutableListOf<Event>()
 
-    override suspend fun add(event: Event) {
+    override suspend fun store(event: Event) {
 
         historical += event
     }
@@ -25,10 +25,10 @@ class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory
 
     private inner class EntitySpecific(private val entityId: Id) : EventStore.Mutable<EntityEvent> {
 
-        override suspend fun add(event: EntityEvent) {
+        override suspend fun store(event: EntityEvent) {
 
             require(event.entityId == entityId) { "Cannot add an event with entity ID '${event.entityId.stringValue}' to an entity-specific event store with different entity ID '${entityId.stringValue}'" }
-            this@InMemoryEventStore.add(event)
+            this@InMemoryEventStore.store(event)
         }
 
         override fun <E : EntityEvent> all(query: EventStore.Query<E>) = this@InMemoryEventStore.historical.asFlow().filterIsForEntityId(entityId).selectedBy(query)

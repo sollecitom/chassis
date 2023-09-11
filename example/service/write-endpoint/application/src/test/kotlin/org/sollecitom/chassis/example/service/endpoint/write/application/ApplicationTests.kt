@@ -2,6 +2,7 @@ package org.sollecitom.chassis.example.service.endpoint.write.application
 
 import assertk.assertThat
 import assertk.assertions.isInstanceOf
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -69,8 +70,11 @@ private class ApplicationTests : CoreDataGenerator by CoreDataGenerator.testProv
             val registerUserAFirstTime = registerUser(emailAddress = emailAddress)
             with(InvocationContext.unauthenticated()) { application(registerUserAFirstTime) }.let { check(it is Accepted) }
 
+            testScheduler.advanceUntilIdle()
             val registerUserASecondTime = registerUser(emailAddress = emailAddress)
-            val result = with(InvocationContext.unauthenticated()) { application(registerUserASecondTime) }
+            val result = with(InvocationContext.unauthenticated()) {
+                application(registerUserASecondTime)
+            }
 
             assertThat(result).isInstanceOf<EmailAddressAlreadyInUse>()
         }
@@ -79,5 +83,5 @@ private class ApplicationTests : CoreDataGenerator by CoreDataGenerator.testProv
     }
 
     // TODO remove the in-memory adapter from here - use a stub instead
-    private fun newApplication(events: Events.Mutable = InMemoryEvents(queryFactory = UserEventQueryFactory), userRepository: UserRepository = EventSourcedUserRepository(events = events, coreDataGenerators = this)): Application = Application(userRepository::withEmailAddress)
+    private fun TestScope.newApplication(events: Events.Mutable = InMemoryEvents(queryFactory = UserEventQueryFactory, scope = this), userRepository: UserRepository = EventSourcedUserRepository(events = events, coreDataGenerators = this@ApplicationTests)): Application = Application(userRepository::withEmailAddress)
 }

@@ -43,7 +43,7 @@ interface EventsTestSpecification : CoreDataGenerator {
 
         val events = events()
         val publishedEvents = testEvents().take(15).toList()
-        publishedEvents.forEach { events.publish(it) }
+        publishedEvents.forEach { events.store(it) }
 
         val historicalEvents = events.all<TestEvent>().toList()
 
@@ -82,11 +82,11 @@ interface EventsTestSpecification : CoreDataGenerator {
         val entityEvents = events.forEntityId(entityId)
         val notAnEntityEvent = testEvent()
         val notForTheEntityEvent = testEntityEvent(entityId = newId.internal())
-        events.publish(notAnEntityEvent)
-        events.publish(notForTheEntityEvent)
+        events.store(notAnEntityEvent)
+        events.store(notForTheEntityEvent)
         val publishedEvents = testEntityEvents(entityId = entityId).take(12).toList()
-        publishedEvents.filterIndexed { index, _ -> index in 0..5 }.forEach { entityEvents.publish(it) }
-        publishedEvents.filterIndexed { index, _ -> index in 6..11 }.forEach { events.publish(it) }
+        publishedEvents.filterIndexed { index, _ -> index in 0..5 }.forEach { entityEvents.store(it) }
+        publishedEvents.filterIndexed { index, _ -> index in 6..11 }.forEach { events.store(it) }
 
         val historicalEvents = entityEvents.all<TestEntityEvent>().toList()
 

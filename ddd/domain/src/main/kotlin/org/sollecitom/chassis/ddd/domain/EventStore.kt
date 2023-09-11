@@ -10,7 +10,7 @@ interface EventStore<in EVENT : Event> {
 
     interface Mutable<in EVENT : Event> : EventStore<EVENT> {
 
-        suspend fun add(event: EVENT)
+        suspend fun store(event: EVENT)
     }
 
     interface Query<in EVENT : Event> {
