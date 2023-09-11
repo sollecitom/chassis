@@ -1,5 +1,5 @@
 dependencies {
-    api(projects.chassisExampleServiceWriteEndpointDomain)
+    api(projects.chassisExampleWriteEndpointDomain)
 
     implementation(projects.chassisDddEventFrameworkMemory)
     implementation(projects.chassisLoggingStandardSlf4jConfiguration)

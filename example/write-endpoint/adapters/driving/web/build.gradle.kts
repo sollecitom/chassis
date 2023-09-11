@@ -1,8 +1,8 @@
 dependencies {
-    api(projects.chassisExampleServiceWriteEndpointApplication)
+    api(projects.chassisExampleWriteEndpointApplication)
     api(projects.chassisWebApiUtils)
 
-    implementation(projects.chassisExampleServiceWriteEndpointConfiguration)
+    implementation(projects.chassisExampleWriteEndpointConfiguration)
     implementation(platform(libs.http4k.bom))
     implementation(libs.http4k.server.jetty)
     implementation(projects.chassisCorrelationCoreSerializationJson)

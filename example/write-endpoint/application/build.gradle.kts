@@ -1,15 +1,15 @@
 dependencies {
-    api(projects.chassisExampleServiceWriteEndpointDomain)
+    api(projects.chassisExampleWriteEndpointDomain)
     api(projects.chassisDddApplication)
 
     implementation(projects.chassisKotlinExtensions)
     implementation(projects.chassisLoggingStandardSlf4jConfiguration)
 
-    testImplementation(projects.chassisExampleServiceWriteEndpointConfiguration)
+    testImplementation(projects.chassisExampleWriteEndpointConfiguration)
     testImplementation(projects.chassisCorrelationCoreTestUtils)
     testImplementation(projects.chassisDddTestUtils)
     testImplementation(projects.chassisCoreTestUtils)
     testImplementation(projects.chassisTestUtils)
 
-    testImplementation(projects.chassisExampleServiceWriteEndpointAdaptersDrivenEventSourced) // TODO remove and replace with a mock?
+    testImplementation(projects.chassisExampleWriteEndpointAdaptersDrivenEventSourced) // TODO remove and replace with a mock?
 }

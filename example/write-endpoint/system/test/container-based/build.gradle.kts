@@ -17,14 +17,14 @@ fun DependencyHandlerScope.containerBasedSystemTestImplementation(dependency: An
 }
 
 dependencies {
-    containerBasedSystemTestImplementation(projects.chassisExampleServiceWriteEndpointConfiguration)
-    containerBasedSystemTestImplementation(projects.chassisExampleServiceWriteEndpointSystemTestSpecification)
+    containerBasedSystemTestImplementation(projects.chassisExampleWriteEndpointConfiguration)
+    containerBasedSystemTestImplementation(projects.chassisExampleWriteEndpointSystemTestSpecification)
     containerBasedSystemTestImplementation(projects.chassisTestContainersUtils)
     containerBasedSystemTestImplementation(projects.chassisCoreTestUtils)
 }
 
 val containerBasedSystemTestTask: TaskProvider<Task> = tasks.named("containerBasedSystemTest") {
-    dependsOn(":${projects.chassisExampleServiceWriteEndpointStarter.name}:jibDockerBuild")
+    dependsOn(":${projects.chassisExampleWriteEndpointStarter.name}:jibDockerBuild")
 }
 
 tasks.named("check") {

@@ -3,5 +3,5 @@ dependencies {
     api(projects.chassisCoreDomain)
     api(projects.chassisDddDomain)
 
-    testImplementation(projects.chassisExampleServiceWriteEndpointConfiguration)
+    testImplementation(projects.chassisExampleWriteEndpointConfiguration)
 }

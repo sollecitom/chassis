@@ -16,9 +16,9 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.chassisExampleServiceWriteEndpointAdaptersDrivingWeb)
-    implementation(projects.chassisExampleServiceWriteEndpointAdaptersDrivenEventSourced)
-    implementation(projects.chassisExampleServiceWriteEndpointConfiguration)
+    implementation(projects.chassisExampleWriteEndpointAdaptersDrivingWeb)
+    implementation(projects.chassisExampleWriteEndpointAdaptersDrivenEventSourced)
+    implementation(projects.chassisExampleWriteEndpointConfiguration)
     implementation(projects.chassisKotlinExtensions)
     implementation(projects.chassisWebServiceDomain)
     implementation(projects.chassisDddEventFrameworkMemory) // TODO swap this with the pulsar-based one
