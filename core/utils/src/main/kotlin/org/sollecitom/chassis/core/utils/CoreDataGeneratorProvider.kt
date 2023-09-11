@@ -36,4 +36,4 @@ internal class CoreDataGeneratorProvider(private val environment: Environment, i
     }
 }
 
-fun CoreDataGenerator.Companion.provider(environment: Environment = StandardEnvironment(), initialisedClock: Clock? = null, initialisedRandom: Random? = null): CoreDataGenerator = CoreDataGeneratorProvider(environment)
+fun CoreDataGenerator.Companion.provider(environment: Environment = StandardEnvironment(), initialisedClock: Clock? = null, initialisedRandom: Random? = null): CoreDataGenerator = CoreDataGeneratorProvider(environment, initialisedClock, initialisedRandom)

@@ -7,6 +7,7 @@ import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasSubmitted
 import kotlin.reflect.KClass
 
+// TODO move to a separate module? It'd allow to remove the dependency on the in-memory event-store from this module
 val UserEventQueryFactory: InMemoryEventStore.Query.Factory = EventQueryFactory
 
 internal object EventQueryFactory : InMemoryEventStore.Query.Factory {
