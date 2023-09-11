@@ -1,5 +1,6 @@
 val containerBasedServiceTest: SourceSet by sourceSets.creating
 
+// TODO create a custom task instead https://docs.gradle.org/current/userguide/custom_tasks.html
 val integrationTestTask = tasks.register<Test>("containerBasedServiceTest") {
     description = "Runs container-based service tests."
     group = "verification"
