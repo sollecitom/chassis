@@ -8,7 +8,7 @@ import org.sollecitom.chassis.ddd.domain.EventStore
 import org.sollecitom.chassis.ddd.domain.filterIsForEntityId
 import kotlin.reflect.KClass
 
-class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory.WithoutCustomQueries) : EventStore.Mutable<Event> {
+class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory.WithoutCustomQueries) : EventStore.Mutable {
 
     private val historical = mutableListOf<Event>()
 
@@ -21,9 +21,9 @@ class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory
 
     override suspend fun <E : Event> firstOrNull(query: EventStore.Query<E>) = all(query).firstOrNull()
 
-    fun forEntityId(entityId: Id): EventStore.Mutable<EntityEvent> = EntitySpecific(entityId)
+    override fun forEntityId(entityId: Id): EventStore.EntitySpecific.Mutable = EntitySpecific(entityId)
 
-    private inner class EntitySpecific(private val entityId: Id) : EventStore.Mutable<EntityEvent> {
+    private inner class EntitySpecific(override val entityId: Id) : EventStore.EntitySpecific.Mutable {
 
         override suspend fun store(event: EntityEvent) {
 

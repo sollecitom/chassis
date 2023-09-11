@@ -7,7 +7,8 @@ import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
 import org.sollecitom.chassis.ddd.event.stream.memory.InMemoryEventStream
 import kotlin.time.Duration.Companion.seconds
 
-class InMemoryEvents private constructor(private val stream: InMemoryEventStream, private val store: InMemoryEventStore, private val scope: CoroutineScope) : Events.Mutable, EventStream.Mutable<Event> by stream, EventStore.Mutable<Event> by store {
+// TODO rename to InMemoryEventFramework
+class InMemoryEvents private constructor(private val stream: InMemoryEventStream, private val store: InMemoryEventStore, private val scope: CoroutineScope) : Events.Mutable, EventStream.Mutable by stream, EventStore.Mutable by store {
 
     constructor(queryFactory: InMemoryEventStore.Query.Factory = InMemoryEventStore.Query.Factory.WithoutCustomQueries, scope: CoroutineScope = CoroutineScope(Job())) : this(stream = InMemoryEventStream(), store = InMemoryEventStore(queryFactory = queryFactory), scope = scope)
 
@@ -21,9 +22,9 @@ class InMemoryEvents private constructor(private val stream: InMemoryEventStream
         Unit
     }
 
-    override fun forEntityId(entityId: Id): EntitySpecificEvents.Mutable = EntitySpecific(entityId, stream, store, scope)
+    override fun forEntityId(entityId: Id): Events.EntitySpecific.Mutable = EntitySpecific(entityId, stream, store, scope)
 
-    private class EntitySpecific private constructor(override val entityId: Id, private val stream: EventStream.Mutable<EntityEvent>, private val store: EventStore.Mutable<EntityEvent>, private val scope: CoroutineScope) : EntitySpecificEvents.Mutable, EventStream.Mutable<EntityEvent> by stream, EventStore.Mutable<EntityEvent> by store {
+    private class EntitySpecific private constructor(override val entityId: Id, private val stream: EventStream.EntitySpecific.Mutable, private val store: EventStore.EntitySpecific.Mutable, private val scope: CoroutineScope) : Events.EntitySpecific.Mutable, EventStream.EntitySpecific.Mutable by stream, EventStore.EntitySpecific.Mutable by store {
 
         constructor(entityId: Id, stream: InMemoryEventStream, store: InMemoryEventStore, scope: CoroutineScope) : this(entityId, stream.forEntityId(entityId), store.forEntityId(entityId), scope)
 

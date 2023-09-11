@@ -8,9 +8,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
-import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
-import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStream
 import org.sollecitom.chassis.ddd.test.stubs.testEntityEvent
@@ -24,8 +22,7 @@ import kotlin.time.Duration.Companion.seconds
 interface EventStreamTestSpecification : CoreDataGenerator {
 
     val timeout: Duration get() = 10.seconds
-    fun eventStream(): EventStream.Mutable<Event>
-    fun EventStream.Mutable<Event>.forEntityId(entityId: Id): EventStream.Mutable<EntityEvent>
+    fun eventStream(): EventStream.Mutable
 
     @Test
     fun `subscribing to the stream of events`() = runTest(timeout = timeout) {

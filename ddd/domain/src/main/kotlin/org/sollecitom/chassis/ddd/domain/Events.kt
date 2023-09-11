@@ -2,13 +2,21 @@ package org.sollecitom.chassis.ddd.domain
 
 import org.sollecitom.chassis.core.domain.identity.Id
 
-interface Events : EventStream<Event>, EventStore<Event> {
+// TODO rename to EventFramework
+interface Events : EventStream, EventStore {
 
-    fun forEntityId(entityId: Id): EntitySpecificEvents
+    override fun forEntityId(entityId: Id): EntitySpecific
 
-    interface Mutable : Events, EventStream.Mutable<Event>, EventStore.Mutable<Event> {
+    interface Mutable : Events, EventStream.Mutable, EventStore.Mutable {
 
-        override fun forEntityId(entityId: Id): EntitySpecificEvents.Mutable
+        override fun forEntityId(entityId: Id): EntitySpecific.Mutable
+    }
+
+    interface EntitySpecific : EventStream.EntitySpecific, EventStore.EntitySpecific {
+
+        override val entityId: Id
+
+        interface Mutable : EntitySpecific, EventStream.EntitySpecific.Mutable, EventStore.EntitySpecific.Mutable
     }
 
     companion object

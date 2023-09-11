@@ -8,7 +8,7 @@ import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.EventStream
 import org.sollecitom.chassis.ddd.domain.filterIsForEntityId
 
-class InMemoryEventStream : EventStream.Mutable<Event> {
+class InMemoryEventStream : EventStream.Mutable {
 
     private val _events = MutableSharedFlow<Event>()
 
@@ -16,9 +16,9 @@ class InMemoryEventStream : EventStream.Mutable<Event> {
 
     override val asFlow: Flow<Event> get() = _events
 
-    fun forEntityId(entityId: Id): EventStream.Mutable<EntityEvent> = EntitySpecific(entityId)
+    override fun forEntityId(entityId: Id): EventStream.EntitySpecific.Mutable = EntitySpecific(entityId)
 
-    private inner class EntitySpecific(private val entityId: Id) : EventStream.Mutable<EntityEvent> {
+    private inner class EntitySpecific(override val entityId: Id) : EventStream.EntitySpecific.Mutable {
 
         override suspend fun publish(event: EntityEvent) {
 

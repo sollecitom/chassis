@@ -10,7 +10,7 @@ import org.sollecitom.chassis.example.service.endpoint.write.domain.user.User
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.service.endpoint.write.domain.user.UserRepository
 
-class EventSourcedUserRepository(private val events: EventStream.Mutable<Event>, private val historicalEvents: EventStore<Event>, private val coreDataGenerators: CoreDataGenerator) : UserRepository, CoreDataGenerator by coreDataGenerators {
+class EventSourcedUserRepository(private val events: EventStream.Mutable, private val historicalEvents: EventStore, private val coreDataGenerators: CoreDataGenerator) : UserRepository, CoreDataGenerator by coreDataGenerators {
 
     override suspend fun withEmailAddress(emailAddress: EmailAddress) = eventSourcedUser(emailAddress)
 
@@ -22,7 +22,7 @@ class EventSourcedUserRepository(private val events: EventStream.Mutable<Event>,
         }
     }
 
-    private suspend fun EventStore<Event>.previousRegistrationEvent(emailAddress: EmailAddress) = firstOrNull(query = ServiceEventQuery.UserRegistrationWithEmailAddress(emailAddress))
+    private suspend fun EventStore.previousRegistrationEvent(emailAddress: EmailAddress) = firstOrNull(query = ServiceEventQuery.UserRegistrationWithEmailAddress(emailAddress))
 
     companion object
 }

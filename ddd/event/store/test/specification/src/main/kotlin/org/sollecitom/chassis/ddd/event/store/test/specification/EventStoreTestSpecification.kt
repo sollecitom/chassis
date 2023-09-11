@@ -17,8 +17,7 @@ import kotlin.time.Duration.Companion.seconds
 interface EventStoreTestSpecification : CoreDataGenerator {
 
     val timeout: Duration get() = 10.seconds
-    fun historicalEvents(): EventStore.Mutable<Event>
-    fun EventStore.Mutable<Event>.forEntityId(entityId: Id): EventStore.Mutable<EntityEvent>
+    fun historicalEvents(): EventStore.Mutable
 
     @Test
     fun `consuming the history`() = runTest(timeout = timeout) {
