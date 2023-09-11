@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.ddd.events.test.specification
+package org.sollecitom.chassis.ddd.test.stubs
 
 import kotlinx.datetime.Instant
 import org.sollecitom.chassis.core.domain.identity.Id
@@ -6,7 +6,7 @@ import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.ddd.domain.Event
 
-internal data class TestEvent(override val id: Id, override val timestamp: Instant) : Event {
+data class TestEvent(override val id: Id, override val timestamp: Instant) : Event {
 
     override val type: Event.Type get() = Type
 
