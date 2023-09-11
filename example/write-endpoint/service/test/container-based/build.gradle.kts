@@ -1,29 +1,29 @@
-val containerBasedSystemTest: SourceSet by sourceSets.creating
+val containerBasedServiceTest: SourceSet by sourceSets.creating
 
-val integrationTestTask = tasks.register<Test>("containerBasedSystemTest") {
-    description = "Runs container-based system tests."
+val integrationTestTask = tasks.register<Test>("containerBasedServiceTest") {
+    description = "Runs container-based service tests."
     group = "verification"
     useJUnitPlatform()
 
-    testClassesDirs = containerBasedSystemTest.output.classesDirs
-    classpath = configurations[containerBasedSystemTest.runtimeClasspathConfigurationName] + containerBasedSystemTest.output
+    testClassesDirs = containerBasedServiceTest.output.classesDirs
+    classpath = configurations[containerBasedServiceTest.runtimeClasspathConfigurationName] + containerBasedServiceTest.output
 
     shouldRunAfter(tasks.test)
 }
 
-fun DependencyHandlerScope.containerBasedSystemTestImplementation(dependency: Any) {
+fun DependencyHandlerScope.containerBasedServiceTestImplementation(dependency: Any) {
 
-    "containerBasedSystemTestImplementation"(dependency)
+    "containerBasedServiceTestImplementation"(dependency)
 }
 
 dependencies {
-    containerBasedSystemTestImplementation(projects.chassisExampleWriteEndpointConfiguration)
-    containerBasedSystemTestImplementation(projects.chassisExampleWriteEndpointServiceTestSpecification)
-    containerBasedSystemTestImplementation(projects.chassisTestContainersUtils)
-    containerBasedSystemTestImplementation(projects.chassisCoreTestUtils)
+    containerBasedServiceTestImplementation(projects.chassisExampleWriteEndpointConfiguration)
+    containerBasedServiceTestImplementation(projects.chassisExampleWriteEndpointServiceTestSpecification)
+    containerBasedServiceTestImplementation(projects.chassisTestContainersUtils)
+    containerBasedServiceTestImplementation(projects.chassisCoreTestUtils)
 }
 
-val containerBasedSystemTestTask: TaskProvider<Task> = tasks.named("containerBasedSystemTest") {
+val containerBasedSystemTestTask: TaskProvider<Task> = tasks.named("containerBasedServiceTest") {
     dependsOn(":${projects.chassisExampleWriteEndpointServiceStarter.name}:jibDockerBuild")
 }
 

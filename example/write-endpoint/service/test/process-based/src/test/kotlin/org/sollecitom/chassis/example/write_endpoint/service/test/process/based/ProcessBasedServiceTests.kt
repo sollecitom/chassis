@@ -11,13 +11,13 @@ import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.example.write_endpoint.configuration.configureLogging
 import org.sollecitom.chassis.example.write_endpoint.service.starter.Service
-import org.sollecitom.chassis.example.write_endpoint.service.test.specification.SystemTestSpecification
+import org.sollecitom.chassis.example.write_endpoint.service.test.specification.ServiceTestSpecification
 import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.LoggingLevel
 
 @TestInstance(PER_CLASS)
-private class ProcessSystemTests : SystemTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
+private class ProcessBasedServiceTests : ServiceTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
 
     init {
         configureLogging(defaultMinimumLoggingLevel = LoggingLevel.DEBUG)

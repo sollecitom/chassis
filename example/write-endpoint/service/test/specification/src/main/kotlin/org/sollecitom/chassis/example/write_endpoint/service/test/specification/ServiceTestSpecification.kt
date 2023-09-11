@@ -22,7 +22,7 @@ import org.sollecitom.chassis.web.api.utils.headers.of
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-interface SystemTestSpecification : CoreDataGenerator, MonitoringEndpointsTestSpecification {
+interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestSpecification {
 
     override val timeout: Duration get() = 30.seconds
 
