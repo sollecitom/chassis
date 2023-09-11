@@ -11,18 +11,18 @@ A set of modular libraries that can be used by multiple projects.
 
 ```
 
-### Build the whole projects, including all submodule specific tasks e.g. container-based system tests
+### Build the whole projects, including all submodule specific tasks e.g. container-based service tests
 
 #### With cache
 
 ```bash
-./gradlew check
+./gradlew build containerBasedServiceTest
 ```
 
 #### Without cache
 
 ```bash
-./gradlew clean check --rerun-tasks
+./gradlew clean build containerBasedServiceTest --rerun-tasks
 ```
 
 ### Publish the artefacts to Maven local

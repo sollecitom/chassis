@@ -114,3 +114,5 @@ tasks.withType<DependencyUpdatesTask> {
 versionCatalogUpdate {
     sortByKey.set(false)
 }
+
+val containerBasedServiceTest: Task = tasks.register("containerBasedServiceTest").get()

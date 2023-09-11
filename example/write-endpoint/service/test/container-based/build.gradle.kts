@@ -1,7 +1,6 @@
 val containerBasedServiceTest: SourceSet by sourceSets.creating
 
-// TODO create a custom task instead https://docs.gradle.org/current/userguide/custom_tasks.html
-val integrationTestTask = tasks.register<Test>("containerBasedServiceTest") {
+val containerBasedServiceTestTask = tasks.register<Test>("containerBasedServiceTest") {
     description = "Runs container-based service tests."
     group = "verification"
     useJUnitPlatform()
@@ -26,8 +25,4 @@ dependencies {
 
 val containerBasedSystemTestTask: TaskProvider<Task> = tasks.named("containerBasedServiceTest") {
     dependsOn(":${projects.chassisExampleWriteEndpointServiceStarter.name}:jibDockerBuild")
-}
-
-tasks.named("check") {
-    dependsOn(containerBasedSystemTestTask)
 }

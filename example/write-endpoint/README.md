@@ -7,7 +7,7 @@ An example write endpoint service. The test strategy follows the approach mentio
 ### Run the container-based system tests
 
 ```bash
-./gradlew build :chassis-example-service-write-endpoint-service-test-container-based:containerBasedSystemTest
+./gradlew build :chassis-example-write-endpoint-service-test-container-based:containerBasedServiceTest
  
 
 ```
@@ -15,7 +15,7 @@ An example write endpoint service. The test strategy follows the approach mentio
 ### Build the Docker image
 
 ```bash
-./gradlew build :chassis-example-service-write-endpoint-starter:jibDockerBuild
+./gradlew build :chassis-example-write-endpoint-service-starter:jibDockerBuild
  
 
 ```
