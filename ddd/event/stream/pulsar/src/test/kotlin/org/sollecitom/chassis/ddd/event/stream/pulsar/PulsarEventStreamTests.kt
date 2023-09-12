@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.ddd.event.stream.pulsar
+//package org.sollecitom.chassis.ddd.event.stream.pulsar
 //
 //import assertk.assertThat
 //import assertk.assertions.isEqualTo
@@ -15,8 +15,8 @@ package org.sollecitom.chassis.ddd.event.stream.pulsar
 //import org.junit.jupiter.api.Test
 //import org.junit.jupiter.api.TestInstance
 //import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-//import org.sollecitom.chassis.avro.serialization.utils.RecordSerde
 //import org.sollecitom.chassis.core.domain.identity.Id
+//import org.sollecitom.chassis.core.domain.identity.StringId
 //import org.sollecitom.chassis.core.domain.lifecycle.Startable
 //import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 //import org.sollecitom.chassis.core.domain.naming.Name
@@ -26,8 +26,9 @@ package org.sollecitom.chassis.ddd.event.stream.pulsar
 //import org.sollecitom.chassis.ddd.domain.stream.EventStream
 //import org.sollecitom.chassis.ddd.event.stream.test.specification.EventStreamTestSpecification
 //import org.sollecitom.chassis.ddd.logging.utils.log
+//import org.sollecitom.chassis.json.utils.serde.JsonSerde
 //import org.sollecitom.chassis.logger.core.loggable.Loggable
-//import org.sollecitom.chassis.pulsar.avro.serialization.pulsarAvroSchema
+//import org.sollecitom.chassis.pulsar.json.serialization.pulsarAvroSchema
 //import org.sollecitom.chassis.pulsar.test.utils.admin
 //import org.sollecitom.chassis.pulsar.test.utils.client
 //import org.sollecitom.chassis.pulsar.test.utils.create
@@ -43,8 +44,11 @@ package org.sollecitom.chassis.ddd.event.stream.pulsar
 //    private val pulsarClient by lazy { pulsar.client() }
 //    private val pulsarAdmin by lazy { pulsar.admin() }
 //    private val topic = PulsarTopic.create()
+//    private val streamName = "test-pulsar-event-stream".let(::Name)
+//    private val instanceId = StringId("1")
+//    private val eventSerde: JsonSerde.SchemaAware<Event> = eventSerde()
 //
-//    override fun eventStream() = EventStream.Mutable.pulsar(topic, pulsarClient)
+//    override fun eventStream() = EventStream.Mutable.pulsar(topic, streamName, instanceId, pulsarClient, eventSerde)
 //
 //    @BeforeAll
 //    fun beforeAll() {
@@ -76,6 +80,10 @@ package org.sollecitom.chassis.ddd.event.stream.pulsar
 //        assertThat(message.key).isEqualTo(key)
 //        assertThat(message.value).isEqualTo(value)
 //    }
+//
+//    private fun eventSerde(): JsonSerde.SchemaAware<Event> {
+//        // TODO need to cover TestEvent and EntitySpecificTestEvent
+//    }
 //}
 //
 //suspend fun TypedMessageBuilder<*>.produce(): MessageIdAdv = sendAsync().await() as MessageIdAdv
@@ -92,11 +100,11 @@ package org.sollecitom.chassis.ddd.event.stream.pulsar
 //
 //val Message<*>.id: MessageIdAdv get() = messageId as MessageIdAdv
 //
-//fun EventStream.Mutable.Companion.pulsar(topic: PulsarTopic, pulsar: PulsarClient): EventStream.Mutable = PulsarEventStream(topic, pulsar)
+//// TODO pass the additional extension hooks
+//fun EventStream.Mutable.Companion.pulsar(topic: PulsarTopic, name: Name, instanceId: Id, pulsar: PulsarClient, eventSerde: JsonSerde.SchemaAware<Event>): EventStream.Mutable = PulsarEventStream(topic, name, instanceId, eventSerde, pulsar)
 //
-//class PulsarPublisher<VALUE>(private val topic: PulsarTopic, private val serde: RecordSerde<VALUE>, private val producerName: String, private val pulsar: PulsarClient, private val customizeProducer: ProducerBuilder<VALUE>.() -> Unit = {}) : Startable, Stoppable {
+//class PulsarPublisher<VALUE : Any>(private val topic: PulsarTopic, private val schema: Schema<VALUE>, private val producerName: String, private val pulsar: PulsarClient, private val customizeProducer: ProducerBuilder<VALUE>.() -> Unit = {}) : Startable, Stoppable {
 //
-//    private val schema = serde.pulsarAvroSchema()
 //    private lateinit var producer: Producer<VALUE>
 //
 //    // TODO change this to be a Message.Id from messaging domain
@@ -110,22 +118,41 @@ package org.sollecitom.chassis.ddd.event.stream.pulsar
 //        producer = createProducer()
 //    }
 //
+//    override suspend fun stop() = producer.close()
+//
 //    private val VALUE.messageKey: String get() = "key" // TODO implement
 //    private val VALUE.messageProperties: Map<String, String> get() = emptyMap() // TODO implement
-//
-//    override suspend fun stop() = producer.close()
 //
 //    private fun createProducer(): Producer<VALUE> = pulsar.newProducer(schema).topic(topic.fullName.value).producerName(producerName).also(customizeProducer).create()
 //}
 //
-//class PulsarEventStream(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSerde: RecordSerde<Event>, private val pulsar: PulsarClient, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}) : EventStream.Mutable, Startable, Stoppable {
+//class PulsarSubscriber<VALUE : Any>(private val topics: Set<PulsarTopic>, private val schema: Schema<VALUE>, private val consumerName: String, private val subscriptionName: String, private val pulsar: PulsarClient, private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeConsumer: ConsumerBuilder<VALUE>.() -> Unit = {}) : Startable, Stoppable {
+//
+//    private lateinit var consumer: Consumer<VALUE>
+//
+//    val messages: Flow<Message<VALUE>> by lazy { consumer.messages }
+//
+//    override suspend fun start() {
+//
+//        consumer = createConsumer()
+//    }
+//
+//    override suspend fun stop() = consumer.close()
+//
+//    private fun createConsumer(): Consumer<VALUE> {
+//
+//        return pulsar.newConsumer(schema).topics(topics.map { it.fullName.value }).consumerName(consumerName).subscriptionName(subscriptionName).subscriptionType(subscriptionType).also(customizeConsumer).subscribe()
+//    }
+//}
+//
+//class PulsarEventStream(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSerde: JsonSerde.SchemaAware<Event>, private val pulsar: PulsarClient, private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}) : EventStream.Mutable, Startable, Stoppable {
 //
 //    private val producerName = "${streamName.value}-producer"
 //    private val subscriptionName = "${streamName.value}-subscription"
 //    private val consumerName = "${streamName.value}-consumer-${instanceId.stringValue}"
 //    private val eventSchema: Schema<Event> = eventSerde.pulsarAvroSchema()
-//    private val publisher = PulsarPublisher(topic, eventSerde, producerName, pulsar, customizeProducer)
-//    private lateinit var consumer: Consumer<Event>
+//    private val publisher = PulsarPublisher(topic, eventSchema, producerName, pulsar, customizeProducer)
+//    private val subscriber = PulsarSubscriber(setOf(topic), eventSchema, consumerName, subscriptionName, pulsar, subscriptionType, customizeConsumer)
 //
 //    override suspend fun publish(event: Event) {
 //
@@ -134,20 +161,16 @@ package org.sollecitom.chassis.ddd.event.stream.pulsar
 //    }
 //
 //    // TODO here you want to adapt these to messages instead (how to deal with the acknowledgement? perhaps separate stream publish and stream subscribe
-//    override val asFlow: Flow<Event> get() = consumer.messages.map { it.value }
+//    override val asFlow: Flow<Event> get() = subscriber.messages.map { it.value }
 //
 //    override suspend fun start() {
-//        consumer = consumer(topic)
+//        subscriber.start()
+//        publisher.start()
 //    }
 //
 //    override suspend fun stop() {
-//        consumer.close()
 //        publisher.stop()
-//    }
-//
-//    private fun consumer(topic: PulsarTopic): Consumer<Event> {
-//
-//        return pulsar.newConsumer(eventSchema).topic(topic.fullName.value).consumerName(consumerName).subscriptionName(subscriptionName).also(customizeConsumer).subscribe()
+//        subscriber.stop()
 //    }
 //
 //    companion object : Loggable()

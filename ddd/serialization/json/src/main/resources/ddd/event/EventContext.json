@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "invocation"
+  ],
+  "properties": {
+    "invocation": {
+      "$ref": "/correlation/context/InvocationContext.json"
+    },
+    "parent": {
+      "$ref": "/ddd/event/EventReference.json"
+    },
+    "originating": {
+      "$ref": "/ddd/event/EventReference.json"
+    }
+  }
+}
