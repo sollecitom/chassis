@@ -17,6 +17,7 @@ test-containers = "1.19.0"
 swagger-parser = "2.1.16"
 atlassian-swagger-request-validator = "2.36.0"
 pulsar = "3.1.0"
+avro = "1.11.2"
 # plugins
 palantir-git-plugin = "3.0.0"
 version-catalog-report-plugin = "0.47.0"
@@ -58,6 +59,7 @@ test-containers-pulsar = { module = "org.testcontainers:pulsar", version.ref = "
 swagger-parser = { module = "io.swagger.parser.v3:swagger-parser-v3", version.ref = "swagger-parser" }
 swagger-request-validator = { module = "com.atlassian.oai:swagger-request-validator-core", version.ref = "atlassian-swagger-request-validator" }
 pulsarClientAdmin = { module = "org.apache.pulsar:pulsar-client-admin", version.ref = "pulsar" }
+apache-avro-core = { module = "org.apache.avro:avro", version.ref = "avro" }
 
 [plugins]
 com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "version-catalog-report-plugin" }

@@ -1,0 +1,21 @@
+package org.sollecitom.chassis.pulsar.avro.serialization
+
+import org.apache.pulsar.client.api.Schema
+import org.apache.pulsar.client.api.schema.SchemaDefinition
+import org.apache.pulsar.client.impl.schema.AvroSchema
+import org.sollecitom.chassis.avro.serialization.utils.RecordSerde
+
+fun <VALUE> RecordSerde<VALUE>.pulsarAvroSchema(): AvroSchema<VALUE> = PulsarSchemas.forSerde(this)
+
+private object PulsarSchemas {
+
+    fun <VALUE> forSerde(serde: RecordSerde<VALUE>): AvroSchema<VALUE> = createSchema(serde)
+
+    private fun <VALUE> createSchema(serde: RecordSerde<VALUE>): AvroSchema<VALUE> {
+
+        val writer = AvroWriter(serde)
+        val reader = AvroReader(serde)
+        val definition = SchemaDefinition.builder<VALUE>().withSchemaWriter(writer).withSchemaReader(reader).withJsonDef(serde.schema.toString()).build()
+        return Schema.AVRO(definition) as AvroSchema<VALUE>
+    }
+}

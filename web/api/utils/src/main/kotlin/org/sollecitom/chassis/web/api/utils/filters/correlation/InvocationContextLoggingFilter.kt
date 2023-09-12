@@ -17,19 +17,19 @@ internal class InvocationContextLoggingFilter : Filter {
 
         val context = InvocationContextFilter.key.optional(request)
         if (context != null) {
-//            withContext(Dispatchers.VirtualThreads) {
             runBlocking {
                 withCoroutineLoggingContext(context.toLoggingContext()) {
                     next(request)
                 }
             }
-//            }
         } else {
             next(request)
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun InvocationContext<*>.toLoggingContext(): Map<String, String?> {
+
         val json = JSONObject().apply {
             put("invocation", InvocationContext.jsonSerde.serialize(this@toLoggingContext).toString())
         }

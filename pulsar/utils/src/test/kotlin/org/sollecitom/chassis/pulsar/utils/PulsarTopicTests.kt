@@ -8,6 +8,7 @@ import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 
@@ -17,13 +18,13 @@ private class PulsarTopicTests : CoreDataGenerator by CoreDataGenerator.testProv
     @Test
     fun `parsing a persistent topic`() {
 
-        val protocol = "persistent"
-        val tenant = "a-tenant"
-        val namespace = "a-namespace"
-        val name = "a-name"
+        val protocol = "persistent".let(::Name)
+        val tenant = "a-tenant".let(::Name)
+        val namespace = "a-namespace".let(::Name)
+        val name = "a-name".let(::Name)
         val fullName = PulsarTopic.fullRawName(protocol, tenant, namespace, name)
 
-        val topic = PulsarTopic.parse(fullName)
+        val topic = PulsarTopic.parse(fullName.value)
 
         assertThat(topic.persistent).isTrue()
         assertThat(topic).isInstanceOf<PulsarTopic.Persistent>()
@@ -37,13 +38,13 @@ private class PulsarTopicTests : CoreDataGenerator by CoreDataGenerator.testProv
     @Test
     fun `parsing a non-persistent topic`() {
 
-        val protocol = "non-persistent"
-        val tenant = "another-tenant"
-        val namespace = "another-namespace"
-        val name = "another-name"
+        val protocol = "non-persistent".let(::Name)
+        val tenant = "another-tenant".let(::Name)
+        val namespace = "another-namespace".let(::Name)
+        val name = "another-name".let(::Name)
         val fullName = PulsarTopic.fullRawName(protocol, tenant, namespace, name)
 
-        val topic = PulsarTopic.parse(fullName)
+        val topic = PulsarTopic.parse(fullName.value)
 
         assertThat(topic.persistent).isFalse()
         assertThat(topic).isInstanceOf<PulsarTopic.NonPersistent>()

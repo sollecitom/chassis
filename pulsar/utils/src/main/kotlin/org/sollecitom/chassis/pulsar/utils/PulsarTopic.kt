@@ -1,28 +1,29 @@
 package org.sollecitom.chassis.pulsar.utils
 
+import org.sollecitom.chassis.core.domain.naming.Name
 import java.util.regex.Pattern
 
 // TODO protocol, tenant, and namespace might be skipped - fix this
-sealed class PulsarTopic(val persistent: Boolean, val tenant: String?, val namespace: String?, val name: String) {
+sealed class PulsarTopic(val persistent: Boolean, val tenant: Name?, val namespace: Name?, val name: Name) {
 
-    val protocol: String get() = if (persistent) Persistent.PROTOCOL else NonPersistent.PROTOCOL
-    val fullName: String get() = fullRawName(protocol, tenant, namespace, name)
+    val protocol: Name get() = if (persistent) Persistent.protocol else NonPersistent.protocol
+    val fullName: Name = fullRawName(protocol, tenant, namespace, name)
 
-    class Persistent(tenant: String, namespace: String, name: String) : PulsarTopic(true, tenant, namespace, name) {
+    class Persistent(tenant: Name?, namespace: Name?, name: Name) : PulsarTopic(true, tenant, namespace, name) {
 
         override fun toString() = "PulsarTopic.Persistent(tenant='$tenant', namespace='$namespace', name='$name')"
 
         companion object {
-            const val PROTOCOL = "persistent"
+            val protocol = "persistent".let(::Name)
         }
     }
 
-    class NonPersistent(tenant: String, namespace: String, name: String) : PulsarTopic(false, tenant, namespace, name) {
+    class NonPersistent(tenant: Name?, namespace: Name?, name: Name) : PulsarTopic(false, tenant, namespace, name) {
 
         override fun toString() = "PulsarTopic.NonPersistent(tenant='$tenant', namespace='$namespace', name='$name')"
 
         companion object {
-            const val PROTOCOL = "non-persistent"
+            val protocol = "non-persistent".let(::Name)
         }
     }
 
@@ -62,28 +63,33 @@ sealed class PulsarTopic(val persistent: Boolean, val tenant: String?, val names
             if (!matcher.find()) {
                 error("Pulsar topic format '$rawTopic' does not match the expected pattern $PATTERN")
             }
-            val protocol = matcher.group(1)
-            val tenant = matcher.group(2)
-            val namespace = matcher.group(3)
-            val topicName = matcher.group(4)
-            return create(protocol, tenant, namespace, topicName)
+            val protocol = matcher.group(1)?.let(::Name) ?: Persistent.protocol
+            val tenant = matcher.group(2)?.let(::Name)
+            val namespace = matcher.group(3)?.let(::Name)
+            val topicName = matcher.group(4).let(::Name)
+            return of(protocol, tenant, namespace, topicName)
         }
 
-        fun create(protocol: String, tenant: String, namespace: String, name: String): PulsarTopic = when (protocol) {
-            Persistent.PROTOCOL -> persistent(tenant, namespace, name)
-            NonPersistent.PROTOCOL -> nonPersistent(tenant, namespace, name)
-            else -> error("Unknown topic protocol $protocol")
+        fun of(protocol: Name, tenant: Name?, namespace: Name?, name: Name): PulsarTopic = when (protocol) {
+            Persistent.protocol -> of(true, tenant, namespace, name)
+            NonPersistent.protocol -> of(false, tenant, namespace, name)
+            else -> error("Unknown topic protocol ${protocol.value}")
         }
 
-        fun fullRawName(protocol: String, tenant: String?, namespace: String?, name: String): String = buildString {
-            append(protocol).append("://")
-            tenant?.let { append(tenant).append("/") }
-            namespace?.let { append(namespace).append("/") }
-            append(name)
+        fun of(protocol: Boolean, tenant: Name?, namespace: Name?, name: Name): PulsarTopic = when (protocol) {
+            true -> persistent(tenant, namespace, name)
+            false -> nonPersistent(tenant, namespace, name)
         }
 
-        fun persistent(tenant: String, namespace: String, name: String): PulsarTopic = Persistent(tenant, namespace, name)
+        fun fullRawName(protocol: Name, tenant: Name?, namespace: Name?, name: Name): Name = buildString {
+            append(protocol.value).append("://")
+            tenant?.let { append(tenant.value).append("/") }
+            namespace?.let { append(namespace.value).append("/") }
+            append(name.value)
+        }.let(::Name)
 
-        fun nonPersistent(tenant: String, namespace: String, name: String): PulsarTopic = NonPersistent(tenant, namespace, name)
+        fun persistent(tenant: Name?, namespace: Name?, name: Name): PulsarTopic = Persistent(tenant, namespace, name)
+
+        fun nonPersistent(tenant: Name?, namespace: Name?, name: Name): PulsarTopic = NonPersistent(tenant, namespace, name)
     }
 }

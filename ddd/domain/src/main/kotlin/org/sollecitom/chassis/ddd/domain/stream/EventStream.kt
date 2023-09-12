@@ -15,7 +15,7 @@ interface EventStream {
 
         suspend fun publish(event: Event)
 
-        override fun forEntityId(entityId: Id): EntitySpecific.Mutable
+        override fun forEntityId(entityId: Id): EntitySpecific.Mutable = FilteredViewEventStream(entityId, this)
 
         companion object
     }

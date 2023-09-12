@@ -39,4 +39,3 @@ context(InvocationContext<*>)
 fun Event.forkContext(): Event.Context = forkContext(invocation = this@InvocationContext.trace.invocation)
 
 fun InvocationContext<*>.toEventContext(parentEvent: Event.Reference? = null, originatingEvent: Event.Reference? = null): Event.Context = Event.Context(this, parentEvent, originatingEvent)
-
