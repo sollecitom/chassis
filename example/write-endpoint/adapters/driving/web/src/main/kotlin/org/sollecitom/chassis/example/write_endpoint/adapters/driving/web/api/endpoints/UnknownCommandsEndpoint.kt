@@ -8,12 +8,12 @@ import org.http4k.lens.int
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
-import org.sollecitom.chassis.web.api.utils.endpoint.Endpoint
-import org.sollecitom.chassis.example.write_endpoint.application.GenericCommandType
+import org.sollecitom.chassis.ddd.domain.Happening
 import org.sollecitom.chassis.http4k.server.utils.toSuspending
 import org.sollecitom.chassis.http4k.utils.lens.composite
 import org.sollecitom.chassis.lens.core.extensions.naming.name
 import org.sollecitom.chassis.logger.core.loggable.Loggable
+import org.sollecitom.chassis.web.api.utils.endpoint.Endpoint
 
 internal class UnknownCommandsEndpoint : Endpoint {
 
@@ -37,6 +37,6 @@ internal class UnknownCommandsEndpoint : Endpoint {
         private const val COMMAND_TYPE_VERSION_PATH_PARAM = "command-type-version"
         private val commandTypeName = Path.name().of(COMMAND_TYPE_PATH_PARAM)
         private val commandTypeVersion = Path.int().map(::IntVersion, IntVersion::value).of(COMMAND_TYPE_VERSION_PATH_PARAM)
-        private val commandType = Path.composite("command-type") { GenericCommandType(commandTypeName(it), commandTypeVersion(it)) }
+        private val commandType = Path.composite("command-type") { Happening.Type(commandTypeName(it), commandTypeVersion(it)) }
     }
 }

@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.toggles
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.correlation.core.domain.toggles.DecimalToggleValue
@@ -15,7 +14,7 @@ internal object DecimalToggleValueJsonSerde : JsonSerde.SchemaAware<DecimalToggl
 
     const val TYPE_VALUE = "decimal"
     private const val SCHEMA_LOCATION = "correlation/toggles/DecimalToggleValue.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: DecimalToggleValue) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

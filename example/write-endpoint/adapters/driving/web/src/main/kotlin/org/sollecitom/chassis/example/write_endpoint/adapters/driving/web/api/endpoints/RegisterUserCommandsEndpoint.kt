@@ -12,7 +12,7 @@ import org.http4k.routing.routes
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.logging.utils.log
-import org.sollecitom.chassis.ddd.domain.Command
+import org.sollecitom.chassis.ddd.domain.Happening
 import org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.serde.serde
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser
 import org.sollecitom.chassis.http4k.utils.lens.body
@@ -36,7 +36,7 @@ sealed class RegisterUserCommandsEndpoint {
         private fun acceptCommand() = path bind Method.POST toUnauthenticated { request ->
 
             logger.log { "Received command with type '$COMMAND_TYPE'" }
-            val command = Companion.command(request)
+            val command = command(request)
 
             val result = handle(command)
 
@@ -50,7 +50,7 @@ sealed class RegisterUserCommandsEndpoint {
 
         companion object : Loggable() {
 
-            private val COMMAND_TYPE: Command.Type = RegisterUser.V1.Type
+            private val COMMAND_TYPE: Happening.Type = RegisterUser.V1.type
 
             private val commandJson = Body.jsonObject().map(RegisterUser.V1.serde).toLens()
             private val negotiator = ContentNegotiation.auto(commandJson)

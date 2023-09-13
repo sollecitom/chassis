@@ -57,7 +57,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, CoreData
 
         val userId = newId.internal()
         val api = webApi { _ -> Accepted(user = UserWithPendingRegistration(userId)) }
-        val commandType = RegisterUser.V1.Type
+        val commandType = RegisterUser.V1.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated().withToggle(Toggles.InvocationVisibility, InvocationVisibility.HIGH)
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
@@ -75,7 +75,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, CoreData
 
         val existingUserId = newId.internal()
         val api = webApi { _ -> EmailAddressAlreadyInUse(userId = existingUserId) }
-        val commandType = RegisterUser.V1.Type
+        val commandType = RegisterUser.V1.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated()
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
@@ -91,7 +91,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, CoreData
     fun `attempting to submit a register user command with an invalid email address`() {
 
         val api = webApi()
-        val commandType = RegisterUser.V1.Type
+        val commandType = RegisterUser.V1.type
         val json = registerUserPayload("invalid")
         val invocationContext = InvocationContext.unauthenticated()
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
@@ -107,7 +107,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, CoreData
     fun `attempting to submit a register user command with an invalid content type`() {
 
         val api = webApi()
-        val commandType = RegisterUser.V1.Type
+        val commandType = RegisterUser.V1.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated()
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json.toString()).contentType(TEXT_PLAIN).contentLength(json.toString().length).withInvocationContext(invocationContext)
@@ -123,7 +123,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, CoreData
     fun `attempting to submit a register user command with an invalid version`() {
 
         val api = webApi()
-        val commandType = RegisterUser.V1.Type
+        val commandType = RegisterUser.V1.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated()
         val request = Request(Method.POST, path("commands/${commandType.name.value}/!")).body(json).withInvocationContext(invocationContext)
@@ -139,7 +139,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, CoreData
     fun `attempting to submit a command with a nonexistent type`() {
 
         val api = webApi()
-        val commandType = RegisterUser.V1.Type
+        val commandType = RegisterUser.V1.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated()
         val request = Request(Method.POST, path("commands/unknown/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)

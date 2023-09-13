@@ -10,5 +10,6 @@ dependencies {
 
     testImplementation(projects.chassisPulsarTestUtils)
     testImplementation(projects.chassisDddSerializationJson)
+    testImplementation(projects.chassisDddTestStubsSerializationJson)
     testImplementation(projects.chassisDddEventStreamTestSpecification)
 }

@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.access.authentication
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.CredentialsBasedAuthentication
@@ -13,7 +12,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 private object AuthenticationJsonSerde : JsonSerde.SchemaAware<Authentication> {
 
     private const val SCHEMA_LOCATION = "correlation/access/authentication/Authentication.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: Authentication) = when (value) {
         is CredentialsBasedAuthentication -> CredentialsBasedAuthentication.jsonSerde.serialize(value)

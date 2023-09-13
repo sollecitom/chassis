@@ -4,8 +4,8 @@ import kotlinx.coroutines.flow.*
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
-import org.sollecitom.chassis.ddd.domain.store.EventStore
 import org.sollecitom.chassis.ddd.domain.filterIsForEntityId
+import org.sollecitom.chassis.ddd.domain.store.EventStore
 import kotlin.reflect.KClass
 
 class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory.WithoutCustomQueries) : EventStore.Mutable {

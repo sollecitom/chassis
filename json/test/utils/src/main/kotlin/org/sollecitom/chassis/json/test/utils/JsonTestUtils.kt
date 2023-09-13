@@ -5,9 +5,8 @@ import assertk.assertions.containsAll
 import assertk.assertions.containsOnly
 import assertk.assertions.support.expected
 import assertk.assertions.support.show
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
-import org.sollecitom.chassis.json.utils.validate
+import org.sollecitom.chassis.json.utils.Schema
 import org.sollecitom.chassis.test.utils.assertions.containsSameEntriesAs
 
 fun Assert<JSONObject>.containsOnly(pair: Pair<String, Any>, vararg others: Pair<String, Any>) = given { actual ->

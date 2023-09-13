@@ -1,12 +1,10 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.access.actor
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.access.actor.ActorOnBehalf
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
 import org.sollecitom.chassis.correlation.core.serialization.json.access.authentication.jsonSerde
-import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
@@ -17,7 +15,7 @@ internal object ActorOnBehalfJsonSerde : JsonSerde.SchemaAware<ActorOnBehalf> {
 
     const val TYPE_VALUE = "on-behalf"
     private const val SCHEMA_LOCATION = "correlation/access/actor/ActorOnBehalf.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: ActorOnBehalf) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

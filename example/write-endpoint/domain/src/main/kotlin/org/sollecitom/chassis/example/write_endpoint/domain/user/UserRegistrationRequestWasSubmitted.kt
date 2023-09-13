@@ -6,17 +6,16 @@ import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.ddd.domain.Event
+import org.sollecitom.chassis.ddd.domain.Happening
 
-sealed class UserRegistrationRequestWasSubmitted(val emailAddress: EmailAddress, userId: Id, id: Id, timestamp: Instant, type: Type, context: Event.Context) : UserRegistrationEvent(id, timestamp, type, userId, context) {
-
-    interface Type : UserRegistrationEvent.Type
+sealed class UserRegistrationRequestWasSubmitted(val emailAddress: EmailAddress, userId: Id, id: Id, timestamp: Instant, type: Happening.Type, context: Event.Context) : UserRegistrationEvent(id, timestamp, type, userId, context) {
 
     companion object {
         val typeId = "user-registration-request-submitted".let(::Name)
     }
 
     // TODO do we need versioning here?
-    class V1(emailAddress: EmailAddress, userId: Id, id: Id, timestamp: Instant, context: Event.Context) : UserRegistrationRequestWasSubmitted(emailAddress, userId, id, timestamp, Type, context) {
+    class V1(emailAddress: EmailAddress, userId: Id, id: Id, timestamp: Instant, context: Event.Context) : UserRegistrationRequestWasSubmitted(emailAddress, userId, id, timestamp, type, context) {
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
@@ -42,9 +41,8 @@ sealed class UserRegistrationRequestWasSubmitted(val emailAddress: EmailAddress,
 
         override fun toString() = "UserRegistrationRequestWasSubmitted.V1(emailAddress=$emailAddress, userId=$userId, id=$id, timestamp=$timestamp)"
 
-        object Type : UserRegistrationRequestWasSubmitted.Type {
-            override val name get() = typeId
-            override val version = 1.let(::IntVersion)
+        companion object {
+            private val type = Happening.Type(typeId, 1.let(::IntVersion))
         }
     }
 }

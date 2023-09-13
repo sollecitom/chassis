@@ -1,7 +1,9 @@
 package org.sollecitom.chassis.json.utils
 
-import com.github.erosb.jsonsKema.*
-import org.json.JSONArray
+import com.github.erosb.jsonsKema.JsonParser
+import com.github.erosb.jsonsKema.SchemaClient
+import com.github.erosb.jsonsKema.SchemaLoader
+import com.github.erosb.jsonsKema.SchemaLoaderConfig
 import org.json.JSONObject
 import org.sollecitom.chassis.resource.utils.ResourceLoader.openAsStream
 import java.io.ByteArrayInputStream
@@ -11,8 +13,11 @@ import java.net.URI
 
 fun jsonSchemaAt(location: String): Schema = openAsStream(location).use {
 
-    val schemaJson = JsonParser(it).parse()
-    SchemaLoader(schemaJson, SchemaLoaderConfig(schemaClient, initialBaseURI)).load()
+    val locationBytes = it.readAllBytes()
+    val jsonSchema = JSONObject(String(locationBytes))
+    val schemaJson = JsonParser(jsonSchema.toString()).parse()
+    val schema = SchemaLoader(schemaJson, SchemaLoaderConfig(schemaClient, initialBaseURI)).load()
+    Schema(schema, jsonSchema)
 }
 
 private const val initialBaseURI = "mem://input"
@@ -38,9 +43,3 @@ private class CustomSchemaClient(private val initialBaseURI: String) : SchemaCli
         return openAsStream(resourceName)
     }
 }
-
-fun Schema.validate(json: IJsonValue) = Validator.forSchema(this).validate(json)
-
-fun Schema.validate(json: JSONObject) = validate(JsonParser(json.toString()).parse())
-
-fun Schema.validate(json: JSONArray) = validate(JsonParser(json.toString()).parse())

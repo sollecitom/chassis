@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.access.actor
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
@@ -17,7 +16,7 @@ internal object UserAccountJsonSerde : JsonSerde.SchemaAware<Actor.UserAccount> 
 
     const val TYPE_VALUE = "user"
     private const val SCHEMA_LOCATION = "correlation/access/actor/UserAccount.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: Actor.UserAccount) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

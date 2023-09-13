@@ -1,6 +1,6 @@
 package org.sollecitom.chassis.json.utils.serde
 
-import com.github.erosb.jsonsKema.Schema
+import org.sollecitom.chassis.json.utils.Schema
 
 interface JsonSerde<VALUE : Any> : JsonSerializer<VALUE>, JsonDeserializer<VALUE> {
 

@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.toggles
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.toggles.*
 import org.sollecitom.chassis.json.utils.getRequiredString
@@ -10,7 +9,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 private object ToggleValueJsonSerde : JsonSerde.SchemaAware<ToggleValue<*>> {
 
     private const val SCHEMA_LOCATION = "correlation/toggles/ToggleValue.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: ToggleValue<*>) = when (value) {
         is BooleanToggleValue -> BooleanToggleValue.jsonSerde.serialize(value)

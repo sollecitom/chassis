@@ -13,7 +13,7 @@
       "$ref": "/correlation/identity/Id.json"
     },
     "type": {
-      "$ref": "/ddd/event/EventType.json"
+      "$ref": "/ddd/happening/HappeningType.json"
     },
     "timestamp": {
       "type": "string",

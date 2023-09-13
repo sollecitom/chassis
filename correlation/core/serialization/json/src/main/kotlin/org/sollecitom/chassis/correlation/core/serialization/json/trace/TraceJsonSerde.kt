@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.trace
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.trace.ExternalInvocationTrace
 import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
@@ -13,7 +12,7 @@ import org.sollecitom.chassis.json.utils.serde.setValue
 private object TraceJsonSerde : JsonSerde.SchemaAware<Trace> {
 
     private const val SCHEMA_LOCATION = "correlation/trace/Trace.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: Trace) = JSONObject().apply {
         setValue(Fields.INVOCATION, value.invocation, InvocationTrace.jsonSerde)

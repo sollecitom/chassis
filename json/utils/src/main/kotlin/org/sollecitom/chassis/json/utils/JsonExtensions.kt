@@ -12,6 +12,8 @@ fun JSONObject.getJSONObjectOrNull(field: String): JSONObject? = runCatching { g
 
 fun JSONObject.getIntOrNull(field: String): Int? = runCatching { getInt(field) }.getOrNull()
 
+fun JSONObject.getRequiredInt(field: String): Int = getIntOrNull(field)!!
+
 fun JSONObject.getJSONArrayOrNull(field: String): JSONArray? = runCatching { getJSONArray(field) }.getOrNull()
 
 fun JSONArray.getItem(index: Int): JSONObject? = runCatching { get(index) as JSONObject }.getOrNull()
@@ -29,6 +31,8 @@ fun JSONObject.deepHashCode() = toMap().hashCode()
 fun JSONArray.deepEquals(other: JSONArray) = toList() == other.toList()
 
 fun JSONArray.deepHashCode() = toList().hashCode()
+
+fun JSONObject.putInstant(key: String, instant: Instant): JSONObject = put(key, instant.toString())
 
 fun JSONObject.getInstantOrNull(key: String) = getStringOrNull(key)?.let(Instant.Companion::parse)
 fun JSONObject.getRequiredInstant(key: String) = getInstantOrNull(key)!!

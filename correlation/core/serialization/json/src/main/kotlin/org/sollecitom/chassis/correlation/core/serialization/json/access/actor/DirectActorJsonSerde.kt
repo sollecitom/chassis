@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.access.actor
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.access.actor.DirectActor
@@ -16,7 +15,7 @@ internal object DirectActorJsonSerde : JsonSerde.SchemaAware<DirectActor> {
 
     const val TYPE_VALUE = "direct"
     private const val SCHEMA_LOCATION = "correlation/access/actor/DirectActor.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: DirectActor) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

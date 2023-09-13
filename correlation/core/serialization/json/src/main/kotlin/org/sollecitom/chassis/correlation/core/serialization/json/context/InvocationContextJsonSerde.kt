@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.context
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
@@ -17,7 +16,7 @@ import org.sollecitom.chassis.json.utils.serde.setValue
 private object InvocationContextJsonSerde : JsonSerde.SchemaAware<InvocationContext<*>> {
 
     private const val SCHEMA_LOCATION = "correlation/context/InvocationContext.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: InvocationContext<*>) = JSONObject().apply {
         setValue(Fields.ACCESS, value.access, Access.jsonSerde)

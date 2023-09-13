@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.access.session
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.access.session.FederatedSession
 import org.sollecitom.chassis.correlation.core.domain.access.session.Session
@@ -12,7 +11,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 private object SessionJsonSerde : JsonSerde.SchemaAware<Session> {
 
     private const val SCHEMA_LOCATION = "correlation/access/session/Session.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: Session) = when (value) {
         is SimpleSession -> SimpleSession.jsonSerde.serialize(value)

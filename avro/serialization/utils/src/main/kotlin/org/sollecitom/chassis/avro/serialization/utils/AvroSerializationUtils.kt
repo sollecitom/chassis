@@ -1,12 +1,9 @@
 package org.sollecitom.chassis.avro.serialization.utils
 
 import org.apache.avro.Schema
-import org.apache.avro.generic.GenericDatumReader
-import org.apache.avro.generic.GenericDatumWriter
 import org.apache.avro.generic.GenericRecord
 import org.apache.avro.io.DecoderFactory
 import org.apache.avro.io.EncoderFactory
-import org.apache.avro.reflect.ReflectDatumReader
 import org.apache.avro.specific.SpecificDatumReader
 import org.apache.avro.specific.SpecificDatumWriter
 import java.io.ByteArrayOutputStream

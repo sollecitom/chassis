@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.identity
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.identity.StringId
@@ -15,7 +14,7 @@ private object IdJsonSerde : JsonSerde.SchemaAware<Id> {
     private const val TYPE_ULID = "ulid"
     private const val TYPE_STRING = "string"
     private const val SCHEMA_LOCATION = "correlation/identity/Id.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: Id) = JSONObject().apply {
         put(Fields.VALUE, value.stringValue)

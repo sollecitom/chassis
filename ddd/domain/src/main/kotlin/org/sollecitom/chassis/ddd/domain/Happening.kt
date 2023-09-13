@@ -9,12 +9,10 @@ interface Happening : Versioned<IntVersion> {
     val type: Type
     override val version: IntVersion get() = type.version
 
-    companion object
-
-    interface Type : Versioned<IntVersion> {
-
-        val name: Name
+    data class Type(val name: Name, override val version: IntVersion) : Versioned<IntVersion> {
 
         companion object
     }
+
+    companion object
 }

@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.access.authentication
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.FederatedAuthentication
@@ -16,7 +15,7 @@ internal object FederatedAuthenticationJsonSerde : JsonSerde.SchemaAware<Federat
 
     const val TYPE_VALUE = "federated"
     private const val SCHEMA_LOCATION = "correlation/access/authentication/FederatedAuthentication.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: FederatedAuthentication) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

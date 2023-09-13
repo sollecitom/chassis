@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.access.authentication
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.StatelessAuthentication
@@ -14,7 +13,7 @@ internal object StatelessAuthenticationJsonSerde : JsonSerde.SchemaAware<Statele
 
     const val TYPE_VALUE = "stateless"
     private const val SCHEMA_LOCATION = "correlation/access/authentication/StatelessAuthentication.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: StatelessAuthentication) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

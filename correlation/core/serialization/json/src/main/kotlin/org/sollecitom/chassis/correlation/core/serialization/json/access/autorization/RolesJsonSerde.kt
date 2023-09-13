@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.access.autorization
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.Role
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.Roles
@@ -12,7 +11,7 @@ import org.sollecitom.chassis.json.utils.serde.setValues
 private object RolesJsonSerde : JsonSerde.SchemaAware<Roles> {
 
     private const val SCHEMA_LOCATION = "correlation/access/authorization/Roles.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: Roles) = JSONObject().apply {
         setValues(Fields.VALUES, value.values, Role.jsonSerde)

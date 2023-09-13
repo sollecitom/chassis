@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.toggles
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.correlation.core.domain.toggles.IntegerToggleValue
@@ -15,7 +14,7 @@ internal object IntegerToggleValueJsonSerde : JsonSerde.SchemaAware<IntegerToggl
 
     const val TYPE_VALUE = "integer"
     private const val SCHEMA_LOCATION = "correlation/toggles/IntegerToggleValue.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: IntegerToggleValue) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

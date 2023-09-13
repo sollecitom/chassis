@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.access.actor
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.json.utils.getRequiredString
@@ -10,7 +9,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 private object ActorAccountJsonSerde : JsonSerde.SchemaAware<Actor.Account> {
 
     private const val SCHEMA_LOCATION = "correlation/access/actor/Account.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: Actor.Account) = when (value) {
         is Actor.UserAccount -> Actor.UserAccount.jsonSerde.serialize(value)

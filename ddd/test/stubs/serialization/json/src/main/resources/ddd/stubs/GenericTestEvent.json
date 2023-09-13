@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "type"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "test-event",
+        "test-entity-event"
+      ]
+    },
+    "id": {},
+    "timestamp": {},
+    "context": {}
+  },
+  "oneOf": [
+    {
+      "$ref": "/ddd/stubs/TestEvent.json"
+    },
+    {
+      "$ref": "/ddd/stubs/TestEntityEvent.json"
+    }
+  ]
+}

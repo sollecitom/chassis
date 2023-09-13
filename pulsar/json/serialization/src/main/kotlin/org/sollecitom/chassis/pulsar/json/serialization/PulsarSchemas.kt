@@ -1,28 +1,25 @@
 package org.sollecitom.chassis.pulsar.json.serialization
 
 import org.apache.pulsar.client.api.Schema
-import org.apache.pulsar.client.api.schema.SchemaDefinition
 import org.apache.pulsar.client.api.schema.SchemaReader
 import org.apache.pulsar.client.api.schema.SchemaWriter
-import org.apache.pulsar.client.impl.schema.AvroSchema
+import org.apache.pulsar.client.impl.schema.AbstractStructSchema
+import org.apache.pulsar.common.schema.SchemaInfo
 import org.json.JSONObject
 import org.sollecitom.chassis.json.utils.serde.JsonDeserializer
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.json.utils.serde.JsonSerializer
 import java.io.InputStream
 
-fun <VALUE : Any> JsonSerde.SchemaAware<VALUE>.pulsarAvroSchema(): AvroSchema<VALUE> = PulsarSchemas.forSerde(this)
+fun <VALUE : Any> JsonSerde.SchemaAware<VALUE>.pulsarAvroSchema(): Schema<VALUE> = PulsarSchemas.forSerde(this)
 
 private object PulsarSchemas {
 
-    fun <VALUE : Any> forSerde(serde: JsonSerde.SchemaAware<VALUE>): AvroSchema<VALUE> = createSchema(serde)
+    fun <VALUE : Any> forSerde(serde: JsonSerde.SchemaAware<VALUE>): Schema<VALUE> = createSchema(serde)
 
-    private fun <VALUE : Any> createSchema(serde: JsonSerde.SchemaAware<VALUE>): AvroSchema<VALUE> {
+    private fun <VALUE : Any> createSchema(serde: JsonSerde.SchemaAware<VALUE>): Schema<VALUE> {
 
-        val writer = JsonWriter(serde)
-        val reader = JsonReader(serde)
-        val definition = SchemaDefinition.builder<VALUE>().withSchemaWriter(writer).withSchemaReader(reader).withJsonDef(serde.schema.toString()).build()
-        return Schema.AVRO(definition) as AvroSchema<VALUE>
+        return JsonSchema(serde)
     }
 
     private class JsonWriter<VALUE : Any>(private val serializer: JsonSerializer<VALUE>) : SchemaWriter<VALUE> {
@@ -49,4 +46,24 @@ private object PulsarSchemas {
             return read(bytes, 0, bytes.size)
         }
     }
+
+    private class JsonSchema<VALUE : Any>(private val serde: JsonSerde.SchemaAware<VALUE>) : AbstractStructSchema<VALUE>(serde.schemaInfo()) {
+
+        private val jsonReader = JsonReader(serde)
+        private val jsonWriter = JsonWriter(serde)
+
+        init {
+            setReader(jsonReader)
+            setWriter(jsonWriter)
+        }
+    }
+
+//    private fun <VALUE : Any> JsonSerde.SchemaAware<VALUE>.schemaDefinition(): SchemaDefinition<VALUE> {
+//
+//        val writer = JsonWriter(this)
+//        val reader = JsonReader(this)
+//        return SchemaDefinition.builder<VALUE>().withSchemaWriter(writer).withSchemaReader(reader).withJsonDef(schema.source.toString()).build()
+//    }
+
+    private fun <VALUE : Any> JsonSerde.SchemaAware<VALUE>.schemaInfo(): SchemaInfo = Schema.STRING.schemaInfo // SchemaUtil.parseSchemaInfo(schemaDefinition(), SchemaType.JSON)
 }

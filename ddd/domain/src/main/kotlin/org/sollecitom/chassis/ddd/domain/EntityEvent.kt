@@ -8,12 +8,5 @@ interface EntityEvent : Event {
     val entityId: Id
     val entityType: Name
 
-    override val type: Type
-
     companion object
-
-    interface Type : Event.Type {
-
-        companion object
-    }
 }

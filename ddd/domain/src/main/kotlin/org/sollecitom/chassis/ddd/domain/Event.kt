@@ -13,16 +13,9 @@ interface Event : Happening, Identifiable, Timestamped {
     val context: Context
     val reference: Reference get() = Reference(id, type, timestamp)
 
-    override val type: Type
-
-    interface Type : Happening.Type {
-
-        companion object
-    }
-
     fun forkContext(invocation: InvocationTrace): Context = Context(invocation = context.invocation.fork(invocation), parent = reference, originating = context.originating ?: reference)
 
-    data class Reference(override val id: Id, val type: Type, override val timestamp: Instant) : Timestamped, Identifiable {
+    data class Reference(override val id: Id, val type: Happening.Type, override val timestamp: Instant) : Timestamped, Identifiable {
 
         companion object
     }

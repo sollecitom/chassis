@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.access
 
-import com.github.erosb.jsonsKema.Schema
 import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
@@ -19,7 +18,7 @@ internal object AuthenticatedAccessJsonSerde : JsonSerde.SchemaAware<Access.Auth
 
     const val TYPE_VALUE = "authenticated"
     private const val SCHEMA_LOCATION = "correlation/access/AuthenticatedAccess.json"
-    override val schema: Schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: Access.Authenticated) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)

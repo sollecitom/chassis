@@ -1,7 +1,6 @@
 package org.sollecitom.chassis.correlation.core.domain.access.authentication
 
 import org.sollecitom.chassis.correlation.core.domain.access.session.Session
-import org.sollecitom.chassis.correlation.core.domain.access.session.SimpleSession
 
 sealed interface TokenBasedAuthentication : Authentication {
 

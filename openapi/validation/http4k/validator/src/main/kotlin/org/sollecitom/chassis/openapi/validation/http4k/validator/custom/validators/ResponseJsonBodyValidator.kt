@@ -4,15 +4,13 @@ import com.atlassian.oai.validator.interaction.response.CustomResponseValidator
 import com.atlassian.oai.validator.model.ApiOperation
 import com.atlassian.oai.validator.model.Response
 import com.atlassian.oai.validator.report.ValidationReport
-import com.github.erosb.jsonsKema.Schema
-import com.github.erosb.jsonsKema.ValidationFailure
 import io.swagger.v3.oas.models.responses.ApiResponse
 import org.http4k.core.ContentType
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import org.sollecitom.chassis.json.utils.Schema
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
-import org.sollecitom.chassis.json.utils.validate
 import org.sollecitom.chassis.kotlin.extensions.optional.asNullable
 import org.sollecitom.chassis.openapi.validation.http4k.validator.model.ResponseWithHeadersAdapter
 import java.nio.charset.Charset
@@ -43,7 +41,7 @@ internal class ResponseJsonBodyValidator(val jsonSchemasDirectoryName: String = 
 
     private fun SwaggerSchema<*>?.isDefined(): Boolean = this != null && properties.isNotEmpty()
 
-    private fun ValidationFailure?.toValidationReport() = this?.let { ValidationReport.from(ValidationReport.Message.create("Response body", it.toString()).build()) } ?: ValidationReport.empty()
+    private fun Schema.ValidationFailure?.toValidationReport() = this?.let { ValidationReport.from(ValidationReport.Message.create("Response body", it.message).build()) } ?: ValidationReport.empty()
 
     private fun ApiResponse?.declaresAJsonContentType() = this?.content?.keys?.any { it == ContentType.APPLICATION_JSON.value } ?: false
 
