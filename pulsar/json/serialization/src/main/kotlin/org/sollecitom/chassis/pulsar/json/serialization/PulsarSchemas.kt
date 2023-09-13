@@ -11,6 +11,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.json.utils.serde.JsonSerializer
 import java.io.InputStream
 
+// TODO change this to be pulsar-serialization-json
 fun <VALUE : Any> JsonSerde.SchemaAware<VALUE>.pulsarAvroSchema(): Schema<VALUE> = PulsarSchemas.forSerde(this)
 
 private object PulsarSchemas {

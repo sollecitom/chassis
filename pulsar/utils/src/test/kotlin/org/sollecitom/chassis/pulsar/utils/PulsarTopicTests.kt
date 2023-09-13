@@ -19,17 +19,15 @@ private class PulsarTopicTests : CoreDataGenerator by CoreDataGenerator.testProv
     fun `parsing a persistent topic`() {
 
         val protocol = "persistent".let(::Name)
-        val tenant = "a-tenant".let(::Name)
-        val namespace = "a-namespace".let(::Name)
+        val namespace = PulsarTopic.Namespace(tenant = "a-tenant".let(::Name), name = "a-namespace".let(::Name))
         val name = "a-name".let(::Name)
-        val fullName = PulsarTopic.fullRawName(protocol, tenant, namespace, name)
+        val fullName = PulsarTopic.fullRawName(protocol, namespace, name)
 
         val topic = PulsarTopic.parse(fullName.value)
 
         assertThat(topic.persistent).isTrue()
         assertThat(topic).isInstanceOf<PulsarTopic.Persistent>()
         assertThat(topic.protocol).isEqualTo(protocol)
-        assertThat(topic.tenant).isEqualTo(tenant)
         assertThat(topic.namespace).isEqualTo(namespace)
         assertThat(topic.name).isEqualTo(name)
         assertThat(topic.fullName).isEqualTo(fullName)
@@ -39,17 +37,15 @@ private class PulsarTopicTests : CoreDataGenerator by CoreDataGenerator.testProv
     fun `parsing a non-persistent topic`() {
 
         val protocol = "non-persistent".let(::Name)
-        val tenant = "another-tenant".let(::Name)
-        val namespace = "another-namespace".let(::Name)
+        val namespace = PulsarTopic.Namespace(tenant = "another-tenant".let(::Name), name = "another-namespace".let(::Name))
         val name = "another-name".let(::Name)
-        val fullName = PulsarTopic.fullRawName(protocol, tenant, namespace, name)
+        val fullName = PulsarTopic.fullRawName(protocol, namespace, name)
 
         val topic = PulsarTopic.parse(fullName.value)
 
         assertThat(topic.persistent).isFalse()
         assertThat(topic).isInstanceOf<PulsarTopic.NonPersistent>()
         assertThat(topic.protocol).isEqualTo(protocol)
-        assertThat(topic.tenant).isEqualTo(tenant)
         assertThat(topic.namespace).isEqualTo(namespace)
         assertThat(topic.name).isEqualTo(name)
         assertThat(topic.fullName).isEqualTo(fullName)

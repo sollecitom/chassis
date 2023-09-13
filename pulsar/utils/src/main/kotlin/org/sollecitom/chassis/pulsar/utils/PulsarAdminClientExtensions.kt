@@ -7,7 +7,14 @@ import org.apache.pulsar.common.policies.data.SchemaCompatibilityStrategy
 import org.apache.pulsar.common.policies.data.TenantInfo
 import org.apache.pulsar.common.policies.data.TopicType
 
-fun PulsarAdmin.createTopic(fullyQualifiedTopic: String, numberOfPartitions: Int = 1) = topics().createPartitionedTopic(fullyQualifiedTopic, numberOfPartitions)
+fun PulsarAdmin.createTopic(fullyQualifiedTopic: String, numberOfPartitions: Int = 1) {
+
+    require(numberOfPartitions >= 0) { "Number of partitions cannot be less than 0" }
+    when (numberOfPartitions) {
+        0 -> topics().createNonPartitionedTopic(fullyQualifiedTopic)
+        else -> topics().createPartitionedTopic(fullyQualifiedTopic, numberOfPartitions)
+    }
+}
 
 fun PulsarAdmin.createTenant(tenant: String) = tenants().createTenant(tenant, TenantInfo.builder().allowedClusters(clusters().clusters.toSet()).build())
 
@@ -58,4 +65,10 @@ fun PulsarAdmin.ensureTopicExists(fullyQualifiedTopic: String, numberOfPartition
     true
 } catch (error: PulsarAdminException.ConflictException) {
     false
+}
+
+fun PulsarAdmin.ensureTopicExists(topic: PulsarTopic, numberOfPartitions: Int = 1, allowTopicCreation: Boolean = false, isAllowAutoUpdateSchema: Boolean = false, schemaValidationEnforced: Boolean = true, schemaCompatibilityStrategy: SchemaCompatibilityStrategy = SchemaCompatibilityStrategy.FULL_TRANSITIVE) {
+
+    topic.namespace?.let { ensureTenantAndNamespaceExist(it.tenant.value, it.name.value, allowTopicCreation, isAllowAutoUpdateSchema, schemaValidationEnforced, schemaCompatibilityStrategy) }
+    ensureTopicExists(topic.fullName.value, numberOfPartitions)
 }

@@ -7,7 +7,7 @@ import org.sollecitom.chassis.kotlin.extensions.text.strings
 import org.sollecitom.chassis.pulsar.utils.PulsarTopic
 
 context(CoreDataGenerator)
-fun PulsarTopic.Companion.create(persistent: Boolean = true, tenant: Name? = randomName(), namespace: Name? = randomName(), name: Name = randomName()): PulsarTopic = of(persistent, tenant, namespace, name)
+fun PulsarTopic.Companion.create(persistent: Boolean = true, namespace: PulsarTopic.Namespace? = PulsarTopic.Namespace(tenant = randomName(), name = randomName()), name: Name = randomName()): PulsarTopic = of(persistent, namespace, name)
 
 context(CoreDataGenerator)
 private fun randomName(): Name = random.strings(5..10, lowercaseCaseLetters).iterator().next().let(::Name)
