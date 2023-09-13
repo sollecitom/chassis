@@ -4,10 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isBetween
 import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
-import kotlinx.coroutines.CoroutineStart.UNDISPATCHED
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -17,8 +14,9 @@ import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.create
-import org.sollecitom.chassis.ddd.domain.framework.EventFramework
-import org.sollecitom.chassis.ddd.event.framework.memory.inMemory
+import org.sollecitom.chassis.ddd.domain.Event
+import org.sollecitom.chassis.ddd.domain.store.EventStore
+import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
 import org.sollecitom.chassis.ddd.test.utils.hasInvocationContext
 import org.sollecitom.chassis.ddd.test.utils.isOriginating
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasAlreadySubmitted
@@ -38,13 +36,13 @@ private class EventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator
         val emailAddress = "bruce@waynecorps.com".let(::EmailAddress)
 
         val user = users.withEmailAddress(emailAddress)
-        val receivingThePublishedEvent = async(start = UNDISPATCHED) { events.asFlow.first() }
         val invocationContext = InvocationContext.create()
         val beforeTheInvocation = clock.now()
         val event = with(invocationContext) { user.submitRegistrationRequest() }
+        testScheduler.advanceUntilIdle()
         val afterTheInvocation = clock.now()
 
-        val publishedEvent = receivingThePublishedEvent.await()
+        val publishedEvent = events.lastOrNull<Event>()
         assertThat(event).isEqualTo(publishedEvent)
         assertThat(event).isInstanceOf<UserRegistrationRequestWasSubmitted.V1>().given {
             assertThat(it.emailAddress).isEqualTo(emailAddress)
@@ -65,13 +63,14 @@ private class EventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator
         testScheduler.advanceUntilIdle()
 
         val user = users.withEmailAddress(emailAddress)
-        val receivingThePublishedEvent = async(start = UNDISPATCHED) { events.asFlow.first() }
         val invocationContext = InvocationContext.create()
         val beforeTheInvocation = clock.now()
         val event = with(invocationContext) { user.submitRegistrationRequest() }
+        testScheduler.advanceUntilIdle()
+        testScheduler.advanceUntilIdle()
         val afterTheInvocation = clock.now()
 
-        val publishedEvent = receivingThePublishedEvent.await()
+        val publishedEvent = events.lastOrNull<Event>()
         assertThat(event).isEqualTo(publishedEvent)
         assertThat(event).isInstanceOf<UserRegistrationRequestWasAlreadySubmitted.V1>().given {
             assertThat(it.emailAddress).isEqualTo(emailAddress)
@@ -82,6 +81,6 @@ private class EventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator
         }
     }
 
-    context(TestScope)
-    private fun eventFramework(): EventFramework.Mutable = EventFramework.Mutable.inMemory(queryFactory = UserEventQueryFactory, scope = this@TestScope)
+    context(CoroutineScope)
+    private fun eventFramework(): EventStore.Mutable = InMemoryEventStore(queryFactory = UserEventQueryFactory, scope = this@CoroutineScope)
 }

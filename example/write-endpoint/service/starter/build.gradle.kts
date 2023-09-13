@@ -21,7 +21,7 @@ dependencies {
     implementation(projects.chassisExampleWriteEndpointConfiguration)
     implementation(projects.chassisKotlinExtensions)
     implementation(projects.chassisWebServiceDomain)
-    implementation(projects.chassisDddEventFrameworkMemory) // TODO swap this with the pulsar-based one
+    implementation(projects.chassisDddEventStoreMemory) // TODO swap this with the pulsar-based one
 }
 
 val versionDetails: Closure<VersionDetails> by extra
