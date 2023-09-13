@@ -22,8 +22,8 @@ import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.filterIsForEntityId
-import org.sollecitom.chassis.ddd.domain.store.EventHistory
 import org.sollecitom.chassis.ddd.domain.store.EventStore
+import org.sollecitom.chassis.ddd.domain.store.EventFramework
 import org.sollecitom.chassis.ddd.event.store.test.specification.EventStoreTestSpecification
 import org.sollecitom.chassis.ddd.logging.utils.log
 import org.sollecitom.chassis.ddd.stubs.serialization.json.event.testStubJsonSerde
@@ -50,15 +50,15 @@ private class PulsarMaterialisedViewPostgresEventStoreTests : EventStoreTestSpec
     private val streamName = "test-pulsar-event-stream".let(::Name)
     private val instanceId = StringId("1")
     private val eventSerde: JsonSerde.SchemaAware<Event> = Event.testStubJsonSerde
-    private val instances = mutableListOf<PulsarEventStore>()
+    private val instances = mutableListOf<PulsarEventFramework>()
     context(CoroutineScope)
-    override fun eventStore() = createEventStore()
+    override fun candidate() = createEventStore()
 
     context(CoroutineScope)
-    private fun createEventStore(): PulsarEventStore {
+    private fun createEventStore(): PulsarEventFramework {
 
         val topic = PulsarTopic.create()
-        val store = PulsarEventStore(topic, streamName, instanceId, eventSerde.pulsarAvroSchema(), pulsarClient, this@CoroutineScope)
+        val store = PulsarEventFramework(topic, streamName, instanceId, eventSerde.pulsarAvroSchema(), pulsarClient, this@CoroutineScope)
         pulsarAdmin.ensureTopicExists(topic = topic, numberOfPartitions = 1, isAllowAutoUpdateSchema = true)
         store.startBlocking()
         instances += store
@@ -80,7 +80,7 @@ private class PulsarMaterialisedViewPostgresEventStoreTests : EventStoreTestSpec
 }
 
 // TODO remove the coroutineScope argument
-class PulsarEventStore(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSchema: Schema<Event>, private val pulsar: PulsarClient, private val scope: CoroutineScope, private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}) : EventStore.Mutable, Startable, Stoppable {
+class PulsarEventFramework(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSchema: Schema<Event>, private val pulsar: PulsarClient, private val scope: CoroutineScope, private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}) : EventFramework.Mutable, Startable, Stoppable {
 
     private val producerName = "${streamName.value}-producer"
     private val subscriptionName = "${streamName.value}-subscription"
@@ -104,14 +104,14 @@ class PulsarEventStore(private val topic: PulsarTopic, private val streamName: N
         materialisedView += event
     }
 
-    override fun forEntityId(entityId: Id): EventStore.EntitySpecific.Mutable = EntitySpecific(entityId)
+    override fun forEntityId(entityId: Id): EventFramework.EntitySpecific.Mutable = EntitySpecific(entityId)
 
     @Suppress("UNCHECKED_CAST")
-    override fun <EVENT : Event> all(query: EventHistory.Query<EVENT>) = this@PulsarEventStore.materialisedView.asFlow() as Flow<EVENT> // .selectedBy(query) // TODO uncomment and use the PostgresQueryFactory to convert
+    override fun <EVENT : Event> all(query: EventStore.Query<EVENT>) = this@PulsarEventFramework.materialisedView.asFlow() as Flow<EVENT> // .selectedBy(query) // TODO uncomment and use the PostgresQueryFactory to convert
 
-    override suspend fun <EVENT : Event> firstOrNull(query: EventHistory.Query<EVENT>) = all(query).firstOrNull()
+    override suspend fun <EVENT : Event> firstOrNull(query: EventStore.Query<EVENT>) = all(query).firstOrNull()
 
-    override suspend fun <EVENT : Event> lastOrNull(query: EventHistory.Query<EVENT>) = all(query).lastOrNull()
+    override suspend fun <EVENT : Event> lastOrNull(query: EventStore.Query<EVENT>) = all(query).lastOrNull()
 
     override suspend fun start() {
         subscriber.start()
@@ -123,26 +123,26 @@ class PulsarEventStore(private val topic: PulsarTopic, private val streamName: N
         subscriber.stop()
     }
 
-    private inner class EntitySpecific(override val entityId: Id) : EventStore.EntitySpecific.Mutable {
+    private inner class EntitySpecific(override val entityId: Id) : EventFramework.EntitySpecific.Mutable {
 
         override suspend fun publish(event: EntityEvent) {
 
             require(event.entityId == entityId) { "Cannot add an event with entity ID '${event.entityId.stringValue}' to an entity-specific event store with different entity ID '${entityId.stringValue}'" }
-            this@PulsarEventStore.publish(event)
+            this@PulsarEventFramework.publish(event)
         }
 
         override suspend fun store(event: EntityEvent) {
 
             require(event.entityId == entityId) { "Cannot add an event with entity ID '${event.entityId.stringValue}' to an entity-specific event store with different entity ID '${entityId.stringValue}'" }
-            this@PulsarEventStore.store(event)
+            this@PulsarEventFramework.store(event)
         }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <E : EntityEvent> all(query: EventHistory.Query<E>) = this@PulsarEventStore.materialisedView.asFlow().filterIsForEntityId(entityId) as Flow<E> // .selectedBy(query) // TODO uncomment and use the PostgresQueryFactory to convert
+        override fun <E : EntityEvent> all(query: EventStore.Query<E>) = this@PulsarEventFramework.materialisedView.asFlow().filterIsForEntityId(entityId) as Flow<E> // .selectedBy(query) // TODO uncomment and use the PostgresQueryFactory to convert
 
-        override suspend fun <E : EntityEvent> firstOrNull(query: EventHistory.Query<E>) = all(query).firstOrNull()
+        override suspend fun <E : EntityEvent> firstOrNull(query: EventStore.Query<E>) = all(query).firstOrNull()
 
-        override suspend fun <EVENT : EntityEvent> lastOrNull(query: EventHistory.Query<EVENT>) = all(query).lastOrNull()
+        override suspend fun <EVENT : EntityEvent> lastOrNull(query: EventStore.Query<EVENT>) = all(query).lastOrNull()
     }
 
     companion object : Loggable()

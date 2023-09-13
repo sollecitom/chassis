@@ -5,11 +5,11 @@ import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
 
-interface EventStore : EventHistory {
+interface EventFramework : EventStore {
 
     override fun forEntityId(entityId: Id): EntitySpecific
 
-    interface Mutable : EventStore, EventHistory.Mutable {
+    interface Mutable : EventFramework, EventStore.Mutable {
 
         suspend fun publish(event: Event)
 
@@ -18,9 +18,9 @@ interface EventStore : EventHistory {
         companion object
     }
 
-    interface EntitySpecific : EventHistory.EntitySpecific {
+    interface EntitySpecific : EventStore.EntitySpecific {
 
-        interface Mutable : EntitySpecific, EventHistory.EntitySpecific.Mutable {
+        interface Mutable : EntitySpecific, EventStore.EntitySpecific.Mutable {
 
             suspend fun publish(event: EntityEvent)
         }
@@ -29,7 +29,7 @@ interface EventStore : EventHistory {
     companion object
 }
 
-interface EventHistory {
+interface EventStore {
 
     fun <EVENT : Event> all(query: Query<EVENT> = Query.Unrestricted): Flow<EVENT>
 
@@ -39,7 +39,7 @@ interface EventHistory {
 
     fun forEntityId(entityId: Id): EntitySpecific
 
-    interface Mutable : EventHistory {
+    interface Mutable : EventStore {
 
         suspend fun store(event: Event)
 

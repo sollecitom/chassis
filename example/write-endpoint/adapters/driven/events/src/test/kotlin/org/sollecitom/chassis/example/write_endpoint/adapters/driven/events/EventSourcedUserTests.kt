@@ -15,8 +15,8 @@ import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.create
 import org.sollecitom.chassis.ddd.domain.Event
-import org.sollecitom.chassis.ddd.domain.store.EventStore
-import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
+import org.sollecitom.chassis.ddd.domain.store.EventFramework
+import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventFramework
 import org.sollecitom.chassis.ddd.test.utils.hasInvocationContext
 import org.sollecitom.chassis.ddd.test.utils.isOriginating
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasAlreadySubmitted
@@ -82,5 +82,5 @@ private class EventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator
     }
 
     context(CoroutineScope)
-    private fun eventFramework(): EventStore.Mutable = InMemoryEventStore(queryFactory = UserEventQueryFactory, scope = this@CoroutineScope)
+    private fun eventFramework(): EventFramework.Mutable = InMemoryEventFramework(queryFactory = UserEventQueryFactory, scope = this@CoroutineScope)
 }

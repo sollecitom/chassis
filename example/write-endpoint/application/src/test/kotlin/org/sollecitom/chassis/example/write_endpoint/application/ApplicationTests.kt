@@ -15,8 +15,8 @@ import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.authenticated
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.ddd.application.Application
-import org.sollecitom.chassis.ddd.domain.store.EventStore
-import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
+import org.sollecitom.chassis.ddd.domain.store.EventFramework
+import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventFramework
 import org.sollecitom.chassis.example.write_endpoint.adapters.driven.events.EventSourcedUserRepository
 import org.sollecitom.chassis.example.write_endpoint.adapters.driven.events.UserEventQueryFactory
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser
@@ -83,5 +83,5 @@ private class ApplicationTests : CoreDataGenerator by CoreDataGenerator.testProv
     }
 
     // TODO remove the in-memory adapter from here - use a stub instead
-    private fun TestScope.newApplication(events: EventStore.Mutable = InMemoryEventStore(queryFactory = UserEventQueryFactory, scope = this), userRepository: UserRepository = EventSourcedUserRepository(events = events, coreDataGenerators = this@ApplicationTests)): Application = Application(userRepository::withEmailAddress)
+    private fun TestScope.newApplication(events: EventFramework.Mutable = InMemoryEventFramework(queryFactory = UserEventQueryFactory, scope = this), userRepository: UserRepository = EventSourcedUserRepository(events = events, coreDataGenerators = this@ApplicationTests)): Application = Application(userRepository::withEmailAddress)
 }

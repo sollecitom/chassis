@@ -20,25 +20,12 @@ interface EventStoreTestSpecification : CoreDataGenerator {
     val timeout: Duration get() = 10.seconds
 
     context(CoroutineScope)
-    fun eventStore(): EventStore.Mutable
-
-    @Test
-    fun `publishing events`() = runTest(timeout = timeout) {
-
-        val events = eventStore()
-        val publishedEvents = testEvents().take(15).toList()
-        publishedEvents.forEach { events.publish(it) }
-
-        testScheduler.advanceUntilIdle()
-        val historicalEvents = events.all<TestEvent>().toList()
-
-        assertThat(historicalEvents).containsSameElementsAs(publishedEvents)
-    }
+    fun candidate(): EventStore.Mutable
 
     @Test
     fun `consuming the history`() = runTest(timeout = timeout) {
 
-        val events = eventStore()
+        val events = candidate()
         val publishedEvents = testEvents().take(15).toList()
         publishedEvents.forEach { events.store(it) }
 
@@ -51,7 +38,7 @@ interface EventStoreTestSpecification : CoreDataGenerator {
     fun `consuming the history for a given entity`() = runTest(timeout = timeout) {
 
         val entityId = newId.internal()
-        val events = eventStore()
+        val events = candidate()
         val entityEvents = events.forEntityId(entityId)
         val notAnEntityEvent = testEvent()
         val notForTheEntityEvent = testEntityEvent(entityId = newId.internal())
