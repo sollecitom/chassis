@@ -8,6 +8,7 @@ dependencies {
     implementation(projects.chassisPulsarJsonSerialization) // TODO api?
 //    implementation(projects.chassisPulsarAvroSerialization) // TODO api?
 
+    testImplementation(projects.chassisDddEventStoreMemory)
     testImplementation(projects.chassisPulsarTestUtils)
     testImplementation(projects.chassisDddSerializationJson)
     testImplementation(projects.chassisDddTestStubsSerializationJson)

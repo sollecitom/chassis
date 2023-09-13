@@ -3,9 +3,6 @@ package org.sollecitom.chassis.ddd.event.store.pulsar.materialised.view.postgres
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.launch
 import org.apache.pulsar.client.api.*
 import org.junit.jupiter.api.AfterAll
@@ -21,10 +18,10 @@ import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
-import org.sollecitom.chassis.ddd.domain.filterIsForEntityId
-import org.sollecitom.chassis.ddd.domain.store.EventStore
 import org.sollecitom.chassis.ddd.domain.store.EventFramework
-import org.sollecitom.chassis.ddd.event.store.test.specification.EventStoreTestSpecification
+import org.sollecitom.chassis.ddd.domain.store.EventStore
+import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
+import org.sollecitom.chassis.ddd.event.store.test.specification.EventFrameworkTestSpecification
 import org.sollecitom.chassis.ddd.logging.utils.log
 import org.sollecitom.chassis.ddd.stubs.serialization.json.event.testStubJsonSerde
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
@@ -40,8 +37,9 @@ import org.sollecitom.chassis.pulsar.utils.messages
 import org.sollecitom.chassis.pulsar.utils.produce
 import kotlin.time.Duration.Companion.seconds
 
+// TODO remove this postgres module name segment here (postgres is the store, not the framework)
 @TestInstance(PER_CLASS)
-private class PulsarMaterialisedViewPostgresEventStoreTests : EventStoreTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
+private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
 
     override val timeout = 20.seconds
     private val pulsar = newPulsarContainer()
@@ -58,11 +56,11 @@ private class PulsarMaterialisedViewPostgresEventStoreTests : EventStoreTestSpec
     private fun createEventStore(): PulsarEventFramework {
 
         val topic = PulsarTopic.create()
-        val store = PulsarEventFramework(topic, streamName, instanceId, eventSerde.pulsarAvroSchema(), pulsarClient, this@CoroutineScope)
+        val framework = PulsarEventFramework(topic, streamName, instanceId, eventSerde.pulsarAvroSchema(), pulsarClient, InMemoryEventStore(), this@CoroutineScope)
         pulsarAdmin.ensureTopicExists(topic = topic, numberOfPartitions = 1, isAllowAutoUpdateSchema = true)
-        store.startBlocking()
-        instances += store
-        return store
+        framework.startBlocking()
+        instances += framework
+        return framework
     }
 
     @BeforeAll
@@ -80,14 +78,13 @@ private class PulsarMaterialisedViewPostgresEventStoreTests : EventStoreTestSpec
 }
 
 // TODO remove the coroutineScope argument
-class PulsarEventFramework(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSchema: Schema<Event>, private val pulsar: PulsarClient, private val scope: CoroutineScope, private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}) : EventFramework.Mutable, Startable, Stoppable {
+class PulsarEventFramework(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSchema: Schema<Event>, private val pulsar: PulsarClient, private val store: EventStore.Mutable, private val scope: CoroutineScope, private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
 
     private val producerName = "${streamName.value}-producer"
     private val subscriptionName = "${streamName.value}-subscription"
     private val consumerName = "${streamName.value}-consumer-${instanceId.stringValue}"
     private val publisher = PulsarPublisher(topic, eventSchema, producerName, pulsar, customizeProducer)
     private val subscriber = PulsarSubscriber(setOf(topic), eventSchema, consumerName, subscriptionName, pulsar, subscriptionType, customizeConsumer)
-    private val materialisedView = mutableListOf<Event>() // TODO replace with postgres DB instead
 
     override suspend fun publish(event: Event) {
 
@@ -99,19 +96,7 @@ class PulsarEventFramework(private val topic: PulsarTopic, private val streamNam
         }
     }
 
-    override suspend fun store(event: Event) {
-
-        materialisedView += event
-    }
-
     override fun forEntityId(entityId: Id): EventFramework.EntitySpecific.Mutable = EntitySpecific(entityId)
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <EVENT : Event> all(query: EventStore.Query<EVENT>) = this@PulsarEventFramework.materialisedView.asFlow() as Flow<EVENT> // .selectedBy(query) // TODO uncomment and use the PostgresQueryFactory to convert
-
-    override suspend fun <EVENT : Event> firstOrNull(query: EventStore.Query<EVENT>) = all(query).firstOrNull()
-
-    override suspend fun <EVENT : Event> lastOrNull(query: EventStore.Query<EVENT>) = all(query).lastOrNull()
 
     override suspend fun start() {
         subscriber.start()
@@ -123,26 +108,13 @@ class PulsarEventFramework(private val topic: PulsarTopic, private val streamNam
         subscriber.stop()
     }
 
-    private inner class EntitySpecific(override val entityId: Id) : EventFramework.EntitySpecific.Mutable {
+    private inner class EntitySpecific(override val entityId: Id) : EventFramework.EntitySpecific.Mutable, EventStore.EntitySpecific.Mutable by store.forEntityId(entityId) {
 
         override suspend fun publish(event: EntityEvent) {
 
             require(event.entityId == entityId) { "Cannot add an event with entity ID '${event.entityId.stringValue}' to an entity-specific event store with different entity ID '${entityId.stringValue}'" }
             this@PulsarEventFramework.publish(event)
         }
-
-        override suspend fun store(event: EntityEvent) {
-
-            require(event.entityId == entityId) { "Cannot add an event with entity ID '${event.entityId.stringValue}' to an entity-specific event store with different entity ID '${entityId.stringValue}'" }
-            this@PulsarEventFramework.store(event)
-        }
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <E : EntityEvent> all(query: EventStore.Query<E>) = this@PulsarEventFramework.materialisedView.asFlow().filterIsForEntityId(entityId) as Flow<E> // .selectedBy(query) // TODO uncomment and use the PostgresQueryFactory to convert
-
-        override suspend fun <E : EntityEvent> firstOrNull(query: EventStore.Query<E>) = all(query).firstOrNull()
-
-        override suspend fun <EVENT : EntityEvent> lastOrNull(query: EventStore.Query<EVENT>) = all(query).lastOrNull()
     }
 
     companion object : Loggable()
