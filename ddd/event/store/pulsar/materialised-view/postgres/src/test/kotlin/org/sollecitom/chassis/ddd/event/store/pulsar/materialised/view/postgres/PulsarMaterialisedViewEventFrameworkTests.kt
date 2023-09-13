@@ -1,10 +1,13 @@
 package org.sollecitom.chassis.ddd.event.store.pulsar.materialised.view.postgres
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart.UNDISPATCHED
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.apache.pulsar.client.api.*
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
