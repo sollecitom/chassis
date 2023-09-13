@@ -25,6 +25,8 @@ import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUs
 import org.sollecitom.chassis.example.write_endpoint.configuration.configureLogging
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRepository
 import org.sollecitom.chassis.test.utils.assertions.failedThrowing
+import org.sollecitom.chassis.test.utils.coroutines.pauseFor
+import kotlin.time.Duration.Companion.seconds
 
 @TestInstance(PER_CLASS)
 private class ApplicationTests : CoreDataGenerator by CoreDataGenerator.testProvider {
@@ -69,8 +71,8 @@ private class ApplicationTests : CoreDataGenerator by CoreDataGenerator.testProv
             val emailAddress = "someone@somedomain.com".let(::EmailAddress)
             val registerUserAFirstTime = registerUser(emailAddress = emailAddress)
             with(InvocationContext.unauthenticated()) { application(registerUserAFirstTime) }.let { check(it is Accepted) }
+            pauseFor(1.seconds)
 
-            testScheduler.advanceUntilIdle()
             val registerUserASecondTime = registerUser(emailAddress = emailAddress)
             val result = with(InvocationContext.unauthenticated()) {
                 application(registerUserASecondTime)

@@ -1,8 +1,11 @@
 package org.sollecitom.chassis.ddd.event.store.pulsar.materialised.view.postgres
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.CoroutineStart.UNDISPATCHED
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.apache.pulsar.client.api.*
 import org.junit.jupiter.api.AfterAll
@@ -77,7 +80,7 @@ private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpec
     }
 }
 
-// TODO remove the coroutineScope argument
+// TODO remove the coroutineScope argument if you move the storing logic in another process
 class PulsarEventFramework(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSchema: Schema<Event>, private val pulsar: PulsarClient, private val store: EventStore.Mutable, private val scope: CoroutineScope, private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
 
     private val producerName = "${streamName.value}-producer"
@@ -88,12 +91,16 @@ class PulsarEventFramework(private val topic: PulsarTopic, private val streamNam
 
     override suspend fun publish(event: Event) {
 
+        scope.launch(start = UNDISPATCHED) {
+            val publishedMessage = subscriber.messages.first { it.value.id == event.id }
+            store(publishedMessage.value)
+        }
         val messageId = publisher.publish(event)
         with(event.context) { logger.log { "Produced message with ID '${messageId}' to topic ${topic.fullName} for event with ID '${event.id.stringValue}'" } }
-        scope.launch { // TODO replace with waiting for the published message using the subscriber
-            delay(1.seconds)
-            store(event) // TODO move this in another coroutine, and later process (with polling by ID?)
-        }
+//        scope.launch { // TODO replace with waiting for the published message using the subscriber
+//            delay(1.seconds)
+//            store(event) // TODO move this in another coroutine, and later process (with polling by ID?)
+//        }
     }
 
     override fun forEntityId(entityId: Id): EventFramework.EntitySpecific.Mutable = EntitySpecific(entityId)

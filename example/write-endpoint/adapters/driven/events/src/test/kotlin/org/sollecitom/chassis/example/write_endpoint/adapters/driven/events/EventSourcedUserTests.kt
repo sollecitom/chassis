@@ -21,6 +21,7 @@ import org.sollecitom.chassis.ddd.test.utils.hasInvocationContext
 import org.sollecitom.chassis.ddd.test.utils.isOriginating
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasAlreadySubmitted
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasSubmitted
+import org.sollecitom.chassis.test.utils.coroutines.pauseFor
 import kotlin.time.Duration.Companion.seconds
 
 @TestInstance(PER_CLASS)
@@ -39,7 +40,7 @@ private class EventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator
         val invocationContext = InvocationContext.create()
         val beforeTheInvocation = clock.now()
         val event = with(invocationContext) { user.submitRegistrationRequest() }
-        testScheduler.advanceUntilIdle()
+        pauseFor(1.seconds)
         val afterTheInvocation = clock.now()
 
         val publishedEvent = events.lastOrNull<Event>()
@@ -60,15 +61,13 @@ private class EventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator
         val users = EventSourcedUserRepository(events = events, coreDataGenerators = this@EventSourcedEntitiesTests)
         val emailAddress = "lucious@waynecorps.com".let(::EmailAddress)
         with(InvocationContext.create()) { users.withEmailAddress(emailAddress).submitRegistrationRequest() }
-        testScheduler.advanceUntilIdle()
 
         val user = users.withEmailAddress(emailAddress)
         val invocationContext = InvocationContext.create()
         val beforeTheInvocation = clock.now()
         val event = with(invocationContext) { user.submitRegistrationRequest() }
-        testScheduler.advanceUntilIdle()
-        testScheduler.advanceUntilIdle()
         val afterTheInvocation = clock.now()
+        pauseFor(1.seconds)
 
         val publishedEvent = events.lastOrNull<Event>()
         assertThat(event).isEqualTo(publishedEvent)
