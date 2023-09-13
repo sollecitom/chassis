@@ -82,7 +82,6 @@ private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpec
     }
 }
 
-// TODO remove the coroutineScope argument if you move the storing logic in another process
 class PulsarEventFramework(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSchema: Schema<Event>, private val pulsar: PulsarClient, private val store: EventStore.Mutable, private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
 
     private val producerName = "${streamName.value}-producer"
@@ -144,8 +143,8 @@ class PulsarPublisher<VALUE : Any>(private val topic: PulsarTopic, private val s
 
     override suspend fun stop() = producer.close()
 
-    private val VALUE.messageKey: String get() = "key" // TODO implement
-    private val VALUE.messageProperties: Map<String, String> get() = emptyMap() // TODO implement
+    private val VALUE.messageKey: String get() = "key" // TODO implement take it from a message converter
+    private val VALUE.messageProperties: Map<String, String> get() = emptyMap() // TODO implement implement take it from a message converter
 
     private fun createProducer(): Producer<VALUE> = pulsar.newProducer(schema).topic(topic.fullName.value).producerName(producerName).also(customizeProducer).create()
 }
