@@ -1,6 +1,7 @@
 package org.sollecitom.chassis.ddd.event.store.pulsar.materialised.view.postgres
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineStart.UNDISPATCHED
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
@@ -57,7 +58,7 @@ private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpec
     private fun createEventStore(): PulsarEventFramework {
 
         val topic = PulsarTopic.create()
-        val framework = PulsarEventFramework(topic, streamName, instanceId, eventSerde.pulsarAvroSchema(), pulsarClient, InMemoryEventStore(), this@CoroutineScope)
+        val framework = PulsarEventFramework(topic, streamName, instanceId, eventSerde.pulsarAvroSchema(), pulsarClient, InMemoryEventStore())
         pulsarAdmin.ensureTopicExists(topic = topic, numberOfPartitions = 1, isAllowAutoUpdateSchema = true)
         framework.startBlocking()
         instances += framework
@@ -79,14 +80,14 @@ private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpec
 }
 
 // TODO remove the coroutineScope argument if you move the storing logic in another process
-class PulsarEventFramework(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSchema: Schema<Event>, private val pulsar: PulsarClient, private val store: EventStore.Mutable, private val scope: CoroutineScope = CoroutineScope(SupervisorJob()), private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
+class PulsarEventFramework(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSchema: Schema<Event>, private val pulsar: PulsarClient, private val store: EventStore.Mutable, private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
 
     private val producerName = "${streamName.value}-producer"
     private val subscriptionName = "${streamName.value}-subscription"
     private val consumerName = "${streamName.value}-consumer-${instanceId.stringValue}"
     private val publisher = PulsarPublisher(topic, eventSchema, producerName, pulsar, customizeProducer)
     private val subscriber = PulsarSubscriber(setOf(topic), eventSchema, consumerName, subscriptionName, pulsar, subscriptionType, customizeConsumer)
-    private lateinit var storingMessages: Job
+    private val scope: CoroutineScope = CoroutineScope(SupervisorJob())
 
     override suspend fun publish(event: Event) {
 
@@ -98,7 +99,7 @@ class PulsarEventFramework(private val topic: PulsarTopic, private val streamNam
 
     override suspend fun start() {
         subscriber.start()
-        storingMessages = scope.launch {
+        scope.launch(start = UNDISPATCHED) {
             subscriber.messages.onEach { store(it.value) }.onEach { subscriber.acknowledge(it) }.collect()
         }
         publisher.start()
@@ -106,7 +107,7 @@ class PulsarEventFramework(private val topic: PulsarTopic, private val streamNam
 
     override suspend fun stop() {
         publisher.stop()
-        storingMessages.cancelAndJoin()
+        scope.cancel()
         subscriber.stop()
     }
 
