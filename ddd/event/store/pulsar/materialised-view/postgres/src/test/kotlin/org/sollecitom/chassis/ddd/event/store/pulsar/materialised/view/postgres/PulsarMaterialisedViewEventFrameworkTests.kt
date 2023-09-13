@@ -97,10 +97,6 @@ class PulsarEventFramework(private val topic: PulsarTopic, private val streamNam
         }
         val messageId = publisher.publish(event)
         with(event.context) { logger.log { "Produced message with ID '${messageId}' to topic ${topic.fullName} for event with ID '${event.id.stringValue}'" } }
-//        scope.launch { // TODO replace with waiting for the published message using the subscriber
-//            delay(1.seconds)
-//            store(event) // TODO move this in another coroutine, and later process (with polling by ID?)
-//        }
     }
 
     override fun forEntityId(entityId: Id): EventFramework.EntitySpecific.Mutable = EntitySpecific(entityId)
