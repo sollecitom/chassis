@@ -1,12 +1,9 @@
 package org.sollecitom.chassis.ddd.event.store.pulsar.materialised.view.postgres
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.CoroutineStart.UNDISPATCHED
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import org.apache.pulsar.client.api.*
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -28,6 +25,7 @@ import org.sollecitom.chassis.ddd.event.store.test.specification.EventFrameworkT
 import org.sollecitom.chassis.ddd.logging.utils.log
 import org.sollecitom.chassis.ddd.stubs.serialization.json.event.testStubJsonSerde
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
+import org.sollecitom.chassis.kotlin.extensions.async.await
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.pulsar.json.serialization.pulsarAvroSchema
 import org.sollecitom.chassis.pulsar.test.utils.admin
@@ -81,20 +79,17 @@ private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpec
 }
 
 // TODO remove the coroutineScope argument if you move the storing logic in another process
-class PulsarEventFramework(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSchema: Schema<Event>, private val pulsar: PulsarClient, private val store: EventStore.Mutable, private val scope: CoroutineScope, private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
+class PulsarEventFramework(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSchema: Schema<Event>, private val pulsar: PulsarClient, private val store: EventStore.Mutable, private val scope: CoroutineScope = CoroutineScope(SupervisorJob()), private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
 
     private val producerName = "${streamName.value}-producer"
     private val subscriptionName = "${streamName.value}-subscription"
     private val consumerName = "${streamName.value}-consumer-${instanceId.stringValue}"
     private val publisher = PulsarPublisher(topic, eventSchema, producerName, pulsar, customizeProducer)
     private val subscriber = PulsarSubscriber(setOf(topic), eventSchema, consumerName, subscriptionName, pulsar, subscriptionType, customizeConsumer)
+    private lateinit var storingMessages: Job
 
     override suspend fun publish(event: Event) {
 
-        scope.launch(start = UNDISPATCHED) {
-            val publishedMessage = subscriber.messages.first { it.value.id == event.id }
-            store(publishedMessage.value)
-        }
         val messageId = publisher.publish(event)
         with(event.context) { logger.log { "Produced message with ID '${messageId}' to topic ${topic.fullName} for event with ID '${event.id.stringValue}'" } }
     }
@@ -103,11 +98,15 @@ class PulsarEventFramework(private val topic: PulsarTopic, private val streamNam
 
     override suspend fun start() {
         subscriber.start()
+        storingMessages = scope.launch {
+            subscriber.messages.onEach { store(it.value) }.onEach { subscriber.acknowledge(it) }.collect()
+        }
         publisher.start()
     }
 
     override suspend fun stop() {
         publisher.stop()
+        storingMessages.cancelAndJoin()
         subscriber.stop()
     }
 
@@ -159,6 +158,8 @@ class PulsarSubscriber<VALUE : Any>(private val topics: Set<PulsarTopic>, privat
     }
 
     override suspend fun stop() = consumer.close()
+
+    suspend fun acknowledge(message: Message<VALUE>) = consumer.acknowledgeAsync(message).await()
 
     private fun createConsumer(): Consumer<VALUE> {
 
