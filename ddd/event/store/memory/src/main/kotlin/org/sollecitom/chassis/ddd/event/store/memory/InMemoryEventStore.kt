@@ -64,13 +64,6 @@ class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory
 
         operator fun invoke(event: EVENT): Boolean
 
-        data object Unrestricted : Query<Event> {
-
-            override val eventType: KClass<Event> get() = Event::class
-
-            override fun invoke(event: Event) = true
-        }
-
         interface Factory {
 
             operator fun <QUERY : EventStore.Query<EVENT>, EVENT : Event> invoke(query: QUERY): Query<EVENT>

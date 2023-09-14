@@ -8,7 +8,6 @@ import org.sollecitom.chassis.ddd.domain.store.EventStore
 
 fun EventFramework.Mutable.Companion.inMemory(queryFactory: InMemoryEventStore.Query.Factory = InMemoryEventStore.Query.Factory.WithoutCustomQueries): EventFramework.Mutable = InMemoryEventFramework(queryFactory)
 
-// TODO move this to another module or delete it
 private class InMemoryEventFramework private constructor(private val history: InMemoryEventStore) : EventFramework.Mutable, EventStore.Mutable by history {
 
     constructor(queryFactory: InMemoryEventStore.Query.Factory) : this(InMemoryEventStore(queryFactory))

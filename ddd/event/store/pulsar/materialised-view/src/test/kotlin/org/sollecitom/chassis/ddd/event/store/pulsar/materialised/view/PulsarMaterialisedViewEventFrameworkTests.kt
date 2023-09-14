@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.ddd.event.store.pulsar.materialised.view.postgres
+package org.sollecitom.chassis.ddd.event.store.pulsar.materialised.view
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart.UNDISPATCHED
@@ -42,7 +42,6 @@ import org.sollecitom.chassis.pulsar.utils.messages
 import org.sollecitom.chassis.pulsar.utils.produce
 import kotlin.time.Duration.Companion.seconds
 
-// TODO remove this postgres module name segment here (postgres is the store, not the framework)
 @TestInstance(PER_CLASS)
 private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
 
