@@ -16,7 +16,7 @@ import org.sollecitom.chassis.ddd.logging.utils.log
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.pulsar.utils.PulsarTopic
 
-// TODO redo this
+// TODO redo this whole module
 class PulsarEventFramework(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSchema: Schema<Event>, private val pulsar: PulsarClient, private val store: EventStore.Mutable, private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
 
     private val producerName = "${streamName.value}-producer"
