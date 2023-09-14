@@ -1,7 +1,7 @@
 dependencies {
     api(projects.chassisExampleWriteEndpointDomain)
+    api(projects.chassisDddEventStoreMemory)
 
-    implementation(projects.chassisDddEventStoreMemory) // TODO remove this dependency (or replace with Pulsar based one at least)
     implementation(projects.chassisLoggingStandardSlf4jConfiguration)
     implementation(projects.chassisKotlinExtensions)
 
@@ -9,5 +9,4 @@ dependencies {
     testImplementation(projects.chassisDddTestUtils)
     testImplementation(projects.chassisCoreTestUtils)
     testImplementation(projects.chassisTestUtils)
-    testImplementation(projects.chassisDddEventStoreMemory) // TODO remove?
 }

@@ -17,11 +17,10 @@ plugins {
 
 dependencies {
     implementation(projects.chassisExampleWriteEndpointAdaptersDrivingWeb)
-    implementation(projects.chassisExampleWriteEndpointAdaptersDrivenEvents)
+    implementation(projects.chassisExampleWriteEndpointAdaptersDrivenEventsMemory)
     implementation(projects.chassisExampleWriteEndpointConfiguration)
     implementation(projects.chassisKotlinExtensions)
     implementation(projects.chassisWebServiceDomain)
-    implementation(projects.chassisDddEventStoreMemory) // TODO swap this with the pulsar-based one
 }
 
 val versionDetails: Closure<VersionDetails> by extra
