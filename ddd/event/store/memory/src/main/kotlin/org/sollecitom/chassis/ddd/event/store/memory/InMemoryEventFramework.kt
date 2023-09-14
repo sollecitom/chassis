@@ -1,17 +1,17 @@
 package org.sollecitom.chassis.ddd.event.store.memory
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.store.EventFramework
 import org.sollecitom.chassis.ddd.domain.store.EventStore
 
-// TODO move this to another module or delete it
-class InMemoryEventFramework(private val history: InMemoryEventStore, private val scope: CoroutineScope) : EventFramework.Mutable, EventStore.Mutable by history {
+fun EventFramework.Mutable.Companion.inMemory(queryFactory: InMemoryEventStore.Query.Factory = InMemoryEventStore.Query.Factory.WithoutCustomQueries): EventFramework.Mutable = InMemoryEventFramework(queryFactory)
 
-    constructor(queryFactory: InMemoryEventStore.Query.Factory = InMemoryEventStore.Query.Factory.WithoutCustomQueries, scope: CoroutineScope = CoroutineScope(SupervisorJob())) : this(InMemoryEventStore(queryFactory), scope)
+// TODO move this to another module or delete it
+private class InMemoryEventFramework private constructor(private val history: InMemoryEventStore) : EventFramework.Mutable, EventStore.Mutable by history {
+
+    constructor(queryFactory: InMemoryEventStore.Query.Factory) : this(InMemoryEventStore(queryFactory))
 
     override suspend fun publish(event: Event) {
         store(event)

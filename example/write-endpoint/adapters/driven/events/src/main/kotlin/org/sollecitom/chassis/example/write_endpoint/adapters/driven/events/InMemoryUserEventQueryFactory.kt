@@ -4,6 +4,7 @@ import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.store.EventStore
 import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
+import org.sollecitom.chassis.example.write_endpoint.domain.user.UserEvent
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserEventQuery
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasSubmitted
 import kotlin.reflect.KClass
@@ -11,7 +12,9 @@ import kotlin.reflect.KClass
 // TODO create memory and pulsar adapters, with a query factory each
 // TODO move to a separate module? It'd allow to remove the dependency on the in-memory event-store from this module
 
-object InMemoryUserEventQueryFactory : InMemoryEventStore.Query.Factory {
+val UserEvent.Companion.inMemoryQueryFactory: InMemoryEventStore.Query.Factory get() = InMemoryUserEventQueryFactory
+
+private object InMemoryUserEventQueryFactory : InMemoryEventStore.Query.Factory {
 
     override fun <QUERY : EventStore.Query<EVENT>, EVENT : Event> invoke(query: QUERY): InMemoryEventStore.Query<EVENT> {
 

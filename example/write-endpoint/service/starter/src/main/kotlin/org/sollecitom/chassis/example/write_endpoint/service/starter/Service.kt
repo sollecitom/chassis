@@ -5,13 +5,14 @@ import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.store.EventFramework
-import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventFramework
-import org.sollecitom.chassis.example.write_endpoint.adapters.driven.events.InMemoryUserEventQueryFactory
+import org.sollecitom.chassis.ddd.event.store.memory.inMemory
+import org.sollecitom.chassis.example.write_endpoint.adapters.driven.events.inMemoryQueryFactory
 import org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.WebAPI
 import org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.from
 import org.sollecitom.chassis.example.write_endpoint.application.invoke
 import org.sollecitom.chassis.example.write_endpoint.configuration.ApplicationProperties
 import org.sollecitom.chassis.example.write_endpoint.domain.user.EventSourcedUserRepository
+import org.sollecitom.chassis.example.write_endpoint.domain.user.UserEvent
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRepository
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.service.domain.WebService
@@ -42,7 +43,7 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
     }
 
     // TODO change this to be the Pulsar-based event store
-    private fun events(): EventFramework.Mutable = InMemoryEventFramework(queryFactory = InMemoryUserEventQueryFactory)
+    private fun events(): EventFramework.Mutable = EventFramework.Mutable.inMemory(queryFactory = UserEvent.inMemoryQueryFactory)
 
     private fun userRepository(events: EventFramework.Mutable): UserRepository = EventSourcedUserRepository(events = events, coreDataGenerators = this)
 

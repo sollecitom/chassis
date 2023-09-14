@@ -15,17 +15,18 @@ import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.create
 import org.sollecitom.chassis.ddd.domain.store.EventFramework
-import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventFramework
+import org.sollecitom.chassis.ddd.event.store.memory.inMemory
 import org.sollecitom.chassis.ddd.test.utils.hasInvocationContext
 import org.sollecitom.chassis.ddd.test.utils.isOriginating
 import org.sollecitom.chassis.example.write_endpoint.domain.user.EventSourcedUserRepository
+import org.sollecitom.chassis.example.write_endpoint.domain.user.UserEvent
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasAlreadySubmitted
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.test.utils.coroutines.pauseFor
 import kotlin.time.Duration.Companion.seconds
 
 @TestInstance(PER_CLASS)
-private class EventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator.testProvider {
+private class InMemoryEventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     private val timeout = 10.seconds
 
@@ -33,7 +34,7 @@ private class EventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator
     fun `an unregistered user submitting a register user command`() = runTest(timeout = timeout) {
 
         val events = eventFramework()
-        val users = EventSourcedUserRepository(events = events, coreDataGenerators = this@EventSourcedEntitiesTests)
+        val users = EventSourcedUserRepository(events = events, coreDataGenerators = this@InMemoryEventSourcedEntitiesTests)
         val emailAddress = "bruce@waynecorps.com".let(::EmailAddress)
 
         val user = users.withEmailAddress(emailAddress)
@@ -58,7 +59,7 @@ private class EventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator
     fun `an already registered user submitting a register user command`() = runTest(timeout = timeout) {
 
         val events = eventFramework()
-        val users = EventSourcedUserRepository(events = events, coreDataGenerators = this@EventSourcedEntitiesTests)
+        val users = EventSourcedUserRepository(events = events, coreDataGenerators = this@InMemoryEventSourcedEntitiesTests)
         val emailAddress = "lucious@waynecorps.com".let(::EmailAddress)
         with(InvocationContext.create()) { users.withEmailAddress(emailAddress).submitRegistrationRequest() }
 
@@ -81,5 +82,5 @@ private class EventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator
     }
 
     context(CoroutineScope)
-    private fun eventFramework(): EventFramework.Mutable = InMemoryEventFramework(queryFactory = InMemoryUserEventQueryFactory, scope = this@CoroutineScope)
+    private fun eventFramework(): EventFramework.Mutable = EventFramework.Mutable.inMemory(queryFactory = UserEvent.inMemoryQueryFactory)
 }
