@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.write_endpoint.adapters.driven.events
+package org.sollecitom.chassis.example.write_endpoint.adapters.driven.events.memory
 
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.ddd.domain.Event

@@ -17,7 +17,7 @@ import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticate
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.store.EventFramework
 import org.sollecitom.chassis.ddd.event.store.memory.inMemory
-import org.sollecitom.chassis.example.write_endpoint.adapters.driven.events.inMemoryQueryFactory
+import org.sollecitom.chassis.example.write_endpoint.adapters.driven.events.memory.inMemoryQueryFactory
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse

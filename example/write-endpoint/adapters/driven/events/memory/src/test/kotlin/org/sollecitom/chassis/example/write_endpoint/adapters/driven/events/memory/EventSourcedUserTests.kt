@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.write_endpoint.adapters.driven.events
+package org.sollecitom.chassis.example.write_endpoint.adapters.driven.events.memory
 
 import assertk.assertThat
 import assertk.assertions.isBetween

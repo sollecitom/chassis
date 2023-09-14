@@ -6,7 +6,7 @@ import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.store.EventFramework
 import org.sollecitom.chassis.ddd.event.store.memory.inMemory
-import org.sollecitom.chassis.example.write_endpoint.adapters.driven.events.inMemoryQueryFactory
+import org.sollecitom.chassis.example.write_endpoint.adapters.driven.events.memory.inMemoryQueryFactory
 import org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.WebAPI
 import org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.from
 import org.sollecitom.chassis.example.write_endpoint.application.invoke
