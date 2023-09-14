@@ -14,11 +14,11 @@ import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.create
-import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.store.EventFramework
 import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventFramework
 import org.sollecitom.chassis.ddd.test.utils.hasInvocationContext
 import org.sollecitom.chassis.ddd.test.utils.isOriginating
+import org.sollecitom.chassis.example.write_endpoint.domain.user.EventSourcedUserRepository
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasAlreadySubmitted
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.test.utils.coroutines.pauseFor
@@ -43,7 +43,7 @@ private class EventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator
         pauseFor(1.seconds)
         val afterTheInvocation = clock.now()
 
-        val publishedEvent = events.lastOrNull<Event>()
+        val publishedEvent = events.lastOrNull()
         assertThat(event).isEqualTo(publishedEvent)
         assertThat(event).isInstanceOf<UserRegistrationRequestWasSubmitted.V1>().given {
             assertThat(it.emailAddress).isEqualTo(emailAddress)
@@ -69,7 +69,7 @@ private class EventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator
         val afterTheInvocation = clock.now()
         pauseFor(1.seconds)
 
-        val publishedEvent = events.lastOrNull<Event>()
+        val publishedEvent = events.lastOrNull()
         assertThat(event).isEqualTo(publishedEvent)
         assertThat(event).isInstanceOf<UserRegistrationRequestWasAlreadySubmitted.V1>().given {
             assertThat(it.emailAddress).isEqualTo(emailAddress)
@@ -81,5 +81,5 @@ private class EventSourcedEntitiesTests : CoreDataGenerator by CoreDataGenerator
     }
 
     context(CoroutineScope)
-    private fun eventFramework(): EventFramework.Mutable = InMemoryEventFramework(queryFactory = UserEventQueryFactory, scope = this@CoroutineScope)
+    private fun eventFramework(): EventFramework.Mutable = InMemoryEventFramework(queryFactory = InMemoryUserEventQueryFactory, scope = this@CoroutineScope)
 }

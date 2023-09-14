@@ -2,14 +2,10 @@ package org.sollecitom.chassis.ddd.event.store.test.specification
 
 import assertk.assertThat
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withContext
 import org.junit.jupiter.api.Test
 import org.sollecitom.chassis.ddd.domain.store.EventFramework
-import org.sollecitom.chassis.ddd.test.stubs.TestEvent
 import org.sollecitom.chassis.ddd.test.stubs.testEvents
 import org.sollecitom.chassis.test.utils.assertions.containsSameElementsAs
 import org.sollecitom.chassis.test.utils.coroutines.pauseFor
@@ -29,7 +25,7 @@ interface EventFrameworkTestSpecification : EventStoreTestSpecification {
         publishedEvents.forEach { events.publish(it) }
         pauseFor(1.seconds)
 
-        val historicalEvents = events.all<TestEvent>().toList()
+        val historicalEvents = events.all().toList()
 
         assertThat(historicalEvents).containsSameElementsAs(publishedEvents)
     }

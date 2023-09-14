@@ -17,11 +17,17 @@ class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory
         historical += event
     }
 
-    override fun <E : Event> all(query: EventStore.Query<E>) = historical.asFlow().selectedBy(query)
+    override fun all() = historical.asFlow()
 
-    override suspend fun <E : Event> firstOrNull(query: EventStore.Query<E>) = all(query).firstOrNull()
+    override fun <QUERY : EventStore.Query<EVENT>, EVENT : Event> all(query: QUERY) = all().selectedBy(query)
 
-    override suspend fun <E : Event> lastOrNull(query: EventStore.Query<E>) = all(query).lastOrNull()
+    override suspend fun firstOrNull() = all().firstOrNull()
+
+    override suspend fun <QUERY : EventStore.Query<EVENT>, EVENT : Event> firstOrNull(query: QUERY) = all(query).firstOrNull()
+
+    override suspend fun lastOrNull() = all().lastOrNull()
+
+    override suspend fun <QUERY : EventStore.Query<EVENT>, EVENT : Event> lastOrNull(query: QUERY) = all(query).lastOrNull()
 
     override fun forEntityId(entityId: Id): EventStore.EntitySpecific.Mutable = EntitySpecific(entityId)
 
@@ -33,14 +39,20 @@ class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory
             this@InMemoryEventStore.store(event)
         }
 
-        override fun <E : EntityEvent> all(query: EventStore.Query<E>) = this@InMemoryEventStore.historical.asFlow().filterIsForEntityId(entityId).selectedBy(query)
+        override fun all() = this@InMemoryEventStore.all().filterIsForEntityId(entityId)
 
-        override suspend fun <E : EntityEvent> firstOrNull(query: EventStore.Query<E>) = all(query).firstOrNull()
+        override fun <QUERY : EventStore.Query<EVENT>, EVENT : EntityEvent> all(query: QUERY) = all().selectedBy(query)
 
-        override suspend fun <E : EntityEvent> lastOrNull(query: EventStore.Query<E>) = all(query).lastOrNull()
+        override suspend fun firstOrNull() = all().firstOrNull()
+
+        override suspend fun <QUERY : EventStore.Query<EVENT>, EVENT : EntityEvent> firstOrNull(query: QUERY) = all(query).firstOrNull()
+
+        override suspend fun lastOrNull() = all().lastOrNull()
+
+        override suspend fun <QUERY : EventStore.Query<EVENT>, EVENT : EntityEvent> lastOrNull(query: QUERY) = all(query).lastOrNull()
     }
 
-    private val <QUERY : EventStore.Query<EVENT>, EVENT : Event> QUERY.inMemory: Query<EVENT> get() = queryFactory(query = this) ?: error("Unsupported query $this")
+    private val <QUERY : EventStore.Query<EVENT>, EVENT : Event> QUERY.inMemory: Query<EVENT> get() = queryFactory(query = this)
 
     private fun <EVENT : Event> Flow<Event>.selectedBy(query: Query<EVENT>): Flow<EVENT> = filterIsInstance(query.eventType).filter { event -> query.invoke(event) }
 
@@ -61,15 +73,11 @@ class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory
 
         interface Factory {
 
-            operator fun <EVENT : Event> invoke(query: EventStore.Query<EVENT>): Query<EVENT>?
+            operator fun <QUERY : EventStore.Query<EVENT>, EVENT : Event> invoke(query: QUERY): Query<EVENT>
 
             object WithoutCustomQueries : Factory {
 
-                @Suppress("UNCHECKED_CAST")
-                override fun <EVENT : Event> invoke(query: EventStore.Query<EVENT>) = when (query) {
-                    is EventStore.Query.Unrestricted -> Unrestricted as Query<EVENT>
-                    else -> null
-                }
+                override fun <QUERY : EventStore.Query<EVENT>, EVENT : Event> invoke(query: QUERY) = error("Unsupported query $query")
             }
         }
     }

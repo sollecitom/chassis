@@ -9,7 +9,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.store.EventStore
-import org.sollecitom.chassis.ddd.test.stubs.*
+import org.sollecitom.chassis.ddd.test.stubs.testEntityEvent
+import org.sollecitom.chassis.ddd.test.stubs.testEntityEvents
+import org.sollecitom.chassis.ddd.test.stubs.testEvent
+import org.sollecitom.chassis.ddd.test.stubs.testEvents
 import org.sollecitom.chassis.test.utils.assertions.containsSameElementsAs
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -29,7 +32,7 @@ interface EventStoreTestSpecification : CoreDataGenerator {
         val publishedEvents = testEvents().take(15).toList()
         publishedEvents.forEach { events.store(it) }
 
-        val historicalEvents = events.all<TestEvent>().toList()
+        val historicalEvents = events.all().toList()
 
         assertThat(historicalEvents).containsSameElementsAs(publishedEvents)
     }
@@ -48,7 +51,7 @@ interface EventStoreTestSpecification : CoreDataGenerator {
         publishedEvents.filterIndexed { index, _ -> index in 0..5 }.forEach { entityEvents.store(it) }
         publishedEvents.filterIndexed { index, _ -> index in 6..11 }.forEach { events.store(it) }
 
-        val historicalEvents = entityEvents.all<TestEntityEvent>().toList()
+        val historicalEvents = entityEvents.all().toList()
 
         assertThat(historicalEvents).containsSameElementsAs(publishedEvents)
     }
