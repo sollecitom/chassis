@@ -10,10 +10,7 @@ import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUs
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
 import org.sollecitom.chassis.example.write_endpoint.application.user.UserWithPendingRegistration
-import org.sollecitom.chassis.example.write_endpoint.domain.user.User
-import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationEvent
-import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasAlreadySubmitted
-import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasSubmitted
+import org.sollecitom.chassis.example.write_endpoint.domain.user.*
 
 internal class DispatchingApplication(private val userWithEmailAddress: suspend (EmailAddress) -> User) : Application {
 
@@ -37,8 +34,8 @@ internal class DispatchingApplication(private val userWithEmailAddress: suspend 
         return user.submitRegistrationRequest().toOperationResult()
     }
 
-    private fun UserRegistrationEvent.toOperationResult(): RegisterUser.V1.Result = when (this) {
-        is UserRegistrationRequestWasSubmitted.V1 -> Accepted(user = UserWithPendingRegistration(id = userId))
-        is UserRegistrationRequestWasAlreadySubmitted.V1 -> EmailAddressAlreadyInUse(userId = userId)
+    private fun Published<UserRegistrationEvent>.toOperationResult(): RegisterUser.V1.Result = when (event) {
+        is UserRegistrationRequestWasSubmitted.V1 -> Accepted(user = UserWithPendingRegistration(id = event.userId))
+        is UserRegistrationRequestWasAlreadySubmitted.V1 -> EmailAddressAlreadyInUse(userId = event.userId)
     }
 }

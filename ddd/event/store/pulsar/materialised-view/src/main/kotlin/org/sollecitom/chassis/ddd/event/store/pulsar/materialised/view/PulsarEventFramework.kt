@@ -26,10 +26,11 @@ class PulsarEventFramework(private val topic: PulsarTopic, private val streamNam
     private val subscriber = PulsarSubscriber(setOf(topic), eventSchema, consumerName, subscriptionName, pulsar, subscriptionType, customizeConsumer)
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob())
 
-    override suspend fun publish(event: Event) {
+    override suspend fun publish(event: Event): Deferred<Unit> {
 
         val messageId = publisher.publish(event)
         with(event.context) { logger.log { "Produced message with ID '${messageId}' to topic ${topic.fullName} for event with ID '${event.id.stringValue}'" } }
+        return store.awaitForEvent(event.id)
     }
 
     override fun forEntityId(entityId: Id): EventFramework.EntitySpecific.Mutable = EntitySpecific(entityId)
@@ -50,10 +51,10 @@ class PulsarEventFramework(private val topic: PulsarTopic, private val streamNam
 
     private inner class EntitySpecific(override val entityId: Id) : EventFramework.EntitySpecific.Mutable, EventStore.EntitySpecific.Mutable by store.forEntityId(entityId) {
 
-        override suspend fun publish(event: EntityEvent) {
+        override suspend fun publish(event: EntityEvent): Deferred<Unit> {
 
             require(event.entityId == entityId) { "Cannot add an event with entity ID '${event.entityId.stringValue}' to an entity-specific event store with different entity ID '${entityId.stringValue}'" }
-            this@PulsarEventFramework.publish(event)
+            return this@PulsarEventFramework.publish(event)
         }
     }
 

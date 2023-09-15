@@ -1,20 +1,41 @@
 package org.sollecitom.chassis.ddd.event.store.memory
 
+import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineStart.LAZY
 import kotlinx.coroutines.flow.*
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.filterIsForEntityId
 import org.sollecitom.chassis.ddd.domain.store.EventStore
+import kotlin.coroutines.coroutineContext
 import kotlin.reflect.KClass
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
-class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory.WithoutCustomQueries) : EventStore.Mutable {
+class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory.WithoutCustomQueries, private val pollingPeriod: Duration = 100.milliseconds, private val scope: CoroutineScope = CoroutineScope(SupervisorJob())) : EventStore.Mutable {
 
     private val historical = mutableListOf<Event>()
 
     override suspend fun store(event: Event) {
 
         historical += event
+    }
+
+    override fun awaitForEvent(id: Id) = scope.async(start = LAZY) { // for the SQL event store, use polling or Debezium
+        awaitEventPersistence(id, pollingPeriod)
+        Unit
+    }
+
+    private suspend fun awaitEventPersistence(id: Id, pollingPeriod: Duration) {
+
+        while (coroutineContext.isActive) {
+            val event = historical.singleOrNull { it.id == id }
+            if (event != null) {
+                break
+            }
+            delay(pollingPeriod)
+        }
     }
 
     override fun all() = historical.asFlow()

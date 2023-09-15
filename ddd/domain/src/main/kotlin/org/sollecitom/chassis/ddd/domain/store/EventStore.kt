@@ -1,11 +1,14 @@
 package org.sollecitom.chassis.ddd.domain.store
 
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
 
 interface EventStore {
+
+    fun awaitForEvent(id: Id): Deferred<Unit>
 
     fun all(): Flow<Event>
     fun <QUERY : Query<EVENT>, EVENT : Event> all(query: QUERY): Flow<EVENT>

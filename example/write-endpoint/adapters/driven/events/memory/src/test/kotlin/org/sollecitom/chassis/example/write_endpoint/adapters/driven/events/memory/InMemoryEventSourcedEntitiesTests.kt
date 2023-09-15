@@ -22,7 +22,6 @@ import org.sollecitom.chassis.example.write_endpoint.domain.user.EventSourcedUse
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserEvent
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasAlreadySubmitted
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRegistrationRequestWasSubmitted
-import org.sollecitom.chassis.test.utils.coroutines.pauseFor
 import kotlin.time.Duration.Companion.seconds
 
 @TestInstance(PER_CLASS)
@@ -40,8 +39,8 @@ private class InMemoryEventSourcedEntitiesTests : CoreDataGenerator by CoreDataG
         val user = users.withEmailAddress(emailAddress)
         val invocationContext = InvocationContext.create()
         val beforeTheInvocation = clock.now()
-        val event = with(invocationContext) { user.submitRegistrationRequest() }
-        pauseFor(1.seconds)
+        val (event, wasPersisted) = with(invocationContext) { user.submitRegistrationRequest() }
+        wasPersisted.join()
         val afterTheInvocation = clock.now()
 
         val publishedEvent = events.lastOrNull()
@@ -66,9 +65,9 @@ private class InMemoryEventSourcedEntitiesTests : CoreDataGenerator by CoreDataG
         val user = users.withEmailAddress(emailAddress)
         val invocationContext = InvocationContext.create()
         val beforeTheInvocation = clock.now()
-        val event = with(invocationContext) { user.submitRegistrationRequest() }
+        val (event, wasPersisted) = with(invocationContext) { user.submitRegistrationRequest() }
         val afterTheInvocation = clock.now()
-        pauseFor(1.seconds)
+        wasPersisted.join()
 
         val publishedEvent = events.lastOrNull()
         assertThat(event).isEqualTo(publishedEvent)

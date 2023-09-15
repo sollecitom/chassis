@@ -1,5 +1,6 @@
 package org.sollecitom.chassis.ddd.domain.store
 
+import kotlinx.coroutines.Deferred
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
@@ -10,7 +11,7 @@ interface EventFramework : EventStore {
 
     interface Mutable : EventFramework, EventStore.Mutable {
 
-        suspend fun publish(event: Event)
+        suspend fun publish(event: Event): Deferred<Unit>
 
         override fun forEntityId(entityId: Id): EntitySpecific.Mutable
 
@@ -21,10 +22,9 @@ interface EventFramework : EventStore {
 
         interface Mutable : EntitySpecific, EventStore.EntitySpecific.Mutable {
 
-            suspend fun publish(event: EntityEvent)
+            suspend fun publish(event: EntityEvent): Deferred<Unit>
         }
     }
 
     companion object
 }
-
