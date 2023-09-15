@@ -2,6 +2,10 @@
 
 A set of modular libraries that can be used by multiple projects.
 
+## License
+
+This project is licensed under the terms of the MIT license. Check the `LICENSE.md` file for more details.
+
 ## How to
 
 ### Build the project
