@@ -35,7 +35,7 @@ internal class GenericAvroReader(writerSchema: Schema?, private val schema: Sche
                 internalOffset = this.offset
             }
             val decoder: Decoder = DecoderFactory.get().binaryDecoder(bytes, internalOffset, length - internalOffset, null)
-            reader!!.read(null, decoder) as GenericRecord
+            reader.read(null, decoder) as GenericRecord
 //            GenericAvroRecord(schemaVersion, schema, fields, avroRecord)
         } catch (e: IOException) {
             throw SchemaSerializationException(e)
@@ -47,7 +47,7 @@ internal class GenericAvroReader(writerSchema: Schema?, private val schema: Sche
     override fun read(inputStream: InputStream): GenericRecord {
         return try {
             val decoder: Decoder = DecoderFactory.get().binaryDecoder(inputStream, null)
-            reader!!.read(null, decoder) as GenericRecord
+            reader.read(null, decoder) as GenericRecord
 //            GenericAvroRecord(schemaVersion, schema, fields, avroRecord)
         } catch (e: IOException) {
             throw SchemaSerializationException(e)

@@ -50,7 +50,7 @@ This project is licensed under the terms of the MIT license. Check the `LICENSE.
 
 ```
 
-### Build all the Docker images (for the example projects)
+### Build all the Docker images (for all the example projects)
 
 ```bash
 ./gradlew jibDockerBuild
