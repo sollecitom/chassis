@@ -10,6 +10,4 @@ dependencies {
     testImplementation(projects.chassisDddTestUtils)
     testImplementation(projects.chassisCoreTestUtils)
     testImplementation(projects.chassisTestUtils)
-
-    testImplementation(projects.chassisExampleWriteEndpointAdaptersDrivenEventStoreMemory) // TODO remove and replace with a mock?
 }
