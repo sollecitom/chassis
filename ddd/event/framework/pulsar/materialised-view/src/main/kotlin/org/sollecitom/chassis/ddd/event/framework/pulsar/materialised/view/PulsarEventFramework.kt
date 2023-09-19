@@ -15,9 +15,11 @@ import org.sollecitom.chassis.ddd.domain.store.EventStore
 import org.sollecitom.chassis.ddd.logging.utils.log
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.pulsar.utils.PulsarTopic
+import org.sollecitom.chassis.pulsar.utils.brokerURI
+import java.net.URI
 
-// TODO redo this whole module
-class PulsarEventFramework(val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSchema: Schema<Event>, private val pulsarBrokerUrl: String, private val store: EventStore.Mutable, private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}, private val customizeClient: (ClientBuilder) -> Unit = {}) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
+// TODO redo this whole module to use messaging-domain
+class PulsarEventFramework(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSchema: Schema<Event>, private val brokerURI: URI, private val store: EventStore.Mutable, private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}, private val customizeClient: (ClientBuilder) -> Unit = {}) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
 
     private lateinit var pulsar: PulsarClient
     private val producerName = "${streamName.value}-producer"
@@ -37,7 +39,7 @@ class PulsarEventFramework(val topic: PulsarTopic, private val streamName: Name,
     override fun forEntityId(entityId: Id): EventFramework.EntitySpecific.Mutable = EntitySpecific(entityId)
 
     override suspend fun start() {
-        pulsar = PulsarClient.builder().serviceUrl(pulsarBrokerUrl).apply(customizeClient).build()
+        pulsar = PulsarClient.builder().brokerURI(brokerURI).apply(customizeClient).build()
         subscriber.start()
         scope.launch(start = CoroutineStart.UNDISPATCHED) {
             subscriber.messages.onEach { store(it.value) }.onEach { subscriber.acknowledge(it) }.collect()

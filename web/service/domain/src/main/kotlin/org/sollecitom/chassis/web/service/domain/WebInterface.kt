@@ -1,6 +1,6 @@
 package org.sollecitom.chassis.web.service.domain
 
-interface WebInterface {
+interface WebInterface { // TODO turn into an interface that has a web interface
 
     val host: String
     val port: Int

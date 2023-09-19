@@ -6,6 +6,9 @@ import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.context.unauthenticatedOrThrow
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.application.ApplicationCommand
+import org.sollecitom.chassis.example.event.domain.UserRegistrationEvent
+import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasAlreadySubmitted
+import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse

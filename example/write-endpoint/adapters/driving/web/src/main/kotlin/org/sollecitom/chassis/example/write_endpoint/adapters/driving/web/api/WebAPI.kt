@@ -2,6 +2,7 @@ package org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api
 
 import org.http4k.cloudnative.Http4kK8sServer
 import org.http4k.cloudnative.asK8sServer
+import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.health.Health
 import org.http4k.core.Filter
 import org.http4k.core.HttpHandler
@@ -36,8 +37,10 @@ import org.sollecitom.chassis.web.api.utils.filters.correlation.parseInvocationC
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 
-// TODO maybe turn this into a module?
+// TODO turn this into a module
 class WebAPI(private val configuration: Configuration, application: Application, coreDataGenerators: CoreDataGenerator) : Startable, Stoppable, HttpHandler, CoreDataGenerator by coreDataGenerators {
+
+    constructor(environment: Environment, application: Application, coreDataGenerators: CoreDataGenerator) : this(Configuration.from(environment), application, coreDataGenerators)
 
     private val mainApp = mainApp(RegisterUserCommandsEndpoint.V1(application::invoke), UnknownCommandsEndpoint())
     private val server = server(mainApp)

@@ -3,6 +3,7 @@ dependencies {
     api(projects.chassisDddLoggingUtils)
     api(projects.chassisLoggerCore)
     api(projects.chassisJsonUtils)
+    api(projects.chassisPulsarUtils)
 //    api(projects.chassisAvroSerializationUtils)
 
     implementation(projects.chassisPulsarJsonSerialization) // TODO api?

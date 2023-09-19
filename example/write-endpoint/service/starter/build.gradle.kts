@@ -17,8 +17,7 @@ plugins {
 
 dependencies {
     implementation(projects.chassisExampleWriteEndpointAdaptersDrivingWeb)
-    implementation(projects.chassisExampleWriteEndpointAdaptersDrivenEventFrameworkPulsarMaterialisedView)
-    implementation(projects.chassisExampleWriteEndpointAdaptersDrivenEventStoreMemory)
+    implementation(projects.chassisExampleWriteEndpointAdaptersDrivenUserRepository)
     implementation(projects.chassisExampleWriteEndpointConfiguration)
     implementation(projects.chassisKotlinExtensions)
     implementation(projects.chassisWebServiceDomain)

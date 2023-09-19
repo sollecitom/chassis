@@ -27,7 +27,13 @@ sealed class PulsarTopic(val persistent: Boolean, val namespace: Namespace?, val
         }
     }
 
-    data class Namespace(val tenant: Name, val name: Name)
+    data class Namespace(val tenant: Name, val name: Name) {
+
+        companion object {
+
+            fun parse(namespace: String): Namespace = PulsarTopic.parse("$namespace/some-topic").namespace!!
+        }
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

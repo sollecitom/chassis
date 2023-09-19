@@ -8,6 +8,7 @@ import org.testcontainers.containers.Network
 import org.testcontainers.containers.PulsarContainer
 import org.testcontainers.containers.wait.strategy.WaitStrategy
 import org.testcontainers.utility.DockerImageName
+import java.net.URI
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
@@ -36,3 +37,6 @@ fun PulsarContainer.client(customise: ClientBuilder.() -> Unit = {}): PulsarClie
 fun PulsarContainer.admin(customise: PulsarAdminBuilder.() -> Unit = {}): PulsarAdmin = PulsarAdmin.builder().serviceHttpUrl(httpServiceUrl).also(customise).build()
 
 val PulsarContainer.networkAlias: String get() = PULSAR_NETWORK_ALIAS
+
+val PulsarContainer.brokerURI: URI get() = URI.create(pulsarBrokerUrl)
+val PulsarContainer.httpServiceURI: URI get() = URI.create(httpServiceUrl)
