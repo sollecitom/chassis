@@ -11,5 +11,5 @@ dependencies {
     testImplementation(projects.chassisCoreTestUtils)
     testImplementation(projects.chassisTestUtils)
 
-    testImplementation(projects.chassisExampleWriteEndpointAdaptersDrivenEventsMemory) // TODO remove and replace with a mock?
+    testImplementation(projects.chassisExampleWriteEndpointAdaptersDrivenEventStoreMemory) // TODO remove and replace with a mock?
 }

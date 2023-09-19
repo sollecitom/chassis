@@ -17,7 +17,7 @@ plugins {
 
 dependencies {
     implementation(projects.chassisExampleWriteEndpointAdaptersDrivingWeb)
-    implementation(projects.chassisExampleWriteEndpointAdaptersDrivenEventsMemory)
+    implementation(projects.chassisExampleWriteEndpointAdaptersDrivenEventStoreMemory) // TODO replace with the pulsar one
     implementation(projects.chassisExampleWriteEndpointConfiguration)
     implementation(projects.chassisKotlinExtensions)
     implementation(projects.chassisWebServiceDomain)
