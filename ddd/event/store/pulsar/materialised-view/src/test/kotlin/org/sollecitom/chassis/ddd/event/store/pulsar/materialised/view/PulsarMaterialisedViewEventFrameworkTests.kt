@@ -28,7 +28,6 @@ private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpec
 
     override val timeout = 20.seconds
     private val pulsar = newPulsarContainer()
-    private val pulsarClient by lazy { pulsar.client() }
     private val pulsarAdmin by lazy { pulsar.admin() }
     private val streamName = "test-pulsar-event-stream".let(::Name)
     private val instanceId = StringId("1")
@@ -41,7 +40,7 @@ private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpec
     private fun createEventStore(): PulsarEventFramework {
 
         val topic = PulsarTopic.create()
-        val framework = PulsarEventFramework(topic, streamName, instanceId, eventSerde.pulsarAvroSchema(), pulsarClient, InMemoryEventStore())
+        val framework = PulsarEventFramework(topic, streamName, instanceId, eventSerde.pulsarAvroSchema(), pulsar.pulsarBrokerUrl, InMemoryEventStore())
         pulsarAdmin.ensureTopicExists(topic = topic, numberOfPartitions = 1, isAllowAutoUpdateSchema = true)
         framework.startBlocking()
         instances += framework
