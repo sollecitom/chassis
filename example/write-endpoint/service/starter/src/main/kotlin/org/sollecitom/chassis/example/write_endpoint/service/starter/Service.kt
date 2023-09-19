@@ -17,16 +17,14 @@ import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRepository
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.service.domain.WebService
 
-// TODO change the project's modules structure, so it's service/starter, service/tests, etc.
 class Service(private val environment: Environment, coreDataGenerators: CoreDataGenerator) : WebService, CoreDataGenerator by coreDataGenerators {
 
     constructor(environment: Environment) : this(environment, CoreDataGenerator.provider(environment))
 
-    // TODO change this to use modules instead? might be overkill here, but think about the modular monolith
     private val eventStore = events()
     private val userRepository = userRepository(events = eventStore)
     private val application: Application = application(userRepository = userRepository)
-    private val webAPI = webApi(application = application, environment = environment) // TODO should each module return its endpoints, and you start the server?
+    private val webAPI = webApi(application = application, environment = environment) // TODO for a modular monolith, should each module return its endpoints, and you start the server?
 
     override val port: Int get() = webAPI.servicePort
     override val healthPort: Int get() = webAPI.healthPort
