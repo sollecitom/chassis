@@ -1,5 +1,6 @@
 package org.sollecitom.chassis.web.api.test.utils
 
-import org.sollecitom.chassis.web.service.domain.WebInterface
+import org.sollecitom.chassis.core.domain.networking.Port
+import org.sollecitom.chassis.web.service.domain.WithWebInterface
 
-fun WebInterface.httpURLWithPath(path: String, port: Int = this.port, protocol: HttpProtocol = HttpProtocol.HTTP) = "${protocol.value}://$host:$port/$path"
+fun WithWebInterface.httpURLWithPath(path: String, port: Port = webInterface.port, protocol: HttpProtocol = HttpProtocol.HTTP) = "${protocol.value}://${webInterface.host}:${port.value}/$path"

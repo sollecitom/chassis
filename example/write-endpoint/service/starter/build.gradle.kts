@@ -16,8 +16,8 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.chassisExampleWriteEndpointAdaptersDrivingWeb)
-    implementation(projects.chassisExampleWriteEndpointAdaptersDrivenUserRepository)
+    api(projects.chassisExampleWriteEndpointAdaptersDrivingWeb)
+    api(projects.chassisExampleWriteEndpointAdaptersDrivenUserRepository)
     implementation(projects.chassisExampleWriteEndpointConfiguration)
     implementation(projects.chassisKotlinExtensions)
     implementation(projects.chassisWebServiceDomain)

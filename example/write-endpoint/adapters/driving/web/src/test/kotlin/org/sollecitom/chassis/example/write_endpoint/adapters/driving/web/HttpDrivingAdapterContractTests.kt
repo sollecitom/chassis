@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.email.EmailAddress
-import org.sollecitom.chassis.core.domain.networking.SpecifiedPort
+import org.sollecitom.chassis.core.domain.networking.RequestedPort
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.correlation.core.domain.access.Access
@@ -23,7 +23,7 @@ import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticate
 import org.sollecitom.chassis.correlation.logging.test.utils.haveContext
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.application.ApplicationCommand
-import org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.WebAPI
+import org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.HttpDrivingAdapter
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
@@ -44,7 +44,7 @@ import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 
 @TestInstance(PER_CLASS)
-private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, CoreDataGenerator by CoreDataGenerator.provider() {
+private class HttpDrivingAdapterContractTests : WithHttp4kOpenApiValidationSupport, CoreDataGenerator by CoreDataGenerator.provider() {
 
     override val openApiValidator = Http4kOpenApiValidator(openApi)
 
@@ -56,7 +56,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, CoreData
     fun `submitting a register user command for an unregistered user`() {
 
         val userId = newId.internal()
-        val api = webApi { _ -> Accepted(user = UserWithPendingRegistration(userId)) }
+        val api = httpDrivingAdapter { _ -> Accepted(user = UserWithPendingRegistration(userId)) }
         val commandType = RegisterUser.V1.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated().withToggle(Toggles.InvocationVisibility, InvocationVisibility.HIGH)
@@ -74,7 +74,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, CoreData
     fun `submitting a register user command for an already registered user`() {
 
         val existingUserId = newId.internal()
-        val api = webApi { _ -> EmailAddressAlreadyInUse(userId = existingUserId) }
+        val api = httpDrivingAdapter { _ -> EmailAddressAlreadyInUse(userId = existingUserId) }
         val commandType = RegisterUser.V1.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated()
@@ -90,7 +90,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, CoreData
     @Test
     fun `attempting to submit a register user command with an invalid email address`() {
 
-        val api = webApi()
+        val api = httpDrivingAdapter()
         val commandType = RegisterUser.V1.type
         val json = registerUserPayload("invalid")
         val invocationContext = InvocationContext.unauthenticated()
@@ -106,7 +106,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, CoreData
     @Test
     fun `attempting to submit a register user command with an invalid content type`() {
 
-        val api = webApi()
+        val api = httpDrivingAdapter()
         val commandType = RegisterUser.V1.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated()
@@ -122,7 +122,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, CoreData
     @Test
     fun `attempting to submit a register user command with an invalid version`() {
 
-        val api = webApi()
+        val api = httpDrivingAdapter()
         val commandType = RegisterUser.V1.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated()
@@ -138,7 +138,7 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, CoreData
     @Test
     fun `attempting to submit a command with a nonexistent type`() {
 
-        val api = webApi()
+        val api = httpDrivingAdapter()
         val commandType = RegisterUser.V1.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated()
@@ -168,13 +168,9 @@ private class WebApiContractTests : WithHttp4kOpenApiValidationSupport, CoreData
         }
     }
 
-    private fun webApi(configuration: WebAPI.Configuration = WebAPI.Configuration.programmatic(), handleRegisterUserV1: suspend context(InvocationContext<Access>)(RegisterUser.V1) -> RegisterUser.V1.Result = { _ -> Accepted(user = UserWithPendingRegistration(id = newId.internal())) }) = WebAPI(application = StubbedApplication(handleRegisterUserV1), configuration = configuration, coreDataGenerators = this)
+    private fun httpDrivingAdapter(configuration: HttpDrivingAdapter.Configuration = HttpDrivingAdapter.Configuration(requestedPort = RequestedPort.randomAvailable), handleRegisterUserV1: suspend context(InvocationContext<Access>)(RegisterUser.V1) -> RegisterUser.V1.Result = { _ -> Accepted(user = UserWithPendingRegistration(id = newId.internal())) }) = HttpDrivingAdapter(application = StubbedApplication(handleRegisterUserV1), configuration = configuration)
 
     private fun path(value: String) = "http://localhost:0/$value"
-
-    private fun WebAPI.Configuration.Companion.programmatic(servicePort: Int = 0, healthPort: Int = 0): WebAPI.Configuration = ProgrammaticWebAPIConfiguration(servicePort.let(::SpecifiedPort), healthPort.let(::SpecifiedPort))
-
-    private data class ProgrammaticWebAPIConfiguration(override val servicePort: SpecifiedPort, override val healthPort: SpecifiedPort) : WebAPI.Configuration
 
     companion object : HttpApiDefinition {
 

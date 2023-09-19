@@ -16,8 +16,8 @@ import org.testcontainers.containers.Network
 private class ContainerBasedServiceTests : ServiceTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
 
     private val network = Network.newNetwork()
-    private val serviceContainer by lazy { newExampleWriteEndpointServiceContainer().withNetwork(network) }
-    override val webService by lazy { serviceContainer.webInterface }
+    private val serviceContainer by lazy { newExampleWriteEndpointServiceContainer().withNetwork(network) } // TODO pass Pulsar
+    override val service: ExampleWriteEndpointServiceContainer by lazy { serviceContainer }
     override val httpClient = ApacheClient()
 
     init {

@@ -3,8 +3,10 @@ dependencies {
     api(projects.chassisCorrelationCoreSerializationJson)
     api(projects.chassisHttp4kServerUtils)
     api(projects.chassisLoggerCore)
+    api(projects.chassisConfigurationUtils)
     api(projects.chassisCorrelationLoggingUtils)
 
+    implementation(libs.http4k.server.jetty)
     implementation(projects.chassisKotlinExtensions)
 
     testImplementation(projects.chassisTestUtils)

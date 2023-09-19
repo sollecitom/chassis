@@ -3,6 +3,7 @@ dependencies {
     api(projects.chassisDddEventFrameworkPulsarMaterialisedView) // TODO hide
     api(projects.chassisDddEventStoreMemory) // TODO hide
 
+    implementation(projects.chassisExampleWriteEndpointConfiguration)
     implementation(projects.chassisLoggingStandardSlf4jConfiguration)
     implementation(projects.chassisKotlinExtensions)
     implementation(projects.chassisPulsarJsonSerialization)

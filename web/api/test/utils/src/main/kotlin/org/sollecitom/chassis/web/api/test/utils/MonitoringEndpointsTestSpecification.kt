@@ -7,7 +7,8 @@ import org.http4k.core.Method.GET
 import org.http4k.core.Request
 import org.http4k.core.Status
 import org.junit.jupiter.api.Test
-import org.sollecitom.chassis.web.service.domain.WebInterface
+import org.sollecitom.chassis.core.domain.networking.Port
+import org.sollecitom.chassis.web.service.domain.WithWebInterface
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -20,7 +21,7 @@ interface MonitoringEndpointsTestSpecification : WebServiceTestSpecification {
     @Test
     fun `liveness endpoint is exposed on the health port`() = runTest(timeout = timeout) {
 
-        val request = webService.livenessRequest()
+        val request = service.livenessRequest()
 
         val response = httpClient(request)
 
@@ -30,7 +31,7 @@ interface MonitoringEndpointsTestSpecification : WebServiceTestSpecification {
     @Test
     fun `liveness endpoint is not exposed on the main port`() = runTest(timeout = timeout) {
 
-        val request = webService.livenessRequest(port = webService.port)
+        val request = service.livenessRequest(port = service.webInterface.port)
 
         val response = httpClient(request)
 
@@ -40,7 +41,7 @@ interface MonitoringEndpointsTestSpecification : WebServiceTestSpecification {
     @Test
     fun `readiness endpoint is exposed on the health port`() = runTest(timeout = timeout) {
 
-        val request = webService.readinessRequest()
+        val request = service.readinessRequest()
 
         val response = httpClient(request)
 
@@ -50,16 +51,16 @@ interface MonitoringEndpointsTestSpecification : WebServiceTestSpecification {
     @Test
     fun `readiness endpoint is not exposed on the main port`() = runTest(timeout = timeout) {
 
-        val request = webService.readinessRequest(port = webService.port)
+        val request = service.readinessRequest(port = service.webInterface.port)
 
         val response = httpClient(request)
 
         assertThat(response.status).isEqualTo(Status.NOT_FOUND)
     }
 
-    private fun WebInterface.livenessRequest(port: Int = healthPort) = Request(GET, httpURLWithPath(livenessPath, port))
+    private fun WithWebInterface.livenessRequest(port: Port = webInterface.healthPort) = Request(GET, httpURLWithPath(livenessPath, port))
 
-    private fun WebInterface.readinessRequest(port: Int = healthPort) = Request(GET, httpURLWithPath(readinessPath, port))
+    private fun WithWebInterface.readinessRequest(port: Port = webInterface.healthPort) = Request(GET, httpURLWithPath(readinessPath, port))
 
     companion object {
         const val DEFAULT_LIVENESS_PATH = "liveness"

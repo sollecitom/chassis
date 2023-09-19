@@ -24,6 +24,7 @@ import kotlin.time.Duration.Companion.seconds
 
 interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestSpecification {
 
+    // TODO add pulsar
     override val timeout: Duration get() = 30.seconds
 
     @Test
@@ -32,7 +33,7 @@ interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestS
         val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
         val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
         val invocationContext = InvocationContext.unauthenticated()
-        val request = Request(Method.POST, webService.httpURLWithPath("commands/register-user/v1")).body(json).withInvocationContext(invocationContext)
+        val request = Request(Method.POST, service.httpURLWithPath("commands/register-user/v1")).body(json).withInvocationContext(invocationContext)
 
         val response = httpClient(request)
 

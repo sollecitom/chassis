@@ -1,5 +1,6 @@
 package org.sollecitom.chassis.example.write_endpoint.service.test.container.based
 
+import org.sollecitom.chassis.core.domain.networking.Port
 import org.sollecitom.chassis.example.write_endpoint.configuration.ApplicationProperties.HEALTH_PORT
 import org.sollecitom.chassis.example.write_endpoint.configuration.ApplicationProperties.SERVICE_OCI_IMAGE_NAME
 import org.sollecitom.chassis.example.write_endpoint.configuration.ApplicationProperties.SERVICE_OCI_IMAGE_REPOSITORY
@@ -27,7 +28,7 @@ private fun waitForServiceStartedLogMessage(): LogMessageWaitStrategy = Wait.for
 
 class ExampleWriteEndpointServiceContainer(private val servicePort: Int, private val healthPort: Int) : GenericContainer<ExampleWriteEndpointServiceContainer>(imageName), WithWebInterface {
 
-    override val webInterface by lazy { WebInterface.create(host, getMappedPort(servicePort), getMappedPort(healthPort)) }
+    override val webInterface by lazy { WebInterface.create(host, getMappedPort(servicePort).let(::Port), getMappedPort(healthPort).let(::Port)) }
 
     companion object {
         val imageName: DockerImageName = DockerImageName.parse("$SERVICE_OCI_IMAGE_REPOSITORY$SERVICE_OCI_IMAGE_NAME")

@@ -1,15 +1,21 @@
 package org.sollecitom.chassis.web.service.domain
 
-interface WebInterface { // TODO turn into an interface that has a web interface
+import org.sollecitom.chassis.core.domain.networking.Port
+
+interface WebInterface {
 
     val host: String
-    val port: Int
-    val healthPort: Int
+    val port: Port
+    val healthPort: Port
 
     companion object {
 
-        fun create(host: String, port: Int, healthPort: Int): WebInterface = WebInterfaceData(host, port, healthPort)
+        private const val LOCALHOST = "localhost"
+
+        fun create(host: String, port: Port, healthPort: Port): WebInterface = WebInterfaceData(host, port, healthPort)
+
+        fun local(port: Port, healthPort: Port): WebInterface = create(LOCALHOST, port, healthPort)
     }
 }
 
-private data class WebInterfaceData(override val host: String, override val port: Int, override val healthPort: Int) : WebInterface
+private data class WebInterfaceData(override val host: String, override val port: Port, override val healthPort: Port) : WebInterface

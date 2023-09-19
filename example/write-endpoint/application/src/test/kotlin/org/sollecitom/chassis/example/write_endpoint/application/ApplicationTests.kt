@@ -19,6 +19,7 @@ import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticate
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.test.utils.create
+import org.sollecitom.chassis.example.event.domain.Published
 import org.sollecitom.chassis.example.event.domain.UserRegistrationEvent
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasAlreadySubmitted
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
@@ -26,7 +27,7 @@ import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUs
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
 import org.sollecitom.chassis.example.write_endpoint.configuration.configureLogging
-import org.sollecitom.chassis.example.write_endpoint.domain.user.*
+import org.sollecitom.chassis.example.write_endpoint.domain.user.User
 import org.sollecitom.chassis.test.utils.assertions.failedThrowing
 
 @TestInstance(PER_CLASS)
