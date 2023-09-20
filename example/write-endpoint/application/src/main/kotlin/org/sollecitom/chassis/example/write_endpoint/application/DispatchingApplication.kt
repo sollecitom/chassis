@@ -6,7 +6,7 @@ import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.context.unauthenticatedOrThrow
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.application.ApplicationCommand
-import org.sollecitom.chassis.example.event.domain.Published
+import org.sollecitom.chassis.ddd.domain.PublishedEvent
 import org.sollecitom.chassis.example.event.domain.UserRegistrationEvent
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasAlreadySubmitted
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
@@ -38,7 +38,7 @@ internal class DispatchingApplication(private val userWithEmailAddress: suspend 
         return user.submitRegistrationRequest().toOperationResult()
     }
 
-    private fun Published<UserRegistrationEvent>.toOperationResult(): RegisterUser.V1.Result = when (event) {
+    private fun PublishedEvent<UserRegistrationEvent>.toOperationResult(): RegisterUser.V1.Result = when (event) {
         is UserRegistrationRequestWasSubmitted.V1 -> Accepted(user = UserWithPendingRegistration(id = event.userId))
         is UserRegistrationRequestWasAlreadySubmitted.V1 -> EmailAddressAlreadyInUse(userId = event.userId)
     }

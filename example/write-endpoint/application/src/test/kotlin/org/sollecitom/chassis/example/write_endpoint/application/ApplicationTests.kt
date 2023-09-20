@@ -19,7 +19,7 @@ import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticate
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.test.utils.create
-import org.sollecitom.chassis.example.event.domain.Published
+import org.sollecitom.chassis.ddd.domain.PublishedEvent
 import org.sollecitom.chassis.example.event.domain.UserRegistrationEvent
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasAlreadySubmitted
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
@@ -88,10 +88,10 @@ private class ApplicationTests : CoreDataGenerator by CoreDataGenerator.testProv
     private class StubbedUser(override val id: Id, private val event: UserRegistrationEvent) : User {
 
         context(InvocationContext<*>)
-        override suspend fun submitRegistrationRequest(): Published<UserRegistrationEvent> {
+        override suspend fun submitRegistrationRequest(): PublishedEvent<UserRegistrationEvent> {
 
             val wasPersisted = CompletableDeferred(Unit)
-            return Published(event, wasPersisted)
+            return PublishedEvent(event, wasPersisted)
         }
     }
 

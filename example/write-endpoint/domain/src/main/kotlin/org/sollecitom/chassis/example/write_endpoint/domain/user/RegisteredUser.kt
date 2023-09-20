@@ -5,7 +5,7 @@ import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.ddd.domain.toEventContext
-import org.sollecitom.chassis.example.event.domain.Published
+import org.sollecitom.chassis.ddd.domain.PublishedEvent
 import org.sollecitom.chassis.example.event.domain.UserEvent
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasAlreadySubmitted
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
@@ -16,11 +16,11 @@ internal class RegisteredUser(private val pastUserRegistrationRequest: UserRegis
     override val id: Id get() = pastUserRegistrationRequest.userId
 
     context(InvocationContext<*>)
-    override suspend fun submitRegistrationRequest(): Published<UserRegistrationRequestWasAlreadySubmitted.V1> {
+    override suspend fun submitRegistrationRequest(): PublishedEvent<UserRegistrationRequestWasAlreadySubmitted.V1> {
 
         val event = pastUserRegistrationRequest.alreadySubmitted()
         val wasPersisted = publish(event)
-        return Published(event, wasPersisted)
+        return PublishedEvent(event, wasPersisted)
     }
 
     context(InvocationContext<*>)
