@@ -9,6 +9,7 @@ dependencies {
     implementation(projects.chassisKotlinExtensions)
     implementation(projects.chassisPulsarJsonSerialization)
 
+    testImplementation(projects.chassisDddEventFrameworkMemory)
     testImplementation(projects.chassisCorrelationCoreTestUtils)
     testImplementation(projects.chassisDddTestUtils)
     testImplementation(projects.chassisCoreTestUtils)

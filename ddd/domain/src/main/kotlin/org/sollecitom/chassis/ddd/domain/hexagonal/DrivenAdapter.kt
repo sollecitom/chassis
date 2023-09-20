@@ -13,6 +13,6 @@ interface DrivingAdapter : Startable, Stoppable {
 
     interface WithPortBinding : DrivingAdapter {
 
-        val port: Port // TODO should this be 1+ bindings instead?
+        val port: Port
     }
 }

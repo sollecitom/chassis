@@ -15,7 +15,7 @@ import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.create
 import org.sollecitom.chassis.ddd.domain.store.EventFramework
-import org.sollecitom.chassis.ddd.event.store.memory.inMemory
+import org.sollecitom.chassis.ddd.event.framework.memory.inMemory
 import org.sollecitom.chassis.ddd.test.utils.hasInvocationContext
 import org.sollecitom.chassis.ddd.test.utils.isOriginating
 import org.sollecitom.chassis.example.write_endpoint.domain.user.EventSourcedUserRepository

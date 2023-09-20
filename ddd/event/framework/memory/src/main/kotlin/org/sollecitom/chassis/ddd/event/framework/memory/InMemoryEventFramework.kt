@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.ddd.event.store.memory
+package org.sollecitom.chassis.ddd.event.framework.memory
 
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
@@ -7,6 +7,7 @@ import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.store.EventFramework
 import org.sollecitom.chassis.ddd.domain.store.EventStore
+import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
 
 fun EventFramework.Mutable.Companion.inMemory(queryFactory: InMemoryEventStore.Query.Factory = InMemoryEventStore.Query.Factory.WithoutCustomQueries): EventFramework.Mutable = InMemoryEventFramework(queryFactory)
 

@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.ddd.event.store.memory
+package org.sollecitom.chassis.ddd.event.framework.memory
 
 import kotlinx.coroutines.CoroutineScope
 import org.junit.jupiter.api.TestInstance
@@ -8,7 +8,6 @@ import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.store.EventFramework
 import org.sollecitom.chassis.ddd.event.store.test.specification.EventFrameworkTestSpecification
 
-// TODO move to another module or delete
 @TestInstance(PER_CLASS)
 private class InMemoryEventFrameworkTests : EventFrameworkTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
 
