@@ -67,7 +67,7 @@ interface EventJsonSerdeSupport<EVENT : Event> {
         }
 
         private object Fields {
-            const val ENTITY_ID = "entityId"
+            const val ENTITY_ID = "entity-id"
         }
     }
 

@@ -42,6 +42,6 @@ object DefaultFormatToJson : FormatLogEntry<String> {
         const val contextMap = "context"
         const val error = "error"
         const val errorMessage = "message"
-        const val errorStackTrace = "stack_trace"
+        const val errorStackTrace = "stack-trace"
     }
 }

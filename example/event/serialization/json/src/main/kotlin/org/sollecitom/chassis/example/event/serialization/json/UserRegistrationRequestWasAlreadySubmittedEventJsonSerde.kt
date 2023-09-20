@@ -32,6 +32,6 @@ internal object UserRegistrationRequestWasAlreadySubmittedEventJsonSerde : JsonS
     }
 
     private object Fields {
-        const val EMAIL_ADDRESS = "email-address" // TODO change all JSON fields to be - cased
+        const val EMAIL_ADDRESS = "email-address"
     }
 }

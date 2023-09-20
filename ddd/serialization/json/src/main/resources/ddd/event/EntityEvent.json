@@ -8,10 +8,10 @@
     }
   ],
   "required": [
-    "entityId"
+    "entity-id"
   ],
   "properties": {
-    "entityId": {
+    "entity-id": {
       "$ref": "/core/identity/Id.json"
     }
   }

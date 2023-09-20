@@ -14,7 +14,6 @@ sealed class UserRegistrationRequestWasSubmitted(val emailAddress: EmailAddress,
         val typeId = "user-registration-request-submitted".let(::Name)
     }
 
-    // TODO do we need versioning here?
     class V1(emailAddress: EmailAddress, userId: Id, id: Id, timestamp: Instant, context: Event.Context) : UserRegistrationRequestWasSubmitted(emailAddress, userId, id, timestamp, type, context) {
 
         override fun equals(other: Any?): Boolean {

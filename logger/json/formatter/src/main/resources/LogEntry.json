@@ -33,7 +33,7 @@
       },
       "required": [
         "message",
-        "stack_trace"
+        "stack-trace"
       ]
     },
     "thread": {
