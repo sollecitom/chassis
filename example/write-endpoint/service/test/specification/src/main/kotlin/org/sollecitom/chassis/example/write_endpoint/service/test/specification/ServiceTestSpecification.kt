@@ -18,10 +18,9 @@ import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.test.utils.hasInvocationContext
 import org.sollecitom.chassis.ddd.test.utils.isOriginating
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
+import org.sollecitom.chassis.example.event.serialization.json.jsonSerde
 import org.sollecitom.chassis.http4k.utils.lens.body
-import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.pulsar.json.serialization.asPulsarSchema
-import org.sollecitom.chassis.pulsar.test.utils.client
 import org.sollecitom.chassis.pulsar.utils.PulsarTopic
 import org.sollecitom.chassis.pulsar.utils.consume
 import org.sollecitom.chassis.pulsar.utils.topic
@@ -48,8 +47,7 @@ interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestS
         val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
         val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
         val invocationContext = InvocationContext.unauthenticated()
-        val serde: JsonSerde.SchemaAware<Event> = TODO("implement")
-        val schema = serde.asPulsarSchema()
+        val schema = Event.jsonSerde.asPulsarSchema()
         val consumer = pulsarClient.newConsumer(schema).topic(topic).subscriptionName("a subscription").subscribe()
 
         val request = Request(Method.POST, service.httpURLWithPath("commands/register-user/v1")).body(json).withInvocationContext(invocationContext)

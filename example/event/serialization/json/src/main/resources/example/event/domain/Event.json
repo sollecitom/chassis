@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "type"
+  ],
+  "allOf": [
+    {
+      "$ref": "/ddd/event/Event.json"
+    }
+  ],
+  "properties": {
+    "type": {},
+    "id": {},
+    "timestamp": {},
+    "context": {}
+  },
+  "oneOf": [
+    {
+      "$ref": "/example/event/domain/user/UserEvent.json"
+    }
+  ]
+}

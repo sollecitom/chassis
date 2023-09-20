@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "type"
+  ],
+  "allOf": [
+    {
+      "$ref": "/example/event/domain/user/UserEvent.json"
+    }
+  ],
+  "properties": {
+    "type": {},
+    "id": {},
+    "timestamp": {},
+    "context": {}
+  },
+  "oneOf": [
+    {
+      "$ref": "/example/event/domain/user/registration/UserRegistrationRequestWasSubmitted.json"
+    },
+    {
+      "$ref": "/example/event/domain/user/registration/UserRegistrationRequestWasAlreadySubmitted.json"
+    }
+  ]
+}

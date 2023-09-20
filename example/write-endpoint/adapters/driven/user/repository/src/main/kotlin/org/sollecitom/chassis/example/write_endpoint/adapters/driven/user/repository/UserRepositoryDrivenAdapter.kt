@@ -13,9 +13,9 @@ import org.sollecitom.chassis.ddd.domain.store.EventStore
 import org.sollecitom.chassis.ddd.event.framework.pulsar.materialised.view.PulsarEventFramework
 import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
 import org.sollecitom.chassis.example.event.domain.UserEvent
+import org.sollecitom.chassis.example.event.serialization.json.jsonSerde
 import org.sollecitom.chassis.example.write_endpoint.domain.user.EventSourcedUserRepository
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRepository
-import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.lens.core.extensions.base.javaURI
 import org.sollecitom.chassis.lens.core.extensions.identity.id
 import org.sollecitom.chassis.pulsar.json.serialization.asPulsarSchema
@@ -27,8 +27,7 @@ class UserRepositoryDrivenAdapter(private val configuration: Configuration, priv
 
     constructor(environment: Environment, coreDataGenerator: CoreDataGenerator) : this(Configuration.from(environment), coreDataGenerator)
 
-    private val eventSerde: JsonSerde.SchemaAware<Event> = TODO("import from another module")
-    private val eventSchema: Schema<Event> = eventSerde.asPulsarSchema()
+    private val eventSchema: Schema<Event> = Event.jsonSerde.asPulsarSchema() // TODO should this come from the constructor?
     private val eventStore = eventStore()
     private val events = events(eventStore = eventStore)
     override val port = userRepository(events = events)

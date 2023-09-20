@@ -5,12 +5,15 @@ import org.http4k.cloudnative.env.MapEnvironment
 import org.http4k.cloudnative.env.fromYaml
 import org.http4k.format.JacksonYaml
 import org.http4k.lens.BiDiLens
+import org.sollecitom.chassis.kotlin.extensions.collections.toPairsArray
 import org.sollecitom.chassis.resource.utils.ResourceLoader
 import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
 
 fun Environment.Companion.from(vararg entries: Pair<BiDiLens<Environment, *>, String>) = from(*entries.map { it.first.meta.name to it.second }.toTypedArray())
+
+fun Environment.Companion.from(entries: Map<BiDiLens<Environment, *>, String>) = from(*entries.toPairsArray())
 
 fun Environment.Companion.fromYamlResource(resourceName: String): Environment {
 

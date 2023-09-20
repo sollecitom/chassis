@@ -41,7 +41,7 @@ sealed class UserRegistrationRequestWasAlreadySubmitted(val emailAddress: EmailA
         override fun toString() = "UserRegistrationRequestWasAlreadySubmitted.V1(emailAddress=$emailAddress, userId=$userId, id=$id, timestamp=$timestamp)"
 
         companion object {
-            private val type = Happening.Type(typeId, 1.let(::IntVersion))
+            val type = Happening.Type(typeId, 1.let(::IntVersion))
         }
     }
 }
