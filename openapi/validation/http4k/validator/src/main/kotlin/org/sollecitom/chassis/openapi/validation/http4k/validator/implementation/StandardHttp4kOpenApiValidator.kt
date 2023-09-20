@@ -12,6 +12,7 @@ import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiV
 import org.sollecitom.chassis.openapi.validation.http4k.validator.custom.validators.ResponseJsonBodyValidator
 import org.sollecitom.chassis.openapi.validation.http4k.validator.custom.validators.UnknownHeadersRejectingRequestValidator
 import org.sollecitom.chassis.openapi.validation.http4k.validator.custom.validators.UnknownHeadersRejectingResponseValidator
+import org.sollecitom.chassis.openapi.validation.http4k.validator.custom.validators.UnknownQueryParamsRejectingRequestValidator
 import org.sollecitom.chassis.openapi.validation.http4k.validator.model.ResponseWithHeaders
 import org.sollecitom.chassis.openapi.validation.http4k.validator.model.ResponseWithHeadersAdapter
 import org.sollecitom.chassis.openapi.validation.http4k.validator.utils.toMultiMap
@@ -60,12 +61,13 @@ internal class StandardHttp4kOpenApiValidator(openApi: OpenAPI, rejectUnknownReq
             withBody(body)
             contentType?.let { contentType -> builder.withContentType(contentType.toHeaderValue()) }
             headers.toMultiMap().forEach { header -> withHeader(header.key, header.value.toList()) }
+            uri.queries().toMultiMap().forEach { query -> withQueryParam(query.key, query.value.toList()) }
         }
         return builder.build()
     }
 
     private fun OpenApiInteractionValidator.Builder.withRejectUnknownRequestHeaders(rejectUnknownParameters: Boolean): OpenApiInteractionValidator.Builder = when (rejectUnknownParameters) {
-        true -> withCustomRequestValidation(UnknownHeadersRejectingRequestValidator)
+        true -> withCustomRequestValidation(UnknownHeadersRejectingRequestValidator).withCustomRequestValidation(UnknownQueryParamsRejectingRequestValidator)
         else -> this
     }
 

@@ -71,6 +71,17 @@ private class Http4kRequestOpenApiValidationTests {
         }
 
         @Test
+        fun `are rejected as invalid when an unknown query param is specified`() {
+
+            val json = validPersonDetails.toJson()
+            val request = validRequest(json).body(json).query("unknown-query-param", "unknown-query-param-value")
+
+            val report = validator.validate(request)
+
+            assertThat(report).containsOnly(ValidationReportError.Request.UnknownHeader)
+        }
+
+        @Test
         fun `are rejected as invalid when the body is invalid`() {
 
             val invalidJson = validPersonDetails.toJson().apply { remove("firstName") }
