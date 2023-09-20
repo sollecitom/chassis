@@ -11,8 +11,6 @@ interface Message<out VALUE> {
     fun hasProperty(propertyKey: String): Boolean = properties.containsKey(propertyKey)
     fun getPropertyOrNull(propertyKey: String): String? = properties[propertyKey]
 
-    // TODO wanna add here support for encryption context?
-
     open class Id(val partitionIndex: Int, val serial: Long) {
 
         fun receivedOnTopic(topic: Topic): ReceivedMessage.Id = ReceivedMessage.Id(partitionIndex, serial, topic)

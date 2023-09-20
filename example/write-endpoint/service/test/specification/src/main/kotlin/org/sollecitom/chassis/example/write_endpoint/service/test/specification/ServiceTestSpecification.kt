@@ -4,11 +4,10 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
 import kotlinx.coroutines.test.runTest
+import org.apache.pulsar.client.admin.PulsarAdmin
 import org.apache.pulsar.client.api.PulsarClient
-import org.http4k.client.AsyncHttpHandler
 import org.http4k.core.Method
 import org.http4k.core.Request
-import org.http4k.core.Response
 import org.http4k.core.Status
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
@@ -26,6 +25,7 @@ import org.sollecitom.chassis.http4k.utils.lens.invoke
 import org.sollecitom.chassis.pulsar.json.serialization.asPulsarSchema
 import org.sollecitom.chassis.pulsar.utils.PulsarTopic
 import org.sollecitom.chassis.pulsar.utils.consume
+import org.sollecitom.chassis.pulsar.utils.ensureTopicExists
 import org.sollecitom.chassis.pulsar.utils.topic
 import org.sollecitom.chassis.web.api.test.utils.MonitoringEndpointsTestSpecification
 import org.sollecitom.chassis.web.api.test.utils.httpURLWithPath
@@ -34,8 +34,6 @@ import org.sollecitom.chassis.web.api.utils.api.withInvocationContext
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 import org.testcontainers.containers.PulsarContainer
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -43,8 +41,18 @@ interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestS
 
     val pulsar: PulsarContainer
     val pulsarClient: PulsarClient
+    val pulsarAdmin: PulsarAdmin
     val topic: PulsarTopic
     override val timeout: Duration get() = 30.seconds
+
+    fun specificationBeforeAll() {
+        pulsar.start()
+        pulsarAdmin.ensureTopicExists(topic = topic, isAllowAutoUpdateSchema = true)
+    }
+
+    fun specificationAfterAll() {
+        pulsar.stop()
+    }
 
     @Test
     fun `submitting a register user command`() = runTest(timeout = timeout) {

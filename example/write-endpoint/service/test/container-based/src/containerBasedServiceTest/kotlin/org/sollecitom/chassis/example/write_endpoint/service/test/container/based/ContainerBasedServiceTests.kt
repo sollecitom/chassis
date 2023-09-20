@@ -12,7 +12,6 @@ import org.sollecitom.chassis.example.write_endpoint.service.test.specification.
 import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.pulsar.test.utils.*
 import org.sollecitom.chassis.pulsar.utils.PulsarTopic
-import org.sollecitom.chassis.pulsar.utils.ensureTopicExists
 import org.testcontainers.containers.Network
 import org.testcontainers.containers.PulsarContainer
 
@@ -22,7 +21,7 @@ private class ContainerBasedServiceTests : ServiceTestSpecification, CoreDataGen
     private val network = Network.newNetwork()
     override val pulsar: PulsarContainer = newPulsarContainer().withNetworkAndAliases(network)
     override val pulsarClient by lazy { pulsar.client() }
-    private val pulsarAdmin by lazy { pulsar.admin() }
+    override val pulsarAdmin by lazy { pulsar.admin() }
     override val topic = PulsarTopic.create()
     private val serviceContainer by lazy { newExampleWriteEndpointServiceContainer(topic, pulsar).withNetwork(network) }
     override val service: ExampleWriteEndpointServiceContainer by lazy { serviceContainer }
@@ -34,15 +33,14 @@ private class ContainerBasedServiceTests : ServiceTestSpecification, CoreDataGen
 
     @BeforeAll
     fun beforeAll() {
-        pulsar.start()
-        pulsarAdmin.ensureTopicExists(topic = topic, isAllowAutoUpdateSchema = true) // TODO move this to the spec?
+        specificationBeforeAll()
         serviceContainer.start()
     }
 
     @AfterAll
     fun afterAll() {
         serviceContainer.stop()
-        pulsar.stop()
+        specificationAfterAll()
         network.close()
     }
 }

@@ -23,7 +23,6 @@ import org.sollecitom.chassis.pulsar.test.utils.client
 import org.sollecitom.chassis.pulsar.test.utils.create
 import org.sollecitom.chassis.pulsar.test.utils.newPulsarContainer
 import org.sollecitom.chassis.pulsar.utils.PulsarTopic
-import org.sollecitom.chassis.pulsar.utils.ensureTopicExists
 
 @TestInstance(PER_CLASS)
 private class ProcessBasedServiceTests : ServiceTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
@@ -34,7 +33,7 @@ private class ProcessBasedServiceTests : ServiceTestSpecification, CoreDataGener
 
     override val pulsar = newPulsarContainer()
     override val pulsarClient by lazy { pulsar.client() }
-    private val pulsarAdmin by lazy { pulsar.admin() }
+    override val pulsarAdmin by lazy { pulsar.admin() }
     override val topic = PulsarTopic.create()
 
     private val drivingAdapterConfig = mapOf<BiDiLens<Environment, *>, String>(EnvironmentKey.servicePort to "0")
@@ -52,13 +51,10 @@ private class ProcessBasedServiceTests : ServiceTestSpecification, CoreDataGener
 
     @BeforeAll
     fun beforeAll() {
-        pulsar.start()
-        pulsarAdmin.ensureTopicExists(topic = topic, isAllowAutoUpdateSchema = true)
+        specificationBeforeAll()
         service.startBlocking()
     }
 
     @AfterAll
-    fun afterAll() {
-        pulsar.stop()
-    }
+    fun afterAll() = specificationAfterAll()
 }
