@@ -14,7 +14,7 @@ import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
 import org.sollecitom.chassis.ddd.event.store.test.specification.EventFrameworkTestSpecification
 import org.sollecitom.chassis.ddd.stubs.serialization.json.event.testStubJsonSerde
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
-import org.sollecitom.chassis.pulsar.json.serialization.pulsarAvroSchema
+import org.sollecitom.chassis.pulsar.json.serialization.asPulsarSchema
 import org.sollecitom.chassis.pulsar.test.utils.admin
 import org.sollecitom.chassis.pulsar.test.utils.brokerURI
 import org.sollecitom.chassis.pulsar.test.utils.create
@@ -40,7 +40,7 @@ private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpec
     private fun createEventStore(): PulsarEventFramework {
 
         val topic = PulsarTopic.create()
-        val framework = PulsarEventFramework(topic, streamName, instanceId, eventSerde.pulsarAvroSchema(), pulsar.brokerURI, InMemoryEventStore())
+        val framework = PulsarEventFramework(topic, streamName, instanceId, eventSerde.asPulsarSchema(), pulsar.brokerURI, InMemoryEventStore())
         pulsarAdmin.ensureTopicExists(topic = topic, numberOfPartitions = 1, isAllowAutoUpdateSchema = true)
         framework.startBlocking()
         instances += framework

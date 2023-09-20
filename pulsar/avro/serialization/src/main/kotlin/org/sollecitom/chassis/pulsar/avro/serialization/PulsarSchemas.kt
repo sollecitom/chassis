@@ -5,7 +5,7 @@ import org.apache.pulsar.client.api.schema.SchemaDefinition
 import org.apache.pulsar.client.impl.schema.AvroSchema
 import org.sollecitom.chassis.avro.serialization.utils.RecordSerde
 
-fun <VALUE : Any> RecordSerde<VALUE>.pulsarAvroSchema(): AvroSchema<VALUE> = PulsarSchemas.forSerde(this)
+fun <VALUE : Any> RecordSerde<VALUE>.asPulsarSchema(): AvroSchema<VALUE> = PulsarSchemas.forSerde(this)
 
 private object PulsarSchemas {
 

@@ -3,9 +3,7 @@ package org.sollecitom.chassis.example.write_endpoint.adapters.driven.user.repos
 import org.apache.pulsar.client.api.Schema
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
-import org.http4k.lens.boolean
 import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.identity.StringId
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.Event
@@ -19,9 +17,10 @@ import org.sollecitom.chassis.example.write_endpoint.domain.user.EventSourcedUse
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRepository
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.lens.core.extensions.base.javaURI
-import org.sollecitom.chassis.lens.core.extensions.naming.name
-import org.sollecitom.chassis.pulsar.json.serialization.pulsarAvroSchema
+import org.sollecitom.chassis.lens.core.extensions.identity.id
+import org.sollecitom.chassis.pulsar.json.serialization.asPulsarSchema
 import org.sollecitom.chassis.pulsar.utils.PulsarTopic
+import org.sollecitom.chassis.pulsar.utils.pulsarTopic
 import java.net.URI
 
 class UserRepositoryDrivenAdapter(private val configuration: Configuration, private val coreDataGenerator: CoreDataGenerator) : DrivenAdapter<UserRepository>, CoreDataGenerator by coreDataGenerator {
@@ -29,7 +28,7 @@ class UserRepositoryDrivenAdapter(private val configuration: Configuration, priv
     constructor(environment: Environment, coreDataGenerator: CoreDataGenerator) : this(Configuration.from(environment), coreDataGenerator)
 
     private val eventSerde: JsonSerde.SchemaAware<Event> = TODO("import from another module")
-    private val eventSchema: Schema<Event> = eventSerde.pulsarAvroSchema()
+    private val eventSchema: Schema<Event> = eventSerde.asPulsarSchema()
     private val eventStore = eventStore()
     private val events = events(eventStore = eventStore)
     override val port = userRepository(events = events)
@@ -44,27 +43,22 @@ class UserRepositoryDrivenAdapter(private val configuration: Configuration, priv
 
     private fun userRepository(events: EventFramework.Mutable) = EventSourcedUserRepository(events = events, coreDataGenerators = this)
 
-    private operator fun PulsarEventFramework.Companion.invoke(configuration: Configuration, eventSchema: Schema<Event>, eventStore: EventStore.Mutable) = PulsarEventFramework(configuration.outboundTopic, configuration.eventStreamName, configuration.instanceId, eventSchema, configuration.pulsarBrokerURI, eventStore)
+    private operator fun PulsarEventFramework.Companion.invoke(configuration: Configuration, eventSchema: Schema<Event>, eventStore: EventStore.Mutable) = PulsarEventFramework(configuration.outboundTopic, eventStreamName, configuration.instanceId, eventSchema, configuration.pulsarBrokerURI, eventStore)
 
     data class Configuration(
         val pulsarBrokerURI: URI,
         val outboundTopic: PulsarTopic, // TODO change to be Topic from messaging-domain
-        val eventStreamName: Name,
         val instanceId: Id
     ) {
 
         companion object {
             val pulsarBrokerURIKey = EnvironmentKey.javaURI().required("pulsar.broker.uri")
-            val pulsarTopicIsPersistentKey = EnvironmentKey.boolean().defaulted("pulsar.topic.persistent", true)
-            val pulsarTopicNamespaceNameKey = EnvironmentKey.name().optional("pulsar.topic.namespace")
-            val pulsarTopicNameKey = EnvironmentKey.name().required("pulsar.topic.name")
-            val eventStreamNameKey = EnvironmentKey.name().required("event.stream.name")
-            val instanceIdKey = EnvironmentKey.name().map { StringId(it.value) }.required("pulsar.consumer.instance.id")
+            val pulsarTopicKey = EnvironmentKey.pulsarTopic().required("pulsar.topic")
+            val instanceIdKey = EnvironmentKey.id().required("pulsar.consumer.instance.id")
 
             fun from(environment: Environment) = Configuration(
                 pulsarBrokerURIKey(environment),
-                PulsarTopic.of(pulsarTopicIsPersistentKey(environment), pulsarTopicNamespaceNameKey(environment)?.let { PulsarTopic.Namespace.parse(it.value) }, pulsarTopicNameKey(environment)),
-                eventStreamNameKey(environment),
+                pulsarTopicKey(environment),
                 instanceIdKey(environment)
             )
         }
@@ -74,5 +68,7 @@ class UserRepositoryDrivenAdapter(private val configuration: Configuration, priv
 
         context(CoreDataGenerator)
         fun create(environment: Environment) = UserRepositoryDrivenAdapter(Configuration.from(environment), this@CoreDataGenerator)
+
+        val eventStreamName = "example-write-endpoint-service".let(::Name)
     }
 }

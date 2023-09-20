@@ -3,6 +3,11 @@ dependencies {
     api(projects.chassisWebApiTestUtils)
     api(projects.chassisTestUtils)
     api(projects.chassisCorrelationCoreTestUtils)
+    api(projects.chassisPulsarTestUtils)
+    api(projects.chassisPulsarJsonSerialization)
+    api(projects.chassisExampleEventDomain)
+    api(projects.chassisExampleEventSerializationJson)
+    api(projects.chassisDddTestUtils)
 
     implementation(projects.chassisKotlinExtensions)
 
