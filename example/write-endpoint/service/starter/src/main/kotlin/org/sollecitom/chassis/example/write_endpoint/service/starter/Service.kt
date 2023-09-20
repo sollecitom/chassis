@@ -8,7 +8,7 @@ import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.hexagonal.DrivenAdapter
 import org.sollecitom.chassis.example.write_endpoint.adapters.driven.user.repository.UserRepositoryDrivenAdapter
 import org.sollecitom.chassis.web.api.utils.api.HealthHttpDrivingAdapter
-import org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.HttpDrivingAdapter
+import org.sollecitom.chassis.example.write_endpoint.adapters.driving.http.api.HttpDrivingAdapter
 import org.sollecitom.chassis.example.write_endpoint.application.invoke
 import org.sollecitom.chassis.example.write_endpoint.configuration.ApplicationProperties
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRepository

@@ -23,7 +23,7 @@ import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticate
 import org.sollecitom.chassis.correlation.logging.test.utils.haveContext
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.application.ApplicationCommand
-import org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.HttpDrivingAdapter
+import org.sollecitom.chassis.example.write_endpoint.adapters.driving.http.api.HttpDrivingAdapter
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse

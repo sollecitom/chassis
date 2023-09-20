@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.endpoints
+package org.sollecitom.chassis.example.write_endpoint.adapters.driving.http.api.endpoints
 
 import org.http4k.core.Method
 import org.http4k.core.Response

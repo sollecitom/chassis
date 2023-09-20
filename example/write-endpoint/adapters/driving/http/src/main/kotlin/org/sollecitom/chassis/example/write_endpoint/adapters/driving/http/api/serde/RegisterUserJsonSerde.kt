@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.serde
+package org.sollecitom.chassis.example.write_endpoint.adapters.driving.http.api.serde
 
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.email.EmailAddress

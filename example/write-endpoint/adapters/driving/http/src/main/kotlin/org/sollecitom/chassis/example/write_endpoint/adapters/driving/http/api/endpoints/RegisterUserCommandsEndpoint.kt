@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.endpoints
+package org.sollecitom.chassis.example.write_endpoint.adapters.driving.http.api.endpoints
 
 import org.http4k.core.Body
 import org.http4k.core.Method
@@ -13,7 +13,7 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.logging.utils.log
 import org.sollecitom.chassis.ddd.domain.Happening
-import org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.serde.serde
+import org.sollecitom.chassis.example.write_endpoint.adapters.driving.http.api.serde.serde
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.jsonObject
@@ -36,7 +36,7 @@ sealed class RegisterUserCommandsEndpoint {
         private fun acceptCommand() = path bind Method.POST toUnauthenticated { request ->
 
             logger.log { "Received command with type '$COMMAND_TYPE'" }
-            val command = command(request)
+            val command = Companion.command(request)
 
             val result = handle(command)
 

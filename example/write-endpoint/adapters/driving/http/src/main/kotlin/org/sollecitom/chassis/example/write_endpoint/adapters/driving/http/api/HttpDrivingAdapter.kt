@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api
+package org.sollecitom.chassis.example.write_endpoint.adapters.driving.http.api
 
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
@@ -9,9 +9,8 @@ import org.sollecitom.chassis.core.domain.networking.Port
 import org.sollecitom.chassis.core.domain.networking.RequestedPort
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.hexagonal.DrivingAdapter
-import org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.endpoints.RegisterUserCommandsEndpoint
-import org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.endpoints.UnknownCommandsEndpoint
-import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
+import org.sollecitom.chassis.example.write_endpoint.adapters.driving.http.api.endpoints.RegisterUserCommandsEndpoint
+import org.sollecitom.chassis.example.write_endpoint.adapters.driving.http.api.endpoints.UnknownCommandsEndpoint
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
@@ -19,8 +18,7 @@ import org.sollecitom.chassis.web.api.utils.api.mainHttpApi
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 
-// TODO rename this module to adapters-driving-http
-class HttpDrivingAdapter(private val application: Application, private val configuration: Configuration) : DrivingAdapter.WithPortBinding, HttpHandler {
+class HttpDrivingAdapter(private val application: Application, configuration: Configuration) : DrivingAdapter.WithPortBinding, HttpHandler {
 
     constructor(application: Application, environment: Environment) : this(application, Configuration.from(environment))
 
