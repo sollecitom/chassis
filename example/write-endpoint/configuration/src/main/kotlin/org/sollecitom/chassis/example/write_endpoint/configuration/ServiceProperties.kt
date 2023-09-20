@@ -1,12 +1,10 @@
 package org.sollecitom.chassis.example.write_endpoint.configuration
 
-// TODO rename to ServiceProperties, and move under service/starter
-object ApplicationProperties {
+object ServiceProperties {
 
     const val SERVICE_STARTED_LOG_MESSAGE = "--Service started--"
     const val SERVICE_STOPPED_LOG_MESSAGE = "--Service stopped--"
 
-    // TODO move these in the container-based test module
     const val SERVICE_PORT = "SERVICE_PORT"
     const val HEALTH_PORT = "HEALTH_PORT"
     const val PULSAR_BROKER_URI = "PULSAR_BROKER_URI"

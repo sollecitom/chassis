@@ -10,7 +10,7 @@ import org.sollecitom.chassis.example.write_endpoint.adapters.driven.user.reposi
 import org.sollecitom.chassis.web.api.utils.api.HealthHttpDrivingAdapter
 import org.sollecitom.chassis.example.write_endpoint.adapters.driving.http.api.HttpDrivingAdapter
 import org.sollecitom.chassis.example.write_endpoint.application.invoke
-import org.sollecitom.chassis.example.write_endpoint.configuration.ApplicationProperties
+import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties
 import org.sollecitom.chassis.example.write_endpoint.domain.user.UserRepository
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.service.domain.WebInterface
@@ -32,14 +32,14 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
         userRepositoryDrivenAdapter.start()
         httpDrivingAdapter.start()
         healthHttpDrivingAdapter.start()
-        logger.info { ApplicationProperties.SERVICE_STARTED_LOG_MESSAGE }
+        logger.info { ServiceProperties.SERVICE_STARTED_LOG_MESSAGE }
     }
 
     override suspend fun stop() {
         healthHttpDrivingAdapter.stop()
         httpDrivingAdapter.stop()
         userRepositoryDrivenAdapter.stop()
-        logger.info { ApplicationProperties.SERVICE_STOPPED_LOG_MESSAGE }
+        logger.info { ServiceProperties.SERVICE_STOPPED_LOG_MESSAGE }
     }
 
     companion object : Loggable()
