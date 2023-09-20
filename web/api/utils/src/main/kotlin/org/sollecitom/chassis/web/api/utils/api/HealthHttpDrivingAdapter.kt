@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api
+package org.sollecitom.chassis.web.api.utils.api
 
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
@@ -9,10 +9,7 @@ import org.sollecitom.chassis.core.domain.networking.RequestedPort
 import org.sollecitom.chassis.ddd.domain.hexagonal.DrivingAdapter
 import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
 import org.sollecitom.chassis.logger.core.loggable.Loggable
-import org.sollecitom.chassis.web.api.utils.api.healthHttpApi
-import org.sollecitom.chassis.web.api.utils.api.standardHealthApp
 
-// TODO move somewhere shared
 class HealthHttpDrivingAdapter(private val configuration: Configuration, private val app: HttpHandler = standardHealthApp()) : DrivingAdapter.WithPortBinding {
 
     constructor(environment: Environment, app: HttpHandler = standardHealthApp()) : this(Configuration.from(environment), app)
