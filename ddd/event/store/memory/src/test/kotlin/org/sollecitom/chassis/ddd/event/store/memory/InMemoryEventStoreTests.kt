@@ -13,4 +13,6 @@ private class InMemoryEventStoreTests : EventStoreTestSpecification, CoreDataGen
 
     context(CoroutineScope)
     override fun candidate() = InMemoryEventStore()
+
+    // TODO add tests about querying
 }

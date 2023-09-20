@@ -55,6 +55,4 @@ interface EventStoreTestSpecification : CoreDataGenerator {
 
         assertThat(historicalEvents).containsSameElementsAs(publishedEvents)
     }
-
-    // TODO add tests about querying
 }

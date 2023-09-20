@@ -1,5 +1,5 @@
 dependencies {
     api(projects.chassisDddEventStoreMemory)
 
-    testImplementation(projects.chassisDddEventStoreTestSpecification)
+    testImplementation(projects.chassisDddEventFrameworkTestSpecification)
 }

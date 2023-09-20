@@ -10,8 +10,8 @@ import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.Event
+import org.sollecitom.chassis.ddd.event.framework.test.specification.EventFrameworkTestSpecification
 import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
-import org.sollecitom.chassis.ddd.event.store.test.specification.EventFrameworkTestSpecification
 import org.sollecitom.chassis.ddd.stubs.serialization.json.event.testStubJsonSerde
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.pulsar.json.serialization.asPulsarSchema

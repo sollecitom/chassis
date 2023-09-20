@@ -18,6 +18,7 @@ import org.sollecitom.chassis.pulsar.utils.PulsarTopic
 import org.sollecitom.chassis.pulsar.utils.brokerURI
 import java.net.URI
 
+// TODO create the outbox implementation in another module
 // TODO redo this whole module to use messaging-domain
 class PulsarEventFramework(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSchema: Schema<Event>, private val brokerURI: URI, private val store: EventStore.Mutable, private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}, private val customizeClient: (ClientBuilder) -> Unit = {}) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
 

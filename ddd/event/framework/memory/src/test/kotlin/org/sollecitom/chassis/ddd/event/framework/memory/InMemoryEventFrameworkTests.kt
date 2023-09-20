@@ -6,7 +6,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.store.EventFramework
-import org.sollecitom.chassis.ddd.event.store.test.specification.EventFrameworkTestSpecification
+import org.sollecitom.chassis.ddd.event.framework.test.specification.EventFrameworkTestSpecification
 
 @TestInstance(PER_CLASS)
 private class InMemoryEventFrameworkTests : EventFrameworkTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
