@@ -13,18 +13,19 @@ import org.sollecitom.chassis.example.write_endpoint.configuration.ApplicationPr
 import org.sollecitom.chassis.example.write_endpoint.configuration.ApplicationProperties.SERVICE_STARTED_LOG_MESSAGE
 import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration.Properties.LOGGING_LEVEL_ENV_VARIABLE
 import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration.Properties.LOGGING_LEVEL_OVERRIDES_ENV_VARIABLE
+import org.sollecitom.chassis.pulsar.test.utils.networkAlias
 import org.sollecitom.chassis.pulsar.utils.PulsarTopic
 import org.sollecitom.chassis.test.containers.utils.withJavaArgs
 import org.sollecitom.chassis.web.service.domain.WebInterface
 import org.sollecitom.chassis.web.service.domain.WithWebInterface
 import org.testcontainers.containers.GenericContainer
+import org.testcontainers.containers.PulsarContainer
 import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.utility.DockerImageName
-import java.net.URI
 
 context(CoreDataGenerator)
-fun newExampleWriteEndpointServiceContainer(pulsarTopic: PulsarTopic, pulsarBrokerURI: URI, pulsarConsumerInstanceId: Id = newId.internal(), servicePort: Int = 8090, healthPort: Int = 8091): ExampleWriteEndpointServiceContainer {
+fun newExampleWriteEndpointServiceContainer(pulsarTopic: PulsarTopic, pulsar: PulsarContainer, pulsarConsumerInstanceId: Id = newId.internal(), servicePort: Int = 8090, healthPort: Int = 8091): ExampleWriteEndpointServiceContainer {
 
     val loggingArguments = mapOf(LOGGING_LEVEL_ENV_VARIABLE to "INFO", LOGGING_LEVEL_OVERRIDES_ENV_VARIABLE to "org.eclipse.jetty=WARN,org.apache.hc=WARN")
 
@@ -34,8 +35,9 @@ fun newExampleWriteEndpointServiceContainer(pulsarTopic: PulsarTopic, pulsarBrok
     val healthArguments = mapOf(
         HEALTH_PORT to "$healthPort"
     )
+    val pulsarBrokerUrl = "pulsar://${pulsar.networkAlias}:${PulsarContainer.BROKER_PORT}"
     val pulsarArguments = mapOf(
-        PULSAR_BROKER_URI to pulsarBrokerURI.toString(),
+        PULSAR_BROKER_URI to pulsarBrokerUrl,
         PULSAR_TOPIC to pulsarTopic.fullName.value,
         PULSAR_CONSUMER_INSTANCE_ID to pulsarConsumerInstanceId.stringValue
     )

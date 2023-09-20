@@ -24,18 +24,18 @@ private class ContainerBasedServiceTests : ServiceTestSpecification, CoreDataGen
     override val pulsarClient by lazy { pulsar.client() }
     private val pulsarAdmin by lazy { pulsar.admin() }
     override val topic = PulsarTopic.create()
-    private val serviceContainer by lazy { newExampleWriteEndpointServiceContainer(topic, pulsar.brokerURI).withNetwork(network) }
+    private val serviceContainer by lazy { newExampleWriteEndpointServiceContainer(topic, pulsar).withNetwork(network) }
     override val service: ExampleWriteEndpointServiceContainer by lazy { serviceContainer }
     override val httpClient = ApacheClient()
 
     init {
-        configureLogging(defaultMinimumLoggingLevel = LoggingLevel.DEBUG)
+        configureLogging(defaultMinimumLoggingLevel = LoggingLevel.INFO)
     }
 
     @BeforeAll
     fun beforeAll() {
         pulsar.start()
-        pulsarAdmin.ensureTopicExists(topic = topic, isAllowAutoUpdateSchema = true)
+        pulsarAdmin.ensureTopicExists(topic = topic, isAllowAutoUpdateSchema = true) // TODO move this to the spec?
         serviceContainer.start()
     }
 

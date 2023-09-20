@@ -8,6 +8,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.sollecitom.chassis.configuration.utils.formatted
 import org.sollecitom.chassis.configuration.utils.from
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
@@ -29,7 +30,7 @@ import org.sollecitom.chassis.pulsar.utils.ensureTopicExists
 private class ProcessBasedServiceTests : ServiceTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
 
     init {
-        configureLogging(defaultMinimumLoggingLevel = LoggingLevel.DEBUG)
+        configureLogging(defaultMinimumLoggingLevel = LoggingLevel.INFO)
     }
 
     override val pulsar = newPulsarContainer()
