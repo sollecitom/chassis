@@ -5,8 +5,10 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
 import kotlinx.coroutines.test.runTest
 import org.apache.pulsar.client.api.PulsarClient
+import org.http4k.client.AsyncHttpHandler
 import org.http4k.core.Method
 import org.http4k.core.Request
+import org.http4k.core.Response
 import org.http4k.core.Status
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
@@ -20,6 +22,7 @@ import org.sollecitom.chassis.ddd.test.utils.isOriginating
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.event.serialization.json.jsonSerde
 import org.sollecitom.chassis.http4k.utils.lens.body
+import org.sollecitom.chassis.http4k.utils.lens.invoke
 import org.sollecitom.chassis.pulsar.json.serialization.asPulsarSchema
 import org.sollecitom.chassis.pulsar.utils.PulsarTopic
 import org.sollecitom.chassis.pulsar.utils.consume
@@ -31,6 +34,8 @@ import org.sollecitom.chassis.web.api.utils.api.withInvocationContext
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 import org.testcontainers.containers.PulsarContainer
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 

@@ -8,6 +8,7 @@ import org.http4k.core.Request
 import org.http4k.core.Status
 import org.junit.jupiter.api.Test
 import org.sollecitom.chassis.core.domain.networking.Port
+import org.sollecitom.chassis.http4k.utils.lens.invoke
 import org.sollecitom.chassis.web.service.domain.WithWebInterface
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds

@@ -1,5 +1,6 @@
 package org.sollecitom.chassis.example.write_endpoint.service.test.process.based
 
+import org.http4k.client.ApacheAsyncClient
 import org.http4k.client.ApacheClient
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
@@ -49,7 +50,7 @@ private class ProcessBasedServiceTests : ServiceTestSpecification, CoreDataGener
     }
     private val environment by lazy { Environment.from(drivingAdapterConfig + healthDrivingAdapterConfig + drivenAdapterConfig) }
     override val service by lazy { Service(environment) }
-    override val httpClient = ApacheClient()
+    override val httpClient = ApacheAsyncClient()
 
     @BeforeAll
     fun beforeAll() {

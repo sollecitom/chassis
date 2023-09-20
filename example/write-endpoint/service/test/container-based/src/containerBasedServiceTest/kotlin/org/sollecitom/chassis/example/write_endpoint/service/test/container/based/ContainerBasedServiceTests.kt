@@ -1,6 +1,6 @@
 package org.sollecitom.chassis.example.write_endpoint.service.test.container.based
 
-import org.http4k.client.ApacheClient
+import org.http4k.client.ApacheAsyncClient
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
@@ -26,7 +26,7 @@ private class ContainerBasedServiceTests : ServiceTestSpecification, CoreDataGen
     override val topic = PulsarTopic.create()
     private val serviceContainer by lazy { newExampleWriteEndpointServiceContainer(topic, pulsar).withNetwork(network) }
     override val service: ExampleWriteEndpointServiceContainer by lazy { serviceContainer }
-    override val httpClient = ApacheClient()
+    override val httpClient = ApacheAsyncClient()
 
     init {
         configureLogging(defaultMinimumLoggingLevel = LoggingLevel.INFO)
