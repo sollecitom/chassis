@@ -60,6 +60,8 @@ fun <T> GenericRecord.getRecordFromUnion(deserialize: (type: String, record: Gen
 
 fun <T : Any> GenericRecord.deserializeWith(deserializer: RecordDeserializer<T>): T = deserializer.deserialize(this)
 
-// TODO introduce the same functions for List<T>
 fun <T : Any> GenericRecord.getAsValueOrNull(key: String, deserializer: RecordDeserializer<T>): T? = getRecordOrNull(key)?.deserializeWith(deserializer)
 fun <T : Any> GenericRecord.getAsValue(key: String, deserializer: RecordDeserializer<T>): T = getAsValueOrNull(key, deserializer)!!
+
+fun <T : Any> GenericRecord.getAsValuesOrNull(key: String, deserializer: RecordDeserializer<T>): List<T>? = getRecordListOrNull(key)?.map(deserializer::deserialize)
+fun <T : Any> GenericRecord.getAsValues(key: String, deserializer: RecordDeserializer<T>): List<T> = getRecordListOrNull(key)?.map(deserializer::deserialize)!!
