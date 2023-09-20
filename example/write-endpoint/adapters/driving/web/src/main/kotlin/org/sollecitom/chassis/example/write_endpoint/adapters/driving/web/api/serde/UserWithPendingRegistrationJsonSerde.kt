@@ -2,7 +2,7 @@ package org.sollecitom.chassis.example.write_endpoint.adapters.driving.web.api.s
 
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.correlation.core.serialization.json.identity.jsonSerde
+import org.sollecitom.chassis.core.serialization.json.identity.jsonSerde
 import org.sollecitom.chassis.example.write_endpoint.application.user.UserWithPendingRegistration
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.json.utils.serde.getValue

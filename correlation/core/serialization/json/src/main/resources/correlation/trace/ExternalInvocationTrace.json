@@ -8,10 +8,10 @@
   ],
   "properties": {
     "invocation-id": {
-      "$ref": "/correlation/identity/Id.json"
+      "$ref": "/core/identity/Id.json"
     },
     "action-id": {
-      "$ref": "/correlation/identity/Id.json"
+      "$ref": "/core/identity/Id.json"
     }
   }
 }

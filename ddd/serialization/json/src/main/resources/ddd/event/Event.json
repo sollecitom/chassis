@@ -10,7 +10,7 @@
   ],
   "properties": {
     "id": {
-      "$ref": "/correlation/identity/Id.json"
+      "$ref": "/core/identity/Id.json"
     },
     "type": {
       "$ref": "/ddd/happening/HappeningType.json"

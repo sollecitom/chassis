@@ -3,7 +3,7 @@ package org.sollecitom.chassis.ddd.serialization.json.event
 import kotlinx.datetime.Instant
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.correlation.core.serialization.json.identity.jsonSerde
+import org.sollecitom.chassis.core.serialization.json.identity.jsonSerde
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.Happening

@@ -5,7 +5,7 @@ import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.correlation.core.domain.access.idp.IdentityProvider
 import org.sollecitom.chassis.correlation.core.domain.access.session.FederatedSession
 import org.sollecitom.chassis.correlation.core.serialization.json.access.idp.jsonSerde
-import org.sollecitom.chassis.correlation.core.serialization.json.identity.jsonSerde
+import org.sollecitom.chassis.core.serialization.json.identity.jsonSerde
 import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde

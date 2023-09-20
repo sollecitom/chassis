@@ -13,7 +13,7 @@
       "const": "federated"
     },
     "id": {
-      "$ref": "/correlation/identity/Id.json"
+      "$ref": "/core/identity/Id.json"
     },
     "identity-provider": {
       "$ref": "/correlation/access/idp/IdentityProvider.json"

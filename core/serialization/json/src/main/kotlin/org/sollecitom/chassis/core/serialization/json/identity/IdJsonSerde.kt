@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.correlation.core.serialization.json.identity
+package org.sollecitom.chassis.core.serialization.json.identity
 
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
@@ -8,12 +8,11 @@ import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 
-// TODO move (along with the json file and the tests) to another module
 private object IdJsonSerde : JsonSerde.SchemaAware<Id> {
 
     private const val TYPE_ULID = "ulid"
     private const val TYPE_STRING = "string"
-    private const val SCHEMA_LOCATION = "correlation/identity/Id.json"
+    private const val SCHEMA_LOCATION = "core/identity/Id.json"
     override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
     override fun serialize(value: Id) = JSONObject().apply {

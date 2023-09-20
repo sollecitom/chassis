@@ -7,7 +7,7 @@
   ],
   "properties": {
     "id": {
-      "$ref": "/correlation/identity/Id.json"
+      "$ref": "/core/identity/Id.json"
     },
     "valid-from": {
       "type": "string",

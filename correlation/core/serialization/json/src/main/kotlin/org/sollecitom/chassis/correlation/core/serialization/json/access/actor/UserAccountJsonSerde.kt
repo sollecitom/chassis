@@ -4,7 +4,7 @@ import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
-import org.sollecitom.chassis.correlation.core.serialization.json.identity.jsonSerde
+import org.sollecitom.chassis.core.serialization.json.identity.jsonSerde
 import org.sollecitom.chassis.correlation.core.serialization.json.tenancy.jsonSerde
 import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt

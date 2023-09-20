@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.correlation.core.serialization.json.identity
+package org.sollecitom.chassis.core.serialization.json.identity
 
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS

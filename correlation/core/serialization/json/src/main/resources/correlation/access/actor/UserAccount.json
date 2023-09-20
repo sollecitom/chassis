@@ -13,7 +13,7 @@
       "const": "user"
     },
     "id": {
-      "$ref": "/correlation/identity/Id.json"
+      "$ref": "/core/identity/Id.json"
     },
     "tenant": {
       "$ref": "/correlation/tenancy/Tenant.json"

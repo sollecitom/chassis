@@ -12,7 +12,7 @@
   ],
   "properties": {
     "entityId": {
-      "$ref": "/correlation/identity/Id.json"
+      "$ref": "/core/identity/Id.json"
     }
   }
 }
