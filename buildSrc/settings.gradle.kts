@@ -1,3 +1,5 @@
+rootProject.name = "chassis"
+
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {

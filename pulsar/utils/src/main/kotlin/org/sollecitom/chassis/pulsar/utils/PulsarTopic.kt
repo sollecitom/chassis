@@ -84,7 +84,7 @@ sealed class PulsarTopic(val persistent: Boolean, val namespace: Namespace?, val
             else -> error("Unknown topic protocol ${protocol.value}")
         }
 
-        fun of(protocol: Boolean, namespace: Namespace?, name: Name): PulsarTopic = when (protocol) {
+        fun of(persistent: Boolean, namespace: Namespace?, name: Name): PulsarTopic = when (persistent) {
             true -> persistent(name, namespace)
             false -> nonPersistent(name, namespace)
         }

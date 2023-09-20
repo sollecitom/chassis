@@ -69,7 +69,7 @@ allprojects {
             plugin("maven-publish")
         }
 
-        configure<JavaPluginExtension> { Plugins.JavaPlugin.configure(this) }
+        java(Plugins.JavaPlugin::configure)
 
         publishing {
             repositories { RepositoryConfiguration.Publications.apply(this, project) }

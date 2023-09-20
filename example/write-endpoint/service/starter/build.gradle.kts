@@ -31,6 +31,7 @@ val serviceName = "example-write-endpoint"
 val repository = "ghcr.io/sollecitom-chassis/"
 val serviceImage = "$repository$serviceName"
 
+// TODO turn these lines into a plugin and apply it instead
 val tmpVolume = "/tmp"
 val maxRamPercentage = "70.000000"
 val customJvmFlags = listOf("-XX:+UnlockExperimentalVMOptions", "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=$tmpVolume/java_pid<pid>.hprof", "-XX:MaxRAMPercentage=$maxRamPercentage", "-XX:+UseG1GC", "-XX:+AlwaysPreTouch", "-XX:+UseNUMA", "--enable-preview")
