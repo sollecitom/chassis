@@ -1,6 +1,5 @@
-package org.sollecitom.chassis.web.api.test.utils
+package org.sollecitom.chassis.core.domain.networking.http
 
-// TODO fix & move
 enum class HttpProtocol(val value: String) {
     HTTP("http"), HTTPS("https")
 }
