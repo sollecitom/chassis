@@ -1,8 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-rootProject.name = "chassis"
-val versionCatalogName: String by settings
-
 module("test", "utils")
 module("test", "containers", "utils")
 module("kotlin", "extensions")
