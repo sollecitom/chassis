@@ -36,7 +36,7 @@ sealed class RegisterUserCommandsEndpoint {
         private fun acceptCommand() = path bind Method.POST toUnauthenticated { request ->
 
             logger.log { "Received command with type '$COMMAND_TYPE'" }
-            val command = Companion.command(request)
+            val command = command(request)
 
             val result = handle(command)
 

@@ -63,8 +63,7 @@ swagger-request-validator = { module = "com.atlassian.oai:swagger-request-valida
 pulsar-client-admin = { module = "org.apache.pulsar:pulsar-client-admin", version.ref = "pulsar" }
 apache-avro-core = { module = "org.apache.avro:avro", version.ref = "avro" }
 yet-another-user-agent-analyzer = { module = "nl.basjes.parse.useragent:yauaa", version.ref = "yauaa" }
-log4j-over-slf4j = { module = "org.slf4j:log4j-over-slf4j", version.ref = "slf4j" }
-log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
+log4j-to-slf4j = { module = "org.apache.logging.log4j:log4j-to-slf4j", version.ref = "log4j" }
 
 [plugins]
 com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "version-catalog-report-plugin" }

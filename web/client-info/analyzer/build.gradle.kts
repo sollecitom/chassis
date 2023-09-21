@@ -1,12 +1,11 @@
 dependencies {
-    api(projects.chassisCorrelationCoreDomain)
+    api(projects.chassisWebClientInfoDomain)
 
     implementation(projects.chassisKotlinExtensions)
-    implementation(libs.yet.another.user.agent.analyzer) // TODO API?
+    implementation(libs.yet.another.user.agent.analyzer)
     implementation(projects.chassisLoggerCore)
 
-    runtimeOnly(libs.log4j.api)
-    runtimeOnly(libs.log4j.over.slf4j)
+    runtimeOnly(libs.log4j.to.slf4j)
 
     testImplementation(projects.chassisCorrelationCoreTestUtils)
     testImplementation(projects.chassisCoreTestUtils)
