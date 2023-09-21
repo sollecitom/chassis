@@ -18,6 +18,7 @@ import org.sollecitom.chassis.web.api.utils.api.mainHttpApi
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 
+// TODO maybe flip this on its head, and produce a stream of commands instead, meaning that the application reacts to them
 class HttpDrivingAdapter(private val application: Application, configuration: Configuration) : DrivingAdapter.WithPortBinding, HttpHandler {
 
     constructor(application: Application, environment: Environment) : this(application, Configuration.from(environment))
