@@ -8,7 +8,10 @@ sealed interface Version : Comparable<Version> {
 
     override fun compareTo(other: Version) = value.compareTo(other.value)
 
-    data class Simple(override val value: Name) : Version
+    data class Simple(override val value: Name) : Version {
+
+        companion object
+    }
 
     data class Semantic(val major: Int, val minor: Int, val patch: Int) : Version {
 
@@ -34,4 +37,12 @@ sealed interface Version : Comparable<Version> {
             }
         }
     }
+
+    companion object
+}
+
+fun Version.Companion.parse(rawValue: Name): Version = try {
+    Version.Semantic.parse(rawValue.value)
+} catch (error: Exception) {
+    Version.Simple(rawValue)
 }

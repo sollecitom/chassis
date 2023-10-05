@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "type",
+    "major",
+    "minor",
+    "patch"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "semantic"
+    },
+    "major": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "minor": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "patch": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

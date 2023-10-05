@@ -2,17 +2,17 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "ip-address",
-    "client-info"
-  ],
   "properties": {
-    "ip-address": {
+    "class-name": {
       "type": "string",
       "minLength": 1
     },
-    "client-info": {
-      "$ref": "/correlation/access/origin/client/info/ClientInfo.json"
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "$ref": "/correlation/access/origin/client/info/version/Version.json"
     }
   }
 }

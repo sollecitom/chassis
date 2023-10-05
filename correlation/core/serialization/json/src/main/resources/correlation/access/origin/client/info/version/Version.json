@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "type"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "simple",
+        "semantic"
+      ]
+    },
+    "value": {},
+    "major": {},
+    "minor": {},
+    "patch": {}
+  },
+  "oneOf": [
+    {
+      "$ref": "/correlation/access/origin/client/info/version/SimpleVersion.json"
+    },
+    {
+      "$ref": "/correlation/access/origin/client/info/version/SemanticVersion.json"
+    }
+  ]
+}

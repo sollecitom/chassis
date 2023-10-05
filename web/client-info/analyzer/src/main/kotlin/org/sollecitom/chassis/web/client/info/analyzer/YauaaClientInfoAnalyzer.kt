@@ -17,17 +17,19 @@ private object YauaaClientInfoAnalyzer : ClientInfoAnalyzer {
         val userAgent = analyzer.parse(requestHeaders)
         if (userAgent.hasSyntaxError()) { /* TODO what to do in this case? */
         }
-        return userAgent.adapted()
+        return userAgent.adapted().data()
     }
 
-    private fun UserAgent.ImmutableUserAgent.adapted(): ClientInfo = YauaaClientInfoAdapter(this)
+    private fun UserAgent.ImmutableUserAgent.adapted(): YauaaClientInfoAdapter = YauaaClientInfoAdapter(this)
 
-    private data class YauaaClientInfoAdapter(private val userAgent: UserAgent.ImmutableUserAgent) : ClientInfo {
+    private fun YauaaClientInfoAdapter.data(): ClientInfo = ClientInfo(device, operatingSystem, layoutEngine, agent)
 
-        override val device by lazy { Device(className = deviceClass.valueAsNameOrNull(), name = deviceName.valueAsNameOrNull(), brand = deviceBrand.valueAsNameOrNull()) }
-        override val operatingSystem by lazy { OperatingSystem(className = operatingSystemClass.valueAsNameOrNull(), name = operatingSystemName.valueAsNameOrNull(), version = operatingSystemVersion.valueAsVersionOrNull()) }
-        override val layoutEngine by lazy { LayoutEngine(className = layoutEngineClass.valueAsNameOrNull(), name = layoutEngineName.valueAsNameOrNull(), version = layoutEngineVersion.valueAsVersionOrNull()) }
-        override val agent by lazy { Agent(className = agentClass.valueAsNameOrNull(), name = agentName.valueAsNameOrNull(), version = agentVersion.valueAsVersionOrNull()) }
+    private data class YauaaClientInfoAdapter(private val userAgent: UserAgent.ImmutableUserAgent) {
+
+        val device by lazy { Device(className = deviceClass.valueAsNameOrNull(), name = deviceName.valueAsNameOrNull(), brand = deviceBrand.valueAsNameOrNull()) }
+        val operatingSystem by lazy { OperatingSystem(className = operatingSystemClass.valueAsNameOrNull(), name = operatingSystemName.valueAsNameOrNull(), version = operatingSystemVersion.valueAsVersionOrNull()) }
+        val layoutEngine by lazy { LayoutEngine(className = layoutEngineClass.valueAsNameOrNull(), name = layoutEngineName.valueAsNameOrNull(), version = layoutEngineVersion.valueAsVersionOrNull()) }
+        val agent by lazy { Agent(className = agentClass.valueAsNameOrNull(), name = agentName.valueAsNameOrNull(), version = agentVersion.valueAsVersionOrNull()) }
 
         private val AgentField.isUnknown: Boolean get() = confidence <= 0 || isDefaultValue
 

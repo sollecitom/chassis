@@ -24,6 +24,7 @@ interface JsonSerdeTestSpecification<VALUE : Any> {
     fun `serializing and deserializing to and from JSON`(argument: ParameterizedTestSupport.InlineWrapper<VALUE>) {
 
         val value = argument.value
+
         val json = jsonSerde.serialize(value)
         val deserialized = jsonSerde.deserialize(json)
 

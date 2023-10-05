@@ -1,9 +1,9 @@
 package org.sollecitom.chassis.correlation.core.domain.access.origin
 
 import org.sollecitom.chassis.core.domain.networking.IpAddress
+import org.sollecitom.chassis.web.client.info.domain.ClientInfo
 
-// TODO add other info e.g. OS, browser, etc. // TODO add client-info from web-client-info-domain
-data class Origin(val ipAddress: IpAddress) {
+data class Origin(val ipAddress: IpAddress, val clientInfo: ClientInfo) {
 
     companion object
 }

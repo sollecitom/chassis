@@ -1,9 +1,6 @@
 package org.sollecitom.chassis.web.client.info.domain
 
-interface ClientInfo {
+data class ClientInfo(val device: Device, val operatingSystem: OperatingSystem, val layoutEngine: LayoutEngine, val agent: Agent) {
 
-    val device: Device
-    val operatingSystem: OperatingSystem
-    val layoutEngine: LayoutEngine
-    val agent: Agent
+    companion object
 }
