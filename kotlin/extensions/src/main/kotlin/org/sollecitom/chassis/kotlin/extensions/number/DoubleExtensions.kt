@@ -10,4 +10,6 @@ fun Double.rounded(decimalPlace: Int, roundingMode: RoundingMode = RoundingMode.
     return bd.toDouble()
 }
 
-fun Double.isEqualTo(other: Double, epsilon: Double): Boolean = abs(this - other) <= epsilon
+private const val defaultDoubleTolerance = 0.00001
+
+fun Double.isEqualToWithTolerance(other: Double, tolerance: Double = defaultDoubleTolerance): Boolean = abs(this - other) <= tolerance
