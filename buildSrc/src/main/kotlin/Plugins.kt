@@ -8,10 +8,8 @@ object Plugins {
 
         fun configure(plugin: JavaPluginExtension) {
             with(plugin) {
-                sourceCompatibility = JavaVersion.VERSION_19
-                targetCompatibility = JavaVersion.VERSION_19
                 toolchain {
-                    languageVersion.set(JavaLanguageVersion.of(JavaVersion.VERSION_19.majorVersion))
+                    languageVersion.set(JavaLanguageVersion.of(JavaVersion.VERSION_21.majorVersion))
                 }
                 withJavadocJar()
                 withSourcesJar()

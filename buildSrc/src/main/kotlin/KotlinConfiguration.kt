@@ -6,7 +6,7 @@ object KotlinConfiguration {
 
     object TargetJvm {
 
-        const val version = "19"
+        const val version = "21"
     }
 
     object Compiler {
