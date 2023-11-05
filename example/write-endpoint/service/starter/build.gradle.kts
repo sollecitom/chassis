@@ -43,7 +43,7 @@ val containerEnvironment = mutableMapOf("SERVICE_PORT" to mainAppPort, "HEALTH_P
 val imageTags = setOf(gitVersionDetails.gitHashFull, "snapshot")
 val currentOperatingSystem: OperatingSystem = DefaultNativePlatform.getCurrentOperatingSystem()
 val currentArchitecture: ArchitectureInternal = DefaultNativePlatform.getCurrentArchitecture()
-val main_class by extra("org.sollecitom.chassis.example.write_endpoint.service.starter.DockerStarter")
+val main_class by extra("org.sollecitom.chassis.example.write_endpoint.service.starter.StarterKt")
 
 configure<JibExtension> {
     container {
