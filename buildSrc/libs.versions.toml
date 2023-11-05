@@ -2,7 +2,7 @@
 # libraries
 semver4j = "3.1.0"
 # plugins
-kotlin = "1.9.10"
+kotlin = "1.9.20"
 palantir-git-plugin = "3.0.0"
 version-catalog-report-plugin = "0.47.0"
 version-catalog-update-plugin = "0.8.1"
