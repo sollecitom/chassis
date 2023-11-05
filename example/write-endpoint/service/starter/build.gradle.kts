@@ -35,7 +35,7 @@ val serviceImage = "$repository$serviceName"
 // TODO turn these lines into a plugin and apply it instead
 val tmpVolume = "/tmp"
 val maxRamPercentage = "70.000000"
-val customJvmFlags = listOf("-XX:+UnlockExperimentalVMOptions", "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=$tmpVolume/java_pid<pid>.hprof", "-XX:MaxRAMPercentage=$maxRamPercentage", "-XX:+UseG1GC", "-XX:+AlwaysPreTouch", "-XX:+UseNUMA", "--enable-preview") // TODO remove --enable-preview
+val customJvmFlags = listOf("-XX:+UnlockExperimentalVMOptions", "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=$tmpVolume/java_pid<pid>.hprof", "-XX:MaxRAMPercentage=$maxRamPercentage", "-XX:+UseZGC", "-XX:+ZGenerational", "-XX:+AlwaysPreTouch", "-XX:+UseNUMA")
 val customArgs = listOf("-Djava.security.egd=file:/dev/./urandom")
 val mainAppPort = "8081"
 val healthAppPort = "8082"
@@ -43,7 +43,7 @@ val containerEnvironment = mutableMapOf("SERVICE_PORT" to mainAppPort, "HEALTH_P
 val imageTags = setOf(gitVersionDetails.gitHashFull, "snapshot")
 val currentOperatingSystem: OperatingSystem = DefaultNativePlatform.getCurrentOperatingSystem()
 val currentArchitecture: ArchitectureInternal = DefaultNativePlatform.getCurrentArchitecture()
-val main_class by extra("org.sollecitom.chassis.example.write_endpoint.service.starter.StarterKt")
+val mainClassFqn by extra("org.sollecitom.chassis.example.write_endpoint.service.starter.StarterKt")
 
 configure<JibExtension> {
     container {
@@ -60,7 +60,7 @@ configure<JibExtension> {
         )
         filesModificationTime.set(buildTimestamp) // TODO this screws up reproducibility - think whether reproducibility is worth achieving, even at the price of some nonsensical consequences
         creationTime.set(buildTimestamp) // TODO this screws up reproducibility - think whether reproducibility is worth achieving, even at the price of some nonsensical consequences
-        mainClass = main_class
+        mainClass = mainClassFqn
     }
     from {
         image = dockerBaseImage
