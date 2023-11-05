@@ -3,6 +3,7 @@ import com.github.benmanes.gradle.versions.updates.resolutionstrategy.ComponentS
 import com.vdurmont.semver4j.Semver
 
 plugins {
+    alias(libs.plugins.kotlin.jvm)
     `kotlin-dsl`
     alias(libs.plugins.com.github.ben.manes.versions)
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
