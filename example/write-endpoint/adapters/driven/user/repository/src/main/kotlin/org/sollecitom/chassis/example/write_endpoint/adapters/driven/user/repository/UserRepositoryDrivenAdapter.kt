@@ -27,7 +27,7 @@ class UserRepositoryDrivenAdapter(private val configuration: Configuration, priv
 
     constructor(environment: Environment, coreDataGenerator: CoreDataGenerator) : this(Configuration.from(environment), coreDataGenerator)
 
-    private val eventSchema: Schema<Event> = Event.jsonSerde.asPulsarSchema() // TODO should this come from the constructor?
+    private val eventSchema: Schema<Event> = Event.jsonSerde.asPulsarSchema()
     private val eventStore = eventStore()
     private val events = events(eventStore = eventStore)
     override val port = userRepository(events = events)

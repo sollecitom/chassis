@@ -15,7 +15,7 @@ private object YauaaClientInfoAnalyzer : ClientInfoAnalyzer {
     override fun invoke(requestHeaders: Map<String, String>): ClientInfo {
 
         val userAgent = analyzer.parse(requestHeaders)
-        if (userAgent.hasSyntaxError()) { /* TODO what to do in this case? */
+        if (userAgent.hasSyntaxError()) { /* TODO what to do in this case? How lenient or strict should this be? */
         }
         return userAgent.adapted().data()
     }
