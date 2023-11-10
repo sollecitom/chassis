@@ -1,7 +1,3 @@
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import com.github.benmanes.gradle.versions.updates.resolutionstrategy.ComponentSelectionWithCurrent
-import com.vdurmont.semver4j.Semver
-
 plugins {
     alias(libs.plugins.kotlin.jvm)
     `kotlin-dsl`
@@ -15,10 +11,10 @@ repositories {
 
 buildscript {
     dependencies {
-        classpath(libs.semver4j) // TODO remove
+//        classpath(libs.semver4j)
     }
 }
 
 dependencies {
-    implementation(libs.semver4j) // TODO remove
+    implementation(libs.semver4j)
 }
