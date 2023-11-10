@@ -495,7 +495,7 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
 //        else -> true
 //    }
 
-// TODO
+// TODO implement the additional test cases
 // sections
 //    add mandatory info fields, including version
 // generic

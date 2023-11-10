@@ -58,9 +58,10 @@ configure<JibExtension> {
                 "build.git.hash.full" to gitVersionDetails.gitHashFull, "build.timestamp" to buildTimestamp
             )
         )
-        filesModificationTime.set(buildTimestamp) // TODO this screws up reproducibility - think whether reproducibility is worth achieving, even at the price of some nonsensical consequences
-        creationTime.set(buildTimestamp) // TODO this screws up reproducibility - think whether reproducibility is worth achieving, even at the price of some nonsensical consequences
         mainClass = mainClassFqn
+        // TODO these next 2 lines screws up reproducibility - think whether reproducibility is worth achieving, even at the price of some nonsensical consequences
+        filesModificationTime.set(buildTimestamp)
+        creationTime.set(buildTimestamp)
     }
     from {
         image = dockerBaseImage

@@ -23,8 +23,9 @@ class PulsarPublisher<VALUE : Any>(private val topic: PulsarTopic, private val s
 
     override suspend fun stop() = producer.close()
 
-    private val VALUE.messageKey: String get() = "key" // TODO implement take it from a message converter
-    private val VALUE.messageProperties: Map<String, String> get() = emptyMap() // TODO implement implement take it from a message converter
+    // TODO take key and properties from a message converter
+    private val VALUE.messageKey: String get() = "key"
+    private val VALUE.messageProperties: Map<String, String> get() = emptyMap()
 
     private fun createProducer(): Producer<VALUE> = pulsar.newProducer(schema).topic(topic.fullName.value).producerName(producerName).also(customizeProducer).create()
 }
