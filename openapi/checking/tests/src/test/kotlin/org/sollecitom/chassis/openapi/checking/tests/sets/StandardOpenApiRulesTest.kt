@@ -495,25 +495,26 @@ private class StandardOpenApiRulesTest : OpenApiTestSpecification {
 //        else -> true
 //    }
 
-// TODO sections
-//    // TODO add mandatory info fields, including version
-// TODO generic
-//    // TODO investigate using dictionaries to whitelist words and structure e.g. plural vs singular (like with https://dev.languagetool.org/java-api)
-//    // TODO media types
-//        // TODO write rule to enforce media type names conventions for all operations that specify one
-//        // TODO write rule to enforce mandatory media type examples for all operations that specify one
+// TODO
+// sections
+//    add mandatory info fields, including version
+// generic
+//    // investigate using dictionaries to whitelist words and structure e.g. plural vs singular (like with https://dev.languagetool.org/java-api)
+//    // media types
+//        // write rule to enforce media type names conventions for all operations that specify one
+//        // write rule to enforce mandatory media type examples for all operations that specify one
 
-// TODO requests
-//    // TODO check mandatory request headers (e.g. tracing and idempotency headers, authentication headers)
-//    // TODO (maybe) check that the optional "sort" parameter is like `sort=+transactionDate,-merchantName` (+ = ascending, - = descending) (check a sort schema is referenced)
-//    // TODO check that if pagination exists, it's implemented correctly (`nextPageToken` as optional header passed and returned, optional `nextPageMaxSize` (default value))
+// requests
+//    // check mandatory request headers (e.g. tracing and idempotency headers, authentication headers)
+//    // (maybe) check that the optional "sort" parameter is like `sort=+transactionDate,-merchantName` (+ = ascending, - = descending) (check a sort schema is referenced)
+//    // check that if pagination exists, it's implemented correctly (`nextPageToken` as optional header passed and returned, optional `nextPageMaxSize` (default value))
 
-// TODO responses
-//    // TODO all methods should specify their Produces type(s)
-//    // TODO check mandatory response headers
-//    // TODO check that every retrieved resource contains a created-at field, with the right schema
-//    // TODO check that if a retrieved resource contains an updated-at field, it has the right schema
-//    // TODO whitelist response codes
-//    // TODO check 4xx and 5xx responses reference the right schema for the response body
-//    // TODO check that if pagination exists, it's implemented correctly (`nextPageToken` as optional header passed and returned, optional `nextPageMaxSize` (default value))
+// responses
+//    // all methods should specify their Produces type(s)
+//    // check mandatory response headers
+//    // check that every retrieved resource contains a created-at field, with the right schema
+//    // check that if a retrieved resource contains an updated-at field, it has the right schema
+//    // whitelist response codes
+//    // check 4xx and 5xx responses reference the right schema for the response body
+//    // check that if pagination exists, it's implemented correctly (`nextPageToken` as optional header passed and returned, optional `nextPageMaxSize` (default value))
 
