@@ -1,10 +1,12 @@
 [versions]
+# buildSrc libraries
+semver4j = "3.1.0"
 # libraries
 kotlin = "1.9.20"
 kotlinx-coroutines = "1.7.3"
 slf4j = "2.0.9"
-http4k = "5.9.0.0"
-junit-jupiter = "5.10.0"
+http4k = "5.10.2.0"
+junit-jupiter = "5.10.1"
 assertk = "0.27.0"
 kotlinx-datetime = "0.4.1"
 ulid-creator = "5.2.2"
@@ -15,7 +17,7 @@ bouncy-castle = "1.76"
 commons-codec = "1.16.0"
 test-containers = "1.19.1"
 swagger-parser = "2.1.18"
-atlassian-swagger-request-validator = "2.38.1"
+atlassian-swagger-request-validator = "2.39.0"
 pulsar = "3.1.1"
 avro = "1.11.3"
 yauaa = "7.23.0"
@@ -27,6 +29,9 @@ version-catalog-update-plugin = "0.8.1"
 jib-plugin = "3.4.0"
 
 [libraries]
+# for buildSrc
+semver4j = { module = "com.vdurmont:semver4j", version.ref = "semver4j" }
+# for the build itself
 kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" }
 kotlinx-coroutines-jdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8" }
