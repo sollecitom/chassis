@@ -15,43 +15,10 @@ repositories {
 
 buildscript {
     dependencies {
-        classpath(libs.semver4j)
+        classpath(libs.semver4j) // TODO remove
     }
 }
 
 dependencies {
-    implementation(libs.semver4j)
-}
-
-// TODO turn this whole dependency update thing into a plugin
-
-fun String.toVersionNumber() = Semver(this)
-
-val ComponentSelectionWithCurrent.currentSemanticVersion: Semver get() = Semver(currentVersion)
-val ComponentSelectionWithCurrent.candidateSemanticVersion: Semver get() = Semver(candidate.version)
-
-fun ComponentSelectionWithCurrent.wouldDowngradeVersion(): Boolean = currentSemanticVersion > candidateSemanticVersion
-fun ComponentSelectionWithCurrent.wouldDestabilizeAStableVersion(): Boolean = currentSemanticVersion.isStable && !candidateSemanticVersion.isStable
-
-tasks.withType<DependencyUpdatesTask> {
-
-    checkConstraints = true
-    checkBuildEnvironmentConstraints = false
-    checkForGradleUpdate = true
-    outputFormatter = "json,html"
-    outputDir = "build/dependencyUpdates"
-    reportfileName = "report"
-
-    rejectVersionIf {
-        wouldDowngradeVersion() || wouldDestabilizeAStableVersion()
-    }
-}
-
-versionCatalogUpdate {
-    sortByKey.set(false)
-    keep {
-        keepUnusedVersions = true
-        keepUnusedLibraries = true
-        keepUnusedPlugins = true
-    }
+    implementation(libs.semver4j) // TODO remove
 }
