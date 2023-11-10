@@ -113,6 +113,11 @@ tasks.withType<DependencyUpdatesTask> {
 
 versionCatalogUpdate {
     sortByKey.set(false)
+    keep {
+        keepUnusedVersions = true
+        keepUnusedLibraries = true
+        keepUnusedPlugins = true
+    }
 }
 
 val containerBasedServiceTest: Task = tasks.register("containerBasedServiceTest").get()
