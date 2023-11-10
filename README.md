@@ -43,7 +43,7 @@ This project is licensed under the terms of the MIT license. Check the `LICENSE.
 
 ```
 
-### Update all dependencies if more recent versions exist, and remove unused ones (it will update `gradle/libs.versions.toml` and/or `buildSrc/libs.versions.toml`)
+### Update all dependencies if more recent versions exist, and remove unused ones (it will update `gradle/libs.versions.toml`)
 
 ```bash
 ./gradlew versionCatalogUpdate
