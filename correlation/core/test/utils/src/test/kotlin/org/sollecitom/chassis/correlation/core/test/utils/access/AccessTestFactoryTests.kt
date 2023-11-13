@@ -15,9 +15,13 @@ import org.sollecitom.chassis.correlation.core.domain.access.authenticatedOrFail
 import org.sollecitom.chassis.correlation.core.domain.access.authenticatedOrThrow
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
 import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
+import org.sollecitom.chassis.correlation.core.domain.access.scope.AccessContainer
+import org.sollecitom.chassis.correlation.core.domain.access.scope.AccessScope
 import org.sollecitom.chassis.correlation.core.test.utils.access.actor.direct
 import org.sollecitom.chassis.correlation.core.test.utils.access.authorization.create
 import org.sollecitom.chassis.correlation.core.test.utils.access.origin.create
+import org.sollecitom.chassis.correlation.core.test.utils.access.scope.create
+import org.sollecitom.chassis.correlation.core.test.utils.access.scope.withContainerStack
 import org.sollecitom.chassis.test.utils.assertions.failedThrowing
 import org.sollecitom.chassis.test.utils.assertions.succeededWithResult
 
@@ -33,12 +37,14 @@ private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testPr
             val origin = Origin.create()
             val actor = Actor.direct()
             val authorization = AuthorizationPrincipal.create()
+            val scope = AccessScope.withContainerStack(AccessContainer.create())
 
-            val access = Access.authenticated(actor, origin, authorization)
+            val access = Access.authenticated(actor, origin, authorization, scope)
 
             assertThat(access.actor).isEqualTo(actor)
             assertThat(access.origin).isEqualTo(origin)
             assertThat(access.authorization).isEqualTo(authorization)
+            assertThat(access.scope).isEqualTo(scope)
         }
 
         @Test
@@ -110,6 +116,18 @@ private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testPr
             val access = Access.unauthenticated(authorization = authorization)
 
             assertThat(access.authorization).isEqualTo(authorization)
+        }
+
+        @Test
+        fun `with given access scope`() {
+
+            val container1 = AccessContainer.create()
+            val container2 = AccessContainer.create()
+            val scope = AccessScope.withContainerStack(container1, container2)
+
+            val access = Access.unauthenticated(scope = scope)
+
+            assertThat(access.scope).isEqualTo(scope)
         }
 
         @Test

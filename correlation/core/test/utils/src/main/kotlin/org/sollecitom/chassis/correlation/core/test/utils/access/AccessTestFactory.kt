@@ -5,19 +5,23 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
 import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
+import org.sollecitom.chassis.correlation.core.domain.access.scope.AccessContainer
+import org.sollecitom.chassis.correlation.core.domain.access.scope.AccessScope
 import org.sollecitom.chassis.correlation.core.test.utils.access.actor.direct
 import org.sollecitom.chassis.correlation.core.test.utils.access.authorization.create
 import org.sollecitom.chassis.correlation.core.test.utils.access.authorization.withoutRoles
 import org.sollecitom.chassis.correlation.core.test.utils.access.origin.create
+import org.sollecitom.chassis.correlation.core.test.utils.access.scope.create
+import org.sollecitom.chassis.correlation.core.test.utils.access.scope.withContainerStack
 
 context(CoreDataGenerator)
-fun Access.Companion.unauthenticated(origin: Origin = Origin.create(), authorization: AuthorizationPrincipal = AuthorizationPrincipal.withoutRoles()): Access.Unauthenticated = Access.Unauthenticated(origin, authorization)
+fun Access.Companion.unauthenticated(origin: Origin = Origin.create(), authorization: AuthorizationPrincipal = AuthorizationPrincipal.withoutRoles(), scope: AccessScope = AccessScope.withContainerStack(AccessContainer.create(), AccessContainer.create())): Access.Unauthenticated = Access.Unauthenticated(origin, authorization, scope)
 
 context(CoreDataGenerator)
-fun Access.Unauthenticated.Companion.create(origin: Origin = Origin.create(), authorization: AuthorizationPrincipal = AuthorizationPrincipal.withoutRoles()): Access.Unauthenticated = Access.Unauthenticated(origin, authorization)
+fun Access.Unauthenticated.Companion.create(origin: Origin = Origin.create(), authorization: AuthorizationPrincipal = AuthorizationPrincipal.withoutRoles(), scope: AccessScope = AccessScope.withContainerStack(AccessContainer.create())): Access.Unauthenticated = Access.Unauthenticated(origin, authorization, scope)
 
 context(CoreDataGenerator)
-fun Access.Companion.authenticated(actor: Actor = Actor.direct(), origin: Origin = Origin.create(), authorization: AuthorizationPrincipal = AuthorizationPrincipal.create()): Access.Authenticated = Access.Authenticated(actor, origin, authorization)
+fun Access.Companion.authenticated(actor: Actor = Actor.direct(), origin: Origin = Origin.create(), authorization: AuthorizationPrincipal = AuthorizationPrincipal.create(), scope: AccessScope = AccessScope.withContainerStack(AccessContainer.create(), AccessContainer.create())): Access.Authenticated = Access.Authenticated(actor, origin, authorization, scope)
 
 context(CoreDataGenerator)
-fun Access.Authenticated.Companion.authenticated(actor: Actor = Actor.direct(), origin: Origin = Origin.create(), authorization: AuthorizationPrincipal = AuthorizationPrincipal.create()): Access.Authenticated = Access.Authenticated(actor, origin, authorization)
+fun Access.Authenticated.Companion.authenticated(actor: Actor = Actor.direct(), origin: Origin = Origin.create(), authorization: AuthorizationPrincipal = AuthorizationPrincipal.create(), scope: AccessScope = AccessScope.withContainerStack(AccessContainer.create())): Access.Authenticated = Access.Authenticated(actor, origin, authorization, scope)

@@ -14,7 +14,8 @@
     },
     "actor": {},
     "origin": {},
-    "authorization": {}
+    "authorization": {},
+    "scope": {}
   },
   "oneOf": [
     {

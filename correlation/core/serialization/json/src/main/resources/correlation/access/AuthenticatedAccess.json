@@ -6,7 +6,8 @@
     "type",
     "actor",
     "origin",
-    "authorization"
+    "authorization",
+    "scope"
   ],
   "properties": {
     "type": {
@@ -21,6 +22,9 @@
     },
     "authorization": {
       "$ref": "/correlation/access/authorization/AuthorizationPrincipal.json"
+    },
+    "scope": {
+      "$ref": "/correlation/access/scope/AccessScope.json"
     }
   }
 }
