@@ -62,13 +62,6 @@ object RepositoryConfiguration {
                 }
             }
 
-            config.maven {
-                url = URI.create("https://maven.vaadin.com/vaadin-addons")
-                content {
-                    excludeGroupByRegex(internalGroup)
-                }
-            }
-
             GithubPackages.apply(config, project)
         }
     }
