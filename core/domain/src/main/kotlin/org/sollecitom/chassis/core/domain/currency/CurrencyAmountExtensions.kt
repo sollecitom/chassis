@@ -1,7 +1,8 @@
 package org.sollecitom.chassis.core.domain.currency
 
+import org.sollecitom.chassis.kotlin.extensions.number.withPrecision
+import org.sollecitom.chassis.kotlin.extensions.text.indexOfOrNull
 import java.math.BigDecimal
-import java.math.MathContext
 
 @Suppress("UNCHECKED_CAST")
 fun <CURRENCY_AMOUNT : CurrencyAmount> CURRENCY_AMOUNT.times(value: Long): CURRENCY_AMOUNT = times(value.toBigInteger()) as CURRENCY_AMOUNT
@@ -28,8 +29,7 @@ operator fun <CURRENCY_AMOUNT : CurrencyAmount> CURRENCY_AMOUNT.div(value: Doubl
 @Suppress("UNCHECKED_CAST")
 fun <CURRENCY_AMOUNT : CurrencyAmount> CURRENCY_AMOUNT.withNewValue(value: BigDecimal): CURRENCY_AMOUNT {
 
-    val newPrecision = value.precision() - value.scale() + currency.fractionalDigits.value
-    val newValueRounded = value.round(MathContext(newPrecision))
+    val newValueRounded = value.withPrecision(currency.fractionalDigits.value)
     val newUnits = newValueRounded.toUnits(currency)
     return withUnits(newUnits) as CURRENCY_AMOUNT
 }

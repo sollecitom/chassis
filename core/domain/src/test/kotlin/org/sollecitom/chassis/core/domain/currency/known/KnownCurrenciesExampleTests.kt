@@ -56,6 +56,26 @@ private class KnownCurrenciesExampleTests {
     }
 
     @Test
+    fun `multiplying a small amount by a number that results in a truncated number of decimal places`() {
+
+        val factor = 0.09
+
+        val result = 0.11.dollars * factor
+
+        assertThat(result).isEqualTo(0.dollars)
+    }
+
+    @Test
+    fun `multiplying zero by a number that results in a truncated number of decimal places`() {
+
+        val factor = 0.9983218
+
+        val result = 0.dollars * factor
+
+        assertThat(result).isEqualTo(0.dollars)
+    }
+
+    @Test
     fun `multiplying by a number that results in a truncated number of decimal places`() {
 
         val amount = 11.32.dollars

@@ -32,3 +32,7 @@ fun String.removeFromLast(delimiter: String): String {
 }
 
 fun String.capitalized(): String = replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+
+fun String.indexOfOrNull(subString: String): Int? = indexOf(subString).takeUnless { it == -1 }
+
+fun String.indexOfOrNull(char: Char): Int? = indexOf(char).takeUnless { it == -1 }
