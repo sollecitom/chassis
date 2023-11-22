@@ -11,9 +11,15 @@ data class GenericCurrencyAmount(override val units: BigInteger, override val cu
 
     override val decimalValue: BigDecimal by lazy { units.toBigDecimal().movePointLeft(currency.fractionalDigits.value) }
 
-    override fun times(value: BigInteger) = GenericCurrencyAmount(units * value, currency)
+    override fun withUnits(units: BigInteger) = GenericCurrencyAmount(units, currency)
 
-    override fun div(value: BigInteger) = GenericCurrencyAmount(units / value, currency)
+    override fun plusUnits(units: BigInteger) = withUnits(this.units + units)
+
+    override fun minusUnits(units: BigInteger) = withUnits(this.units - units)
+
+    override fun times(value: BigInteger) = withUnits(units * value)
+
+    override fun div(value: BigInteger) = withUnits(units / value)
 
     override fun divAndRemainder(value: BigInteger) = units.divideAndRemainder(value).let { GenericCurrencyAmount(it[0], currency) to GenericCurrencyAmount(it[1], currency) }
 

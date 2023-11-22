@@ -11,13 +11,19 @@ abstract class SpecificCurrencyAmountTemplate<SELF : SpecificCurrencyAmountTempl
 
     override val decimalValue: BigDecimal by lazy { units.toBigDecimal().movePointLeft(currency.fractionalDigits.value) }
 
-    override fun plus(other: SELF) = construct(units + other.units)
+    override fun withUnits(units: BigInteger) = construct(units)
 
-    override fun minus(other: SELF) = construct(units - other.units)
+    override fun plusUnits(units: BigInteger) = withUnits(this.units + units)
 
-    override fun times(value: BigInteger) = construct(units * value)
+    override fun minusUnits(units: BigInteger) =  withUnits(this.units - units)
 
-    override fun div(value: BigInteger) = construct(units / value)
+    override fun plus(other: SELF) = plusUnits(other.units)
+
+    override fun minus(other: SELF) = minusUnits(other.units)
+
+    override fun times(value: BigInteger) = withUnits(units * value)
+
+    override fun div(value: BigInteger) = withUnits(units / value)
 
     override fun divAndRemainder(value: BigInteger) = units.divideAndRemainder(value).let { construct(it[0]) to construct(it[1]) }
 

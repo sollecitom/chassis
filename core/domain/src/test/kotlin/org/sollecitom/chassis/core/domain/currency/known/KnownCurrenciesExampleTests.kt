@@ -7,6 +7,8 @@ import assertk.assertions.isInstanceOf
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.sollecitom.chassis.core.domain.currency.div
+import org.sollecitom.chassis.core.domain.currency.times
 
 @TestInstance(PER_CLASS)
 private class KnownCurrenciesExampleTests {
@@ -29,5 +31,49 @@ private class KnownCurrenciesExampleTests {
         val result = runCatching { invalidGbpAmount.pounds }
 
         assertThat(result).isFailure().isInstanceOf<IllegalArgumentException>()
+    }
+
+    @Test
+    fun `multiplying by a number that results in a correct number of decimal places`() {
+
+        val amount = 12.4.dollars
+        val factor = 2.5
+
+        val result = amount * factor
+
+        assertThat(result).isEqualTo(31.dollars)
+    }
+
+    @Test
+    fun `dividing by a number that results in a correct number of decimal places`() {
+
+        val amount = 31.dollars
+        val factor = 2.5
+
+        val result = amount / factor
+
+        assertThat(result).isEqualTo(12.4.dollars)
+    }
+
+    @Test
+    fun `multiplying by a number that results in a truncated number of decimal places`() {
+
+        val amount = 11.32.dollars
+        val factor = 2.67
+
+        val result = amount * factor
+
+        assertThat(result).isEqualTo(30.22.dollars)
+    }
+
+    @Test
+    fun `dividing by a number that results in a truncated number of decimal places`() {
+
+        val amount = 30.22.dollars
+        val factor = 2.67
+
+        val result = amount / factor
+
+        assertThat(result).isEqualTo(11.32.dollars)
     }
 }

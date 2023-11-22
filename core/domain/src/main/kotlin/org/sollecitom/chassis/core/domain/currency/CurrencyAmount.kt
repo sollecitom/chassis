@@ -9,6 +9,12 @@ interface CurrencyAmount<SELF : CurrencyAmount<SELF>> {
     val currency: Currency
     val decimalValue: BigDecimal
 
+    fun withUnits(units: BigInteger): SELF
+
+    fun plusUnits(units: BigInteger): SELF
+
+    fun minusUnits(units: BigInteger): SELF
+
     operator fun times(value: BigInteger): SELF
 
     operator fun div(value: BigInteger): SELF
