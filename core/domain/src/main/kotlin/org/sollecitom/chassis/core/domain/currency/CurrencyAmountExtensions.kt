@@ -1,7 +1,6 @@
 package org.sollecitom.chassis.core.domain.currency
 
 import org.sollecitom.chassis.kotlin.extensions.number.withPrecision
-import org.sollecitom.chassis.kotlin.extensions.text.indexOfOrNull
 import java.math.BigDecimal
 
 @Suppress("UNCHECKED_CAST")
@@ -22,9 +21,11 @@ fun <CURRENCY_AMOUNT : CurrencyAmount> CURRENCY_AMOUNT.div(value: Int): CURRENCY
 @Suppress("UNCHECKED_CAST")
 fun <CURRENCY_AMOUNT : CurrencyAmount> CURRENCY_AMOUNT.divAndRemainder(value: Int): Pair<CURRENCY_AMOUNT, CURRENCY_AMOUNT> = divAndRemainder(value.toBigInteger()) as Pair<CURRENCY_AMOUNT, CURRENCY_AMOUNT>
 
-operator fun <CURRENCY_AMOUNT : CurrencyAmount> CURRENCY_AMOUNT.times(value: Double) = withNewValue(units.toBigDecimal().movePointLeft(currency.fractionalDigits.value) * value.toBigDecimal())
+operator fun <CURRENCY_AMOUNT : CurrencyAmount> CURRENCY_AMOUNT.times(value: BigDecimal) = withNewValue(units.toBigDecimal().movePointLeft(currency.fractionalDigits.value) * value)
+operator fun <CURRENCY_AMOUNT : CurrencyAmount> CURRENCY_AMOUNT.times(value: Double) = times(value.toBigDecimal())
 
-operator fun <CURRENCY_AMOUNT : CurrencyAmount> CURRENCY_AMOUNT.div(value: Double) = withNewValue(units.toBigDecimal().movePointLeft(currency.fractionalDigits.value) / value.toBigDecimal())
+operator fun <CURRENCY_AMOUNT : CurrencyAmount> CURRENCY_AMOUNT.div(value: BigDecimal) = withNewValue(units.toBigDecimal().movePointLeft(currency.fractionalDigits.value) / value)
+operator fun <CURRENCY_AMOUNT : CurrencyAmount> CURRENCY_AMOUNT.div(value: Double) = div(value.toBigDecimal())
 
 @Suppress("UNCHECKED_CAST")
 fun <CURRENCY_AMOUNT : CurrencyAmount> CURRENCY_AMOUNT.withNewValue(value: BigDecimal): CURRENCY_AMOUNT {
