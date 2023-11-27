@@ -1,4 +1,5 @@
 dependencies {
+    api(projects.chassisCoreDomain)
     api(projects.chassisCoreUtils)
     api(projects.chassisTestUtils)
 
