@@ -9,6 +9,7 @@ sealed interface Actor {
     val account: Account
     val benefitingAccount: Account
     val authentication: Authentication
+    // TODO add locale!
 
     sealed interface Account {
         val id: Id
