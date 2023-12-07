@@ -6,7 +6,7 @@ import java.util.*
 import java.util.Currency as JavaCurrency
 
 @JvmInline
-internal value class JavaCurrencyAdapter(private val currency: JavaCurrency) : Currency {
+internal value class JavaCurrencyAdapter<AMOUNT : SpecificCurrencyAmount<AMOUNT>>(private val currency: JavaCurrency) : Currency<AMOUNT> {
 
     override val textualCode get() = currency.currencyCode.let(::Name)
     override val numericCode get() = currency.numericCodeAsString.let(::Name)

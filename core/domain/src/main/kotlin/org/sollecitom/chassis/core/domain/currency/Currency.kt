@@ -4,7 +4,7 @@ import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.quantity.Count
 import java.util.*
 
-interface Currency {
+interface Currency<AMOUNT : SpecificCurrencyAmount<AMOUNT>> {
 
     val textualCode: Name
     val numericCode: Name

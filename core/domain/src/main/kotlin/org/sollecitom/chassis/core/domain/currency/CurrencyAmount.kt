@@ -6,7 +6,7 @@ import java.math.BigInteger
 interface CurrencyAmount {
 
     val units: BigInteger
-    val currency: Currency
+    val currency: Currency<*>
     val decimalValue: BigDecimal
 
     fun withUnits(units: BigInteger): CurrencyAmount

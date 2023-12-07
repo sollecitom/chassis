@@ -3,7 +3,7 @@ package org.sollecitom.chassis.core.domain.currency
 import java.math.BigDecimal
 import java.math.BigInteger
 
-abstract class SpecificCurrencyAmountTemplate<SELF : SpecificCurrencyAmountTemplate<SELF>>(final override val units: BigInteger, final override val currency: Currency, private val construct: (BigInteger) -> SELF) : SpecificCurrencyAmount<SELF> {
+abstract class SpecificCurrencyAmountTemplate<SELF : SpecificCurrencyAmountTemplate<SELF>>(final override val units: BigInteger, final override val currency: Currency<SELF>, private val construct: (BigInteger) -> SELF) : SpecificCurrencyAmount<SELF> {
 
     init {
         require(units >= BigInteger.ZERO) { "Units cannot be less than zero" }
@@ -46,4 +46,4 @@ abstract class SpecificCurrencyAmountTemplate<SELF : SpecificCurrencyAmountTempl
     override fun toString() = "${currency.symbol().value}${String.format("%.${currency.fractionalDigits.value}f", decimalValue)}"
 }
 
-internal fun BigDecimal.toUnits(currency: Currency): BigInteger = runCatching { movePointRight(currency.fractionalDigits.value).toBigIntegerExact() }.getOrElse { throw IllegalArgumentException(it) }
+internal fun <AMOUNT : SpecificCurrencyAmount<AMOUNT>> BigDecimal.toUnits(currency: Currency<AMOUNT>): BigInteger = runCatching { movePointRight(currency.fractionalDigits.value).toBigIntegerExact() }.getOrElse { throw IllegalArgumentException(it) }

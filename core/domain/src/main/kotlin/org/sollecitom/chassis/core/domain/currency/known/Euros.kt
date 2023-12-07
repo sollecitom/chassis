@@ -7,7 +7,7 @@ import org.sollecitom.chassis.core.domain.currency.toUnits
 import java.math.BigDecimal
 import java.math.BigInteger
 
-private val eur: Currency by lazy { JavaCurrencyAdapter(java.util.Currency.getInstance("EUR")) }
+private val eur: Currency<Euros> by lazy { JavaCurrencyAdapter(java.util.Currency.getInstance("EUR")) }
 val Currency.Companion.EUR get() = eur
 
 class Euros(units: BigInteger) : SpecificCurrencyAmountTemplate<Euros>(units, Currency.EUR, ::Euros) {

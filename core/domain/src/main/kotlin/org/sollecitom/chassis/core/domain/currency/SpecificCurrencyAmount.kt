@@ -4,6 +4,8 @@ import java.math.BigInteger
 
 interface SpecificCurrencyAmount<SELF : SpecificCurrencyAmount<SELF>> : CurrencyAmount {
 
+    override val currency: Currency<SELF>
+
     operator fun plus(other: SELF): SELF
 
     operator fun minus(other: SELF): SELF

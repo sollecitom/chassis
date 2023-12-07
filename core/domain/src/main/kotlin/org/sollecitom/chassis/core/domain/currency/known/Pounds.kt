@@ -7,7 +7,7 @@ import org.sollecitom.chassis.core.domain.currency.toUnits
 import java.math.BigDecimal
 import java.math.BigInteger
 
-private val gbp: Currency by lazy { JavaCurrencyAdapter(java.util.Currency.getInstance("GBP")) }
+private val gbp: Currency<Pounds> by lazy { JavaCurrencyAdapter(java.util.Currency.getInstance("GBP")) }
 val Currency.Companion.GBP get() = gbp
 
 class Pounds(units: BigInteger) : SpecificCurrencyAmountTemplate<Pounds>(units, Currency.GBP, ::Pounds) {

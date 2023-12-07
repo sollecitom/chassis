@@ -5,7 +5,7 @@ import org.sollecitom.chassis.core.domain.currency.JavaCurrencyAdapter
 import org.sollecitom.chassis.core.domain.currency.SpecificCurrencyAmountTemplate
 import java.math.BigInteger
 
-private val jpy: Currency by lazy { JavaCurrencyAdapter(java.util.Currency.getInstance("JPY")) }
+private val jpy: Currency<Yen> by lazy { JavaCurrencyAdapter(java.util.Currency.getInstance("JPY")) }
 val Currency.Companion.JPY get() = jpy
 
 class Yen(units: BigInteger) : SpecificCurrencyAmountTemplate<Yen>(units, Currency.JPY, ::Yen)
