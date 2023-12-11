@@ -14,9 +14,9 @@ inline fun <reified ELEMENT> Assert<List<ELEMENT>>.containsSameElementsAs(other:
     assertThat(actual).containsExactly(*other.toTypedArray())
 }
 
-inline fun <reified ELEMENT> Assert<Collection<ELEMENT>>.containsAllElementsIn(other: Collection<ELEMENT>) = given { actual ->
+inline fun <reified ELEMENT> Assert<Collection<ELEMENT>>.containsAtLeastAllElementsIn(other: Collection<ELEMENT>) = given { actual ->
 
-    assertThat(actual).containsAll(*other.toTypedArray())
+    assertThat(actual).containsAtLeast(*other.toTypedArray())
 }
 
 fun <KEY, VALUE> Assert<Map<KEY, VALUE>>.containsSameEntriesAs(other: Map<KEY, VALUE>) = given { actual ->

@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.core.domain.identity.ksuid
+package org.sollecitom.chassis.core.domain.identity.tsid
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -11,44 +11,43 @@ import org.sollecitom.chassis.core.domain.identity.factory.Factory
 import org.sollecitom.chassis.core.domain.identity.factory.invoke
 import org.sollecitom.chassis.kotlin.extensions.time.fixed
 import org.sollecitom.chassis.kotlin.extensions.time.truncatedToMilliseconds
-import org.sollecitom.chassis.kotlin.extensions.time.truncatedToSeconds
 import kotlin.time.Duration.Companion.days
 
 @TestInstance(PER_CLASS)
-private class KSUIDTests {
+private class TSIDTests {
 
     @Test
-    fun `generating KSUIDs`() {
+    fun `generating TSIDs`() {
 
         val timestamp = Clock.System.now()
         val clock = Clock.fixed(timestamp)
 
-        val id = Id.Factory(clock = clock).ksuid.monotonic()
+        val id = Id.Factory(clock = clock).tsid.default()
 
-        assertThat(id.timestamp).isEqualTo(timestamp.truncatedToSeconds())
+        assertThat(id.timestamp).isEqualTo(timestamp.truncatedToMilliseconds())
     }
 
     @Test
-    fun `generating a KSUID in the past`() {
+    fun `generating a TSID in the past still uses the current time`() {
 
         val timestamp = Clock.System.now()
         val clock = Clock.fixed(timestamp)
         val pastTimestamp = timestamp - 10.days
 
-        val id = Id.Factory(clock = clock).ksuid.monotonic(timestamp = pastTimestamp)
+        val id = Id.Factory(clock = clock).tsid.default(timestamp = pastTimestamp)
 
-        assertThat(id.timestamp).isEqualTo(pastTimestamp.truncatedToSeconds())
+        assertThat(id.timestamp).isEqualTo(timestamp.truncatedToMilliseconds())
     }
 
     @Test
-    fun `generating a KSUID in the future`() {
+    fun `generating a TSID in the future`() {
 
         val timestamp = Clock.System.now()
         val clock = Clock.fixed(timestamp)
         val futureTimestamp = timestamp + 15.days
 
-        val id = Id.Factory(clock = clock).ksuid.monotonic(timestamp = futureTimestamp)
+        val id = Id.Factory(clock = clock).tsid.default(timestamp = futureTimestamp)
 
-        assertThat(id.timestamp).isEqualTo(futureTimestamp.truncatedToSeconds())
+        assertThat(id.timestamp).isEqualTo(futureTimestamp.truncatedToMilliseconds())
     }
 }

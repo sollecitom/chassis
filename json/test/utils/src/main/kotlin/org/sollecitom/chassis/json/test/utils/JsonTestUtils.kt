@@ -1,7 +1,7 @@
 package org.sollecitom.chassis.json.test.utils
 
 import assertk.Assert
-import assertk.assertions.containsAll
+import assertk.assertions.containsAtLeast
 import assertk.assertions.containsOnly
 import assertk.assertions.support.expected
 import assertk.assertions.support.show
@@ -14,9 +14,9 @@ fun Assert<JSONObject>.containsOnly(pair: Pair<String, Any>, vararg others: Pair
     assertThat(actual.toMap()).containsOnly(*arrayOf(pair) + others)
 }
 
-fun Assert<JSONObject>.containsAll(pair: Pair<String, Any>, vararg others: Pair<String, Any>) = given { actual ->
+fun Assert<JSONObject>.containsAtLeast(pair: Pair<String, Any>, vararg others: Pair<String, Any>) = given { actual ->
 
-    assertThat(actual.toMap()).containsAll(*arrayOf(pair) + others)
+    assertThat(actual.toMap()).containsAtLeast(*arrayOf(pair) + others)
 }
 
 fun Assert<JSONObject>.isEqualTo(expected: JSONObject) = given { actual ->

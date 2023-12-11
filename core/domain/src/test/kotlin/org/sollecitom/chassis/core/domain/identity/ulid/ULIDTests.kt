@@ -11,6 +11,8 @@ import org.sollecitom.chassis.core.domain.identity.factory.Factory
 import org.sollecitom.chassis.core.domain.identity.factory.invoke
 import org.sollecitom.chassis.kotlin.extensions.time.fixed
 import org.sollecitom.chassis.kotlin.extensions.time.truncatedToMilliseconds
+import org.sollecitom.chassis.kotlin.extensions.time.truncatedToSeconds
+import kotlin.time.Duration.Companion.days
 
 @TestInstance(PER_CLASS)
 private class ULIDTests {
@@ -24,5 +26,29 @@ private class ULIDTests {
         val id = Id.Factory(clock = clock).ulid.monotonic()
 
         assertThat(id.timestamp).isEqualTo(timestamp.truncatedToMilliseconds())
+    }
+
+    @Test
+    fun `generating a ULID in the past`() {
+
+        val timestamp = Clock.System.now()
+        val clock = Clock.fixed(timestamp)
+        val pastTimestamp = timestamp - 10.days
+
+        val id = Id.Factory(clock = clock).ulid.monotonic(timestamp = pastTimestamp)
+
+        assertThat(id.timestamp).isEqualTo(pastTimestamp.truncatedToMilliseconds())
+    }
+
+    @Test
+    fun `generating a ULID in the future`() {
+
+        val timestamp = Clock.System.now()
+        val clock = Clock.fixed(timestamp)
+        val futureTimestamp = timestamp + 15.days
+
+        val id = Id.Factory(clock = clock).ulid.monotonic(timestamp = futureTimestamp)
+
+        assertThat(id.timestamp).isEqualTo(futureTimestamp.truncatedToMilliseconds())
     }
 }
