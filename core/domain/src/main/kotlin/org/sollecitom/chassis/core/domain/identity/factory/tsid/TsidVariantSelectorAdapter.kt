@@ -9,7 +9,7 @@ internal class TsidVariantSelectorAdapter(private val random: Random, private va
 
     override val default = DefaultTsidFactoryAdapter(random, clock)
 
-    override fun nodeSpecific(nodeId: Int, maximumNumberOfNodes: Int) = NodeSpecificTsidFactoryAdapter(nodeId, bitsFor(maximumNumberOfNodes), random, clock)
+    override fun nodeSpecific(nodeId: Int, maximumNodesCount: Int) = NodeSpecificTsidFactoryAdapter(nodeId, bitsFor(maximumNodesCount), random, clock)
 
     private fun bitsFor(maximumNumberOfNodes: Int): Int = log2(maximumNumberOfNodes.toDouble()).roundToCeil()
 }

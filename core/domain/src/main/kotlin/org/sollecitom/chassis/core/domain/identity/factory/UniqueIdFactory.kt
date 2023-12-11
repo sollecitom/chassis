@@ -11,6 +11,7 @@ interface UniqueIdFactory {
     val ksuid: KsuidVariantSelector
     val tsid: TsidVariantSelector
     val internal: SortableTimestampedUniqueIdentifierFactory<*>
+    val forEntities: SortableTimestampedUniqueIdentifierFactory<*>
     val external: UniqueIdentifierFactory<Id>
 
     companion object

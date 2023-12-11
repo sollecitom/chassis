@@ -10,11 +10,11 @@ import org.sollecitom.chassis.core.domain.identity.factory.invoke
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import kotlin.random.Random
 
-internal class CoreDataGeneratorProvider(private val environment: Environment, initialisedClock: Clock? = null, initialisedRandom: Random? = null) : Loggable(), CoreDataGenerator {
+internal class CoreDataGeneratorProvider(private val environment: Environment, private val nodeId: Int = 0, private val maximumNodesCount: Int = 256, initialisedClock: Clock? = null, initialisedRandom: Random? = null) : Loggable(), CoreDataGenerator {
 
     override val random: Random = initialisedRandom ?: initialiseRandom()
     override val clock: Clock = initialisedClock ?: initialiseClock()
-    override val newId: UniqueIdFactory by lazy { UniqueIdFactory.invoke(random = random, clock = clock) }
+    override val newId: UniqueIdFactory by lazy { UniqueIdFactory.invoke(random = random, clock = clock, nodeId = nodeId, maximumNodesCount = maximumNodesCount) }
 
     private fun initialiseRandom(): Random {
 
@@ -36,4 +36,4 @@ internal class CoreDataGeneratorProvider(private val environment: Environment, i
     }
 }
 
-fun CoreDataGenerator.Companion.provider(environment: Environment = StandardEnvironment(), initialisedClock: Clock? = null, initialisedRandom: Random? = null): CoreDataGenerator = CoreDataGeneratorProvider(environment, initialisedClock, initialisedRandom)
+fun CoreDataGenerator.Companion.provider(environment: Environment = StandardEnvironment(), nodeId: Int = 0, maximumNodesCount: Int = 256, initialisedClock: Clock? = null, initialisedRandom: Random? = null): CoreDataGenerator = CoreDataGeneratorProvider(environment = environment, nodeId = nodeId, maximumNodesCount = maximumNodesCount, initialisedClock = initialisedClock, initialisedRandom = initialisedRandom)

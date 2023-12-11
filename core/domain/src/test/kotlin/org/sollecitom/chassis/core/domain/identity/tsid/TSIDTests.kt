@@ -8,7 +8,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.identity.factory.Factory
-import org.sollecitom.chassis.core.domain.identity.factory.invoke
+import org.sollecitom.chassis.core.domain.identity.utils.invoke
 import org.sollecitom.chassis.kotlin.extensions.time.fixed
 import org.sollecitom.chassis.kotlin.extensions.time.truncatedToMilliseconds
 import kotlin.time.Duration.Companion.days

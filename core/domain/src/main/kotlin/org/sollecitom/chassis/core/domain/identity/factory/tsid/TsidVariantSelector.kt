@@ -7,5 +7,5 @@ interface TsidVariantSelector {
 
     val default: SortableTimestampedUniqueIdentifierFactory<TSID>
 
-    fun nodeSpecific(nodeId: Int, maximumNumberOfNodes: Int): SortableTimestampedUniqueIdentifierFactory<TSID>
+    fun nodeSpecific(nodeId: Int, maximumNodesCount: Int): SortableTimestampedUniqueIdentifierFactory<TSID>
 }
