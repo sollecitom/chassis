@@ -23,6 +23,6 @@ private class ULIDTests {
 
         val id = Id.Factory(clock = clock).ulid.monotonic()
 
-        assertThat(id::timestamp).isEqualTo(timestamp.truncatedToMilliseconds())
+        assertThat(id.timestamp).isEqualTo(timestamp.truncatedToMilliseconds())
     }
 }

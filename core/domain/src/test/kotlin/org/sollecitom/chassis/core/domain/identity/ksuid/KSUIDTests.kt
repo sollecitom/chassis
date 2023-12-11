@@ -23,6 +23,6 @@ private class KSUIDTests {
 
         val id = Id.Factory(clock = clock).ksuid.monotonic()
 
-        assertThat(id::timestamp).isEqualTo(timestamp.truncatedToSeconds())
+        assertThat(id.timestamp).isEqualTo(timestamp.truncatedToSeconds())
     }
 }

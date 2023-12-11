@@ -21,7 +21,7 @@ class KSUID internal constructor(private val delegate: Ksuid) : SortableTimestam
 
     override fun hashCode() = delegate.hashCode()
 
-    override fun toString() = "ULID($stringValue)"
+    override fun toString() = "KSUID($stringValue)"
 
     companion object {
 
