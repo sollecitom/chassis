@@ -1,15 +1,13 @@
 package org.sollecitom.chassis.core.domain.identity.factory.tsid
 
 import kotlinx.datetime.Clock
-import org.sollecitom.chassis.kotlin.extensions.number.roundToCeil
-import kotlin.math.log2
+import org.sollecitom.chassis.core.domain.identity.ClusterCoordinates
+import org.sollecitom.chassis.kotlin.extensions.bytes.requiredBits
 import kotlin.random.Random
 
 internal class TsidVariantSelectorAdapter(private val random: Random, private val clock: Clock) : TsidVariantSelector {
 
     override val default = DefaultTsidFactoryAdapter(random, clock)
 
-    override fun nodeSpecific(nodeId: Int, maximumNodesCount: Int) = NodeSpecificTsidFactoryAdapter(nodeId, bitsFor(maximumNodesCount), random, clock)
-
-    private fun bitsFor(maximumNumberOfNodes: Int): Int = log2(maximumNumberOfNodes.toDouble()).roundToCeil()
+    override fun nodeSpecific(clusterCoordinates: ClusterCoordinates) = NodeSpecificTsidFactoryAdapter(clusterCoordinates.nodeId, clusterCoordinates.maximumNodesCount.requiredBits, random, clock)
 }
