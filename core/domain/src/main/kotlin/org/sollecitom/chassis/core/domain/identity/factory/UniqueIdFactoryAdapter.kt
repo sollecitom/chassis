@@ -13,7 +13,7 @@ private class UniqueIdFactoryAdapter(random: Random = Random, clock: Clock = Clo
 
     override val ulid = UlidVariantSelectorAdapter(random, clock)
     override val ksuid = KsuidVariantSelectorAdapter(random, clock)
-    override val internal: SortableTimestampedUniqueIdentifierFactory<ULID> get() = ulid.monotonic
+    override val internal: SortableTimestampedUniqueIdentifierFactory<*> get() = ksuid.monotonic
     override val external: UniqueIdentifierFactory<Id> = StringFactoryAdapter(random) { internal().stringValue }
 }
 
