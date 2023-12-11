@@ -1,10 +1,12 @@
 package org.sollecitom.chassis.configuration.utils
 
 import org.http4k.cloudnative.env.Environment
+import org.http4k.cloudnative.env.EnvironmentKey
 import org.http4k.cloudnative.env.MapEnvironment
 import org.http4k.cloudnative.env.fromYaml
 import org.http4k.format.JacksonYaml
 import org.http4k.lens.BiDiLens
+import org.sollecitom.chassis.core.domain.identity.ClusterCoordinates
 import org.sollecitom.chassis.kotlin.extensions.collections.toPairsArray
 import org.sollecitom.chassis.resource.utils.ResourceLoader
 import java.io.File
@@ -41,6 +43,8 @@ fun Environment.Companion.fromYaml(input: InputStream): Environment {
 
     return MapEnvironment.from(map.flatten().toMap().toProperties())
 }
+
+fun Environment.clusterCoordinates(): ClusterCoordinates = ClusterCoordinates(EnvironmentKey.nodeId(this), EnvironmentKey.maximumNodesCount(this))
 
 fun Environment.Companion.fromFiles(files: List<File>): Environment = files.map { Environment.fromYaml(it) }.foldRight(EMPTY) { item, accumulator -> item overrides accumulator }
 
