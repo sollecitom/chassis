@@ -2,6 +2,7 @@ package org.sollecitom.chassis.core.serialization.json.identity
 
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
+import org.sollecitom.chassis.core.domain.identity.KSUID
 import org.sollecitom.chassis.core.domain.identity.StringId
 import org.sollecitom.chassis.core.domain.identity.ULID
 import org.sollecitom.chassis.json.utils.getRequiredString
@@ -11,6 +12,7 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 private object IdJsonSerde : JsonSerde.SchemaAware<Id> {
 
     private const val TYPE_ULID = "ulid"
+    private const val TYPE_KSUID = "ksuid"
     private const val TYPE_STRING = "string"
     private const val SCHEMA_LOCATION = "core/identity/Id.json"
     override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
@@ -19,6 +21,7 @@ private object IdJsonSerde : JsonSerde.SchemaAware<Id> {
         put(Fields.VALUE, value.stringValue)
         val type = when (value) {
             is ULID -> TYPE_ULID
+            is KSUID -> TYPE_KSUID
             is StringId -> TYPE_STRING
         }
         put(Fields.TYPE, type)
@@ -30,6 +33,7 @@ private object IdJsonSerde : JsonSerde.SchemaAware<Id> {
         val value = json.getRequiredString(Fields.VALUE)
         return when (type) {
             TYPE_ULID -> ULID(value)
+            TYPE_KSUID -> KSUID(value)
             TYPE_STRING -> StringId(value)
             else -> error("Unknown ID type $type")
         }
