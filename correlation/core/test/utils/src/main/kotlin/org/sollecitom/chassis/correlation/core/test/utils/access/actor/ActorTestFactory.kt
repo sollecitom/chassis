@@ -8,12 +8,13 @@ import org.sollecitom.chassis.correlation.core.domain.access.authentication.Auth
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 import org.sollecitom.chassis.correlation.core.test.utils.access.authentication.credentialsBased
 import org.sollecitom.chassis.correlation.core.test.utils.tenancy.create
+import java.util.*
 
 context(CoreDataGenerator)
-fun Actor.Account.Companion.user(id: Id = newId.internal(), tenant: Tenant = Tenant.create()): Actor.UserAccount = Actor.UserAccount(id, tenant)
+fun Actor.Account.Companion.user(id: Id = newId.internal(), locale: Locale = Locale.UK, tenant: Tenant = Tenant.create()): Actor.UserAccount = Actor.UserAccount(id, locale, tenant)
 
 context(CoreDataGenerator)
-fun Actor.UserAccount.Companion.create(id: Id = newId.internal(), tenant: Tenant = Tenant.create()): Actor.UserAccount = Actor.UserAccount(id, tenant)
+fun Actor.UserAccount.Companion.create(id: Id = newId.internal(), locale: Locale = Locale.UK, tenant: Tenant = Tenant.create()): Actor.UserAccount = Actor.UserAccount(id, locale, tenant)
 
 context(CoreDataGenerator)
 fun Actor.Account.Companion.service(id: Id = newId.internal(), tenant: Tenant = Tenant.create()): Actor.ServiceAccount = Actor.ServiceAccount(id, tenant)

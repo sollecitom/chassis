@@ -11,6 +11,7 @@ import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.json.utils.serde.getValue
 import org.sollecitom.chassis.json.utils.serde.setValue
+import java.util.Locale
 
 internal object UserAccountJsonSerde : JsonSerde.SchemaAware<Actor.UserAccount> {
 
@@ -21,6 +22,7 @@ internal object UserAccountJsonSerde : JsonSerde.SchemaAware<Actor.UserAccount> 
     override fun serialize(value: Actor.UserAccount) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)
         setValue(Fields.ID, value.id, Id.jsonSerde)
+        put(Fields.LOCALE, value.locale.toLanguageTag())
         setValue(Fields.TENANT, value.tenant, Tenant.jsonSerde)
     }
 
@@ -29,13 +31,15 @@ internal object UserAccountJsonSerde : JsonSerde.SchemaAware<Actor.UserAccount> 
         val type = json.getRequiredString(Fields.TYPE)
         check(type == TYPE_VALUE) { "Invalid type '$type'. Must be '$TYPE_VALUE'" }
         val id = json.getValue(Fields.ID, Id.jsonSerde)
+        val locale = json.getRequiredString(Fields.LOCALE).let(Locale::forLanguageTag)
         val tenant = json.getValue(Fields.TENANT, Tenant.jsonSerde)
-        return Actor.UserAccount(id = id, tenant = tenant)
+        return Actor.UserAccount(id = id, locale = locale, tenant = tenant)
     }
 
     private object Fields {
         const val TYPE = "type"
         const val ID = "id"
+        const val LOCALE = "locale"
         const val TENANT = "tenant"
     }
 }

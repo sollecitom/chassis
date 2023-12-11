@@ -5,6 +5,7 @@
   "required": [
     "type",
     "id",
+    "locale",
     "tenant"
   ],
   "properties": {
@@ -14,6 +15,10 @@
     },
     "id": {
       "$ref": "/core/identity/Id.json"
+    },
+    "locale": {
+      "type": "string",
+      "minLength": 1
     },
     "tenant": {
       "$ref": "/correlation/tenancy/Tenant.json"

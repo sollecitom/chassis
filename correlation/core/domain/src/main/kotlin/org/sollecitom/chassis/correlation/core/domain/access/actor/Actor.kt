@@ -3,13 +3,13 @@ package org.sollecitom.chassis.correlation.core.domain.access.actor
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
+import java.util.*
 
 sealed interface Actor {
 
     val account: Account
     val benefitingAccount: Account
     val authentication: Authentication
-    // TODO add locale!
 
     sealed interface Account {
         val id: Id
@@ -18,7 +18,7 @@ sealed interface Actor {
         companion object
     }
 
-    data class UserAccount(override val id: Id, override val tenant: Tenant) : Account {
+    data class UserAccount(override val id: Id, val locale: Locale, override val tenant: Tenant) : Account {
 
         companion object
     }
@@ -30,3 +30,5 @@ sealed interface Actor {
 
     companion object
 }
+
+val Actor.Account.localeOrNull: Locale? get() = if (this is Actor.UserAccount) locale else null

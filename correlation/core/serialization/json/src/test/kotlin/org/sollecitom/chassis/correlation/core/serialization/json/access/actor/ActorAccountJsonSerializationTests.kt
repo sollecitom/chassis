@@ -8,6 +8,7 @@ import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.test.utils.access.actor.service
 import org.sollecitom.chassis.correlation.core.test.utils.access.actor.user
 import org.sollecitom.chassis.json.test.utils.JsonSerdeTestSpecification
+import java.util.*
 
 @TestInstance(PER_CLASS)
 private class ActorAccountJsonSerializationTests : JsonSerdeTestSpecification<Actor.Account>, CoreDataGenerator by CoreDataGenerator.testProvider {
@@ -16,6 +17,7 @@ private class ActorAccountJsonSerializationTests : JsonSerdeTestSpecification<Ac
 
     override fun parameterizedArguments() = listOf(
         "user" to Actor.Account.user(),
+        "user-with-explicit-locale" to Actor.Account.user(locale = Locale.ITALY),
         "service" to Actor.Account.service()
     )
 }
