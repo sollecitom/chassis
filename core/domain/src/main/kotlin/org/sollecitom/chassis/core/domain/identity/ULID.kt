@@ -3,8 +3,6 @@ package org.sollecitom.chassis.core.domain.identity
 import com.github.f4b6a3.ulid.Ulid
 import kotlinx.datetime.toKotlinInstant
 
-// TODO add TSID (https://github.com/vladmihalcea/hypersistence-tsid or https://github.com/f4b6a3/tsid-creator)
-
 class ULID internal constructor(private val delegate: Ulid) : SortableTimestampedUniqueIdentifier<ULID> {
 
     override val stringValue by lazy(delegate::toString)

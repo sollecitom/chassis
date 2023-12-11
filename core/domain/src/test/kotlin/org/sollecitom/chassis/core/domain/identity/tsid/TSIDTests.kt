@@ -50,4 +50,17 @@ private class TSIDTests {
 
         assertThat(id.timestamp).isEqualTo(futureTimestamp.truncatedToMilliseconds())
     }
+
+    @Test
+    fun `generating TSIDs as part of a cluster of nodes`() {
+
+        val timestamp = Clock.System.now()
+        val clock = Clock.fixed(timestamp)
+        val nodeId = 23
+        val maximumNumberOfNodes = 256
+
+        val id = Id.Factory(clock = clock).tsid.nodeSpecific(nodeId, maximumNumberOfNodes).invoke()
+
+        assertThat(id.timestamp).isEqualTo(timestamp.truncatedToMilliseconds())
+    }
 }
