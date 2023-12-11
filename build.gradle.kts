@@ -111,7 +111,7 @@ tasks.withType<DependencyUpdatesTask> {
     }
 }
 
-versionCatalogUpdate {
+versionCatalogUpdate { // TODO add https://github.com/gradle-update/update-gradle-wrapper-action to the CI script when you'll have one
     sortByKey.set(false)
     keep {
         keepUnusedVersions = true
