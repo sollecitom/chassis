@@ -7,12 +7,12 @@ import java.io.File
 
 fun main(args: Array<String>) = runBlocking { // no suspend coroutineScope {} or it won't work with Docker
 
-    val environment = StandardEnvironment(defaultConfiguration = StandardEnvironment.defaultYamlConfiguration, additionalExternalConfigFiles = args.toList().additionalExternalConfigFiles())
+    val environment = StandardEnvironment(defaultConfiguration = StandardEnvironment.defaultYamlConfiguration, additionalExternalConfigFiles = additionalExternalConfigFiles(args))
     configureLogging(environment)
     Service(environment).start()
 }
 
-private fun List<String>.additionalExternalConfigFiles(): List<File> {
+private fun additionalExternalConfigFiles(args: Array<String>): List<File> {
 
     // TODO read args for the presence of external additional config files
     return emptyList()
