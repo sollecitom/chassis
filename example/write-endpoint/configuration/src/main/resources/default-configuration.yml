@@ -1,4 +1,11 @@
 service:
   port: 0
+
 health:
   port: 0
+
+cluster:
+  node:
+    id: 5 # change this from infrastructure to be the ID of the service within its cluster e.g., 0, 1, or 2 in a cluster with 3 nodes.
+  nodes:
+    count: 256 # change this from infrastructure to be the maximum number of nodes in the cluster e.g., 256 in a cluster with 256 maximum nodes.

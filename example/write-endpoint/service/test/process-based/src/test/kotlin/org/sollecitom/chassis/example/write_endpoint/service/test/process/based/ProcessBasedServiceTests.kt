@@ -3,12 +3,13 @@ package org.sollecitom.chassis.example.write_endpoint.service.test.process.based
 import org.http4k.client.ApacheAsyncClient
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
-import org.http4k.lens.BiDiLens
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.configuration.utils.from
+import org.sollecitom.chassis.configuration.utils.maximumNodesCount
+import org.sollecitom.chassis.configuration.utils.nodeId
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.example.write_endpoint.adapters.driven.user.repository.UserRepositoryDrivenAdapter
@@ -36,16 +37,17 @@ private class ProcessBasedServiceTests : ServiceTestSpecification, CoreDataGener
     override val pulsarAdmin by lazy { pulsar.admin() }
     override val topic = PulsarTopic.create()
 
-    private val drivingAdapterConfig = mapOf<BiDiLens<Environment, *>, String>(EnvironmentKey.servicePort to "0")
-    private val healthDrivingAdapterConfig = mapOf<BiDiLens<Environment, *>, String>(EnvironmentKey.healthPort to "0")
+    private val drivingAdapterConfig = mapOf(EnvironmentKey.servicePort to "0")
+    private val healthDrivingAdapterConfig = mapOf(EnvironmentKey.healthPort to "0")
     private val drivenAdapterConfig by lazy {
-        mapOf<BiDiLens<Environment, *>, String>(
-            UserRepositoryDrivenAdapter.Configuration.pulsarBrokerURIKey to pulsar.pulsarBrokerUrl,
-            UserRepositoryDrivenAdapter.Configuration.pulsarTopicKey to topic.fullName.value,
-            UserRepositoryDrivenAdapter.Configuration.instanceIdKey to newId.internal().stringValue,
+        mapOf(
+                UserRepositoryDrivenAdapter.Configuration.pulsarBrokerURIKey to pulsar.pulsarBrokerUrl,
+                UserRepositoryDrivenAdapter.Configuration.pulsarTopicKey to topic.fullName.value,
+                UserRepositoryDrivenAdapter.Configuration.instanceIdKey to newId.internal().stringValue,
         )
     }
-    private val environment by lazy { Environment.from(drivingAdapterConfig + healthDrivingAdapterConfig + drivenAdapterConfig) }
+    private val serviceConfig = mapOf(EnvironmentKey.nodeId to "0", EnvironmentKey.maximumNodesCount to "256")
+    private val environment by lazy { Environment.from(drivingAdapterConfig + healthDrivingAdapterConfig + drivenAdapterConfig + serviceConfig) }
     override val service by lazy { Service(environment) }
     override val httpClient = ApacheAsyncClient()
 

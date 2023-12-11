@@ -12,8 +12,8 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.domain.networking.RequestedPort
+import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
-import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
@@ -44,7 +44,7 @@ import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 
 @TestInstance(PER_CLASS)
-private class HttpDrivingAdapterContractTests : WithHttp4kOpenApiValidationSupport, CoreDataGenerator by CoreDataGenerator.provider() {
+private class HttpDrivingAdapterContractTests : WithHttp4kOpenApiValidationSupport, CoreDataGenerator by CoreDataGenerator.testProvider {
 
     override val openApiValidator = Http4kOpenApiValidator(openApi)
 
