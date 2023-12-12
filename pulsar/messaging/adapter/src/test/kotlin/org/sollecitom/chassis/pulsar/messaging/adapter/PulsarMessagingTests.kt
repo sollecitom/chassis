@@ -115,7 +115,6 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
 
         assertThat(receivedMessages).hasSameSizeAs(producedMessages)
         receivedMessages.forEachIndexed { index, receivedMessage ->
-
             assertThat(receivedMessage).matches(producedMessages[index])
         }
     }
