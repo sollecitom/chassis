@@ -1,11 +1,9 @@
-package org.sollecitom.chassis.example.write_endpoint.configuration
+package org.sollecitom.chassis.logging.standard.configuration
 
 import org.http4k.cloudnative.env.Environment
 import org.sollecitom.chassis.logger.core.JvmLoggerFactory
 import org.sollecitom.chassis.logger.core.Log
 import org.sollecitom.chassis.logger.core.LoggingLevel
-import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration
-import org.sollecitom.chassis.logging.standard.configuration.applyTo
 
 fun configureLogging(defaultMinimumLoggingLevel: LoggingLevel = LoggingLevel.INFO) {
 

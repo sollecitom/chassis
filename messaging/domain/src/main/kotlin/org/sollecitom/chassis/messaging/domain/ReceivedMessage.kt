@@ -22,8 +22,6 @@ interface ReceivedMessage<out VALUE> : Message<VALUE> {
 
         override fun toString(): String = "ReceivedMessage.Id(partitionIndex=$partitionIndex, serial=$serial, topic=$topic)"
     }
-
-    interface WithSerializedData<out VALUE, out DATA> : ReceivedMessage<VALUE>, Message.WithSerializedData<VALUE, DATA>
 }
 
 fun ReceivedMessage<*>.forkContext(): Message.Context = context.fork(parentMessageId = id)

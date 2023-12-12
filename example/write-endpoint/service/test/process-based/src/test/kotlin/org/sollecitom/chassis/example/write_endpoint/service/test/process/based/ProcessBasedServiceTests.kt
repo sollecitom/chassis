@@ -13,12 +13,12 @@ import org.sollecitom.chassis.configuration.utils.nodeId
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.example.write_endpoint.adapters.driven.user.repository.UserRepositoryDrivenAdapter
-import org.sollecitom.chassis.example.write_endpoint.configuration.configureLogging
 import org.sollecitom.chassis.example.write_endpoint.service.starter.Service
 import org.sollecitom.chassis.example.write_endpoint.service.test.specification.ServiceTestSpecification
 import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.LoggingLevel
+import org.sollecitom.chassis.logging.standard.configuration.configureLogging
 import org.sollecitom.chassis.pulsar.test.utils.admin
 import org.sollecitom.chassis.pulsar.test.utils.client
 import org.sollecitom.chassis.pulsar.test.utils.create

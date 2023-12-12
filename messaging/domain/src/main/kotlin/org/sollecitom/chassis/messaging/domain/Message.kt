@@ -13,8 +13,6 @@ interface Message<out VALUE> {
 
     open class Id(val partitionIndex: Int, val serial: Long) {
 
-        fun receivedOnTopic(topic: Topic): ReceivedMessage.Id = ReceivedMessage.Id(partitionIndex, serial, topic)
-
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (other !is Id) return false
@@ -47,11 +45,6 @@ interface Message<out VALUE> {
 
         val isOriginating: Boolean get() = originatingMessageId == null
     }
-
-    interface WithSerializedData<out VALUE, out DATA> : Message<VALUE> {
-
-        val data: DATA
-    }
 }
 
 val Message<*>.isOriginating: Boolean get() = context.isOriginating
@@ -63,3 +56,5 @@ fun Message<*>.originatesFromMessageWithId(messageId: ReceivedMessage.Id) = cont
 fun Message<*>.originatesFrom(message: ReceivedMessage<*>) = originatesFromMessageWithId(message.id)
 
 fun Message<*>.getProperty(propertyKey: String): String = getPropertyOrNull(propertyKey) ?: error("No value for property with key $propertyKey")
+
+fun Message.Id.receivedOnTopic(topic: Topic): ReceivedMessage.Id = ReceivedMessage.Id(partitionIndex, serial, topic)

@@ -26,8 +26,8 @@ import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSub
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
-import org.sollecitom.chassis.example.write_endpoint.configuration.configureLogging
 import org.sollecitom.chassis.example.write_endpoint.domain.user.User
+import org.sollecitom.chassis.logging.standard.configuration.configureLogging
 import org.sollecitom.chassis.test.utils.assertions.failedThrowing
 
 @TestInstance(PER_CLASS)

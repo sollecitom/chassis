@@ -68,6 +68,7 @@ module("pulsar", "utils")
 module("pulsar", "test", "utils")
 module("pulsar", "json", "serialization")
 module("pulsar", "avro", "serialization")
+module("pulsar", "messaging", "adapter")
 
 module("example", "event", "domain")
 module("example", "event", "serialization", "json")

@@ -28,11 +28,11 @@ import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUs
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
 import org.sollecitom.chassis.example.write_endpoint.application.user.UserWithPendingRegistration
-import org.sollecitom.chassis.example.write_endpoint.configuration.configureLogging
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.contentLength
 import org.sollecitom.chassis.http4k.utils.lens.contentType
 import org.sollecitom.chassis.logger.core.LoggingLevel.INFO
+import org.sollecitom.chassis.logging.standard.configuration.configureLogging
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
 import org.sollecitom.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
 import org.sollecitom.chassis.openapi.validation.http4k.validator.implementation.invoke

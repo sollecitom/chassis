@@ -2,7 +2,7 @@ package org.sollecitom.chassis.example.write_endpoint.service.starter
 
 import kotlinx.coroutines.runBlocking
 import org.sollecitom.chassis.configuration.utils.StandardEnvironment
-import org.sollecitom.chassis.example.write_endpoint.configuration.configureLogging
+import org.sollecitom.chassis.logging.standard.configuration.configureLogging
 import java.io.File
 
 fun main(args: Array<String>) = runBlocking { // no suspend coroutineScope {} or it won't work with Docker

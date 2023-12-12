@@ -7,9 +7,9 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
-import org.sollecitom.chassis.example.write_endpoint.configuration.configureLogging
 import org.sollecitom.chassis.example.write_endpoint.service.test.specification.ServiceTestSpecification
 import org.sollecitom.chassis.logger.core.LoggingLevel
+import org.sollecitom.chassis.logging.standard.configuration.configureLogging
 import org.sollecitom.chassis.pulsar.test.utils.*
 import org.sollecitom.chassis.pulsar.utils.PulsarTopic
 import org.testcontainers.containers.Network
