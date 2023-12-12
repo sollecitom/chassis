@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.sollecitom.chassis.core.test.utils.hasValue
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.logger.core.LoggingLevel
@@ -83,15 +84,15 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
         val message = OutboundMessage(key, value, properties, context)
 
         val messageId = producer.produce(message)
-        consumer.nextMessage()
-        val receivedMessage = consumer.nextMessage()
+        consumer.nextReceivedMessage()
+        val receivedMessage = consumer.nextReceivedMessage()
 
         assertThat(receivedMessage.id).isEqualTo(messageId)
         assertThat(receivedMessage.key).isEqualTo(key)
         assertThat(receivedMessage.value).isEqualTo(value)
         assertThat(receivedMessage.properties).isEqualTo(properties)
         assertThat(receivedMessage.context).isEqualTo(context)
-        assertThat(receivedMessage.producerName.value).isEqualTo(producerName)
+        assertThat(receivedMessage.producerName).hasValue(producerName)
     }
 
     @Test
@@ -117,7 +118,28 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
         assertThat(receivedMessages).hasSameSizeAs(producedMessages)
         receivedMessages.forEachIndexed { index, receivedMessage ->
             assertThat(receivedMessage).matches(producedMessages[index])
-            assertThat(receivedMessage.producerName.value).isEqualTo(producerName)
+            assertThat(receivedMessage.producerName).hasValue(producerName)
         }
+    }
+
+    @Test
+    fun `receiving and resending a message using the messaging API`() = runTest(timeout = timeout) {
+
+        val topic1 = Topic.create().also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) }
+        val topic2 = Topic.create().also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) }
+        val consumer1 = pulsarClient.newConsumer(Schema.STRING).topics(topic1).subscriptionName("a subscription 4-1").consumerName("a unique consumer 4-1").subscribe()
+        val producer1 = pulsarClient.newProducer(Schema.STRING).topic(topic1).producerName("a unique producer 4-1").create()
+        val consumer2 = pulsarClient.newConsumer(Schema.STRING).topics(topic2).subscriptionName("a subscription 4-2").consumerName("a unique consumer 4-2").subscribe()
+        val producer2 = pulsarClient.newProducer(Schema.STRING).topic(topic2).producerName("a unique producer 4-2").create()
+
+        val message = OutboundMessage("key", "value", emptyMap(), Message.Context())
+        producer1.produce(message)
+        val receivedFirstMessage = consumer1.nextReceivedMessage()
+        val secondMessageId = producer2.produce(receivedFirstMessage)
+        val receivedSecondMessage = consumer2.nextReceivedMessage()
+
+        assertThat(receivedSecondMessage.id).isEqualTo(secondMessageId)
+        assertThat(receivedSecondMessage).matches(message)
+        assertThat(receivedSecondMessage.producerName).hasValue(producer2.producerName)
     }
 }

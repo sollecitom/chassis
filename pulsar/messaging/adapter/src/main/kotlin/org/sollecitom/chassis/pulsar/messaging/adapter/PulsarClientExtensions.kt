@@ -18,7 +18,7 @@ fun <V> ConsumerBuilder<V>.topics(vararg topics: Topic): ConsumerBuilder<V> = to
 
 fun <V> ProducerBuilder<V>.topic(topic: Topic): ProducerBuilder<V> = topic(topic.fullName.value)
 
-suspend fun <VALUE> Consumer<VALUE>.nextMessage(): ReceivedMessage<VALUE> = receiveAsync().await().toReceivedMessage()
+suspend fun <VALUE> Consumer<VALUE>.nextReceivedMessage(): ReceivedMessage<VALUE> = receiveAsync().await().toReceivedMessage()
 
 context(Consumer<VALUE>)
 private fun <VALUE> PulsarMessage<VALUE>.toReceivedMessage(): ReceivedMessage<VALUE> = PulsarReceivedMessage(this)
