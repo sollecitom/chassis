@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.pulsar.messaging.adapter
 
-import assertk.Assert
 import assertk.assertThat
 import assertk.assertions.hasSameSizeAs
 import assertk.assertions.isEqualTo
@@ -60,12 +59,13 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
         val producer = pulsarClient.newProducer(Schema.STRING).topic(topic).producerName(producerName).create()
 
         val messageId = producer.newMessage().key(key).value(value).properties(properties).produce()
-        val received = consumer.consume()
+        val receivedMessage = consumer.consume()
 
-        assertThat(received.messageId).isEqualTo(messageId)
-        assertThat(received.key).isEqualTo(key)
-        assertThat(received.value).isEqualTo(value)
-        assertThat(received.properties).isEqualTo(properties)
+        assertThat(receivedMessage.messageId).isEqualTo(messageId)
+        assertThat(receivedMessage.key).isEqualTo(key)
+        assertThat(receivedMessage.value).isEqualTo(value)
+        assertThat(receivedMessage.properties).isEqualTo(properties)
+        assertThat(receivedMessage.producerName).isEqualTo(producerName)
     }
 
     @Test
@@ -84,13 +84,14 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
 
         val messageId = producer.produce(message)
         consumer.nextMessage()
-        val received = consumer.nextMessage()
+        val receivedMessage = consumer.nextMessage()
 
-        assertThat(received.id).isEqualTo(messageId)
-        assertThat(received.key).isEqualTo(key)
-        assertThat(received.value).isEqualTo(value)
-        assertThat(received.properties).isEqualTo(properties)
-        assertThat(received.context).isEqualTo(context)
+        assertThat(receivedMessage.id).isEqualTo(messageId)
+        assertThat(receivedMessage.key).isEqualTo(key)
+        assertThat(receivedMessage.value).isEqualTo(value)
+        assertThat(receivedMessage.properties).isEqualTo(properties)
+        assertThat(receivedMessage.context).isEqualTo(context)
+        assertThat(receivedMessage.producerName.value).isEqualTo(producerName)
     }
 
     @Test
@@ -116,6 +117,7 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
         assertThat(receivedMessages).hasSameSizeAs(producedMessages)
         receivedMessages.forEachIndexed { index, receivedMessage ->
             assertThat(receivedMessage).matches(producedMessages[index])
+            assertThat(receivedMessage.producerName.value).isEqualTo(producerName)
         }
     }
 }
