@@ -2,25 +2,17 @@ package org.sollecitom.chassis.messaging.domain
 
 import kotlinx.datetime.Instant
 
-interface ReceivedMessage<out VALUE> : Message<VALUE> {
+interface ReceivedMessage<out VALUE> : Message<VALUE>, Comparable<ReceivedMessage<*>> {
 
-    val id: Id
+    val id: Message.Id
+    val bytes: ByteArray
     val publishedAt: Instant
+
+    val topic: Topic get() = id.topic
 
     suspend fun acknowledge()
 
-    class Id(partitionIndex: Int, serial: Long, val topic: Topic) : Message.Id(partitionIndex, serial) {
-
-        val topicPartition: Topic.Partition = Topic.Partition(topic, partitionIndex)
-
-        override fun toString(): String = "ReceivedMessage.Id(partitionIndex=$partitionIndex, serial=$serial, topic=$topic)"
-    }
+    override fun compareTo(other: ReceivedMessage<*>) = id.compareTo(other.id)
 }
 
 fun ReceivedMessage<*>.forkContext(): Message.Context = context.fork(parentMessageId = id)
-
-suspend fun List<ReceivedMessage<*>>.acknowledgeLastForEachPartition() {
-
-    val byPartition = groupBy { message -> message.id.partitionIndex }
-    byPartition.forEach { (_, messagesInPartition) -> messagesInPartition.last().acknowledge() }
-}

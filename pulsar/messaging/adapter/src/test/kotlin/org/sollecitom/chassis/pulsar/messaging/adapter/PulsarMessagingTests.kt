@@ -13,6 +13,10 @@ import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.logging.standard.configuration.configureLogging
+import org.sollecitom.chassis.messaging.domain.Message
+import org.sollecitom.chassis.messaging.domain.OutboundMessage
+import org.sollecitom.chassis.messaging.domain.Topic
+import org.sollecitom.chassis.messaging.test.utils.create
 import org.sollecitom.chassis.pulsar.test.utils.admin
 import org.sollecitom.chassis.pulsar.test.utils.client
 import org.sollecitom.chassis.pulsar.test.utils.create
@@ -34,14 +38,10 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
     private val timeout: Duration get() = 30.seconds
 
     @BeforeAll
-    fun beforeAll() {
-        pulsar.start()
-    }
+    fun beforeAll() = pulsar.start()
 
     @AfterAll
-    fun afterAll() {
-        pulsar.stop()
-    }
+    fun afterAll() = pulsar.stop()
 
     @Test
     fun `sending and receiving a single message with Pulsar`() = runTest(timeout = timeout) {
@@ -58,6 +58,27 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
         val received = consumer.consume()
 
         assertThat(received.messageId).isEqualTo(messageId)
+        assertThat(received.key).isEqualTo(key)
+        assertThat(received.value).isEqualTo(value)
+        assertThat(received.properties).isEqualTo(properties)
+    }
+
+    @Test
+    fun `sending and receiving a single message with the messaging API`() = runTest(timeout = timeout) {
+
+        val key = "key"
+        val value = "value"
+        val properties = mapOf("propertyKey1" to "propertyValue1", "propertyKey2" to "propertyValue2")
+        val producerName = "a unique producer 123"
+        val message = OutboundMessage(key, value, properties, Message.Context())
+        val topic = Topic.create().also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) }
+        val consumer = pulsarClient.newConsumer(Schema.STRING).topics(topic).subscriptionName("a subscription").consumerName("a unique consumer 123").subscribe()
+        val producer = pulsarClient.newProducer(Schema.STRING).topic(topic).producerName(producerName).create()
+
+        val messageId = producer.produce(message)
+        val received = consumer.nextMessage()
+
+        assertThat(received.id).isEqualTo(messageId)
         assertThat(received.key).isEqualTo(key)
         assertThat(received.value).isEqualTo(value)
         assertThat(received.properties).isEqualTo(properties)
