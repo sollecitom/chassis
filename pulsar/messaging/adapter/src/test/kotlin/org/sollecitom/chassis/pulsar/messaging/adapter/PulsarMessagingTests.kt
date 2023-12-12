@@ -17,16 +17,12 @@ import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.logging.standard.configuration.configureLogging
-import org.sollecitom.chassis.messaging.domain.Message
-import org.sollecitom.chassis.messaging.domain.OutboundMessage
-import org.sollecitom.chassis.messaging.domain.Topic
+import org.sollecitom.chassis.messaging.domain.*
 import org.sollecitom.chassis.messaging.test.utils.create
 import org.sollecitom.chassis.messaging.test.utils.matches
 import org.sollecitom.chassis.pulsar.test.utils.admin
 import org.sollecitom.chassis.pulsar.test.utils.client
-import org.sollecitom.chassis.pulsar.test.utils.create
 import org.sollecitom.chassis.pulsar.test.utils.newPulsarContainer
-import org.sollecitom.chassis.pulsar.utils.*
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -49,34 +45,13 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
     fun afterAll() = pulsar.stop()
 
     @Test
-    fun `sending and receiving a single message with Pulsar`() = runTest(timeout = timeout) {
-
-        val key = "key"
-        val value = "value"
-        val properties = mapOf("propertyKey1" to "propertyValue1", "propertyKey2" to "propertyValue2")
-        val producerName = "a unique producer 1"
-        val topic = PulsarTopic.create().also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) } // TODO change this to be a messaging topic instead
-        val consumer = pulsarClient.newConsumer(Schema.STRING).topics(topic).subscriptionName("a subscription 1").consumerName("a unique consumer 1").subscribe()
-        val producer = pulsarClient.newProducer(Schema.STRING).topic(topic).producerName(producerName).create()
-
-        val messageId = producer.newMessage().key(key).value(value).properties(properties).produce()
-        val receivedMessage = consumer.consume()
-
-        assertThat(receivedMessage.messageId).isEqualTo(messageId)
-        assertThat(receivedMessage.key).isEqualTo(key)
-        assertThat(receivedMessage.value).isEqualTo(value)
-        assertThat(receivedMessage.properties).isEqualTo(properties)
-        assertThat(receivedMessage.producerName).isEqualTo(producerName)
-    }
-
-    @Test
     fun `sending and receiving a single message using the messaging API`() = runTest(timeout = timeout) {
 
         val key = "key"
         val value = "value"
         val properties = mapOf("propertyKey1" to "propertyValue1", "propertyKey2" to "propertyValue2")
         val producerName = "a unique producer 2"
-        val topic = Topic.create().also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) }
+        val topic = newTopic()
         val consumer = pulsarClient.newConsumer(Schema.STRING).topics(topic).subscriptionName("a subscription 2").consumerName("a unique consumer 2").subscribe()
         val producer = pulsarClient.newProducer(Schema.STRING).topic(topic).producerName(producerName).create()
         val aPreviousMessageId = producer.produce(OutboundMessage("a-previous-key", "a-previous-value", emptyMap(), Message.Context()))
@@ -99,7 +74,7 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
     fun `sending and receiving multiple messages using the messaging API`() = runTest(timeout = timeout) {
 
         val producerName = "a unique producer 3"
-        val topic = Topic.create().also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) }
+        val topic = newTopic()
         val consumer = pulsarClient.newConsumer(Schema.STRING).topics(topic).subscriptionName("a subscription 3").consumerName("a unique consumer 3").subscribe()
         val producer = pulsarClient.newProducer(Schema.STRING).topic(topic).producerName(producerName).create()
 
@@ -125,8 +100,8 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
     @Test
     fun `receiving and resending a message using the messaging API`() = runTest(timeout = timeout) {
 
-        val topic1 = Topic.create().also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) }
-        val topic2 = Topic.create().also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) }
+        val topic1 = newTopic()
+        val topic2 = newTopic()
         val consumer1 = pulsarClient.newConsumer(Schema.STRING).topics(topic1).subscriptionName("a subscription 4-1").consumerName("a unique consumer 4-1").subscribe()
         val producer1 = pulsarClient.newProducer(Schema.STRING).topic(topic1).producerName("a unique producer 4-1").create()
         val consumer2 = pulsarClient.newConsumer(Schema.STRING).topics(topic2).subscriptionName("a subscription 4-2").consumerName("a unique consumer 4-2").subscribe()
@@ -142,4 +117,37 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
         assertThat(receivedSecondMessage).matches(message)
         assertThat(receivedSecondMessage.producerName).hasValue(producer2.producerName)
     }
+
+    @Test
+    fun `sending and receiving multiple messages using the messaging API wrapper types`() = runTest(timeout = timeout) {
+
+        val topic = newTopic()
+        val consumer = newMessageConsumer(topic)
+        val producer = newMessageProducer(topic)
+
+        val producedMessages = mutableListOf<Message<String>>()
+        val originatingMessage = OutboundMessage("key-5", "value-5", emptyMap(), Message.Context())
+        val originatingMessageId = producer.produce(originatingMessage).also { producedMessages += originatingMessage }
+        var parentMessageId = originatingMessageId
+        val messagesCount = 5
+        (1..<messagesCount).forEach { index ->
+            val message = OutboundMessage("key-$index", "value-$index", emptyMap(), Message.Context(parentMessageId = parentMessageId, originatingMessageId = originatingMessageId))
+            parentMessageId = producer.produce(message).also { producedMessages += message }
+        }
+
+        val receivedMessages = consumer.messages.take(messagesCount).toList()
+
+        assertThat(receivedMessages).hasSameSizeAs(producedMessages)
+        receivedMessages.forEachIndexed { index, receivedMessage ->
+            assertThat(receivedMessage).matches(producedMessages[index])
+            assertThat(receivedMessage.producerName).isEqualTo(producer.name)
+        }
+    }
+
+    fun newTopic(): Topic = Topic.create().also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) } // TODO move impl outside of the spec
+
+    fun newMessageProducer(topic: Topic, name: String = newId.internal().stringValue): MessageProducer<String> = pulsarMessageProducer { pulsarClient.newProducer(Schema.STRING).topic(topic).producerName(name).create() } // TODO move impl outside of the spec
+
+    fun newMessageConsumer(topics: Set<Topic>, subscriptionName: String = newId.internal().stringValue, name: String = newId.internal().stringValue): MessageConsumer<String> = pulsarMessageConsumer(topics) { pulsarClient.newConsumer(Schema.STRING).topics(topics).subscriptionName(subscriptionName).consumerName(name).subscribe() } // TODO move impl outside of the spec
+    fun newMessageConsumer(topic: Topic, subscriptionName: String = newId.internal().stringValue, name: String = newId.internal().stringValue) = newMessageConsumer(topics = setOf(topic), subscriptionName = subscriptionName, name = name)
 }

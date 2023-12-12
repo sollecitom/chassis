@@ -16,6 +16,8 @@ import org.apache.pulsar.client.api.Message as PulsarMessage
 
 fun <V> ConsumerBuilder<V>.topics(vararg topics: Topic): ConsumerBuilder<V> = topic(*topics.map { it.fullName.value }.toTypedArray())
 
+fun <V> ConsumerBuilder<V>.topics(topics: Set<Topic>): ConsumerBuilder<V> = topic(*topics.map { it.fullName.value }.toTypedArray())
+
 fun <V> ProducerBuilder<V>.topic(topic: Topic): ProducerBuilder<V> = topic(topic.fullName.value)
 
 suspend fun <VALUE> Consumer<VALUE>.nextReceivedMessage(): ReceivedMessage<VALUE> = receiveAsync().await().toReceivedMessage()
