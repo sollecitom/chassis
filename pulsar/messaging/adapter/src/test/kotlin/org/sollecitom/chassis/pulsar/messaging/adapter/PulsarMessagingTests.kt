@@ -1,7 +1,8 @@
 package org.sollecitom.chassis.pulsar.messaging.adapter
 
 import assertk.assertThat
-import assertk.assertions.isNotNull
+import assertk.assertions.isEqualTo
+import kotlinx.coroutines.test.runTest
 import org.apache.pulsar.client.api.Schema
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -16,10 +17,7 @@ import org.sollecitom.chassis.pulsar.test.utils.admin
 import org.sollecitom.chassis.pulsar.test.utils.client
 import org.sollecitom.chassis.pulsar.test.utils.create
 import org.sollecitom.chassis.pulsar.test.utils.newPulsarContainer
-import org.sollecitom.chassis.pulsar.utils.PulsarTopic
-import org.sollecitom.chassis.pulsar.utils.ensureTopicExists
-import org.sollecitom.chassis.pulsar.utils.topic
-import org.sollecitom.chassis.pulsar.utils.topics
+import org.sollecitom.chassis.pulsar.utils.*
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -48,11 +46,21 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
     }
 
     @Test
-    fun `sending and receiving a single message`() {
+    fun `sending and receiving a single message`() = runTest(timeout = timeout) {
 
-        val consumer = pulsarClient.newConsumer(Schema.STRING).topics(topic).subscriptionName("a subscription").subscribe()
-        val producer = pulsarClient.newProducer(Schema.STRING).topic(topic).producerName("a producer").create()
+        val key = "key"
+        val value = "value"
+        val properties = mapOf("propertyKey1" to "propertyValue1", "propertyKey2" to "propertyValue2")
+        val producerName = "a unique producer 123"
+        val consumer = pulsarClient.newConsumer(Schema.STRING).topics(topic).subscriptionName("a subscription").consumerName("a unique consumer 123").subscribe()
+        val producer = pulsarClient.newProducer(Schema.STRING).topic(topic).producerName(producerName).create()
 
-        assertThat(pulsar.pulsarBrokerUrl).isNotNull()
+        val messageId = producer.newMessage().key(key).value(value).properties(properties).produce()
+        val received = consumer.consume()
+
+        assertThat(received.messageId).isEqualTo(messageId)
+        assertThat(received.key).isEqualTo(key)
+        assertThat(received.value).isEqualTo(value)
+        assertThat(received.properties).isEqualTo(properties)
     }
 }

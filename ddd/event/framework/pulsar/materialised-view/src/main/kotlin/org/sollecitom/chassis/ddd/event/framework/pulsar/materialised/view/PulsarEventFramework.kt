@@ -23,7 +23,7 @@ import java.net.URI
 class PulsarEventFramework(private val topic: PulsarTopic, private val streamName: Name, private val instanceId: Id, private val eventSchema: Schema<Event>, private val brokerURI: URI, private val store: EventStore.Mutable, private val subscriptionType: SubscriptionType = SubscriptionType.Failover, private val customizeProducer: ProducerBuilder<Event>.() -> Unit = {}, private val customizeConsumer: ConsumerBuilder<Event>.() -> Unit = {}, private val customizeClient: (ClientBuilder) -> Unit = {}) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
 
     private lateinit var pulsar: PulsarClient
-    private val producerName = "${streamName.value}-producer"
+    private val producerName = "${streamName.value}-producer-${instanceId.stringValue}"
     private val subscriptionName = "${streamName.value}-subscription"
     private val consumerName = "${streamName.value}-consumer-${instanceId.stringValue}"
     private val publisher by lazy { PulsarPublisher(topic, eventSchema, producerName, pulsar, customizeProducer) }
