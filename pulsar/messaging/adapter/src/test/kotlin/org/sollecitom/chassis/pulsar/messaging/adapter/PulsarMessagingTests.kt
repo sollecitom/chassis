@@ -31,13 +31,11 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
     private val pulsar = newPulsarContainer()
     private val pulsarClient by lazy { pulsar.client() }
     private val pulsarAdmin by lazy { pulsar.admin() }
-    private val topic = PulsarTopic.create() // TODO change this to be a messaging topic instead
     private val timeout: Duration get() = 30.seconds
 
     @BeforeAll
     fun beforeAll() {
         pulsar.start()
-        pulsarAdmin.ensureTopicExists(topic = topic, isAllowAutoUpdateSchema = true)
     }
 
     @AfterAll
@@ -46,12 +44,13 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
     }
 
     @Test
-    fun `sending and receiving a single message`() = runTest(timeout = timeout) {
+    fun `sending and receiving a single message with Pulsar`() = runTest(timeout = timeout) {
 
         val key = "key"
         val value = "value"
         val properties = mapOf("propertyKey1" to "propertyValue1", "propertyKey2" to "propertyValue2")
         val producerName = "a unique producer 123"
+        val topic = PulsarTopic.create().also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) } // TODO change this to be a messaging topic instead
         val consumer = pulsarClient.newConsumer(Schema.STRING).topics(topic).subscriptionName("a subscription").consumerName("a unique consumer 123").subscribe()
         val producer = pulsarClient.newProducer(Schema.STRING).topic(topic).producerName(producerName).create()
 
