@@ -8,9 +8,13 @@ internal data class PulsarMessageId(override val topic: Topic, private val deleg
 
     override val partition: Topic.Partition? = delegate.partitionIndex.takeUnless { it == -1 }?.let { Topic.Partition(topic, it) }
 
+    internal fun toByteArray(): ByteArray = delegate.toByteArray()
+
     override fun compareTo(other: Message.Id): Int {
 
         if (other !is PulsarMessageId) error("Cannot compare a PulsarMessageId with a ${other::class.java.name}")
         return delegate.compareTo(other.delegate)
     }
 }
+
+internal fun MessageIdAdv.adapted(topic: Topic): Message.Id = PulsarMessageId(topic, this)

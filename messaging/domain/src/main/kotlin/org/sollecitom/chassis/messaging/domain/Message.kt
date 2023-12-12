@@ -15,7 +15,7 @@ interface Message<out VALUE> {
         val topic: Topic
         val partition: Topic.Partition?
 
-        // TODO add support for serialization and deserialization, through a factory
+        companion object
     }
 
     data class Context(val parentMessageId: Id? = null, val originatingMessageId: Id? = null) {

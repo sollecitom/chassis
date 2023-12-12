@@ -25,13 +25,28 @@ suspend fun <VALUE> Producer<VALUE>.produce(message: Message<VALUE>): Message.Id
     return newMessage().key(message.key).value(message.value).properties(message.properties + message.context.asProperties()).produce().adapted(topic = Topic.parse(topic))
 }
 
-private fun MessageIdAdv.adapted(topic: Topic) = PulsarMessageId(topic, this)
+private fun Message.Context.asProperties(): Map<String, String> = buildMap {
 
-private fun Message.Context.asProperties(): Map<String, String> = emptyMap() // TODO write the context as properties (probably need custom Property names...)
+    parentMessageId?.let {
+        put(PARENT_MESSAGE_ID_PROPERTY, MessageIdSerializer.serialize(it))
+    }
+    originatingMessageId?.let {
+        put(ORIGINATING_MESSAGE_ID_PROPERTY, MessageIdSerializer.serialize(it))
+    }
+}
 
-private fun Message.Context.Companion.from(properties: Map<String, String>): Message.Context = Message.Context() // TODO fix this
+private fun Message.Context.Companion.from(properties: Map<String, String>): Message.Context {
 
-private fun Map<String, String>.withoutProtocolProperties(): Map<String, String> = this // TODO remove all protocol-properties e.g., context properties
+    val parentMessageId = properties[PARENT_MESSAGE_ID_PROPERTY]?.let(MessageIdSerializer::deserialize)
+    val originatingMessageId = properties[ORIGINATING_MESSAGE_ID_PROPERTY]?.let(MessageIdSerializer::deserialize)
+    return Message.Context(parentMessageId = parentMessageId, originatingMessageId = originatingMessageId)
+}
+
+private fun Map<String, String>.withoutProtocolProperties(): Map<String, String> = filterKeys { !it.startsWith(PROTOCOL_PROPERTY_PREFIX) }
+
+private const val PROTOCOL_PROPERTY_PREFIX = "PROTOCOL" // TODO add a ULID or something as a prefix
+private const val PARENT_MESSAGE_ID_PROPERTY = "$PROTOCOL_PROPERTY_PREFIX-MESSAGE-CONTEXT-PARENT-MESSAGE-ID"
+private const val ORIGINATING_MESSAGE_ID_PROPERTY = "$PROTOCOL_PROPERTY_PREFIX-MESSAGE-CONTEXT-ORIGINATING-MESSAGE-ID"
 
 context (Consumer<VALUE>)
 internal class PulsarReceivedMessage<out VALUE>(private val delegate: PulsarMessage<VALUE>) : ReceivedMessage<VALUE> {

@@ -70,17 +70,21 @@ private class PulsarMessagingTests : CoreDataGenerator by CoreDataGenerator.test
         val value = "value"
         val properties = mapOf("propertyKey1" to "propertyValue1", "propertyKey2" to "propertyValue2")
         val producerName = "a unique producer 123"
-        val message = OutboundMessage(key, value, properties, Message.Context())
         val topic = Topic.create().also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) }
         val consumer = pulsarClient.newConsumer(Schema.STRING).topics(topic).subscriptionName("a subscription").consumerName("a unique consumer 123").subscribe()
         val producer = pulsarClient.newProducer(Schema.STRING).topic(topic).producerName(producerName).create()
+        val aPreviousMessageId = producer.produce(OutboundMessage("a-previous-key", "a-previous-value", emptyMap(), Message.Context()))
+        val context = Message.Context(parentMessageId = aPreviousMessageId, originatingMessageId = aPreviousMessageId)
+        val message = OutboundMessage(key, value, properties, context)
 
         val messageId = producer.produce(message)
+        consumer.nextMessage()
         val received = consumer.nextMessage()
 
         assertThat(received.id).isEqualTo(messageId)
         assertThat(received.key).isEqualTo(key)
         assertThat(received.value).isEqualTo(value)
         assertThat(received.properties).isEqualTo(properties)
+        assertThat(received.context).isEqualTo(context)
     }
 }
