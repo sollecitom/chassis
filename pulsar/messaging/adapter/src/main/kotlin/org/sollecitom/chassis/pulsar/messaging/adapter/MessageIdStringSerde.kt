@@ -6,7 +6,7 @@ import org.sollecitom.chassis.messaging.domain.Message
 import org.sollecitom.chassis.messaging.domain.Topic
 
 @OptIn(ExperimentalStdlibApi::class)
-internal object MessageIdSerializer { // TODO revisit
+internal object MessageIdStringSerde { // TODO revisit
 
     private const val TOPIC_PREFIX = "-:TOPIC:"
     private const val ID_PREFIX = "-:ID:"
