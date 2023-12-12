@@ -24,4 +24,6 @@ val Message<*>.id: MessageIdAdv get() = messageId as MessageIdAdv
 
 fun ClientBuilder.brokerURI(brokerURI: URI): ClientBuilder = serviceUrl(brokerURI.toString())
 
-fun <V> ConsumerBuilder<V>.topic(vararg topics: PulsarTopic) = topic(*topics.map { it.fullName.value }.toTypedArray())
+fun <V> ConsumerBuilder<V>.topics(vararg topics: PulsarTopic): ConsumerBuilder<V> = topic(*topics.map { it.fullName.value }.toTypedArray())
+
+fun <V> ProducerBuilder<V>.topic(topic: PulsarTopic): ProducerBuilder<V> = topic(topic.fullName.value)

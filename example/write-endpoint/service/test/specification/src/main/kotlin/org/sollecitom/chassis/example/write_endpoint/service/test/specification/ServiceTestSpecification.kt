@@ -26,7 +26,7 @@ import org.sollecitom.chassis.pulsar.json.serialization.asPulsarSchema
 import org.sollecitom.chassis.pulsar.utils.PulsarTopic
 import org.sollecitom.chassis.pulsar.utils.consume
 import org.sollecitom.chassis.pulsar.utils.ensureTopicExists
-import org.sollecitom.chassis.pulsar.utils.topic
+import org.sollecitom.chassis.pulsar.utils.topics
 import org.sollecitom.chassis.web.api.test.utils.MonitoringEndpointsTestSpecification
 import org.sollecitom.chassis.web.api.test.utils.httpURLWithPath
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
@@ -61,7 +61,7 @@ interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestS
         val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
         val invocationContext = InvocationContext.unauthenticated()
         val schema = Event.jsonSerde.asPulsarSchema()
-        val consumer = pulsarClient.newConsumer(schema).topic(topic).subscriptionName("a subscription").subscribe()
+        val consumer = pulsarClient.newConsumer(schema).topics(topic).subscriptionName("a subscription").subscribe()
 
         val request = Request(Method.POST, service.httpURLWithPath("commands/register-user/v1")).body(json).withInvocationContext(invocationContext)
 
