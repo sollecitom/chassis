@@ -14,7 +14,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-interface MessagingTestSpecification : CoreDataGenerator {
+interface MessagingTestSpecification : CoreDataGenerator { // TODO add Avro tests
 
     val timeout: Duration get() = 30.seconds
 
