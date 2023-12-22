@@ -1,7 +1,6 @@
 package org.sollecitom.chassis.core.test.utils.stubs
 
 import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.TimeGenerator
 import kotlin.time.Duration
 

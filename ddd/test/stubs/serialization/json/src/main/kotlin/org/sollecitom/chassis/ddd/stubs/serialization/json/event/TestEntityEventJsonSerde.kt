@@ -3,7 +3,6 @@ package org.sollecitom.chassis.ddd.stubs.serialization.json.event
 import org.json.JSONObject
 import org.sollecitom.chassis.ddd.serialization.json.event.EventJsonSerdeSupport
 import org.sollecitom.chassis.ddd.test.stubs.TestEntityEvent
-import org.sollecitom.chassis.ddd.test.stubs.TestEvent
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 

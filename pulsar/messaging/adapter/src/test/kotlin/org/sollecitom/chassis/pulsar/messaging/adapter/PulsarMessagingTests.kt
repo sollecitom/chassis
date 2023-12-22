@@ -9,7 +9,9 @@ import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.logging.standard.configuration.configureLogging
-import org.sollecitom.chassis.messaging.domain.*
+import org.sollecitom.chassis.messaging.domain.MessageConsumer
+import org.sollecitom.chassis.messaging.domain.MessageProducer
+import org.sollecitom.chassis.messaging.domain.Topic
 import org.sollecitom.chassis.messaging.test.utils.MessagingTestSpecification
 import org.sollecitom.chassis.messaging.test.utils.create
 import org.sollecitom.chassis.pulsar.test.utils.admin

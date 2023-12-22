@@ -5,7 +5,6 @@ import org.http4k.core.then
 import org.http4k.filter.*
 import org.sollecitom.chassis.http4k.utils.lens.AddContentLength
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
-import org.sollecitom.chassis.web.api.utils.filters.RequestContextsProvider
 import org.sollecitom.chassis.web.api.utils.filters.correlation.InvocationContextFilter
 import org.sollecitom.chassis.web.api.utils.filters.correlation.addInvocationContextToLoggingStack
 import org.sollecitom.chassis.web.api.utils.filters.correlation.parseInvocationContextFromGatewayHeader

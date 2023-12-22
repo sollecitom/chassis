@@ -1,9 +1,6 @@
 package org.sollecitom.chassis.correlation.core.serialization.json.access.origin.client.info
 
 import org.json.JSONObject
-import org.sollecitom.chassis.core.domain.networking.IpAddress
-import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
-import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.json.utils.serde.getValue

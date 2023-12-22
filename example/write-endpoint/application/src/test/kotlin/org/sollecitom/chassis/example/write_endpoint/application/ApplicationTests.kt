@@ -18,8 +18,8 @@ import org.sollecitom.chassis.correlation.core.test.utils.context.authenticated
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.Event
-import org.sollecitom.chassis.ddd.test.utils.create
 import org.sollecitom.chassis.ddd.domain.PublishedEvent
+import org.sollecitom.chassis.ddd.test.utils.create
 import org.sollecitom.chassis.example.event.domain.UserRegistrationEvent
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasAlreadySubmitted
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted

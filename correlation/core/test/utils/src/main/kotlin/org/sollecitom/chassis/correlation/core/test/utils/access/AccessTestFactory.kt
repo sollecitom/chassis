@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.correlation.core.test.utils.access
 
-import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.TimeGenerator
 import org.sollecitom.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.Access

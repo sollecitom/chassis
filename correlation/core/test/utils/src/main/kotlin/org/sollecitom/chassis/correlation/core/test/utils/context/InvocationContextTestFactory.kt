@@ -1,7 +1,6 @@
 package org.sollecitom.chassis.correlation.core.test.utils.context
 
 import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.TimeGenerator
 import org.sollecitom.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.Access

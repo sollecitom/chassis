@@ -14,10 +14,14 @@ import org.sollecitom.chassis.logger.core.JvmLoggerFactory
 import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration
 import org.sollecitom.chassis.logging.standard.configuration.applyTo
-import org.sollecitom.chassis.openapi.builder.*
+import org.sollecitom.chassis.openapi.builder.OpenApiBuilder
+import org.sollecitom.chassis.openapi.builder.buildOpenApi
+import org.sollecitom.chassis.openapi.builder.post
 import org.sollecitom.chassis.openapi.checking.checker.model.OpenApiFields
 import org.sollecitom.chassis.openapi.checking.checker.model.ParameterLocation
-import org.sollecitom.chassis.openapi.checking.checker.rules.*
+import org.sollecitom.chassis.openapi.checking.checker.rules.MandatoryInfoFieldsRule
+import org.sollecitom.chassis.openapi.checking.checker.rules.WhitelistedAlphabetPathNameRule
+import org.sollecitom.chassis.openapi.checking.checker.rules.WhitelistedOpenApiVersionFieldRule
 import org.sollecitom.chassis.openapi.checking.checker.sets.StandardOpenApiRules
 import org.sollecitom.chassis.openapi.checking.checker.sets.checkAgainstRules
 import org.sollecitom.chassis.openapi.checking.test.utils.isCompliant

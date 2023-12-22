@@ -1,7 +1,6 @@
 package org.sollecitom.chassis.correlation.core.test.utils.access.origin
 
 import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.web.client.info.domain.*
 
 fun ClientInfo.Companion.create(device: Device = Device.create(), operatingSystem: OperatingSystem = OperatingSystem.create(), layoutEngine: LayoutEngine = LayoutEngine.create(), agent: Agent = Agent.create()): ClientInfo = ClientInfo(device, operatingSystem, layoutEngine, agent)

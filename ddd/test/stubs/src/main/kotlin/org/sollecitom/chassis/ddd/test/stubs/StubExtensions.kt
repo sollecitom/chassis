@@ -2,7 +2,6 @@ package org.sollecitom.chassis.ddd.test.stubs
 
 import kotlinx.datetime.Instant
 import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.TimeGenerator
 import org.sollecitom.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.ddd.domain.Event

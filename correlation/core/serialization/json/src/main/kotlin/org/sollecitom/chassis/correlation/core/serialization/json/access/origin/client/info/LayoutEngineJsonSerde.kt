@@ -8,7 +8,6 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.json.utils.serde.getValueOrNull
 import org.sollecitom.chassis.json.utils.serde.setValue
 import org.sollecitom.chassis.web.client.info.domain.LayoutEngine
-import org.sollecitom.chassis.web.client.info.domain.OperatingSystem
 import org.sollecitom.chassis.web.client.info.domain.Version
 
 private object LayoutEngineJsonSerde : JsonSerde.SchemaAware<LayoutEngine> {

@@ -2,7 +2,6 @@ package org.sollecitom.chassis.example.write_endpoint.service.test.container.bas
 
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.networking.Port
-import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.HEALTH_PORT
 import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.MAXIMUM_NODES_COUNT

@@ -5,8 +5,8 @@ import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.store.EventStore
 import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
 import org.sollecitom.chassis.example.event.domain.UserEvent
-import org.sollecitom.chassis.example.write_endpoint.domain.user.UserEventQuery
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
+import org.sollecitom.chassis.example.write_endpoint.domain.user.UserEventQuery
 import kotlin.reflect.KClass
 
 internal val UserEvent.Companion.inMemoryQueryFactory: InMemoryEventStore.Query.Factory get() = InMemoryUserEventQueryFactory
