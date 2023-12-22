@@ -3,6 +3,7 @@ package org.sollecitom.chassis.example.write_endpoint.service.test.container.bas
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.networking.Port
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
+import org.sollecitom.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.HEALTH_PORT
 import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.MAXIMUM_NODES_COUNT
 import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.NODE_ID
@@ -26,7 +27,7 @@ import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.utility.DockerImageName
 
-context(CoreDataGenerator)
+context(UniqueIdGenerator)
 fun newExampleWriteEndpointServiceContainer(pulsarTopic: PulsarTopic, pulsar: PulsarContainer, pulsarConsumerInstanceId: Id = newId.internal(), servicePort: Int = 8090, healthPort: Int = 8091, nodeId: Int = 0, maximumNodesCount: Int = 256): ExampleWriteEndpointServiceContainer {
 
     val loggingArguments = mapOf(LOGGING_LEVEL_ENV_VARIABLE to "INFO", LOGGING_LEVEL_OVERRIDES_ENV_VARIABLE to "org.eclipse.jetty=WARN,org.apache.hc=WARN")

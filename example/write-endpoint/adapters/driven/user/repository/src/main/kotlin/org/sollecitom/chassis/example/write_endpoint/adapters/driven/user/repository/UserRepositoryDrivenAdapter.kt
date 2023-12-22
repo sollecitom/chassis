@@ -65,9 +65,9 @@ class UserRepositoryDrivenAdapter(private val configuration: Configuration, priv
 
     companion object {
 
-        context(CoreDataGenerator)
-        fun create(environment: Environment) = UserRepositoryDrivenAdapter(Configuration.from(environment), this@CoreDataGenerator)
-
         val eventStreamName = "example-write-endpoint-service".let(::Name)
     }
 }
+
+context(CoreDataGenerator)
+fun UserRepositoryDrivenAdapter.Companion.create(environment: Environment) = UserRepositoryDrivenAdapter(UserRepositoryDrivenAdapter.Configuration.from(environment), this@CoreDataGenerator)

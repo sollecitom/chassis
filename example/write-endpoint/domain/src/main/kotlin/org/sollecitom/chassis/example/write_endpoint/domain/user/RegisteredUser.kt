@@ -3,6 +3,8 @@ package org.sollecitom.chassis.example.write_endpoint.domain.user
 import kotlinx.coroutines.Deferred
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
+import org.sollecitom.chassis.core.utils.TimeGenerator
+import org.sollecitom.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.ddd.domain.toEventContext
 import org.sollecitom.chassis.ddd.domain.PublishedEvent
@@ -10,7 +12,7 @@ import org.sollecitom.chassis.example.event.domain.UserEvent
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasAlreadySubmitted
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
 
-context(CoreDataGenerator)
+context(UniqueIdGenerator, TimeGenerator)
 internal class RegisteredUser(private val pastUserRegistrationRequest: UserRegistrationRequestWasSubmitted, private val publish: suspend (UserEvent) -> Deferred<Unit>) : User {
 
     override val id: Id get() = pastUserRegistrationRequest.userId
