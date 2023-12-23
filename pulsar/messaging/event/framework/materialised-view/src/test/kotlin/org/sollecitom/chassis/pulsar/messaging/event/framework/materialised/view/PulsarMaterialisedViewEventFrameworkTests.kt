@@ -1,6 +1,8 @@
 package org.sollecitom.chassis.pulsar.messaging.event.framework.materialised.view
 
 import kotlinx.coroutines.CoroutineScope
+import org.apache.pulsar.client.api.PulsarClient
+import org.apache.pulsar.client.api.Schema
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
@@ -9,6 +11,7 @@ import org.sollecitom.chassis.core.domain.identity.StringId
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.Event
+import org.sollecitom.chassis.ddd.domain.store.EventStore
 import org.sollecitom.chassis.ddd.event.framework.test.specification.EventFrameworkTestSpecification
 import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
 import org.sollecitom.chassis.ddd.stubs.serialization.json.event.testStubJsonSerde
@@ -41,11 +44,7 @@ private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpec
 
         val topic = Topic.create()
         val store = InMemoryEventStore()
-        val schema = eventSerde.asPulsarSchema()
-        // TODO create a convenience function to create the framework in Pulsar
-        val producer = pulsarMessageProducer(topic) { pulsar.client().newProducer(schema).topic(it).producerName("$streamName-producer-${instanceId.stringValue}").create() }
-        val consumer = pulsarMessageConsumer(topic) { pulsar.client().newConsumer(schema).topics(it).consumerName("$streamName-consumer-${instanceId.stringValue}").subscriptionName(streamName).subscribe() }
-        val framework = MaterialisedEventFramework(topic, store, producer, consumer) { event ->
+        val framework = pulsar.client().pulsarMaterialisedEventFramework(instanceId.stringValue, streamName, eventSerde, topic, store) { event ->
 
             OutboundMessage(event.id.stringValue, event, emptyMap(), Message.Context()) // TODO take from a MessageConverter
         }
@@ -54,6 +53,19 @@ private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpec
         instances += framework
         return framework
     }
+
+    // TODO move to main source
+    fun PulsarClient.pulsarMaterialisedEventFramework(instanceId: String, streamName: String, serde: JsonSerde.SchemaAware<Event>, topic: Topic, store: EventStore.Mutable, eventToMessage: (Event) -> Message<Event>): MaterialisedEventFramework {
+
+        val schema = serde.asPulsarSchema()
+        val producer = messageProducer(instanceId, streamName, schema, topic)
+        val consumer = messageConsumer(instanceId, streamName, schema, topic)
+        return MaterialisedEventFramework(topic, store, producer, consumer, eventToMessage)
+    }
+
+    private fun PulsarClient.messageProducer(instanceId: String, streamName: String, schema: Schema<Event>, topic: Topic) = pulsarMessageProducer(topic) { newProducer(schema).topic(it).producerName("$streamName-producer-${instanceId}").create() }
+
+    private fun PulsarClient.messageConsumer(instanceId: String, streamName: String, schema: Schema<Event>, topic: Topic) = pulsarMessageConsumer(topic) { newConsumer(schema).topics(it).consumerName("$streamName-consumer-${instanceId}").subscriptionName(streamName).subscribe() }
 
     @BeforeAll
     fun beforeAll() {
