@@ -70,6 +70,7 @@ module("pulsar", "test", "utils")
 module("pulsar", "json", "serialization")
 module("pulsar", "avro", "serialization")
 module("pulsar", "messaging", "adapter")
+module("pulsar", "messaging", "event", "framework", "materialised-view")
 
 module("example", "event", "domain")
 module("example", "event", "serialization", "json")
