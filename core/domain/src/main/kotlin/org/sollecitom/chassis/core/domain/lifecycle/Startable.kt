@@ -5,6 +5,9 @@ import kotlinx.coroutines.runBlocking
 interface Startable {
 
     suspend fun start()
+}
 
-    fun startBlocking() = runBlocking { start() }
+fun Startable.startBlocking() {
+
+    runBlocking { start() }
 }

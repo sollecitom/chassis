@@ -1,7 +1,8 @@
 dependencies {
     api(projects.chassisExampleWriteEndpointDomain)
 
-    implementation(projects.chassisDddEventFrameworkPulsarMaterialisedView) // TODO remove and replace with pulsarMessagingEventFrameworkMaterialisedView
+    implementation(projects.chassisPulsarMessagingEventFrameworkMaterialisedView)
+    implementation(projects.chassisMessagingConfigurationUtils)
     implementation(projects.chassisDddEventStoreMemory) // TODO switch to postgres
     implementation(projects.chassisExampleEventSerializationJson)
     implementation(projects.chassisExampleWriteEndpointConfiguration)

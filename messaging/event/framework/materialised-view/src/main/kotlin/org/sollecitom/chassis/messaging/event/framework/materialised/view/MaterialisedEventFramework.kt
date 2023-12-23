@@ -11,42 +11,35 @@ import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.store.EventFramework
 import org.sollecitom.chassis.ddd.domain.store.EventStore
-import org.sollecitom.chassis.ddd.logging.utils.log
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.messaging.domain.*
-import org.sollecitom.chassis.messaging.domain.Message
 
+// TODO make this generic with the event type?
 // TODO create the outbox variant in another module
-class MaterialisedEventFramework(private val store: EventStore.Mutable, private val producer: MessageProducer<Event>, private val consumer: MessageConsumer<Event>, private val eventToMessage: (Event) -> Message<Event>) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
+class MaterialisedEventFramework(private val store: EventStore.Mutable, private val stream: EventStream<Event>) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
 
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob())
 
-    init {
-        require(producer.topic in consumer.topics) { "The message consumer must consume the messages published by the message producer" }
-    }
-
     override suspend fun start() {
 
-        consumer.start()
+        store.start()
+        stream.start()
         scope.launch(start = CoroutineStart.UNDISPATCHED) {
-            consumer.messages.onEach { store(it.value) }.onEach(ReceivedMessage<Event>::acknowledge).collect()
+            stream.messages.onEach { store(it.value) }.onEach(ReceivedMessage<Event>::acknowledge).collect()
         }
-        producer.start()
     }
 
     override suspend fun publish(event: Event): Deferred<Unit> {
 
-        val message = eventToMessage(event)
-        val messageId = producer.produce(message)
-        with(event.context) { logger.log { "Produced message with ID '${messageId}' to topic ${producer.topic.fullName} for event with ID '${event.id.stringValue}'" } }
+        stream.publish(event)
         return store.awaitForEvent(event.id)
     }
 
     override suspend fun stop() {
 
-        producer.stop()
         scope.cancel()
-        consumer.stop()
+        stream.stop()
+        store.stop()
     }
 
     override fun forEntityId(entityId: Id): EventFramework.EntitySpecific.Mutable = EntitySpecific(entityId)

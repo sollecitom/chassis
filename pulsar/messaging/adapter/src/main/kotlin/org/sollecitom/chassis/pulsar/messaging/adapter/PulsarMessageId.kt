@@ -15,6 +15,8 @@ internal data class PulsarMessageId(override val topic: Topic, private val deleg
         if (other !is PulsarMessageId) error("Cannot compare a PulsarMessageId with a ${other::class.java.name}")
         return delegate.compareTo(other.delegate)
     }
+
+    override fun toString() = "(ledger: ${delegate.ledgerId}, entry: ${delegate.entryId}, partition: ${delegate.partitionIndex}, batch: ${delegate.batchIndex}"
 }
 
 internal fun MessageIdAdv.adapted(topic: Topic): Message.Id = PulsarMessageId(topic, this)

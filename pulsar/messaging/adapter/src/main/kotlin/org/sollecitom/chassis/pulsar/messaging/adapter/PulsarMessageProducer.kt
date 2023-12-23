@@ -1,6 +1,7 @@
 package org.sollecitom.chassis.pulsar.messaging.adapter
 
 import org.apache.pulsar.client.api.Producer
+import org.sollecitom.chassis.core.domain.lifecycle.stopBlocking
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.kotlin.extensions.async.await
 import org.sollecitom.chassis.messaging.domain.Message

@@ -5,6 +5,7 @@ import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
 
+// TODO move
 interface EventFramework : EventStore {
 
     override fun forEntityId(entityId: Id): EntitySpecific

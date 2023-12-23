@@ -3,10 +3,12 @@ package org.sollecitom.chassis.ddd.domain.store
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 import org.sollecitom.chassis.core.domain.identity.Id
+import org.sollecitom.chassis.core.domain.lifecycle.Startable
+import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
 
-interface EventStore {
+interface EventStore : Startable, Stoppable {
 
     fun awaitForEvent(id: Id): Deferred<Unit>
 

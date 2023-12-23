@@ -11,6 +11,7 @@ import org.sollecitom.chassis.configuration.utils.from
 import org.sollecitom.chassis.configuration.utils.instanceGroupName
 import org.sollecitom.chassis.configuration.utils.instancesGroupMaxSize
 import org.sollecitom.chassis.configuration.utils.instanceId
+import org.sollecitom.chassis.core.domain.lifecycle.startBlocking
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.example.write_endpoint.adapters.driven.user.repository.UserRepositoryDrivenAdapter
@@ -43,7 +44,7 @@ private class ProcessBasedServiceTests : ServiceTestSpecification, CoreDataGener
     private val drivenAdapterConfig by lazy {
         mapOf(
                 UserRepositoryDrivenAdapter.Configuration.pulsarBrokerURIKey to pulsar.pulsarBrokerUrl,
-                UserRepositoryDrivenAdapter.Configuration.pulsarTopicKey to topic.fullName.value,
+                UserRepositoryDrivenAdapter.Configuration.topicKey to topic.fullName.value,
                 UserRepositoryDrivenAdapter.Configuration.instanceIdKey to newId.internal().stringValue,
         )
     }

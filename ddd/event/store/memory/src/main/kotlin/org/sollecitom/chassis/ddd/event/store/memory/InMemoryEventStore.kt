@@ -50,6 +50,14 @@ class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory
 
     override suspend fun <QUERY : EventStore.Query<EVENT>, EVENT : Event> lastOrNull(query: QUERY) = all(query).lastOrNull()
 
+    override suspend fun start() {
+        // nothing here
+    }
+
+    override suspend fun stop() {
+        // nothing here
+    }
+
     override fun forEntityId(entityId: Id): EventStore.EntitySpecific.Mutable = EntitySpecific(entityId)
 
     private inner class EntitySpecific(override val entityId: Id) : EventStore.EntitySpecific.Mutable {
