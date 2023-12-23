@@ -7,7 +7,9 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.identity.StringId
+import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.Event
@@ -34,7 +36,7 @@ private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpec
     override val timeout = 20.seconds
     private val pulsar = newPulsarContainer()
     private val pulsarAdmin by lazy { pulsar.admin() }
-    private val streamName = "test-pulsar-event-stream"
+    private val streamName = "test-pulsar-event-stream".let(::Name)
     private val instanceId = StringId("1")
     private val eventSerde: JsonSerde.SchemaAware<Event> = Event.testStubJsonSerde
     private val instances = mutableListOf<MaterialisedEventFramework>()
@@ -44,7 +46,7 @@ private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpec
 
         val topic = Topic.create()
         val store = InMemoryEventStore()
-        val framework = pulsar.client().pulsarMaterialisedEventFramework(instanceId.stringValue, streamName, eventSerde, topic, store) { event ->
+        val framework = pulsar.client().pulsarMaterialisedEventFramework(topic, store, streamName, instanceId, eventSerde) { event ->
 
             OutboundMessage(event.id.stringValue, event, emptyMap(), Message.Context()) // TODO take from a MessageConverter
         }
@@ -53,6 +55,8 @@ private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpec
         instances += framework
         return framework
     }
+
+    fun PulsarClient.pulsarMaterialisedEventFramework(topic: Topic, store: EventStore.Mutable, streamName: Name, instanceId: Id, serde: JsonSerde.SchemaAware<Event>, eventToMessage: (Event) -> Message<Event>): MaterialisedEventFramework = pulsarMaterialisedEventFramework(instanceId.stringValue, streamName.value, serde, topic, store, eventToMessage)
 
     // TODO move to main source
     fun PulsarClient.pulsarMaterialisedEventFramework(instanceId: String, streamName: String, serde: JsonSerde.SchemaAware<Event>, topic: Topic, store: EventStore.Mutable, eventToMessage: (Event) -> Message<Event>): MaterialisedEventFramework {
