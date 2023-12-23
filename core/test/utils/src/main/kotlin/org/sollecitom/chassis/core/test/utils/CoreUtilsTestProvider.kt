@@ -1,9 +1,10 @@
 package org.sollecitom.chassis.core.test.utils
 
-import org.sollecitom.chassis.core.domain.identity.ClusterCoordinates
+import org.sollecitom.chassis.core.domain.identity.InstanceInfo
+import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.provider
 
-val CoreDataGenerator.Companion.testProvider: CoreDataGenerator by lazy { CoreDataGenerator.provider(clusterCoordinates = testClusterCoordinates) }
+val CoreDataGenerator.Companion.testProvider: CoreDataGenerator by lazy { CoreDataGenerator.provider(instanceInfo = testInstanceInfo) }
 
-private val testClusterCoordinates = ClusterCoordinates(nodeId = 0, maximumNodesCount = 256)
+private val testInstanceInfo = InstanceInfo(id = 0, maximumInstancesCount = 256, groupName = "test-instance-group-name".let(::Name))

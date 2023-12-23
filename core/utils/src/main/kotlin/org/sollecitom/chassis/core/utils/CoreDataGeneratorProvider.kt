@@ -4,21 +4,20 @@ import kotlinx.datetime.Clock
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
 import org.sollecitom.chassis.configuration.utils.StandardEnvironment
-import org.sollecitom.chassis.configuration.utils.maximumNodesCount
-import org.sollecitom.chassis.configuration.utils.nodeId
+import org.sollecitom.chassis.configuration.utils.instanceInfo
 import org.sollecitom.chassis.configuration.utils.randomSeed
-import org.sollecitom.chassis.core.domain.identity.ClusterCoordinates
+import org.sollecitom.chassis.core.domain.identity.InstanceInfo
 import org.sollecitom.chassis.core.domain.identity.factory.UniqueIdFactory
 import org.sollecitom.chassis.core.domain.identity.factory.invoke
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import kotlin.random.Random
 
-internal class CoreDataGeneratorProvider(private val environment: Environment, initialisedClusterCoordinates: ClusterCoordinates? = null, initialisedClock: Clock? = null, initialisedRandom: Random? = null) : Loggable(), CoreDataGenerator {
+internal class CoreDataGeneratorProvider(private val environment: Environment, initialisedInstanceInfo: InstanceInfo? = null, initialisedClock: Clock? = null, initialisedRandom: Random? = null) : Loggable(), CoreDataGenerator {
 
     override val random: Random = initialisedRandom ?: initialiseRandom()
     override val clock: Clock = initialisedClock ?: initialiseClock()
-    private val clusterCoordinates = initialisedClusterCoordinates ?: initialiseClusterCoordinates()
-    override val newId: UniqueIdFactory by lazy { UniqueIdFactory.invoke(random = random, clock = clock, clusterCoordinates = clusterCoordinates) }
+    private val clusterCoordinates = initialisedInstanceInfo ?: initialiseClusterCoordinates()
+    override val newId: UniqueIdFactory by lazy { UniqueIdFactory.invoke(random = random, clock = clock, instanceInfo = clusterCoordinates) }
 
     private fun initialiseRandom(): Random {
 
@@ -35,16 +34,12 @@ internal class CoreDataGeneratorProvider(private val environment: Environment, i
         return clock
     }
 
-    private fun initialiseClusterCoordinates(): ClusterCoordinates {
+    private fun initialiseClusterCoordinates(): InstanceInfo {
 
-        logger.info { "Reading nodeID from property ${EnvironmentKey.nodeId.meta.name}" }
-        val nodeId = EnvironmentKey.nodeId(environment)
-        logger.info { "Reading maximumNodesCount from property ${EnvironmentKey.maximumNodesCount.meta.name}" }
-        val maximumNodesCount = EnvironmentKey.maximumNodesCount(environment)
-        val clusterCoordinates = ClusterCoordinates(nodeId = nodeId, maximumNodesCount = maximumNodesCount)
-        logger.info { "Initialised clusterCoordinates with value: $clusterCoordinates" }
-        return clusterCoordinates
+        val instanceInfo = environment.instanceInfo()
+        logger.info { "Initialised clusterCoordinates with value: $instanceInfo" }
+        return instanceInfo
     }
 }
 
-fun CoreDataGenerator.Companion.provider(environment: Environment = StandardEnvironment(), clusterCoordinates: ClusterCoordinates? = null, clock: Clock? = null, random: Random? = null): CoreDataGenerator = CoreDataGeneratorProvider(environment = environment, initialisedClusterCoordinates = clusterCoordinates, initialisedClock = clock, initialisedRandom = random)
+fun CoreDataGenerator.Companion.provider(environment: Environment = StandardEnvironment(), instanceInfo: InstanceInfo? = null, clock: Clock? = null, random: Random? = null): CoreDataGenerator = CoreDataGeneratorProvider(environment = environment, initialisedInstanceInfo = instanceInfo, initialisedClock = clock, initialisedRandom = random)

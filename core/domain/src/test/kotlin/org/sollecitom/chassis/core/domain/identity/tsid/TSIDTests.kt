@@ -10,6 +10,7 @@ import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.identity.factory.Factory
 import org.sollecitom.chassis.core.domain.identity.factory.tsid.nodeSpecific
 import org.sollecitom.chassis.core.domain.identity.utils.invoke
+import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.kotlin.extensions.time.fixed
 import org.sollecitom.chassis.kotlin.extensions.time.truncatedToMilliseconds
 import kotlin.time.Duration.Companion.days
@@ -60,7 +61,7 @@ private class TSIDTests {
         val nodeId = 23
         val maximumNumberOfNodes = 256
 
-        val id = Id.Factory(clock = clock).tsid.nodeSpecific(nodeId, maximumNumberOfNodes).invoke()
+        val id = Id.Factory(clock = clock).tsid.nodeSpecific(nodeId, maximumNumberOfNodes, "a-group-name".let(::Name)).invoke()
 
         assertThat(id.timestamp).isEqualTo(timestamp.truncatedToMilliseconds())
     }

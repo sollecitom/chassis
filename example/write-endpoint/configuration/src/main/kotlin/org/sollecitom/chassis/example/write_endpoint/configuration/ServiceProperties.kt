@@ -11,8 +11,8 @@ object ServiceProperties {
     const val PULSAR_TOPIC = "PULSAR_TOPIC"
     const val PULSAR_CONSUMER_INSTANCE_ID = "PULSAR_CONSUMER_INSTANCE_ID"
 
-    const val NODE_ID = "CLUSTER_NODE_ID"
-    const val MAXIMUM_NODES_COUNT = "CLUSTER_MAXIMUM_NODES_COUNT"
+    const val INSTANCE_ID = "INSTANCE_ID"
+    const val INSTANCE_GROUP_MAX_SIZE = "INSTANCE_GROUP_MAX_SIZE"
 
     const val SERVICE_OCI_IMAGE_NAME = "example-write-endpoint:snapshot"
     const val SERVICE_OCI_IMAGE_REPOSITORY = "ghcr.io/sollecitom-chassis/"

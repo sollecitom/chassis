@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.sollecitom.chassis.core.domain.identity.InstanceInfo
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
@@ -35,7 +36,7 @@ private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpec
     override val timeout = 20.seconds
     private val pulsar = newPulsarContainer()
     private val pulsarAdmin by lazy { pulsar.admin() }
-    private val instanceInfo = InstanceInfo("1".let(::Name), "test-pulsar-event-stream".let(::Name))
+    private val instanceInfo = InstanceInfo(id = 1, groupName = "test-pulsar-event-stream".let(::Name), maximumInstancesCount = 256)
     private val instances = mutableListOf<MaterialisedEventFramework>()
 
     context(CoroutineScope)
@@ -76,9 +77,9 @@ fun PulsarClient.pulsarMaterialisedEventFramework(instanceInfo: InstanceInfo, st
     }
 }
 
-private fun PulsarClient.messageProducer(instanceInfo: InstanceInfo, stream: PulsarEventStream) = pulsarMessageProducer(stream.topic) { newProducer(stream.schema).topic(it).producerName("${instanceInfo.groupName.value}-producer-${instanceInfo.id.value}").create() }
+private fun PulsarClient.messageProducer(instanceInfo: InstanceInfo, stream: PulsarEventStream) = pulsarMessageProducer(stream.topic) { newProducer(stream.schema).topic(it).producerName("${instanceInfo.groupName.value}-producer-${instanceInfo.id}").create() }
 
-private fun PulsarClient.messageConsumer(instanceInfo: InstanceInfo, stream: PulsarEventStream) = pulsarMessageConsumer(stream.topic) { newConsumer(stream.schema).topics(it).consumerName("${instanceInfo.groupName.value}-consumer-${instanceInfo.id.value}").subscriptionName(instanceInfo.groupName.value).subscribe() }
+private fun PulsarClient.messageConsumer(instanceInfo: InstanceInfo, stream: PulsarEventStream) = pulsarMessageConsumer(stream.topic) { newConsumer(stream.schema).topics(it).consumerName("${instanceInfo.groupName.value}-consumer-${instanceInfo.id}").subscriptionName(instanceInfo.groupName.value).subscribe() }
 
 // TODO move
 interface PulsarEventStream : EventStream {
@@ -112,5 +113,3 @@ interface EventStream {
 
     fun messagePropertiesForEvent(event: Event): Map<String, String>
 }
-
-data class InstanceInfo(val id: Name, val groupName: Name)

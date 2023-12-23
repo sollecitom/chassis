@@ -4,8 +4,8 @@ import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.networking.Port
 import org.sollecitom.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.HEALTH_PORT
-import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.MAXIMUM_NODES_COUNT
-import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.NODE_ID
+import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.INSTANCE_GROUP_MAX_SIZE
+import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.INSTANCE_ID
 import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.PULSAR_BROKER_URI
 import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.PULSAR_CONSUMER_INSTANCE_ID
 import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.PULSAR_TOPIC
@@ -32,20 +32,20 @@ fun newExampleWriteEndpointServiceContainer(pulsarTopic: PulsarTopic, pulsar: Pu
     val loggingArguments = mapOf(LOGGING_LEVEL_ENV_VARIABLE to "INFO", LOGGING_LEVEL_OVERRIDES_ENV_VARIABLE to "org.eclipse.jetty=WARN,org.apache.hc=WARN")
 
     val webArguments = mapOf(
-            SERVICE_PORT to "$servicePort"
+        SERVICE_PORT to "$servicePort"
     )
     val healthArguments = mapOf(
-            HEALTH_PORT to "$healthPort"
+        HEALTH_PORT to "$healthPort"
     )
     val pulsarBrokerUrl = "pulsar://${pulsar.networkAlias}:${PulsarContainer.BROKER_PORT}"
     val pulsarArguments = mapOf(
-            PULSAR_BROKER_URI to pulsarBrokerUrl,
-            PULSAR_TOPIC to pulsarTopic.fullName.value,
-            PULSAR_CONSUMER_INSTANCE_ID to pulsarConsumerInstanceId.stringValue
+        PULSAR_BROKER_URI to pulsarBrokerUrl,
+        PULSAR_TOPIC to pulsarTopic.fullName.value,
+        PULSAR_CONSUMER_INSTANCE_ID to pulsarConsumerInstanceId.stringValue
     )
     val serviceArguments = mapOf(
-            NODE_ID to nodeId.toString(),
-            MAXIMUM_NODES_COUNT to maximumNodesCount.toString()
+        INSTANCE_ID to nodeId.toString(),
+        INSTANCE_GROUP_MAX_SIZE to maximumNodesCount.toString()
     )
     val arguments = (webArguments + healthArguments + pulsarArguments + loggingArguments + serviceArguments)
     return ExampleWriteEndpointServiceContainer(servicePort, healthPort).withExposedPorts(servicePort, healthPort).waitingFor(waitForServiceStartedLogMessage()).withJavaArgs(arguments)
