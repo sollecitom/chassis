@@ -22,13 +22,7 @@ internal object MessageIdStringSerde { // TODO revisit
         return (id as MessageIdAdv).adapted(topic)
     }
 
-    private fun ByteArray.serializeToString(): String {
+    private fun ByteArray.serializeToString() = toHexString()
 
-        return toHexString()
-    }
-
-    private fun String.deserializeToByteArray(): ByteArray {
-
-        return hexToByteArray()
-    }
+    private fun String.deserializeToByteArray() = hexToByteArray()
 }

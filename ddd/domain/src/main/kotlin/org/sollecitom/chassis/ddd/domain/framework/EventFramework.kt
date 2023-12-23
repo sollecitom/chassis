@@ -1,11 +1,11 @@
-package org.sollecitom.chassis.ddd.domain.store
+package org.sollecitom.chassis.ddd.domain.framework
 
 import kotlinx.coroutines.Deferred
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
+import org.sollecitom.chassis.ddd.domain.store.EventStore
 
-// TODO move
 interface EventFramework : EventStore {
 
     override fun forEntityId(entityId: Id): EntitySpecific

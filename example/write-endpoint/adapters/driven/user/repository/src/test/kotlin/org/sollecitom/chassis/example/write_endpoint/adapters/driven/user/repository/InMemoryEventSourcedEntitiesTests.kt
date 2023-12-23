@@ -14,7 +14,7 @@ import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.create
-import org.sollecitom.chassis.ddd.domain.store.EventFramework
+import org.sollecitom.chassis.ddd.domain.framework.EventFramework
 import org.sollecitom.chassis.ddd.event.framework.memory.inMemory
 import org.sollecitom.chassis.ddd.test.utils.hasInvocationContext
 import org.sollecitom.chassis.ddd.test.utils.isOriginating

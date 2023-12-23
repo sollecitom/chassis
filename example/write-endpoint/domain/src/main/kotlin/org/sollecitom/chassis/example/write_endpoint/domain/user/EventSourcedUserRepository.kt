@@ -2,7 +2,7 @@ package org.sollecitom.chassis.example.write_endpoint.domain.user
 
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
-import org.sollecitom.chassis.ddd.domain.store.EventFramework
+import org.sollecitom.chassis.ddd.domain.framework.EventFramework
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
 
 class EventSourcedUserRepository(private val events: EventFramework.Mutable, private val coreDataGenerators: CoreDataGenerator) : UserRepository, CoreDataGenerator by coreDataGenerators {

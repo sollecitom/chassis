@@ -5,7 +5,7 @@ import kotlinx.coroutines.Deferred
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
-import org.sollecitom.chassis.ddd.domain.store.EventFramework
+import org.sollecitom.chassis.ddd.domain.framework.EventFramework
 import org.sollecitom.chassis.ddd.domain.store.EventStore
 import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
 

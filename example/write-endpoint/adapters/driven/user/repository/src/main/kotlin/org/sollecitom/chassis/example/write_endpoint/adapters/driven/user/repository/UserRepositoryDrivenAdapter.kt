@@ -5,11 +5,10 @@ import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
 import org.sollecitom.chassis.configuration.utils.instanceInfo
 import org.sollecitom.chassis.core.domain.identity.InstanceInfo
-import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.hexagonal.DrivenAdapter
-import org.sollecitom.chassis.ddd.domain.store.EventFramework
+import org.sollecitom.chassis.ddd.domain.framework.EventFramework
 import org.sollecitom.chassis.ddd.domain.store.EventStore
 import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore
 import org.sollecitom.chassis.example.event.domain.UserEvent
