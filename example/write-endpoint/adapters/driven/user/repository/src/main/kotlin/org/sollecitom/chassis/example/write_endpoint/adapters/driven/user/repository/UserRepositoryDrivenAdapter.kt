@@ -24,7 +24,7 @@ import org.sollecitom.chassis.messaging.domain.Topic
 import org.sollecitom.chassis.messaging.domain.asEventStream
 import org.sollecitom.chassis.messaging.event.framework.materialised.view.MaterialisedEventFramework
 import org.sollecitom.chassis.pulsar.json.serialization.asPulsarSchema
-import org.sollecitom.chassis.pulsar.messaging.event.framework.materialised.view.pulsar
+import org.sollecitom.chassis.pulsar.messaging.adapter.pulsar
 import org.sollecitom.chassis.pulsar.utils.brokerURI
 import java.net.URI
 

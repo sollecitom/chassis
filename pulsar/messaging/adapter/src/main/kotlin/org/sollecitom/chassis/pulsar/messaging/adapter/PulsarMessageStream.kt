@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.pulsar.messaging.event.framework.materialised.view
+package org.sollecitom.chassis.pulsar.messaging.adapter
 
 import kotlinx.coroutines.flow.Flow
 import org.apache.pulsar.client.api.PulsarClient

@@ -1,7 +1,6 @@
-package org.sollecitom.chassis.pulsar.messaging.event.framework.materialised.view
+package org.sollecitom.chassis.pulsar.messaging.adapter
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
@@ -22,7 +21,6 @@ import org.sollecitom.chassis.messaging.domain.asEventStream
 import org.sollecitom.chassis.messaging.event.framework.materialised.view.MaterialisedEventFramework
 import org.sollecitom.chassis.messaging.test.utils.create
 import org.sollecitom.chassis.pulsar.json.serialization.asPulsarSchema
-import org.sollecitom.chassis.pulsar.messaging.adapter.ensureTopicExists
 import org.sollecitom.chassis.pulsar.test.utils.admin
 import org.sollecitom.chassis.pulsar.test.utils.client
 import org.sollecitom.chassis.pulsar.test.utils.newPulsarContainer
