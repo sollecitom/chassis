@@ -42,6 +42,7 @@ private class PulsarMaterialisedViewEventFrameworkTests : EventFrameworkTestSpec
         val topic = Topic.create()
         val store = InMemoryEventStore()
         val schema = eventSerde.asPulsarSchema()
+        // TODO create a convenience function to create the framework in Pulsar
         val producer = pulsarMessageProducer(topic) { pulsar.client().newProducer(schema).topic(it).producerName("$streamName-producer-${instanceId.stringValue}").create() }
         val consumer = pulsarMessageConsumer(topic) { pulsar.client().newConsumer(schema).topics(it).consumerName("$streamName-consumer-${instanceId.stringValue}").subscriptionName(streamName).subscribe() }
         val framework = MaterialisedEventFramework(topic, store, producer, consumer) { event ->
