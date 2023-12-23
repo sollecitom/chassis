@@ -17,7 +17,7 @@ import org.sollecitom.chassis.messaging.domain.*
 import org.sollecitom.chassis.messaging.domain.Message
 
 // TODO create the outbox variant in another module
-class MaterialisedEventFramework(private val topic: Topic, private val store: EventStore.Mutable, private val producer: MessageProducer<Event>, private val consumer: MessageConsumer<Event>, private val eventToMessage: (Event) -> Message<Event>) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
+class MaterialisedEventFramework(private val store: EventStore.Mutable, private val producer: MessageProducer<Event>, private val consumer: MessageConsumer<Event>, private val eventToMessage: (Event) -> Message<Event>) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
 
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob())
 
@@ -38,7 +38,7 @@ class MaterialisedEventFramework(private val topic: Topic, private val store: Ev
 
         val message = eventToMessage(event)
         val messageId = producer.produce(message)
-        with(event.context) { logger.log { "Produced message with ID '${messageId}' to topic ${topic.fullName} for event with ID '${event.id.stringValue}'" } }
+        with(event.context) { logger.log { "Produced message with ID '${messageId}' to topic ${producer.topic.fullName} for event with ID '${event.id.stringValue}'" } }
         return store.awaitForEvent(event.id)
     }
 

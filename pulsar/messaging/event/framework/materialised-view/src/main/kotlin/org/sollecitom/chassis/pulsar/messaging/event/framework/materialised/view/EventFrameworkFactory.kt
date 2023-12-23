@@ -15,7 +15,7 @@ fun PulsarClient.pulsarMaterialisedEventFramework(instanceInfo: InstanceInfo, st
 
     val producer = messageProducer(instanceInfo, stream)
     val consumer = messageConsumer(instanceInfo, stream)
-    return MaterialisedEventFramework(stream.topic, store, producer, consumer) { event ->
+    return MaterialisedEventFramework(store, producer, consumer) { event ->
 
         OutboundMessage(stream.messageKeyForEvent(event), event, stream.messagePropertiesForEvent(event), Message.Context())
     }
