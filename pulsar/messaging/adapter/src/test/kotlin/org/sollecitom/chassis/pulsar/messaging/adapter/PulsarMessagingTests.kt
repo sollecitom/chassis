@@ -1,6 +1,7 @@
 package org.sollecitom.chassis.pulsar.messaging.adapter
 
 import org.apache.pulsar.client.api.Schema
+import org.apache.pulsar.client.api.SubscriptionInitialPosition
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
@@ -40,7 +41,7 @@ private class PulsarMessagingTests : MessagingTestSpecification, CoreDataGenerat
 
     override fun newTopic(): Topic = Topic.create().also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) }
 
-    override fun newMessageProducer(topic: Topic, name: String): MessageProducer<String> = pulsarMessageProducer { pulsarClient.newProducer(Schema.STRING).topic(topic).producerName(name).create() }
+    override fun newMessageProducer(topic: Topic, name: String): MessageProducer<String> = pulsarMessageProducer(topic) { pulsarClient.newProducer(Schema.STRING).topic(it).producerName(name).create() }
 
-    override fun newMessageConsumer(topics: Set<Topic>, subscriptionName: String, name: String): MessageConsumer<String> = pulsarMessageConsumer(topics) { pulsarClient.newConsumer(Schema.STRING).topics(topics).subscriptionName(subscriptionName).consumerName(name).subscribe() }
+    override fun newMessageConsumer(topics: Set<Topic>, subscriptionName: String, name: String): MessageConsumer<String> = pulsarMessageConsumer(topics) { pulsarClient.newConsumer(Schema.STRING).topics(it).subscriptionName(subscriptionName).subscriptionInitialPosition(SubscriptionInitialPosition.Earliest).consumerName(name).subscribe() }
 }

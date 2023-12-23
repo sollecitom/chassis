@@ -7,11 +7,10 @@ import org.sollecitom.chassis.messaging.domain.Message
 import org.sollecitom.chassis.messaging.domain.MessageProducer
 import org.sollecitom.chassis.messaging.domain.Topic
 
-internal class PulsarMessageProducer<in VALUE>(initializeProducer: () -> Producer<VALUE>) : MessageProducer<VALUE> {
+internal class PulsarMessageProducer<in VALUE>(override val topic: Topic, initializeProducer: (Topic) -> Producer<VALUE>) : MessageProducer<VALUE> {
 
-    private val producer by lazy(initializeProducer)
+    private val producer by lazy { initializeProducer(topic) }
     override val name by lazy { Name(producer.producerName) }
-    override val topic by lazy { Topic.parse(producer.topic) }
 
     override suspend fun produce(message: Message<VALUE>) = producer.produce(message)
 
@@ -22,4 +21,4 @@ internal class PulsarMessageProducer<in VALUE>(initializeProducer: () -> Produce
     override fun close() = stopBlocking()
 }
 
-fun <VALUE> pulsarMessageProducer(initializeProducer: () -> Producer<VALUE>): MessageProducer<VALUE> = PulsarMessageProducer(initializeProducer)
+fun <VALUE> pulsarMessageProducer(topic: Topic, initializeProducer: (Topic) -> Producer<VALUE>): MessageProducer<VALUE> = PulsarMessageProducer(topic, initializeProducer)

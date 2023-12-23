@@ -5,6 +5,7 @@ dependencies {
     api(projects.chassisJsonUtils)
     api(projects.chassisPulsarUtils)
     api(projects.chassisMessagingDomain)
+    api(projects.chassisMessagingEventFrameworkMaterialisedView)
 
     implementation(projects.chassisPulsarMessagingAdapter)
 
@@ -13,6 +14,7 @@ dependencies {
     testImplementation(projects.chassisPulsarJsonSerialization)
     testImplementation(projects.chassisDddEventStoreMemory)
     testImplementation(projects.chassisPulsarTestUtils)
+    testImplementation(projects.chassisMessagingTestUtils)
     testImplementation(projects.chassisDddSerializationJson)
     testImplementation(projects.chassisDddTestStubsSerializationJson)
 }

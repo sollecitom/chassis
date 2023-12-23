@@ -6,15 +6,15 @@ import org.sollecitom.chassis.kotlin.extensions.async.await
 import org.sollecitom.chassis.messaging.domain.MessageConsumer
 import org.sollecitom.chassis.messaging.domain.Topic
 
-internal class PulsarMessageConsumer<out VALUE>(override val topics: Set<Topic>, initializeConsumer: () -> Consumer<VALUE>) : MessageConsumer<VALUE> {
+internal class PulsarMessageConsumer<out VALUE>(override val topics: Set<Topic>, initializeConsumer: (Set<Topic>) -> Consumer<VALUE>) : MessageConsumer<VALUE> {
 
-    private val consumer by lazy(initializeConsumer)
+    private val consumer by lazy { initializeConsumer(topics) }
     override val name by lazy { Name(consumer.consumerName) }
     override val subscriptionName by lazy { Name(consumer.subscription) }
 
     override suspend fun receive() = consumer.nextReceivedMessage()
 
-    override val messages = consumer.receivedMessages
+    override val messages get() = consumer.receivedMessages
 
     override suspend fun start() = check(consumer.isConnected) { "Consumer is not connected!" }
 
@@ -23,4 +23,6 @@ internal class PulsarMessageConsumer<out VALUE>(override val topics: Set<Topic>,
     override fun close() = stopBlocking()
 }
 
-fun <VALUE> pulsarMessageConsumer(topics: Set<Topic>, initializeConsumer: () -> Consumer<VALUE>): MessageConsumer<VALUE> = PulsarMessageConsumer(topics, initializeConsumer)
+fun <VALUE> pulsarMessageConsumer(topics: Set<Topic>, initializeConsumer: (Set<Topic>) -> Consumer<VALUE>): MessageConsumer<VALUE> = PulsarMessageConsumer(topics, initializeConsumer)
+
+fun <VALUE> pulsarMessageConsumer(topic: Topic, initializeConsumer: (Set<Topic>) -> Consumer<VALUE>) = pulsarMessageConsumer(topics = setOf(topic), initializeConsumer)
