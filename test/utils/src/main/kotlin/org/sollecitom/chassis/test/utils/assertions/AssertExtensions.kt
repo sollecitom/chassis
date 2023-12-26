@@ -45,7 +45,7 @@ fun <RESULT : Any> Assert<Result<RESULT>>.succeededWithResult(expected: RESULT) 
 inline fun <reified ERROR : Throwable> Assert<Result<*>>.failedThrowing(): Assert<ERROR> = transform { actual ->
 
     assertThat(actual).isFailure()
-    actual.exceptionOrNull() ?.takeIf { ERROR::class.isInstance(it) }?.let { it as ERROR } ?: expected("failure of type ${ERROR::class} but was:${show(actual.getOrNull())}")
+    actual.exceptionOrNull() ?.takeIf { ERROR::class.isInstance(it) }?.let { it as ERROR } ?: expected("failure of type ${ERROR::class} but was:${show(actual.exceptionOrNull())}")
 }
 
 inline fun <reified ELEMENT> Assert<Collection<ELEMENT>>.containsExactlyInAnyOrder(other: Collection<ELEMENT>) = given { actual ->
