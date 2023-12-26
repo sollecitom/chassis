@@ -2,6 +2,8 @@ package org.sollecitom.chassis.test.utils.assertions
 
 import assertk.Assert
 import assertk.assertions.*
+import assertk.assertions.support.expected
+import assertk.assertions.support.show
 import java.util.*
 
 inline fun <reified ELEMENT> Assert<Set<ELEMENT>>.containsSameElementsAs(other: Set<ELEMENT>) = given { actual ->
@@ -29,7 +31,7 @@ inline fun <reified ERROR : Throwable> Assert<Throwable>.ofType() = given { actu
     assertThat(actual).isInstanceOf(ERROR::class)
 }
 
-fun Assert<Result<*>>.succeeded() = given { actual ->
+fun Assert<Result<*>>.succeeded() = transform { actual ->
 
     assertThat(actual.isSuccess).isTrue()
 }
@@ -40,10 +42,10 @@ fun <RESULT : Any> Assert<Result<RESULT>>.succeededWithResult(expected: RESULT) 
     assertThat(actual.getOrThrow()).isEqualTo(expected)
 }
 
-inline fun <reified ERROR : Throwable> Assert<Result<*>>.failedThrowing() = given { actual ->
+inline fun <reified ERROR : Throwable> Assert<Result<*>>.failedThrowing() = transform { actual ->
 
-    assertThat(actual.isFailure).isTrue()
-    assertThat(actual.exceptionOrNull()).isNotNull().ofType<ERROR>()
+    assertThat(actual).isFailure()
+    actual.exceptionOrNull() ?.takeIf { ERROR::class.isInstance(it) } ?: expected("failure of type ${ERROR::class} but was:${show(actual.getOrNull())}")
 }
 
 inline fun <reified ELEMENT> Assert<Collection<ELEMENT>>.containsExactlyInAnyOrder(other: Collection<ELEMENT>) = given { actual ->
