@@ -1,7 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-rootProject.name = "chassis"
-
 module("test", "utils")
 module("test", "containers", "utils")
 module("kotlin", "extensions")
