@@ -1,18 +1,12 @@
 package org.sollecitom.chassis.kotlin.extensions.time
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.toJavaInstant
-import kotlinx.datetime.toKotlinInstant
+import kotlinx.datetime.*
 import java.time.temporal.ChronoUnit
-
-fun Clock.Companion.fixed(instant: Instant): Clock = FixedInstantClock(instant)
 
 fun Instant.truncatedToMilliseconds(): Instant = toJavaInstant().truncatedTo(ChronoUnit.MILLIS).toKotlinInstant()
 
 fun Instant.truncatedToSeconds(): Instant = toJavaInstant().truncatedTo(ChronoUnit.SECONDS).toKotlinInstant()
 
-private class FixedInstantClock(val instant: Instant) : Clock {
+val Int.years: DatePeriod get() = DatePeriod(years = this)
 
-    override fun now() = instant
-}
+val Int.months: DatePeriod get() = DatePeriod(months = this)
