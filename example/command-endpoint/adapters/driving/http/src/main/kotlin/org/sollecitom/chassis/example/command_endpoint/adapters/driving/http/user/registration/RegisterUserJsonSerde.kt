@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.user.registration.handlers
+package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.user.registration
 
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.email.EmailAddress

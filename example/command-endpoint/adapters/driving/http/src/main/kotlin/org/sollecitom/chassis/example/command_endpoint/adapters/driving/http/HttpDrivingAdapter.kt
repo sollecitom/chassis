@@ -9,7 +9,7 @@ import org.sollecitom.chassis.core.domain.networking.Port
 import org.sollecitom.chassis.core.domain.networking.RequestedPort
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.hexagonal.DrivingAdapter
-import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.user.registration.handlers.RegisterUserV1HttpCommandHandler
+import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.user.registration.RegisterUserV1HttpCommandHandler
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
