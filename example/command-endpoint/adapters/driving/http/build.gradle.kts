@@ -14,6 +14,7 @@ dependencies {
     runtimeOnly(projects.chassisWebApiJsonSchemas)
 
     testImplementation(projects.chassisTestUtils)
+    testImplementation(projects.chassisWebApiTestUtils)
     testImplementation(projects.chassisOpenapiCheckingTestUtils)
     testImplementation(projects.chassisCorrelationCoreTestUtils)
     testImplementation(projects.chassisCorrelationLoggingTestUtils)
