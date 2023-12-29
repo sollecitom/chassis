@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.handlers.user.registration
+package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.user.registration.handlers
 
 import org.http4k.core.Body
 import org.http4k.core.Response
