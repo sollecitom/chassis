@@ -17,7 +17,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '/api/schemas/json/RegisterUserCommandV1.json'
+              $ref: '/api/schemas/json/user/registration/RegisterUserCommandV1.json'
             example: { "email": { "address": "bruce@waynecorp.com" } }
         required: true
       responses:
@@ -106,7 +106,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '/api/schemas/json/RegisterUserCommandV1AcceptedResult.json'
+            $ref: '/api/schemas/json/user/registration/RegisterUserCommandV1AcceptedResult.json'
           example: { "user": { "id": "01H8HBDMX0S2EGDTR7WAGK0SC7" } }
       headers:
         content-type:
