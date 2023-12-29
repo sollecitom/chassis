@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.serde
+package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.handlers.user.registration
 
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id

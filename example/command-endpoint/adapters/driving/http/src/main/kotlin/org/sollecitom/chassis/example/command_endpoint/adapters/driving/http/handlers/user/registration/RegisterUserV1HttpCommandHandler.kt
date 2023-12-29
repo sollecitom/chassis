@@ -1,10 +1,9 @@
-package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.specifications
+package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.handlers.user.registration
 
 import org.http4k.core.Body
 import org.http4k.core.Response
 import org.http4k.core.Status
 import org.sollecitom.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.serde.serde
 import org.sollecitom.chassis.example.command_endpoint.application.user.RegisterUser
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.jsonObject

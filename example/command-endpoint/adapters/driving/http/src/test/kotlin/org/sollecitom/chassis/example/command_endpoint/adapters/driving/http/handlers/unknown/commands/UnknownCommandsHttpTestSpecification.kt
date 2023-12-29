@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.specifications
+package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.handlers.unknown.commands
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
