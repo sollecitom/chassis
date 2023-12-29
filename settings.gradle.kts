@@ -87,6 +87,16 @@ module("example", "write-endpoint", "service", "test", "specification")
 module("example", "write-endpoint", "service", "test", "process-based")
 module("example", "write-endpoint", "service", "test", "container-based")
 
+module("example", "command-endpoint", "configuration")
+module("example", "command-endpoint", "domain")
+module("example", "command-endpoint", "application")
+module("example", "command-endpoint", "adapters", "driving", "http")
+module("example", "command-endpoint", "adapters", "driven", "user", "repository")
+module("example", "command-endpoint", "service", "starter")
+module("example", "command-endpoint", "service", "test", "specification")
+module("example", "command-endpoint", "service", "test", "process-based")
+module("example", "command-endpoint", "service", "test", "container-based")
+
 fun module(vararg pathSegments: String) {
     val projectName = pathSegments.last()
     val path = pathSegments.dropLast(1)
