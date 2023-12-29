@@ -12,6 +12,8 @@ sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT, Access.Unauth
 
     val emailAddress: EmailAddress
 
+    override val requiresAuthentication get() = false
+
     companion object {
         val typeName = "register-user".let(::Name)
     }

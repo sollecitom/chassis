@@ -6,8 +6,8 @@ import org.sollecitom.chassis.core.domain.networking.RequestedPort
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.application.Application
-import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.endpoints.RegisterUserCommandsEndpointTestSpecification
-import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.endpoints.UnknownCommandsEndpointTestSpecification
+import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.specifications.RegisterUserCommandsHttpTestSpecification
+import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.specifications.UnknownCommandsHttpTestSpecification
 import org.sollecitom.chassis.logger.core.LoggingLevel.INFO
 import org.sollecitom.chassis.logging.standard.configuration.configureLogging
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
@@ -18,7 +18,7 @@ import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 
 @TestInstance(PER_CLASS)
-private class HttpDrivingAdapterContractTests : WithHttp4kOpenApiValidationSupport, HttpApiDefinition, CoreDataGenerator by CoreDataGenerator.testProvider, RegisterUserCommandsEndpointTestSpecification, UnknownCommandsEndpointTestSpecification {
+private class HttpDrivingAdapterContractTests : WithHttp4kOpenApiValidationSupport, HttpApiDefinition, CoreDataGenerator by CoreDataGenerator.testProvider, RegisterUserCommandsHttpTestSpecification, UnknownCommandsHttpTestSpecification {
 
     override val openApiValidator = Http4kOpenApiValidator(openApi)
     override val headerNames: HttpHeaderNames = HttpHeaderNames.of(companyName = "acme")

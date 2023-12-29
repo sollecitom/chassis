@@ -5,5 +5,7 @@ import org.sollecitom.chassis.ddd.domain.Command
 
 interface ApplicationCommand<out RESULT, out ACCESS : Access> : Command {
 
+    val requiresAuthentication: Boolean
+
     companion object
 }

@@ -20,3 +20,9 @@ infix fun PathMethod.toUnauthenticated(action: suspend InvocationContext<Access.
     val context = InvocationContextFilter.key.unauthenticated(request)
     runBlocking { with(context) { action(request) } }
 }
+
+infix fun PathMethod.toWithInvocationContext(action: suspend InvocationContext<Access>.(request: Request) -> Response): RoutingHttpHandler = to { request ->
+
+    val context = InvocationContextFilter.key.generic(request)
+    runBlocking { with(context) { action(request) } }
+}

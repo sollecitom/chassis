@@ -9,8 +9,7 @@ import org.sollecitom.chassis.core.domain.networking.Port
 import org.sollecitom.chassis.core.domain.networking.RequestedPort
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.hexagonal.DrivingAdapter
-import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.endpoints.RegisterUserCommandsEndpoint
-import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.endpoints.UnknownCommandsEndpoint
+import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.specifications.RegisterUserV1CommandHandler
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
@@ -18,11 +17,11 @@ import org.sollecitom.chassis.web.api.utils.api.mainHttpApi
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 
-class HttpDrivingAdapter(private val application: Application, configuration: Configuration) : DrivingAdapter.WithPortBinding, HttpHandler {
+class HttpDrivingAdapter(private val application: Application, private val configuration: Configuration) : DrivingAdapter.WithPortBinding, HttpHandler {
 
     constructor(application: Application, environment: Environment) : this(application, Configuration.from(environment))
 
-    private val api = mainHttpApi(endpoints = listOf(RegisterUserCommandsEndpoint.V1(application::invoke), UnknownCommandsEndpoint()), requestedPort = configuration.requestedPort)
+    private val api = mainHttpApi(RegisterUserV1CommandHandler)
     override val port: Port get() = api.port
 
     override fun invoke(request: Request) = api(request)
@@ -38,6 +37,8 @@ class HttpDrivingAdapter(private val application: Application, configuration: Co
         api.stop()
         logger.info { "Stopped" }
     }
+
+    private fun mainHttpApi(vararg handlers: CommandHandler<*, *, *>) = mainHttpApi(endpoints = listOf(CommandsEndpoint(application, handlers.toSet())), requestedPort = configuration.requestedPort)
 
     data class Configuration(val requestedPort: RequestedPort) {
 

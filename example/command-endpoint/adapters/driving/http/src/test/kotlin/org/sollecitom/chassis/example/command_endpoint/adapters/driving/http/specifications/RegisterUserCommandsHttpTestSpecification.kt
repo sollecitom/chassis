@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.endpoints
+package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.specifications
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -31,7 +31,7 @@ import org.sollecitom.chassis.web.api.test.utils.LocalHttpDrivingAdapterTestSpec
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
 import org.sollecitom.chassis.web.api.utils.api.withInvocationContext
 
-interface RegisterUserCommandsEndpointTestSpecification : CoreDataGenerator, WithHttp4kOpenApiValidationSupport, HttpApiDefinition, LocalHttpDrivingAdapterTestSpecification {
+interface RegisterUserCommandsHttpTestSpecification : CoreDataGenerator, WithHttp4kOpenApiValidationSupport, HttpApiDefinition, LocalHttpDrivingAdapterTestSpecification {
 
     @Test
     fun `submitting a register user command for an unregistered user`() {
@@ -107,7 +107,7 @@ interface RegisterUserCommandsEndpointTestSpecification : CoreDataGenerator, Wit
         val commandType = RegisterUser.V1.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated()
-        val request = Request(Method.POST, path("commands/${commandType.name.value}/!")).body(json).withInvocationContext(invocationContext)
+        val request = Request(Method.POST, path("commands/${commandType.name.value}/v!")).body(json).withInvocationContext(invocationContext)
         request.ensureNonCompliantWithOpenApi(error = ValidationReportError.Request.UnknownPath)
 
         val response = api(request)

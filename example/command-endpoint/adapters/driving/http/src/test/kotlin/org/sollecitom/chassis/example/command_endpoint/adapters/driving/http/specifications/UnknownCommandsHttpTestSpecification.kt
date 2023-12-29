@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.endpoints
+package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.specifications
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -22,7 +22,7 @@ import org.sollecitom.chassis.web.api.test.utils.LocalHttpDrivingAdapterTestSpec
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
 import org.sollecitom.chassis.web.api.utils.api.withInvocationContext
 
-interface UnknownCommandsEndpointTestSpecification : CoreDataGenerator, WithHttp4kOpenApiValidationSupport, HttpApiDefinition, LocalHttpDrivingAdapterTestSpecification {
+interface UnknownCommandsHttpTestSpecification : CoreDataGenerator, WithHttp4kOpenApiValidationSupport, HttpApiDefinition, LocalHttpDrivingAdapterTestSpecification {
 
     @Test
     fun `attempting to submit a command with a nonexistent type`() {
