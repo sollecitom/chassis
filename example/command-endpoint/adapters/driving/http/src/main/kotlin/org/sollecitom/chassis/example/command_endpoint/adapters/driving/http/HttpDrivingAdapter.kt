@@ -14,6 +14,8 @@ import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
 import org.sollecitom.chassis.web.api.utils.api.mainHttpApi
+import org.sollecitom.chassis.web.api.utils.command.handler.CommandHandler
+import org.sollecitom.chassis.web.api.utils.endpoint.CommandsEndpoint
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 

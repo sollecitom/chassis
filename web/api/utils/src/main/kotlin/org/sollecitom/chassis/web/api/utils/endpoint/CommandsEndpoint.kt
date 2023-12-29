@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http
+package org.sollecitom.chassis.web.api.utils.endpoint
 
 import org.http4k.core.Method
 import org.http4k.core.Response
@@ -15,11 +15,9 @@ import org.sollecitom.chassis.ddd.domain.Happening
 import org.sollecitom.chassis.http4k.utils.lens.composite
 import org.sollecitom.chassis.lens.core.extensions.naming.name
 import org.sollecitom.chassis.logger.core.loggable.Loggable
-import org.sollecitom.chassis.web.api.utils.endpoint.Endpoint
-import org.sollecitom.chassis.web.api.utils.endpoint.toWithInvocationContext
+import org.sollecitom.chassis.web.api.utils.command.handler.CommandHandler
 
-// TODO move
-internal class CommandsEndpoint(private val application: Application, handlers: Set<CommandHandler<*, *, *>>) : Endpoint {
+class CommandsEndpoint(private val application: Application, handlers: Set<CommandHandler<*, *, *>>) : Endpoint {
 
     private val handlerByType = handlers.associateBy(CommandHandler<*, *, *>::commandType)
     override val path = "/commands/{$COMMAND_TYPE_PATH_PARAM}/v{$COMMAND_TYPE_VERSION_PATH_PARAM}"

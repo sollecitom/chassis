@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http
+package org.sollecitom.chassis.web.api.utils.command.handler
 
 import org.http4k.core.Request
 import org.http4k.core.Response
@@ -6,7 +6,7 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.ddd.application.ApplicationCommand
 import org.sollecitom.chassis.ddd.domain.Happening
 
-interface CommandHandler<COMMAND : ApplicationCommand<RESULT, ACCESS>, RESULT, ACCESS : Access> { // TODO move
+interface CommandHandler<COMMAND : ApplicationCommand<RESULT, ACCESS>, RESULT, ACCESS : Access> {
 
     val commandType: Happening.Type
 
