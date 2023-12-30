@@ -1,7 +1,6 @@
 package org.sollecitom.chassis.example.command_endpoint.application.user.registration
 
 import org.sollecitom.chassis.core.domain.email.EmailAddress
-import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.correlation.core.domain.access.Access
@@ -33,7 +32,7 @@ sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT, Access> {
 
             sealed interface Rejected : Result {
 
-                data class EmailAddressAlreadyInUse(val userId: Id) : Rejected
+                data class EmailAddressAlreadyInUse(val user: User) : Rejected
             }
         }
 

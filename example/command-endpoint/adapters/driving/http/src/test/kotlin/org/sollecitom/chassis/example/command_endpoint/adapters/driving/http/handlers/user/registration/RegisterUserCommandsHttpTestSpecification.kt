@@ -20,6 +20,7 @@ import org.sollecitom.chassis.correlation.logging.test.utils.haveContext
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.application.ApplicationCommand
 import org.sollecitom.chassis.example.command_endpoint.application.user.registration.RegisterUser
+import org.sollecitom.chassis.example.command_endpoint.application.user.registration.User
 import org.sollecitom.chassis.example.command_endpoint.application.user.registration.UserWithPendingRegistration
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.contentLength
@@ -55,7 +56,7 @@ interface RegisterUserCommandsHttpTestSpecification : CoreDataGenerator, WithHtt
     fun `submitting a register user command for an already registered user`() {
 
         val existingUserId = newId.internal()
-        val api = httpDrivingAdapter { _ -> RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse(userId = existingUserId) }
+        val api = httpDrivingAdapter { _ -> RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse(user = User(id = existingUserId)) }
         val commandType = RegisterUser.V1.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated()
