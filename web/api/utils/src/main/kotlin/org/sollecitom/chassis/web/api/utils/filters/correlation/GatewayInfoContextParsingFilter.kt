@@ -8,7 +8,7 @@ import org.sollecitom.chassis.correlation.core.serialization.json.context.jsonSe
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 
-fun InvocationContextFilter.parseInvocationContextFromGatewayHeader(headerNames: HttpHeaderNames.Correlation): Filter = GatewayInfoContextParsingFilter(InvocationContextFilter.key, headerNames)
+fun InvocationContextFilter.parseInvocationContextFromGatewayHeader(headerNames: HttpHeaderNames.Correlation): Filter = GatewayInfoContextParsingFilter(key, headerNames)
 
 context(HttpApiDefinition)
 fun InvocationContextFilter.parseInvocationContextFromGatewayHeader(): Filter = parseInvocationContextFromGatewayHeader(headerNames.correlation)

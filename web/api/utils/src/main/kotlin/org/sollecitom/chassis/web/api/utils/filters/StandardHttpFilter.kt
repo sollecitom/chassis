@@ -12,7 +12,7 @@ import org.sollecitom.chassis.web.api.utils.filters.correlation.parseInvocationC
 object StandardHttpFilter {
 
     context(HttpApiDefinition)
-    fun forRequests(): Filter = ServerFilters.CatchLensFailure.then(RequestFilters.GunZip()).then(DebuggingFilters.PrintRequestAndResponse().inIntelliJOnly()).then(ServerFilters.InitialiseRequestContext(RequestContextsProvider.requestContexts)).then(InvocationContextFilter.parseInvocationContextFromGatewayHeader()).then(InvocationContextFilter.addInvocationContextToLoggingStack())
+    fun forRequests(): Filter = ServerFilters.catchAndLogErrors.then(ServerFilters.CatchLensFailure).then(RequestFilters.GunZip()).then(DebuggingFilters.PrintRequestAndResponse().inIntelliJOnly()).then(ServerFilters.InitialiseRequestContext(RequestContextsProvider.requestContexts)).then(InvocationContextFilter.parseInvocationContextFromGatewayHeader()).then(InvocationContextFilter.addInvocationContextToLoggingStack())
 
     fun forResponses(): Filter = ResponseFilters.GZip().then(ResponseFilters.AddContentLength)
 }
