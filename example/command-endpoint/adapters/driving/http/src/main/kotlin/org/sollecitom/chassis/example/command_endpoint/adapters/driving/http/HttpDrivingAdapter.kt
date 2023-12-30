@@ -9,7 +9,8 @@ import org.sollecitom.chassis.core.domain.networking.Port
 import org.sollecitom.chassis.core.domain.networking.RequestedPort
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.hexagonal.DrivingAdapter
-import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.user.registration.RegisterUserV1HttpCommandHandler
+import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.user.registration.httpCommandHandler
+import org.sollecitom.chassis.example.command_endpoint.application.user.registration.RegisterUser
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
@@ -23,7 +24,7 @@ class HttpDrivingAdapter(private val application: Application, private val confi
 
     constructor(application: Application, environment: Environment) : this(application, Configuration.from(environment))
 
-    private val api = mainHttpApi(RegisterUserV1HttpCommandHandler)
+    private val api = mainHttpApi(RegisterUser.V1.httpCommandHandler)
     override val port: Port get() = api.port
 
     override fun invoke(request: Request) = api(request)
