@@ -10,7 +10,7 @@ import org.sollecitom.chassis.ddd.domain.Happening
 import org.sollecitom.chassis.web.api.utils.content.negotiation.auto
 import kotlin.reflect.KClass
 
-abstract class HttpCommandHandlerTemplate<COMMAND : ApplicationCommand<RESULT, ACCESS>, RESULT, ACCESS : Access>(final override val commandType: Happening.Type, private val resultClass: KClass<*>, private val lensSpecs: List<BiDiBodyLensSpec<COMMAND>>) : HttpCommandHandler<COMMAND, RESULT, ACCESS> {
+abstract class HttpCommandHandlerTemplate<COMMAND : ApplicationCommand<RESULT, ACCESS>, RESULT, ACCESS : Access>(final override val commandType: Happening.Type, private val resultClass: KClass<*>, lensSpecs: List<BiDiBodyLensSpec<COMMAND>>) : HttpCommandHandler<COMMAND, RESULT, ACCESS> {
 
     private val lenses = lensSpecs.map(BiDiBodyLensSpec<COMMAND>::toLens)
     private val negotiator: AutoContentNegotiator<COMMAND> = ContentNegotiation.auto(lenses)
