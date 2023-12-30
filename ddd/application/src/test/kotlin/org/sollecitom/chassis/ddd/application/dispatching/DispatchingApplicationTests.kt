@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.command_endpoint.application
+package org.sollecitom.chassis.ddd.application.dispatching
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -18,7 +18,7 @@ import org.sollecitom.chassis.ddd.application.ApplicationCommand
 import org.sollecitom.chassis.ddd.domain.Happening
 import org.sollecitom.chassis.test.utils.assertions.failedThrowing
 
-@TestInstance(PER_CLASS) // TODO move
+@TestInstance(PER_CLASS)
 private class DispatchingApplicationTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     @Test
@@ -48,37 +48,37 @@ private class DispatchingApplicationTests : CoreDataGenerator by CoreDataGenerat
 
         assertThat(result).failedThrowing<IllegalStateException>()
     }
+}
 
-    private class SomeCommandHandler(private val stubbedResult: SomeCommand.Result) : ApplicationCommandHandler<SomeCommand, SomeCommand.Result, Access.Unauthenticated> {
+private class SomeCommandHandler(private val stubbedResult: SomeCommand.Result) : ApplicationCommandHandler<SomeCommand, SomeCommand.Result, Access.Unauthenticated> {
 
-        override val commandType: Happening.Type get() = SomeCommand.type
-        private lateinit var capturedCommand: SomeCommand
-        private lateinit var capturedInvocationContext: InvocationContext<Access.Unauthenticated>
+    override val commandType: Happening.Type get() = SomeCommand.type
+    private lateinit var capturedCommand: SomeCommand
+    private lateinit var capturedInvocationContext: InvocationContext<Access.Unauthenticated>
 
-        context(InvocationContext<Access.Unauthenticated>)
-        override suspend fun process(command: SomeCommand): SomeCommand.Result {
+    context(InvocationContext<Access.Unauthenticated>)
+    override suspend fun process(command: SomeCommand): SomeCommand.Result {
 
-            this.capturedCommand = command
-            this.capturedInvocationContext = this@InvocationContext
-            return stubbedResult
-        }
-
-        fun capturedCommand() = capturedCommand
-        fun capturedInvocationContext() = capturedInvocationContext
+        this.capturedCommand = command
+        this.capturedInvocationContext = this@InvocationContext
+        return stubbedResult
     }
 
-    private data class SomeCommand(val intensity: Int) : ApplicationCommand<SomeCommand.Result, Access.Unauthenticated> {
+    fun capturedCommand() = capturedCommand
+    fun capturedInvocationContext() = capturedInvocationContext
+}
 
-        override val requiresAuthentication = false
-        override val type: Happening.Type get() = Companion.type
+private data class SomeCommand(val intensity: Int) : ApplicationCommand<SomeCommand.Result, Access.Unauthenticated> {
 
-        sealed interface Result {
+    override val requiresAuthentication = false
+    override val type: Happening.Type get() = Companion.type
 
-            data class Successful(val intensity: Int) : Result
-        }
+    sealed interface Result {
 
-        companion object {
-            val type = Happening.Type("some-command".let(::Name), IntVersion(1))
-        }
+        data class Successful(val intensity: Int) : Result
+    }
+
+    companion object {
+        val type = Happening.Type("some-command".let(::Name), IntVersion(1))
     }
 }

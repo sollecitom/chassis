@@ -5,5 +5,6 @@ dependencies {
     api(projects.chassisKotlinExtensions)
 
     testImplementation(projects.chassisTestUtils)
+    testImplementation(projects.chassisCoreTestUtils)
     testImplementation(projects.chassisCorrelationCoreTestUtils)
 }
