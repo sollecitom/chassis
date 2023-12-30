@@ -14,7 +14,7 @@ import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.application.ApplicationCommand
-import org.sollecitom.chassis.example.command_endpoint.application.user.RegisterUser
+import org.sollecitom.chassis.example.command_endpoint.application.user.registration.RegisterUser
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
 import org.sollecitom.chassis.openapi.validation.request.validator.ValidationReportError

@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.command_endpoint.application.user
+package org.sollecitom.chassis.example.command_endpoint.application.user.registration
 
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.domain.identity.Id

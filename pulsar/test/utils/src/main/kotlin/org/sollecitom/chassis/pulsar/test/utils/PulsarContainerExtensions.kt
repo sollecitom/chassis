@@ -13,7 +13,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
 
-private const val DEFAULT_PULSAR_DOCKER_IMAGE_VERSION = "3.1.0"
+private const val DEFAULT_PULSAR_DOCKER_IMAGE_VERSION = "3.1.1"
 private const val PULSAR_NETWORK_ALIAS = "pulsar"
 
 private fun pulsarDockerImageName(version: String) = DockerImageName.parse("apachepulsar/pulsar:$version")
