@@ -6,7 +6,7 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.ddd.application.ApplicationCommand
 import org.sollecitom.chassis.ddd.domain.Happening
 
-interface HttpCommandHandler<COMMAND : ApplicationCommand<RESULT, ACCESS>, RESULT, ACCESS : Access> {
+interface HttpCommandHandler<out COMMAND : ApplicationCommand<RESULT, ACCESS>, RESULT, out ACCESS : Access> {
 
     val commandType: Happening.Type
 

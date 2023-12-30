@@ -8,7 +8,7 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.ddd.application.ApplicationCommand
 import org.sollecitom.chassis.ddd.domain.Happening
 
-sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT, Access.Unauthenticated> {
+sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT, Access> {
 
     val emailAddress: EmailAddress
 
