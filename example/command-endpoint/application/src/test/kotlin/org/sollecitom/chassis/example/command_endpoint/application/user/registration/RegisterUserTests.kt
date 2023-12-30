@@ -1,5 +1,6 @@
 package org.sollecitom.chassis.example.command_endpoint.application.user.registration
 
+import assertk.Assert
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
@@ -15,6 +16,8 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.ddd.application.dispatching.ApplicationCommandHandler
+import org.sollecitom.chassis.example.command_endpoint.application.user.registration.RegisterUser.V1.Result.Accepted
+import org.sollecitom.chassis.example.command_endpoint.application.user.registration.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 private class RegisterUserTests : CoreDataGenerator by CoreDataGenerator.testProvider {
@@ -32,7 +35,7 @@ private class RegisterUserTests : CoreDataGenerator by CoreDataGenerator.testPro
 
             val result = with(invocationContext) { handler.process(command) }
 
-            assertThat(result).isInstanceOf<RegisterUser.V1.Result.Accepted>()
+            assertThat(result).wasAccepted()
         }
 
         @Test
@@ -41,17 +44,19 @@ private class RegisterUserTests : CoreDataGenerator by CoreDataGenerator.testPro
             val emailAddress = "stale-address@gmail.com".let(::EmailAddress)
             val command = RegisterUser.V1(emailAddress = emailAddress)
             val invocationContext = InvocationContext.unauthenticated()
-            val existingUserWithTheSameEmailAddress = User(id = newId.forEntities())
-            val handler = newV1Handler { address -> address.takeIf { it == emailAddress }?.let { existingUserWithTheSameEmailAddress } }
+            val anotherUser = User(id = newId.forEntities())
+            val handler = newV1Handler { address -> address.takeIf { it == emailAddress }?.let { anotherUser } }
 
             val result = with(invocationContext) { handler.process(command) }
 
-            assertThat(result).isInstanceOf<RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse>()
-            result as RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse
-            assertThat(result.user).isEqualTo(existingUserWithTheSameEmailAddress)
+            assertThat(result).wasRejectedBecauseAnotherUserHasTheSameEmailAddress(user = anotherUser)
         }
 
         private fun newV1Handler(userWithEmailAddress: suspend (EmailAddress) -> User? = { null }): ApplicationCommandHandler<RegisterUser.V1, RegisterUser.V1.Result, Access> = RegisterUserV1Handler(userWithEmailAddress = userWithEmailAddress, uniqueIdGenerator = this@RegisterUserTests)
+
+        private fun Assert<RegisterUser.V1.Result>.wasAccepted() = given { result -> assertThat(result).isInstanceOf<Accepted>() }
+
+        private fun Assert<RegisterUser.V1.Result>.wasRejectedBecauseAnotherUserHasTheSameEmailAddress(user: User) = given { result -> assertThat(result).isEqualTo(EmailAddressAlreadyInUse(user = user)) }
     }
 }
 
@@ -64,9 +69,14 @@ class RegisterUserV1Handler(private val userWithEmailAddress: suspend (EmailAddr
 
         val existingUserWithTheSameEmailAddress = userWithEmailAddress(command.emailAddress)
         if (existingUserWithTheSameEmailAddress != null) {
-            return RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse(user = existingUserWithTheSameEmailAddress)
+            return EmailAddressAlreadyInUse(user = existingUserWithTheSameEmailAddress)
         }
+
+        // TODO subscribe to the result coming from downstream
+        // TODO publish the event
+        // TODO await the result
+
         val user = UserWithPendingRegistration(id = newId.forEntities())
-        return RegisterUser.V1.Result.Accepted(user = user)
+        return Accepted(user = user)
     }
 }
