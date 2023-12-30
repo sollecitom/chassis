@@ -20,6 +20,7 @@ import org.sollecitom.chassis.web.api.utils.endpoint.CommandsEndpoint
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 
+// TODO could this be common and shared?
 class HttpDrivingAdapter(private val application: Application, private val configuration: Configuration) : DrivingAdapter.WithPortBinding, HttpHandler {
 
     constructor(application: Application, environment: Environment) : this(application, Configuration.from(environment))
