@@ -43,7 +43,7 @@ class HttpDrivingAdapter(private val application: Application, private val confi
         logger.info { "Stopped" }
     }
 
-    private fun mainHttpApi(vararg handlers: HttpCommandHandler<*, *, *>) = mainHttpApi(endpoints = listOf(CommandsEndpoint(application, handlers.toSet())), requestedPort = configuration.requestedPort)
+    private fun mainHttpApi(vararg handlers: HttpCommandHandler<*, *>) = mainHttpApi(endpoints = listOf(CommandsEndpoint(application, handlers.toSet())), requestedPort = configuration.requestedPort)
 
     data class Configuration(val requestedPort: RequestedPort) {
 

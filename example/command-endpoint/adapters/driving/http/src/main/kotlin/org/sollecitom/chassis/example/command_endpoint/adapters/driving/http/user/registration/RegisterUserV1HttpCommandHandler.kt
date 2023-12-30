@@ -11,7 +11,7 @@ import org.sollecitom.chassis.http4k.utils.lens.map
 import org.sollecitom.chassis.web.api.utils.command.handler.HttpCommandHandler
 import org.sollecitom.chassis.web.api.utils.command.handler.HttpCommandHandlerTemplate
 
-private data object RegisterUserV1HttpCommandHandler : HttpCommandHandlerTemplate<RegisterUser.V1, RegisterUser.V1.Result, Access>(RegisterUser.V1.type, RegisterUser.V1.Result::class, listOf(Body.jsonObject().map(RegisterUser.V1.serde))) {
+private data object RegisterUserV1HttpCommandHandler : HttpCommandHandlerTemplate<RegisterUser.V1, RegisterUser.V1.Result>(RegisterUser.V1.type, RegisterUser.V1.Result::class, listOf(Body.jsonObject().map(RegisterUser.V1.serde))) {
 
     override fun resultToResponse(result: RegisterUser.V1.Result) = when (result) {
         is RegisterUser.V1.Result.Accepted -> Response(Status.ACCEPTED).body(result, RegisterUser.V1.Result.Accepted.serde)
@@ -19,4 +19,4 @@ private data object RegisterUserV1HttpCommandHandler : HttpCommandHandlerTemplat
     }
 }
 
-val RegisterUser.V1.Companion.httpCommandHandler: HttpCommandHandler<RegisterUser.V1, RegisterUser.V1.Result, Access> get() = RegisterUserV1HttpCommandHandler
+val RegisterUser.V1.Companion.httpCommandHandler: HttpCommandHandler<RegisterUser.V1, RegisterUser.V1.Result> get() = RegisterUserV1HttpCommandHandler

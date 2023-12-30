@@ -17,9 +17,9 @@ import org.sollecitom.chassis.lens.core.extensions.naming.name
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.api.utils.command.handler.HttpCommandHandler
 
-class CommandsEndpoint(private val application: Application, handlers: Set<HttpCommandHandler<*, *, *>>) : Endpoint {
+class CommandsEndpoint(private val application: Application, handlers: Set<HttpCommandHandler<*, *>>) : Endpoint {
 
-    private val handlerByType = handlers.associateBy(HttpCommandHandler<*, *, *>::commandType)
+    private val handlerByType = handlers.associateBy(HttpCommandHandler<*, *>::commandType)
     override val path = "/commands/{$COMMAND_TYPE_PATH_PARAM}/v{$COMMAND_TYPE_VERSION_PATH_PARAM}"
     override val methods = setOf(Method.POST)
 
