@@ -2,11 +2,10 @@ package org.sollecitom.chassis.web.api.utils.command.handler
 
 import org.http4k.core.Request
 import org.http4k.core.Response
-import org.sollecitom.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.ddd.application.ApplicationCommand
+import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.Happening
 
-interface HttpCommandHandler<out COMMAND : ApplicationCommand<RESULT, *>, RESULT> {
+interface HttpCommandHandler<out COMMAND : Command<RESULT, *>, RESULT> {
 
     val commandType: Happening.Type
 

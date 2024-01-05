@@ -13,7 +13,7 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.ddd.application.Application
-import org.sollecitom.chassis.ddd.application.ApplicationCommand
+import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.example.command_endpoint.application.user.registration.RegisterUser
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
@@ -43,7 +43,7 @@ interface UnknownCommandsHttpTestSpecification : CoreDataGenerator, WithHttp4kOp
     private fun httpDrivingAdapter(): HttpHandler = httpDrivingAdapter(object : Application {
 
         context(InvocationContext<ACCESS>)
-        override suspend fun <RESULT, ACCESS : Access> invoke(command: ApplicationCommand<RESULT, ACCESS>): RESULT {
+        override suspend fun <RESULT, ACCESS : Access> invoke(command: Command<RESULT, ACCESS>): RESULT {
 
             error("Not supposed to be called for unknown commands")
         }

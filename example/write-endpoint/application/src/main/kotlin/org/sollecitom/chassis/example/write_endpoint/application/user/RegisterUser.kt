@@ -5,10 +5,10 @@ import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.ddd.application.ApplicationCommand
+import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.Happening
 
-sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT, Access.Unauthenticated> {
+sealed interface RegisterUser<RESULT> : Command<RESULT, Access.Unauthenticated> {
 
     val emailAddress: EmailAddress
 

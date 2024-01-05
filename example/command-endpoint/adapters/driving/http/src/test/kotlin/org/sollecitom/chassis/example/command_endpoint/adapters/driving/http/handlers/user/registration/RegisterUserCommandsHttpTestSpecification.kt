@@ -18,7 +18,7 @@ import org.sollecitom.chassis.correlation.core.domain.toggles.withToggle
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.correlation.logging.test.utils.haveContext
 import org.sollecitom.chassis.ddd.application.Application
-import org.sollecitom.chassis.ddd.application.ApplicationCommand
+import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.example.command_endpoint.application.user.registration.RegisterUser
 import org.sollecitom.chassis.example.command_endpoint.application.user.registration.User
 import org.sollecitom.chassis.example.command_endpoint.application.user.registration.UserWithPendingRegistration
@@ -127,7 +127,7 @@ interface RegisterUserCommandsHttpTestSpecification : CoreDataGenerator, WithHtt
 
         context(InvocationContext<ACCESS>)
         @Suppress("UNCHECKED_CAST")
-        override suspend operator fun <RESULT, ACCESS : Access> invoke(command: ApplicationCommand<RESULT, ACCESS>): RESULT {
+        override suspend operator fun <RESULT, ACCESS : Access> invoke(command: Command<RESULT, ACCESS>): RESULT {
             val context = this@InvocationContext
             return when (command) {
                 is RegisterUser.V1 -> handleRegisterUserV1(context, command) as RESULT

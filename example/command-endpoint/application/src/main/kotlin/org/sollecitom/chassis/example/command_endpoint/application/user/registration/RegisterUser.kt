@@ -4,10 +4,10 @@ import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.ddd.application.ApplicationCommand
+import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.Happening
 
-sealed interface RegisterUser<RESULT> : ApplicationCommand<RESULT, Access> {
+sealed interface RegisterUser<RESULT> : Command<RESULT, Access> {
 
     val emailAddress: EmailAddress
 

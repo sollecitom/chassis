@@ -14,7 +14,7 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.ddd.application.Application
-import org.sollecitom.chassis.ddd.application.ApplicationCommand
+import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.Happening
 import org.sollecitom.chassis.test.utils.assertions.failedThrowing
 
@@ -50,7 +50,7 @@ private class DispatchingApplicationTests : CoreDataGenerator by CoreDataGenerat
     }
 }
 
-private class SomeCommandHandler(private val stubbedResult: SomeCommand.Result) : ApplicationCommandHandler<SomeCommand, SomeCommand.Result, Access.Unauthenticated> {
+private class SomeCommandHandler(private val stubbedResult: SomeCommand.Result) : CommandHandler<SomeCommand, SomeCommand.Result, Access.Unauthenticated> {
 
     override val commandType: Happening.Type get() = SomeCommand.type
     private lateinit var capturedCommand: SomeCommand
@@ -68,7 +68,7 @@ private class SomeCommandHandler(private val stubbedResult: SomeCommand.Result) 
     fun capturedInvocationContext() = capturedInvocationContext
 }
 
-private data class SomeCommand(val intensity: Int) : ApplicationCommand<SomeCommand.Result, Access.Unauthenticated> {
+private data class SomeCommand(val intensity: Int) : Command<SomeCommand.Result, Access.Unauthenticated> {
 
     override val requiresAuthentication = false
     override val type: Happening.Type get() = Companion.type

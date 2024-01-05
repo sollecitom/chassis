@@ -5,8 +5,8 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.context.unauthenticatedOrThrow
 import org.sollecitom.chassis.ddd.application.Application
-import org.sollecitom.chassis.ddd.application.ApplicationCommand
 import org.sollecitom.chassis.ddd.application.LoggingApplicationAdapter
+import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.PublishedEvent
 import org.sollecitom.chassis.example.event.domain.UserRegistrationEvent
 import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasAlreadySubmitted
@@ -20,7 +20,7 @@ import org.sollecitom.chassis.example.write_endpoint.domain.user.User
 internal class ApplicationImplementation(private val userWithEmailAddress: suspend (EmailAddress) -> User) : Application {
 
     context(InvocationContext<ACCESS>)
-    override suspend fun <RESULT, ACCESS : Access> invoke(command: ApplicationCommand<RESULT, ACCESS>) = when (command) {
+    override suspend fun <RESULT, ACCESS : Access> invoke(command: Command<RESULT, ACCESS>) = when (command) {
         is RegisterUser -> with(unauthenticatedOrThrow()) { processRegisterUserCommand(command) }
         else -> error("Unknown application command $command")
     }

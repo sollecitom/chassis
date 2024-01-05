@@ -6,7 +6,7 @@ import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.store.EventStore
 
-interface EventFramework : EventStore {
+interface EventFramework : EventStore { // TODO remove this
 
     override fun forEntityId(entityId: Id): EntitySpecific
 
