@@ -4,6 +4,9 @@ import assertk.Assert
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
+import kotlinx.coroutines.CoroutineStart.UNDISPATCHED
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import org.junit.jupiter.api.Nested
@@ -15,6 +18,7 @@ import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
+import org.sollecitom.chassis.core.utils.TimeGenerator
 import org.sollecitom.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
@@ -57,7 +61,7 @@ private class RegisterUserTests : CoreDataGenerator by CoreDataGenerator.testPro
             assertThat(result).wasRejectedBecauseAnotherUserHasTheSameEmailAddress(user = anotherUser)
         }
 
-        private fun newV1Handler(userWithEmailAddress: suspend context(InvocationContext<*>)(EmailAddress) -> User? = { null }): CommandHandler<RegisterUser.V1, RegisterUser.V1.Result, Access> = RegisterUserV1Handler(findUserWithEmailAddress = userWithEmailAddress, uniqueIdGenerator = this@RegisterUserTests)
+        private fun newV1Handler(userWithEmailAddress: suspend context(InvocationContext<*>)(EmailAddress) -> User? = { null }): CommandHandler<RegisterUser.V1, RegisterUser.V1.Result, Access> = RegisterUserV1Handler(findUserWithEmailAddress = userWithEmailAddress, uniqueIdGenerator = this@RegisterUserTests, timeGenerator = this@RegisterUserTests)
 
         private fun Assert<RegisterUser.V1.Result>.wasAccepted() = given { result -> assertThat(result).isInstanceOf<Accepted>() }
 
@@ -65,25 +69,33 @@ private class RegisterUserTests : CoreDataGenerator by CoreDataGenerator.testPro
     }
 }
 
-class RegisterUserV1Handler(private val findUserWithEmailAddress: suspend context(InvocationContext<*>)(EmailAddress) -> User?, private val uniqueIdGenerator: UniqueIdGenerator) : CommandHandler<RegisterUser.V1, RegisterUser.V1.Result, Access>, UniqueIdGenerator by uniqueIdGenerator {
+class RegisterUserV1Handler(private val findUserWithEmailAddress: suspend context(InvocationContext<*>)(EmailAddress) -> User?, private val uniqueIdGenerator: UniqueIdGenerator, private val timeGenerator: TimeGenerator) : CommandHandler<RegisterUser.V1, RegisterUser.V1.Result, Access>, UniqueIdGenerator by uniqueIdGenerator, TimeGenerator by timeGenerator {
 //class RegisterUserV1Handler(private val findUserWithEmailAddress: suspend context(InvocationContext<*>)(EmailAddress) -> User?, private val uniqueIdGenerator: UniqueIdGenerator) : ApplicationCommandHandler<RegisterUser.V1, RegisterUser.V1.Result, Access>, UniqueIdGenerator by uniqueIdGenerator {
 
     override val commandType get() = RegisterUser.V1.type
 
     context(InvocationContext<Access>)
-    override suspend fun process(command: RegisterUser.V1): RegisterUser.V1.Result {
+    override suspend fun process(command: RegisterUser.V1): RegisterUser.V1.Result = coroutineScope {
 
         // TODO subscribe to the result coming from downstream
         // TODO publish the event
         // TODO await the result
+        val event = command.wasReceived()
+        val result = async(start = UNDISPATCHED) { event.receiveResult() }
+        // event.publish()
+        result.await()
+    }
 
+    private suspend fun <RESULT : Any, COMMAND : Command<RESULT, *>> CommandWasReceived<COMMAND>.receiveResult(): RESULT {
 
-        val user = UserWithPendingRegistration(id = newId.forEntities())
-        return Accepted(user = user)
+        TODO("implement")
     }
 
     context(InvocationContext<Access>)
     private suspend fun runPreChecks(command: RegisterUser.V1): RegisterUser.V1.Result? {
+
+//        val user = UserWithPendingRegistration(id = newId.forEntities())
+//        Accepted(user = user)
 
         val existingUserWithTheSameEmailAddress = findUserWithEmailAddress(this@InvocationContext, command.emailAddress)
         return existingUserWithTheSameEmailAddress?.let { EmailAddressAlreadyInUse(it) }
@@ -135,4 +147,22 @@ class GenericCommandWasReceived<COMMAND : Command<*, *>>(command: COMMAND, id: I
     override fun hashCode() = id.hashCode()
 
     override fun toString() = "GenericCommandWasReceived(command=$command, id=$id, timestamp=$timestamp, context=$context)"
+}
+
+context(InvocationContext<Access>, UniqueIdGenerator, TimeGenerator)
+fun <COMMAND : Command<*, *>> COMMAND.wasReceived(): GenericCommandWasReceived<COMMAND> {
+
+    val id = newId.forEntities()
+    val timestamp = clock.now()
+    val context = Event.Context(invocation = this@InvocationContext)
+    return GenericCommandWasReceived(this, id, timestamp, context)
+}
+
+context(InvocationContext<Access>, UniqueIdGenerator, TimeGenerator)
+fun <COMMAND : EntityCommand<*, *>> COMMAND.wasReceived(): EntitySpecificCommandWasReceived<COMMAND> {
+
+    val id = newId.forEntities()
+    val timestamp = clock.now()
+    val context = Event.Context(invocation = this@InvocationContext)
+    return EntitySpecificCommandWasReceived(this, id, timestamp, context)
 }
