@@ -52,7 +52,7 @@ private class RegisterUserTests : CoreDataGenerator by CoreDataGenerator.testPro
             assertThat(result).wasRejectedBecauseAnotherUserHasTheSameEmailAddress(user = anotherUser)
         }
 
-        private fun newV1Handler(userWithEmailAddress: suspend context(InvocationContext<*>)(EmailAddress) -> User? = { null }): ApplicationCommandHandler<RegisterUser.V1, RegisterUser.V1.Result, Access> = RegisterUserV1Handler(userWithEmailAddress = userWithEmailAddress, uniqueIdGenerator = this@RegisterUserTests)
+        private fun newV1Handler(userWithEmailAddress: suspend context(InvocationContext<*>)(EmailAddress) -> User? = { null }): ApplicationCommandHandler<RegisterUser.V1, RegisterUser.V1.Result, Access> = RegisterUserV1Handler(findUserWithEmailAddress = userWithEmailAddress, uniqueIdGenerator = this@RegisterUserTests)
 
         private fun Assert<RegisterUser.V1.Result>.wasAccepted() = given { result -> assertThat(result).isInstanceOf<Accepted>() }
 
@@ -60,17 +60,14 @@ private class RegisterUserTests : CoreDataGenerator by CoreDataGenerator.testPro
     }
 }
 
-class RegisterUserV1Handler(private val userWithEmailAddress: suspend context(InvocationContext<*>)(EmailAddress) -> User?, private val uniqueIdGenerator: UniqueIdGenerator) : ApplicationCommandHandler<RegisterUser.V1, RegisterUser.V1.Result, Access>, UniqueIdGenerator by uniqueIdGenerator {
+class RegisterUserV1Handler(private val findUserWithEmailAddress: suspend context(InvocationContext<*>)(EmailAddress) -> User?, private val uniqueIdGenerator: UniqueIdGenerator) : ApplicationCommandHandler<RegisterUser.V1, RegisterUser.V1.Result, Access>, UniqueIdGenerator by uniqueIdGenerator {
 
     override val commandType get() = RegisterUser.V1.type
 
     context(InvocationContext<Access>)
     override suspend fun process(command: RegisterUser.V1): RegisterUser.V1.Result {
 
-        val existingUserWithTheSameEmailAddress = userWithEmailAddress(this@InvocationContext, command.emailAddress)
-        if (existingUserWithTheSameEmailAddress != null) {
-            return EmailAddressAlreadyInUse(user = existingUserWithTheSameEmailAddress)
-        }
+        runPreChecks(command)?.let { return it }
 
         // TODO subscribe to the result coming from downstream
         // TODO publish the event
@@ -78,5 +75,12 @@ class RegisterUserV1Handler(private val userWithEmailAddress: suspend context(In
 
         val user = UserWithPendingRegistration(id = newId.forEntities())
         return Accepted(user = user)
+    }
+
+    context(InvocationContext<Access>)
+    private suspend fun runPreChecks(command: RegisterUser.V1): RegisterUser.V1.Result? {
+
+        val existingUserWithTheSameEmailAddress = findUserWithEmailAddress(this@InvocationContext, command.emailAddress)
+        return existingUserWithTheSameEmailAddress?.let { EmailAddressAlreadyInUse(it) }
     }
 }
