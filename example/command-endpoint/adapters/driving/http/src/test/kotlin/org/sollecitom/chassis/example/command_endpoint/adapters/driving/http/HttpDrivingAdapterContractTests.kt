@@ -6,8 +6,8 @@ import org.sollecitom.chassis.core.domain.networking.RequestedPort
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.application.Application
-import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.handlers.user.registration.RegisterUserCommandsHttpTestSpecification
 import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.handlers.unknown.commands.UnknownCommandsHttpTestSpecification
+import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.handlers.user.registration.RegisterUserCommandsHttpTestSpecification
 import org.sollecitom.chassis.logger.core.LoggingLevel.INFO
 import org.sollecitom.chassis.logging.standard.configuration.configureLogging
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport

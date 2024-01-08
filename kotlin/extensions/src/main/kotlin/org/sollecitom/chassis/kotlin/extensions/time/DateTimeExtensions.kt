@@ -1,6 +1,9 @@
 package org.sollecitom.chassis.kotlin.extensions.time
 
-import kotlinx.datetime.*
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toJavaInstant
+import kotlinx.datetime.toKotlinInstant
 import java.time.temporal.ChronoUnit
 
 fun Instant.truncatedToMilliseconds(): Instant = toJavaInstant().truncatedTo(ChronoUnit.MILLIS).toKotlinInstant()

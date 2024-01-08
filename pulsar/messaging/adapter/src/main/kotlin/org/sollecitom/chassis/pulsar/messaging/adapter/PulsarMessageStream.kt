@@ -10,10 +10,6 @@ import org.sollecitom.chassis.messaging.domain.Message
 import org.sollecitom.chassis.messaging.domain.MessageStream
 import org.sollecitom.chassis.messaging.domain.ReceivedMessage
 import org.sollecitom.chassis.messaging.domain.Topic
-import org.sollecitom.chassis.pulsar.messaging.adapter.pulsarMessageConsumer
-import org.sollecitom.chassis.pulsar.messaging.adapter.pulsarMessageProducer
-import org.sollecitom.chassis.pulsar.messaging.adapter.topic
-import org.sollecitom.chassis.pulsar.messaging.adapter.topics
 
 internal class PulsarMessageStream<VALUE>(private val instanceInfo: InstanceInfo, private val topic: Topic, private val schema: Schema<VALUE>, clientSupplier: () -> PulsarClient) : MessageStream<VALUE>, Startable, Stoppable {
 

@@ -9,8 +9,8 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.configuration.utils.from
 import org.sollecitom.chassis.configuration.utils.instanceGroupName
-import org.sollecitom.chassis.configuration.utils.instancesGroupMaxSize
 import org.sollecitom.chassis.configuration.utils.instanceId
+import org.sollecitom.chassis.configuration.utils.instancesGroupMaxSize
 import org.sollecitom.chassis.core.domain.lifecycle.startBlocking
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
