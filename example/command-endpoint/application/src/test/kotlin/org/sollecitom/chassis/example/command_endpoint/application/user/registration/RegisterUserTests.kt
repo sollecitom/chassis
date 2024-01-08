@@ -28,7 +28,7 @@ private class RegisterUserTests : CoreDataGenerator by CoreDataGenerator.testPro
         val emailAddress = "fresh-address@gmail.com".let(::EmailAddress)
         val command = RegisterUser(emailAddress = emailAddress)
         val invocationContext = InvocationContext.unauthenticated()
-        val handler = newHandler()
+        val handler = newHandler { _: EmailAddress -> null }
 
         val result = with(invocationContext) { handler.process(command) }
 
