@@ -28,7 +28,7 @@ interface UnknownCommandsHttpTestSpecification : CoreDataGenerator, WithHttp4kOp
     fun `attempting to submit a command with a nonexistent type`() {
 
         val api = httpDrivingAdapter()
-        val commandType = RegisterUser.V1.type
+        val commandType = RegisterUser.type
         val json = JSONObject().put("some-key", "some-value")
         val invocationContext = InvocationContext.unauthenticated()
         val request = Request(Method.POST, path("commands/unknown/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)

@@ -10,44 +10,42 @@ import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.json.utils.serde.getValue
 import org.sollecitom.chassis.json.utils.serde.setValue
 
-val RegisterUser.V1.Companion.serde: JsonSerde<RegisterUser.V1> get() = RegisterUserCommandSerde.V1
-val RegisterUser.V1.Result.Accepted.Companion.serde: JsonSerde<RegisterUser.V1.Result.Accepted> get() = RegisterUserCommandSerde.V1.Result.Accepted
+val RegisterUser.Companion.serde: JsonSerde<RegisterUser> get() = RegisterUserCommandSerde
+val RegisterUser.Result.Accepted.Companion.serde: JsonSerde<RegisterUser.Result.Accepted> get() = RegisterUserCommandSerde.Result.Accepted
 
-private object RegisterUserCommandSerde {
+private object RegisterUserCommandSerde : JsonSerde<RegisterUser> {
 
-    object V1 : JsonSerde<RegisterUser.V1> {
 
-        override fun serialize(value: RegisterUser.V1): JSONObject = JSONObject().put(Fields.EMAIL, JSONObject().put(Fields.ADDRESS, value.emailAddress.value))
+    override fun serialize(value: RegisterUser): JSONObject = JSONObject().put(Fields.EMAIL, JSONObject().put(Fields.ADDRESS, value.emailAddress.value))
 
-        override fun deserialize(json: JSONObject): RegisterUser.V1 {
+    override fun deserialize(json: JSONObject): RegisterUser {
 
-            val emailAddress = json.getRequiredJSONObject(Fields.EMAIL).getRequiredString(Fields.ADDRESS).let(::EmailAddress)
-            return RegisterUser.V1(emailAddress = emailAddress)
-        }
+        val emailAddress = json.getRequiredJSONObject(Fields.EMAIL).getRequiredString(Fields.ADDRESS).let(::EmailAddress)
+        return RegisterUser(emailAddress = emailAddress)
+    }
 
-        private object Fields {
-            const val EMAIL = "email"
-            const val ADDRESS = "address"
-        }
+    private object Fields {
+        const val EMAIL = "email"
+        const val ADDRESS = "address"
+    }
 
-        object Result {
+    object Result {
 
-            object Accepted : JsonSerde<RegisterUser.V1.Result.Accepted> {
+        object Accepted : JsonSerde<RegisterUser.Result.Accepted> {
 
-                override fun serialize(value: RegisterUser.V1.Result.Accepted) = JSONObject().apply {
+            override fun serialize(value: RegisterUser.Result.Accepted) = JSONObject().apply {
 
-                    setValue(Fields.USER, value.user, UserWithPendingRegistration.serde)
-                }
+                setValue(Fields.USER, value.user, UserWithPendingRegistration.serde)
+            }
 
-                override fun deserialize(json: JSONObject): RegisterUser.V1.Result.Accepted {
+            override fun deserialize(json: JSONObject): RegisterUser.Result.Accepted {
 
-                    val user = json.getValue(Fields.USER, UserWithPendingRegistration.serde)
-                    return RegisterUser.V1.Result.Accepted(user)
-                }
+                val user = json.getValue(Fields.USER, UserWithPendingRegistration.serde)
+                return RegisterUser.Result.Accepted(user)
+            }
 
-                private object Fields {
-                    const val USER = "user"
-                }
+            private object Fields {
+                const val USER = "user"
             }
         }
     }

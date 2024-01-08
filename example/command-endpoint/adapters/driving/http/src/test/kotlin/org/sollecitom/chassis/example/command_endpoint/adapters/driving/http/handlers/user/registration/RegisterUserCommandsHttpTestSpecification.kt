@@ -38,8 +38,8 @@ interface RegisterUserCommandsHttpTestSpecification : CoreDataGenerator, WithHtt
     fun `submitting a register user command for an unregistered user`() {
 
         val userId = newId.internal()
-        val api = httpDrivingAdapter { _ -> RegisterUser.V1.Result.Accepted(user = UserWithPendingRegistration(userId)) }
-        val commandType = RegisterUser.V1.type
+        val api = httpDrivingAdapter { _ -> RegisterUser.Result.Accepted(user = UserWithPendingRegistration(userId)) }
+        val commandType = RegisterUser.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated().withToggle(Toggles.InvocationVisibility, InvocationVisibility.HIGH)
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
@@ -56,8 +56,8 @@ interface RegisterUserCommandsHttpTestSpecification : CoreDataGenerator, WithHtt
     fun `submitting a register user command for an already registered user`() {
 
         val existingUserId = newId.internal()
-        val api = httpDrivingAdapter { _ -> RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse(user = User(id = existingUserId)) }
-        val commandType = RegisterUser.V1.type
+        val api = httpDrivingAdapter { _ -> RegisterUser.Result.Rejected.EmailAddressAlreadyInUse(user = User(id = existingUserId)) }
+        val commandType = RegisterUser.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated()
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
@@ -73,7 +73,7 @@ interface RegisterUserCommandsHttpTestSpecification : CoreDataGenerator, WithHtt
     fun `attempting to submit a register user command with an invalid email address`() {
 
         val api = httpDrivingAdapter()
-        val commandType = RegisterUser.V1.type
+        val commandType = RegisterUser.type
         val json = registerUserPayload("invalid")
         val invocationContext = InvocationContext.unauthenticated()
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
@@ -89,7 +89,7 @@ interface RegisterUserCommandsHttpTestSpecification : CoreDataGenerator, WithHtt
     fun `attempting to submit a register user command with an invalid content type`() {
 
         val api = httpDrivingAdapter()
-        val commandType = RegisterUser.V1.type
+        val commandType = RegisterUser.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated()
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json.toString()).contentType(ContentType.TEXT_PLAIN).contentLength(json.toString().length).withInvocationContext(invocationContext)
@@ -105,7 +105,7 @@ interface RegisterUserCommandsHttpTestSpecification : CoreDataGenerator, WithHtt
     fun `attempting to submit a register user command with an invalid version`() {
 
         val api = httpDrivingAdapter()
-        val commandType = RegisterUser.V1.type
+        val commandType = RegisterUser.type
         val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
         val invocationContext = InvocationContext.unauthenticated()
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v!")).body(json).withInvocationContext(invocationContext)
@@ -121,16 +121,16 @@ interface RegisterUserCommandsHttpTestSpecification : CoreDataGenerator, WithHtt
 
     private fun registerUserPayload(emailAddress: String): JSONObject = JSONObject().put("email", JSONObject().put("address", emailAddress))
 
-    private fun httpDrivingAdapter(handleRegisterUserV1: suspend context(InvocationContext<Access>)(RegisterUser.V1) -> RegisterUser.V1.Result = { _ -> RegisterUser.V1.Result.Accepted(user = UserWithPendingRegistration(id = newId.internal())) }) = httpDrivingAdapter(application = StubbedApplication(handleRegisterUserV1))
+    private fun httpDrivingAdapter(handleRegisterUserV1: suspend context(InvocationContext<Access>)(RegisterUser) -> RegisterUser.Result = { _ -> RegisterUser.Result.Accepted(user = UserWithPendingRegistration(id = newId.internal())) }) = httpDrivingAdapter(application = StubbedApplication(handleRegisterUserV1))
 
-    private class StubbedApplication(private val handleRegisterUserV1: suspend context(InvocationContext<Access>)(RegisterUser.V1) -> RegisterUser.V1.Result) : Application {
+    private class StubbedApplication(private val handleRegisterUserV1: suspend context(InvocationContext<Access>)(RegisterUser) -> RegisterUser.Result) : Application {
 
         context(InvocationContext<ACCESS>)
         @Suppress("UNCHECKED_CAST")
         override suspend operator fun <RESULT, ACCESS : Access> invoke(command: Command<RESULT, ACCESS>): RESULT {
             val context = this@InvocationContext
             return when (command) {
-                is RegisterUser.V1 -> handleRegisterUserV1(context, command) as RESULT
+                is RegisterUser -> handleRegisterUserV1(context, command) as RESULT
                 else -> error("Unknown command type ${command.type}")
             }
         }

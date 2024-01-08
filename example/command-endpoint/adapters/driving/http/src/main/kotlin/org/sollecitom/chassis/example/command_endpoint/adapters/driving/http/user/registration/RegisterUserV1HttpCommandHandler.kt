@@ -11,12 +11,12 @@ import org.sollecitom.chassis.http4k.utils.lens.map
 import org.sollecitom.chassis.web.api.utils.command.handler.HttpCommandHandler
 import org.sollecitom.chassis.web.api.utils.command.handler.HttpCommandHandlerTemplate
 
-private data object RegisterUserV1HttpCommandHandler : HttpCommandHandlerTemplate<RegisterUser.V1, RegisterUser.V1.Result>(RegisterUser.V1.type, RegisterUser.V1.Result::class, listOf(Body.jsonObject().map(RegisterUser.V1.serde))) {
+private data object RegisterUserV1HttpCommandHandler : HttpCommandHandlerTemplate<RegisterUser, RegisterUser.Result>(RegisterUser.type, RegisterUser.Result::class, listOf(Body.jsonObject().map(RegisterUser.serde))) {
 
-    override fun resultToResponse(result: RegisterUser.V1.Result) = when (result) {
-        is RegisterUser.V1.Result.Accepted -> Response(Status.ACCEPTED).body(result, RegisterUser.V1.Result.Accepted.serde)
-        is RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse -> Response(Status.UNPROCESSABLE_ENTITY.description("Email address is already used by another user")) // TODO change to OK or something
+    override fun resultToResponse(result: RegisterUser.Result) = when (result) {
+        is RegisterUser.Result.Accepted -> Response(Status.ACCEPTED).body(result, RegisterUser.Result.Accepted.serde)
+        is RegisterUser.Result.Rejected.EmailAddressAlreadyInUse -> Response(Status.UNPROCESSABLE_ENTITY.description("Email address is already used by another user")) // TODO change to OK or something
     }
 }
 
-val RegisterUser.V1.Companion.httpCommandHandler: HttpCommandHandler<RegisterUser.V1, RegisterUser.V1.Result> get() = RegisterUserV1HttpCommandHandler
+val RegisterUser.Companion.httpCommandHandler: HttpCommandHandler<RegisterUser, RegisterUser.Result> get() = RegisterUserV1HttpCommandHandler

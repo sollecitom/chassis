@@ -7,37 +7,27 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.Happening
 
-sealed interface RegisterUser<RESULT> : Command<RESULT, Access> {
-
-    val emailAddress: EmailAddress
+data class RegisterUser(val emailAddress: EmailAddress) : Command<RegisterUser.Result, Access> {
 
     override val requiresAuthentication get() = false
+    override val type: Happening.Type get() = Companion.type
 
-    companion object {
-        val typeName = "register-user".let(::Name)
+    override fun toString() = "RegisterUser(emailAddress=${emailAddress.value}, type=${type.name.value}, version=${version.value})"
+
+    sealed interface Result {
+
+        data class Accepted(val user: UserWithPendingRegistration) : Result {
+
+            companion object
+        }
+
+        sealed interface Rejected : Result {
+
+            data class EmailAddressAlreadyInUse(val user: User) : Rejected
+        }
     }
 
-    data class V1(override val emailAddress: EmailAddress) : RegisterUser<V1.Result> {
-
-        override val type get() = Companion.type
-
-        override fun toString() = "RegisterUser(emailAddress=${emailAddress.value}, type=${type.name.value}, version=${version.value})"
-
-        sealed interface Result {
-
-            data class Accepted(val user: UserWithPendingRegistration) : Result {
-
-                companion object
-            }
-
-            sealed interface Rejected : Result {
-
-                data class EmailAddressAlreadyInUse(val user: User) : Rejected
-            }
-        }
-
-        companion object {
-            val type = Happening.Type(typeName, 1.let(::IntVersion))
-        }
+    companion object {
+        val type = Happening.Type("register-user".let(::Name), 1.let(::IntVersion))
     }
 }

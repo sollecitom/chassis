@@ -26,7 +26,7 @@ class HttpDrivingAdapter(private val application: Application, private val confi
     // TODO use this instead of the other constructor, or remove it
     constructor(application: Application, environment: Environment) : this(application, Configuration.from(environment))
 
-    private val api = mainHttpApi(RegisterUser.V1.httpCommandHandler)
+    private val api = mainHttpApi(RegisterUser.httpCommandHandler)
     override val port: Port get() = api.port
 
     override fun invoke(request: Request) = api(request)
