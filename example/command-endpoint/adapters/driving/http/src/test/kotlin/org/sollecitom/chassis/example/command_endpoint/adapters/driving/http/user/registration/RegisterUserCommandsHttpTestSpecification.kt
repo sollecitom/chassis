@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.handlers.user.registration
+package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.user.registration
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
