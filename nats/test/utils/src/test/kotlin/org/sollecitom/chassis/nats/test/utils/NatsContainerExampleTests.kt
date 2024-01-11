@@ -97,6 +97,7 @@ private class NatsContainerExampleTests {
         receiving.await()
         handler.unsubscribe(subject)
         consumingConnection.close()
+        publisher.stop()
 
         assertThat(receivedMessages).hasSize(1)
         val receivedMessage = receivedMessages.single()
