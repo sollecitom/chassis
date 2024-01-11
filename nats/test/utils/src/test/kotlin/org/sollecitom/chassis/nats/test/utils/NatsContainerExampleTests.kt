@@ -1,7 +1,6 @@
 package org.sollecitom.chassis.nats.test.utils
 
 import assertk.assertThat
-import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import io.nats.client.Dispatcher
 import io.nats.client.Message
@@ -9,7 +8,6 @@ import io.nats.client.Nats
 import io.nats.client.Options
 import io.nats.client.impl.Headers
 import io.nats.client.impl.NatsMessage
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineStart.UNDISPATCHED
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -36,57 +34,18 @@ private class NatsContainerExampleTests {
     private val nats = NatsContainer()
 
     @BeforeAll
-    fun beforeAll() {
-        nats.start()
-    }
+    fun beforeAll() = nats.start()
 
     @AfterAll
-    fun afterAll() {
-        nats.stop()
-    }
-
-    @Test
-    fun `consuming and publishing messages with the raw client`() = runTest(timeout = timeout) {
-
-        val options = Options.builder().server("nats://${nats.host}:${nats.clientPort.value}").build()
-        val publishingConnection = Nats.connect(options) // TODO use connectAsynchronously with a connectionListener in the builder
-        val consumingConnection = Nats.connect(options) // TODO use connectAsynchronously with a connectionListener in the builder
-        val subject = "a-subject"
-        val payload = "hello world"
-        val headers = buildMap {
-            put("header-key", buildList {
-                add("headerValue1")
-                add("headerValue2")
-            })
-        }
-
-        val receivedMessages = mutableListOf<Message>()
-        val receiving = CompletableDeferred<Unit>()
-        val handler = consumingConnection.createDispatcher { message ->
-
-            receivedMessages += message
-            receiving.complete(Unit)
-        }.subscribe(subject)
-        publishingConnection.publish(NatsMessage(subject, null, Headers().put(headers), payload.toByteArray()))
-        receiving.await()
-        handler.unsubscribe(subject)
-        consumingConnection.close()
-        publishingConnection.close()
-
-        assertThat(receivedMessages).hasSize(1)
-        val receivedMessage = receivedMessages.single()
-        assertThat(receivedMessage.subject).isEqualTo(subject)
-        assertThat(String(receivedMessage.data)).isEqualTo(payload)
-        assertThat(receivedMessage.headers.toMultiMap()).containsSameMultipleEntriesAs(headers)
-    }
+    fun afterAll() = nats.stop()
 
     @Test
     fun `consuming and publishing messages`() = runTest(timeout = timeout) {
 
-        val subject = "another-subject"
+        val subject = "a-subject"
         val publisher = nats.newPublisher()
         val consumer = nats.newConsumer(subject)
-        val payload = "hello world again"
+        val payload = "hello world"
         val headers = buildMap {
             put("header-key", buildList {
                 add("headerValue1")
