@@ -24,6 +24,7 @@ import org.sollecitom.chassis.web.api.utils.api.HealthHttpDrivingAdapter
 import org.sollecitom.chassis.web.service.domain.WebInterface
 import org.sollecitom.chassis.web.service.domain.WebService
 
+// TODO finish
 class Service(private val environment: Environment, coreDataGenerators: CoreDataGenerator) : WebService, CoreDataGenerator by coreDataGenerators {
 
     constructor(environment: Environment) : this(environment, CoreDataGenerator.provider(environment))

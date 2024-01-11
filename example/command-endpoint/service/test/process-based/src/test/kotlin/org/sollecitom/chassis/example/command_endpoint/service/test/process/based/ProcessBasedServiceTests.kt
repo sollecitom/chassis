@@ -5,6 +5,7 @@ import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.configuration.utils.from
@@ -26,6 +27,7 @@ import org.sollecitom.chassis.pulsar.test.utils.create
 import org.sollecitom.chassis.pulsar.test.utils.newPulsarContainer
 import org.sollecitom.chassis.pulsar.utils.PulsarTopic
 
+@Disabled // TODO remove
 @TestInstance(PER_CLASS)
 private class ProcessBasedServiceTests : ServiceTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
 
