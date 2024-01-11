@@ -18,6 +18,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 import org.sollecitom.chassis.core.domain.networking.Port
 import org.sollecitom.chassis.test.utils.assertions.containsSameMultipleEntriesAs
+import java.util.concurrent.Executors
 import kotlin.time.Duration.Companion.seconds
 
 @TestInstance(PER_CLASS)
@@ -75,7 +76,7 @@ private class NatsContainerExampleTests {
     fun `consuming and publishing messages`() = runTest(timeout = timeout) {
 
         val options = Options.builder().server(host = nats.host, port = nats.clientPort).build()
-        val publisher = NatsPublisher.create { server(host = nats.host, port = nats.clientPort) }
+        val publisher = NatsPublisher.create(options)
         val consumingConnection = Nats.connect(options) // TODO use connectAsynchronously with a connectionListener in the builder
         val subject = "another-subject"
         val payload = "hello world again"
@@ -114,12 +115,6 @@ interface NatsPublisher : Stoppable {
     companion object
 }
 
-fun NatsPublisher.Companion.create(customize: Options.Builder.() -> Unit = { }): NatsPublisher {
-
-    val options = Options.builder().also(customize).build() // TODO use VirtualThreads
-    return NatsPublisherAdapter(options)
-}
-
 fun NatsPublisher.Companion.create(options: Options): NatsPublisher = NatsPublisherAdapter(options)
 
 fun Options.Builder.server(host: String, port: Int) = server("nats://$host:$port")
@@ -128,11 +123,15 @@ fun Options.Builder.server(host: String, port: Port) = server("nats://$host:${po
 
 private class NatsPublisherAdapter(options: Options) : NatsPublisher {
 
-    private val connection by lazy { Nats.connect(options) }
+    private val executor = Executors.newVirtualThreadPerTaskExecutor()
+    private val connection by lazy { Nats.connect(Options.Builder(options).executor(executor).build()) }
 
     override suspend fun publish(message: Message) = connection.publish(message)
 
-    override suspend fun stop() = connection.close()
+    override suspend fun stop() {
+        connection.close()
+        executor.close()
+    }
 }
 
 private fun Headers.toMultiMap(): Map<String, List<String>> = entrySet().associate { it.key to it.value }
