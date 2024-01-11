@@ -16,7 +16,6 @@ org-json = "20230618"
 erosb-json-schema = "0.10.0"
 guava = "33.0.0-jre"
 bouncy-castle = "1.76"
-commons-codec = "1.16.0"
 test-containers = "1.19.3"
 swagger-parser = "2.1.19"
 atlassian-swagger-request-validator = "2.39.0"
@@ -24,6 +23,7 @@ pulsar = "3.1.1"
 avro = "1.11.3"
 yauaa = "7.24.0"
 log4j = "2.22.0"
+zero-allocation-hashing = "0.16"
 # plugins
 palantir-git-plugin = "3.0.0"
 version-catalog-report-plugin = "0.50.0"
@@ -57,7 +57,6 @@ tsid-creator = { module = "io.hypersistence:hypersistence-tsid", version.ref = "
 org-json = { module = "org.json:json", version.ref = "org-json" }
 json-schema-parser = { module = "com.github.erosb:json-sKema", version.ref = "erosb-json-schema" }
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
-commons-codec = { module = "commons-codec:commons-codec", version.ref = "commons-codec" }
 bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncy-castle" }
 bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bouncy-castle" }
 bcutil = { module = "org.bouncycastle:bcutil-jdk18on", version.ref = "bouncy-castle" }
@@ -74,6 +73,7 @@ apache-avro-core = { module = "org.apache.avro:avro", version.ref = "avro" }
 yet-another-user-agent-analyzer = { module = "nl.basjes.parse.useragent:yauaa", version.ref = "yauaa" }
 log4j-to-slf4j = { module = "org.apache.logging.log4j:log4j-to-slf4j", version.ref = "log4j" }
 com-github-ben-manes-versions = { module = "com.github.ben-manes.versions:com.github.ben-manes.versions.gradle.plugin", version.ref = "version-catalog-report-plugin" }
+zero-allocation-hashing = { module = "net.openhft:zero-allocation-hashing", version.ref = "zero-allocation-hashing" }
 
 [plugins]
 com-github-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "version-catalog-report-plugin" }

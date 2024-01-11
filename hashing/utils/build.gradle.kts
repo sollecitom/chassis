@@ -1,5 +1,5 @@
 dependencies {
-    implementation(libs.commons.codec)
+    implementation(libs.zero.allocation.hashing)
     implementation(projects.chassisKotlinExtensions)
 
     testImplementation(projects.chassisTestUtils)

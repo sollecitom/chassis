@@ -1,7 +1,7 @@
-package org.sollecitom.chassis.hashing.utils.murmur3
+package org.sollecitom.chassis.hashing.utils
 
 @JvmInline
-value class Hash128Result private constructor(private val parts: LongArray) {
+value class Hash128Result internal constructor(private val parts: LongArray) {
 
     val firstHalf: Long get() = parts[0]
     val secondHalf: Long get() = parts[1]

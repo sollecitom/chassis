@@ -5,22 +5,15 @@ import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.sollecitom.chassis.hashing.utils.Hash128Result
 
 @TestInstance(PER_CLASS)
 private class Murmur3HashingExampleTest {
 
     @Nested
-    inner class Hash32 : HashFunctionTestSpecification<Int> {
-
-        override val hash get() = Murmur3.hash32
-        override val digest = "a message"
-        override val expectedHash = 728939086
-    }
-
-    @Nested
     inner class Hash64 : HashFunctionTestSpecification<Long> {
 
-        override val hash get() = Murmur3.hash64
+        override fun hashFunction(seed: Long) = Murmur3.hash64(seed)
         override val digest = "a message"
         override val expectedHash = -3060066523902502006L
     }
@@ -28,7 +21,7 @@ private class Murmur3HashingExampleTest {
     @Nested
     inner class Hash128 : HashFunctionTestSpecification<Hash128Result> {
 
-        override val hash get() = Murmur3.hash128
+        override fun hashFunction(seed: Long) = Murmur3.hash128(seed)
         override val digest = "a message"
         override val expectedHash = Hash128Result.create(-3060066523902502006L, 2187737632784832728L)
 
