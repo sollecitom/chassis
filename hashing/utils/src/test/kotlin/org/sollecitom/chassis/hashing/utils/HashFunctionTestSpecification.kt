@@ -1,11 +1,10 @@
-package org.sollecitom.chassis.hashing.utils.murmur3
+package org.sollecitom.chassis.hashing.utils
 
 import assertk.Assert
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotEqualTo
 import org.junit.jupiter.api.Test
-import org.sollecitom.chassis.hashing.utils.HashFunction
 import org.sollecitom.chassis.kotlin.extensions.text.string
 import org.sollecitom.chassis.kotlin.extensions.text.strings
 import kotlin.random.Random
@@ -52,7 +51,7 @@ interface HashFunctionTestSpecification<RESULT : Any> {
     }
 
     @Test
-    fun `the hash produced matches the one Murmur3 produces`() {
+    fun `the hash produced matches the one the algorithm produces`() {
 
         val hashFunction = hashFunction()
         val bytes = digest.toByteArray()

@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.hashing.utils.murmur3
+package org.sollecitom.chassis.hashing.utils.xxh
 
 import assertk.Assert
 import assertk.assertions.isEqualTo
@@ -9,22 +9,22 @@ import org.sollecitom.chassis.hashing.utils.Hash128Result
 import org.sollecitom.chassis.hashing.utils.HashFunctionTestSpecification
 
 @TestInstance(PER_CLASS)
-private class Murmur3HashingExampleTest {
+private class XxhHashingExampleTest {
 
     @Nested
     inner class Hash64 : HashFunctionTestSpecification<Long> {
 
-        override fun hashFunction(seed: Long) = Murmur3.hash64(seed)
+        override fun hashFunction(seed: Long) = Xxh.hash64(seed)
         override val digest = "a message"
-        override val expectedHash = -3060066523902502006L
+        override val expectedHash = 5785544599489281299L
     }
 
     @Nested
     inner class Hash128 : HashFunctionTestSpecification<Hash128Result> {
 
-        override fun hashFunction(seed: Long) = Murmur3.hash128(seed)
+        override fun hashFunction(seed: Long) = Xxh.hash128(seed)
         override val digest = "a message"
-        override val expectedHash = Hash128Result.create(-3060066523902502006L, 2187737632784832728L)
+        override val expectedHash = Hash128Result.create(3146448641567002184L, 8337944919793685661L)
 
         override fun Assert<Hash128Result>.matches(expected: Hash128Result) = given { actual ->
 
