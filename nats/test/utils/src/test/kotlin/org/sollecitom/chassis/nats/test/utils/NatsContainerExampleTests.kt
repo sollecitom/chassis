@@ -76,7 +76,7 @@ private class NatsContainerExampleTests {
     fun `consuming and publishing messages`() = runTest(timeout = timeout) {
 
         val options = Options.builder().server(host = nats.host, port = nats.clientPort).build()
-        val publisher = NatsPublisher.create(options)
+        val publisher = nats.newPublisher()
         val consumingConnection = Nats.connect(options) // TODO use connectAsynchronously with a connectionListener in the builder
         val subject = "another-subject"
         val payload = "hello world again"
@@ -120,6 +120,8 @@ fun NatsPublisher.Companion.create(options: Options): NatsPublisher = NatsPublis
 fun Options.Builder.server(host: String, port: Int) = server("nats://$host:$port")
 
 fun Options.Builder.server(host: String, port: Port) = server("nats://$host:${port.value}")
+
+fun NatsContainer.newPublisher(customize: Options.Builder.() -> Unit = {}) = NatsPublisher.create(options = Options.builder().also(customize).server(host = host, port = clientPort).build())
 
 private class NatsPublisherAdapter(options: Options) : NatsPublisher {
 
