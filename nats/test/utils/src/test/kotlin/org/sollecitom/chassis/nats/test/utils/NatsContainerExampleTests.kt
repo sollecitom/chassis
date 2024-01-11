@@ -15,6 +15,8 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
+import org.sollecitom.chassis.core.domain.networking.Port
 import org.sollecitom.chassis.test.utils.assertions.containsSameMultipleEntriesAs
 import kotlin.time.Duration.Companion.seconds
 
@@ -67,6 +69,63 @@ private class NatsContainerExampleTests {
         assertThat(receivedMessage.subject).isEqualTo(subject)
         assertThat(String(receivedMessage.data)).isEqualTo(payload)
         assertThat(receivedMessage.headers.toMultiMap()).containsSameMultipleEntriesAs(headers)
+    }
+
+    @Test
+    fun `consuming and publishing messages`() = runTest(timeout = timeout) {
+
+        val options = Options.builder().server(nats.host, nats.clientPort).build()
+        val publishingConnection = Nats.connect(options) // TODO use connectAsynchronously with a connectionListener in the builder
+        val consumingConnection = Nats.connect(options) // TODO use connectAsynchronously with a connectionListener in the builder
+        val subject = "another-subject"
+        val payload = "hello world again"
+        val headers = buildMap {
+            put("header-key", buildList {
+                add("headerValue1")
+                add("headerValue2")
+            })
+        }
+
+        val receivedMessages = mutableListOf<Message>()
+        val receiving = CompletableDeferred<Unit>()
+        val handler = consumingConnection.createDispatcher { message ->
+
+            receivedMessages += message
+            receiving.complete(Unit)
+        }.subscribe(subject)
+        publishingConnection.publish(NatsMessage(subject, null, Headers().put(headers), payload.toByteArray()))
+        receiving.await()
+        handler.unsubscribe(subject)
+        consumingConnection.close()
+        publishingConnection.close()
+
+        assertThat(receivedMessages).hasSize(1)
+        val receivedMessage = receivedMessages.single()
+        assertThat(receivedMessage.subject).isEqualTo(subject)
+        assertThat(String(receivedMessage.data)).isEqualTo(payload)
+        assertThat(receivedMessage.headers.toMultiMap()).containsSameMultipleEntriesAs(headers)
+    }
+}
+
+interface NatsPublisher : Stoppable {
+
+    companion object
+}
+
+fun NatsPublisher.Companion.create(customize: Options.Builder.() -> Options.Builder): NatsPublisher {
+
+    val options = Options.builder().customize().build() // TODO use VirtualThreads
+    return NatsPublisherAdapter(options)
+}
+
+fun Options.Builder.server(host: String, port: Int) = server("nats://$host:$port")
+
+fun Options.Builder.server(host: String, port: Port) = server("nats://$host:${port.value}")
+
+private class NatsPublisherAdapter(options: Options) : NatsPublisher {
+
+    override suspend fun stop() {
+        TODO("Not yet implemented")
     }
 }
 
