@@ -74,8 +74,8 @@ private class NatsContainerExampleTests {
     @Test
     fun `consuming and publishing messages`() = runTest(timeout = timeout) {
 
-        val options = Options.builder().server(nats.host, nats.clientPort).build()
-        val publishingConnection = Nats.connect(options) // TODO use connectAsynchronously with a connectionListener in the builder
+        val options = Options.builder().server(host = nats.host, port = nats.clientPort).build()
+        val publisher = NatsPublisher.create { server(host = nats.host, port = nats.clientPort) }
         val consumingConnection = Nats.connect(options) // TODO use connectAsynchronously with a connectionListener in the builder
         val subject = "another-subject"
         val payload = "hello world again"
@@ -93,11 +93,10 @@ private class NatsContainerExampleTests {
             receivedMessages += message
             receiving.complete(Unit)
         }.subscribe(subject)
-        publishingConnection.publish(NatsMessage(subject, null, Headers().put(headers), payload.toByteArray()))
+        publisher.publish(NatsMessage(subject, null, Headers().put(headers), payload.toByteArray()))
         receiving.await()
         handler.unsubscribe(subject)
         consumingConnection.close()
-        publishingConnection.close()
 
         assertThat(receivedMessages).hasSize(1)
         val receivedMessage = receivedMessages.single()
@@ -109,14 +108,18 @@ private class NatsContainerExampleTests {
 
 interface NatsPublisher : Stoppable {
 
+    suspend fun publish(message: Message)
+
     companion object
 }
 
-fun NatsPublisher.Companion.create(customize: Options.Builder.() -> Options.Builder): NatsPublisher {
+fun NatsPublisher.Companion.create(customize: Options.Builder.() -> Unit = { }): NatsPublisher {
 
-    val options = Options.builder().customize().build() // TODO use VirtualThreads
+    val options = Options.builder().also(customize).build() // TODO use VirtualThreads
     return NatsPublisherAdapter(options)
 }
+
+fun NatsPublisher.Companion.create(options: Options): NatsPublisher = NatsPublisherAdapter(options)
 
 fun Options.Builder.server(host: String, port: Int) = server("nats://$host:$port")
 
@@ -124,9 +127,11 @@ fun Options.Builder.server(host: String, port: Port) = server("nats://$host:${po
 
 private class NatsPublisherAdapter(options: Options) : NatsPublisher {
 
-    override suspend fun stop() {
-        TODO("Not yet implemented")
-    }
+    private val connection by lazy { Nats.connect(options) }
+
+    override suspend fun publish(message: Message) = connection.publish(message)
+
+    override suspend fun stop() = connection.close()
 }
 
 private fun Headers.toMultiMap(): Map<String, List<String>> = entrySet().associate { it.key to it.value }
