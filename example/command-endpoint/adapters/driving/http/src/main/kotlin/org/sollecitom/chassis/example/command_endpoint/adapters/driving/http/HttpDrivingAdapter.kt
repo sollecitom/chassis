@@ -23,9 +23,6 @@ import org.sollecitom.chassis.web.api.utils.headers.of
 // TODO could this be common and shared?
 class HttpDrivingAdapter(private val application: Application, private val configuration: Configuration) : DrivingAdapter.WithPortBinding, HttpHandler {
 
-    // TODO use this instead of the other constructor, or remove it
-    constructor(application: Application, environment: Environment) : this(application, Configuration.from(environment))
-
     private val api = mainHttpApi(RegisterUser.httpCommandHandler)
     override val port: Port get() = api.port
 

@@ -17,8 +17,8 @@ plugins {
 }
 
 dependencies {
-    api(projects.chassisExampleCommandEndpointAdaptersDrivingHttp)
-    api(projects.chassisExampleCommandEndpointAdaptersDrivenUserRepository)
+    api(projects.chassisExampleCommandEndpointAdaptersDrivingHttp) // TODO should the adapters be api or implementation here?
+    api(projects.chassisExampleCommandEndpointAdaptersDrivenPulsarNatsCommandPublisher)
     implementation(projects.chassisExampleCommandEndpointConfiguration)
     implementation(projects.chassisKotlinExtensions)
     implementation(projects.chassisWebServiceDomain)

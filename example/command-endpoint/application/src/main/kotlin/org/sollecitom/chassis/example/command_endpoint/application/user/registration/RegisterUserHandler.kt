@@ -6,11 +6,7 @@ import org.sollecitom.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.ddd.application.dispatching.CommandHandler
-import org.sollecitom.chassis.ddd.domain.CommandWasReceived
-import org.sollecitom.chassis.ddd.domain.GenericCommandWasReceived
-import org.sollecitom.chassis.ddd.domain.wasReceived
-import org.sollecitom.chassis.ddd.domain.CommandResultSubscriber
-import org.sollecitom.chassis.ddd.domain.ReceivedCommandPublisher
+import org.sollecitom.chassis.ddd.domain.*
 
 class RegisterUserHandler(private val receivedCommandPublisher: ReceivedCommandPublisher<RegisterUser, Access>, private val commandResultSubscriber: CommandResultSubscriber<RegisterUser, RegisterUser.Result, Access>, private val uniqueIdGenerator: UniqueIdGenerator, private val timeGenerator: TimeGenerator) : CommandHandler<RegisterUser, RegisterUser.Result, Access>, UniqueIdGenerator by uniqueIdGenerator, TimeGenerator by timeGenerator {
 
@@ -30,4 +26,9 @@ class RegisterUserHandler(private val receivedCommandPublisher: ReceivedCommandP
 
     context(InvocationContext<Access>)
     private suspend fun GenericCommandWasReceived<RegisterUser>.publish() = receivedCommandPublisher.publish(this)
+
+    companion object
 }
+
+context(TimeGenerator, UniqueIdGenerator)
+operator fun RegisterUserHandler.Companion.invoke(receivedCommandPublisher: ReceivedCommandPublisher<RegisterUser, Access>, commandResultSubscriber: CommandResultSubscriber<RegisterUser, RegisterUser.Result, Access>) = RegisterUserHandler(receivedCommandPublisher = receivedCommandPublisher, commandResultSubscriber = commandResultSubscriber, uniqueIdGenerator = this@UniqueIdGenerator, timeGenerator = this@TimeGenerator)

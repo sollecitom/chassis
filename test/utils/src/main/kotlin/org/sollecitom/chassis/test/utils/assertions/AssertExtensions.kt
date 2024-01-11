@@ -26,6 +26,14 @@ fun <KEY, VALUE> Assert<Map<KEY, VALUE>>.containsSameEntriesAs(other: Map<KEY, V
     assertThat(actual.entries).containsSameElementsAs(other.entries)
 }
 
+inline fun <KEY, reified VALUE> Assert<Map<KEY, List<VALUE>>>.containsSameMultipleEntriesAs(other: Map<KEY, List<VALUE>>) = given { actual ->
+
+    assertThat(actual.size).isEqualTo(other.size)
+    actual.entries.forEach { entry ->
+        assertThat(entry.value).containsSameElementsAs(other[entry.key]!!)
+    }
+}
+
 inline fun <reified ERROR : Throwable> Assert<Throwable>.ofType() = given { actual ->
 
     assertThat(actual).isInstanceOf(ERROR::class)
@@ -45,7 +53,7 @@ fun <RESULT : Any> Assert<Result<RESULT>>.succeededWithResult(expected: RESULT) 
 inline fun <reified ERROR : Throwable> Assert<Result<*>>.failedThrowing(): Assert<ERROR> = transform { actual ->
 
     assertThat(actual).isFailure()
-    actual.exceptionOrNull() ?.takeIf { ERROR::class.isInstance(it) }?.let { it as ERROR } ?: expected("failure of type ${ERROR::class} but was:${show(actual.exceptionOrNull())}")
+    actual.exceptionOrNull()?.takeIf { ERROR::class.isInstance(it) }?.let { it as ERROR } ?: expected("failure of type ${ERROR::class} but was:${show(actual.exceptionOrNull())}")
 }
 
 inline fun <reified ELEMENT> Assert<Collection<ELEMENT>>.containsExactlyInAnyOrder(other: Collection<ELEMENT>) = given { actual ->

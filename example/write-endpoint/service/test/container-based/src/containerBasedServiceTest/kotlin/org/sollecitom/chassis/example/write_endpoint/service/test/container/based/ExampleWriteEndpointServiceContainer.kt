@@ -3,15 +3,12 @@ package org.sollecitom.chassis.example.write_endpoint.service.test.container.bas
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.networking.Port
 import org.sollecitom.chassis.core.utils.UniqueIdGenerator
-import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.HEALTH_PORT
+import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties
 import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.INSTANCE_GROUP_MAX_SIZE
 import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.INSTANCE_ID
 import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.PULSAR_BROKER_URI
 import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.PULSAR_CONSUMER_INSTANCE_ID
 import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.PULSAR_TOPIC
-import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.SERVICE_OCI_IMAGE_NAME
-import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.SERVICE_OCI_IMAGE_REPOSITORY
-import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.SERVICE_PORT
 import org.sollecitom.chassis.example.write_endpoint.configuration.ServiceProperties.SERVICE_STARTED_LOG_MESSAGE
 import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration.Properties.LOGGING_LEVEL_ENV_VARIABLE
 import org.sollecitom.chassis.logging.standard.configuration.StandardLoggingConfiguration.Properties.LOGGING_LEVEL_OVERRIDES_ENV_VARIABLE
@@ -32,10 +29,10 @@ fun newExampleWriteEndpointServiceContainer(pulsarTopic: PulsarTopic, pulsar: Pu
     val loggingArguments = mapOf(LOGGING_LEVEL_ENV_VARIABLE to "INFO", LOGGING_LEVEL_OVERRIDES_ENV_VARIABLE to "org.eclipse.jetty=WARN,org.apache.hc=WARN")
 
     val webArguments = mapOf(
-        SERVICE_PORT to "$servicePort"
+        ServiceProperties.SERVICE_PORT to "$servicePort"
     )
     val healthArguments = mapOf(
-        HEALTH_PORT to "$healthPort"
+        ServiceProperties.HEALTH_PORT to "$healthPort"
     )
     val pulsarBrokerUrl = "pulsar://${pulsar.networkAlias}:${PulsarContainer.BROKER_PORT}"
     val pulsarArguments = mapOf(
@@ -58,6 +55,10 @@ class ExampleWriteEndpointServiceContainer(private val servicePort: Int, private
     override val webInterface by lazy { WebInterface.create(host, getMappedPort(servicePort).let(::Port), getMappedPort(healthPort).let(::Port)) }
 
     companion object {
+
+        private const val SERVICE_OCI_IMAGE_NAME = "example-write-endpoint:snapshot"
+        private const val SERVICE_OCI_IMAGE_REPOSITORY = "ghcr.io/sollecitom-chassis/"
+
         val imageName: DockerImageName = DockerImageName.parse("$SERVICE_OCI_IMAGE_REPOSITORY$SERVICE_OCI_IMAGE_NAME")
     }
 }
