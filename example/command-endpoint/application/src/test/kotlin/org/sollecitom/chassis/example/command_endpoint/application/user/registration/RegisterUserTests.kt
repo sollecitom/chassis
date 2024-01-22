@@ -16,8 +16,11 @@ import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticate
 import org.sollecitom.chassis.ddd.application.dispatching.CommandHandler
 import org.sollecitom.chassis.ddd.domain.CommandWasReceived
 import org.sollecitom.chassis.ddd.test.utils.InMemoryCommandProcessor
-import org.sollecitom.chassis.example.command_endpoint.application.user.registration.RegisterUser.Result.Accepted
-import org.sollecitom.chassis.example.command_endpoint.application.user.registration.RegisterUser.Result.Rejected.EmailAddressAlreadyInUse
+import org.sollecitom.chassis.example.command_endpoint.domain.user.registration.RegisterUser
+import org.sollecitom.chassis.example.command_endpoint.domain.user.registration.RegisterUser.Result.Accepted
+import org.sollecitom.chassis.example.command_endpoint.domain.user.registration.RegisterUser.Result.Rejected.EmailAddressAlreadyInUse
+import org.sollecitom.chassis.example.command_endpoint.domain.user.registration.User
+import org.sollecitom.chassis.example.command_endpoint.domain.user.registration.UserWithPendingRegistration
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 private class RegisterUserTests : CoreDataGenerator by CoreDataGenerator.testProvider {

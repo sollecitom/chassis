@@ -7,6 +7,7 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.ddd.application.dispatching.CommandHandler
 import org.sollecitom.chassis.ddd.domain.*
+import org.sollecitom.chassis.example.command_endpoint.domain.user.registration.RegisterUser
 
 class RegisterUserHandler(private val receivedCommandPublisher: ReceivedCommandPublisher<RegisterUser, Access>, private val commandResultSubscriber: CommandResultSubscriber<RegisterUser, RegisterUser.Result, Access>, private val uniqueIdGenerator: UniqueIdGenerator, private val timeGenerator: TimeGenerator) : CommandHandler<RegisterUser, RegisterUser.Result, Access>, UniqueIdGenerator by uniqueIdGenerator, TimeGenerator by timeGenerator {
 

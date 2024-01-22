@@ -2,8 +2,8 @@ package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.us
 
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.email.EmailAddress
-import org.sollecitom.chassis.example.command_endpoint.application.user.registration.RegisterUser
-import org.sollecitom.chassis.example.command_endpoint.application.user.registration.UserWithPendingRegistration
+import org.sollecitom.chassis.example.command_endpoint.domain.user.registration.RegisterUser
+import org.sollecitom.chassis.example.command_endpoint.domain.user.registration.UserWithPendingRegistration
 import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.serde.JsonSerde

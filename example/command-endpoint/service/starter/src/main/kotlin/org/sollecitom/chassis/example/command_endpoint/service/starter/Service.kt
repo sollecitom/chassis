@@ -7,13 +7,10 @@ import org.http4k.lens.string
 import org.sollecitom.chassis.core.domain.networking.Port
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.provider
-import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.application.dispatching.invoke
-import org.sollecitom.chassis.ddd.domain.CommandResultSubscriber
-import org.sollecitom.chassis.ddd.domain.ReceivedCommandPublisher
+import org.sollecitom.chassis.example.command_endpoint.adapters.driven.pulsar.nats.command.publisher.PulsarNatsCommandPublisher
 import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.HttpDrivingAdapter
-import org.sollecitom.chassis.example.command_endpoint.application.user.registration.RegisterUser
 import org.sollecitom.chassis.example.command_endpoint.application.user.registration.RegisterUserHandler
 import org.sollecitom.chassis.example.command_endpoint.application.user.registration.invoke
 import org.sollecitom.chassis.example.command_endpoint.configuration.ServiceProperties
@@ -29,10 +26,8 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
 
     constructor(environment: Environment) : this(environment, CoreDataGenerator.provider(environment))
 
-    //    private val userRepositoryDrivenAdapter: DrivenAdapter<UserRepository> = UserRepositoryDrivenAdapter.create(environment)
-    private val receivedCommandPublisher: ReceivedCommandPublisher<RegisterUser, Access> = TODO("implement")
-    private val commandResultSubscriber: CommandResultSubscriber<RegisterUser, RegisterUser.Result, Access> = TODO("implement")
-    private val registerUserHandler = RegisterUserHandler(receivedCommandPublisher, commandResultSubscriber)
+    private val commandPublisher = PulsarNatsCommandPublisher()
+    private val registerUserHandler = RegisterUserHandler(commandPublisher, commandPublisher)
     private val application: Application = Application(registerUserHandler)
     private val httpDrivingAdapter = HttpDrivingAdapter(application, HttpDrivingAdapter.Configuration.from(environment))
     private val healthHttpDrivingAdapter = HealthHttpDrivingAdapter(environment)
@@ -42,7 +37,7 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
     override val webInterface by lazy { WebInterface.local(port, healthPort) }
 
     override suspend fun start() {
-//        userRepositoryDrivenAdapter.start()
+        commandPublisher.start()
         httpDrivingAdapter.start()
         healthHttpDrivingAdapter.start()
         logger.info { ServiceProperties.SERVICE_STARTED_LOG_MESSAGE }
@@ -51,7 +46,7 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
     override suspend fun stop() {
         healthHttpDrivingAdapter.stop()
         httpDrivingAdapter.stop()
-//        userRepositoryDrivenAdapter.stop()
+        commandPublisher.stop()
         logger.info { ServiceProperties.SERVICE_STOPPED_LOG_MESSAGE }
     }
 
@@ -60,7 +55,7 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
         val topicKey: BiDiLens<Environment, *> = EnvironmentKey.string().required("pulsar.topic")
 
         //        val topicKey = EnvironmentKey.topic().required("pulsar.topic")
-        val instanceIdKey: BiDiLens<Environment, *> = EnvironmentKey.id().required("pulsar.consumer.instance.id") // TODO remove this
+        val instanceIdKey: BiDiLens<Environment, *> = EnvironmentKey.id().required("pulsar.consumer.instance.id") // TODO remove this, and replace it with the instance.id top-level property
     }
 
     companion object : Loggable()
