@@ -46,7 +46,7 @@ interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestS
     val pulsarClient: PulsarClient
     val pulsarAdmin: PulsarAdmin
     val topic: PulsarTopic
-    override val timeout: Duration get() = 30.seconds
+    override val timeout: Duration get() = 10.seconds
 
     fun specificationBeforeAll() {
         pulsar.start()

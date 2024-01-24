@@ -24,17 +24,17 @@ import org.sollecitom.chassis.web.service.domain.WebService
 // TODO finish
 class Service(private val environment: Environment, coreDataGenerators: CoreDataGenerator) : WebService, CoreDataGenerator by coreDataGenerators {
 
-    constructor(environment: Environment) : this(environment, CoreDataGenerator.provider(environment))
+    constructor(environment: Environment) : this(environment = environment, coreDataGenerators = CoreDataGenerator.provider(environment))
 
-    private val commandPublisher = PulsarNatsCommandPublisher()
-    private val registerUserHandler = RegisterUserHandler(commandPublisher, commandPublisher)
+    private val commandPublisher = PulsarNatsCommandPublisher(configuration = PulsarNatsCommandPublisher.Configuration.from(environment))
+    private val registerUserHandler = RegisterUserHandler(receivedCommandPublisher = commandPublisher, commandResultSubscriber = commandPublisher)
     private val application: Application = Application(registerUserHandler)
-    private val httpDrivingAdapter = HttpDrivingAdapter(application, HttpDrivingAdapter.Configuration.from(environment))
-    private val healthHttpDrivingAdapter = HealthHttpDrivingAdapter(environment)
+    private val httpDrivingAdapter = HttpDrivingAdapter(application = application, configuration = HttpDrivingAdapter.Configuration.from(environment))
+    private val healthHttpDrivingAdapter = HealthHttpDrivingAdapter(environment = environment)
 
     private val port: Port get() = httpDrivingAdapter.port
     private val healthPort: Port get() = healthHttpDrivingAdapter.port
-    override val webInterface by lazy { WebInterface.local(port, healthPort) }
+    override val webInterface by lazy { WebInterface.local(port = port, healthPort = healthPort) }
 
     override suspend fun start() {
         commandPublisher.start()
@@ -56,6 +56,11 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
 
         //        val topicKey = EnvironmentKey.topic().required("pulsar.topic")
         val instanceIdKey: BiDiLens<Environment, *> = EnvironmentKey.id().required("pulsar.consumer.instance.id") // TODO remove this, and replace it with the instance.id top-level property
+    }
+
+    private fun PulsarNatsCommandPublisher.Configuration.Companion.from(environment: Environment): PulsarNatsCommandPublisher.Configuration {
+
+        TODO("implement")
     }
 
     companion object : Loggable()

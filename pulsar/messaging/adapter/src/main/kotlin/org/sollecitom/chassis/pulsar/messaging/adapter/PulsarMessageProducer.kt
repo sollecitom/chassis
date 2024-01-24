@@ -1,6 +1,10 @@
 package org.sollecitom.chassis.pulsar.messaging.adapter
 
 import org.apache.pulsar.client.api.Producer
+import org.apache.pulsar.client.api.ProducerBuilder
+import org.apache.pulsar.client.api.PulsarClient
+import org.apache.pulsar.client.api.Schema
+import org.sollecitom.chassis.core.domain.identity.InstanceInfo
 import org.sollecitom.chassis.core.domain.lifecycle.stopBlocking
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.kotlin.extensions.async.await
@@ -23,3 +27,5 @@ internal class PulsarMessageProducer<in VALUE>(override val topic: Topic, initia
 }
 
 fun <VALUE> pulsarMessageProducer(topic: Topic, initializeProducer: (Topic) -> Producer<VALUE>): MessageProducer<VALUE> = PulsarMessageProducer(topic, initializeProducer)
+
+fun <VALUE> PulsarClient.messageProducer(topic: Topic, schema: Schema<VALUE>, instanceInfo: InstanceInfo, customize: ProducerBuilder<VALUE>.() -> ProducerBuilder<VALUE> = { this }) = pulsarMessageProducer(topic) { newProducer(schema).topic(it).producerName("${instanceInfo.groupName.value}-producer-${instanceInfo.id}").customize().create() }
