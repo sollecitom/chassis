@@ -2,21 +2,24 @@ package org.sollecitom.chassis.example.command_endpoint.service.starter
 
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
-import org.http4k.lens.BiDiLens
-import org.http4k.lens.string
+import org.sollecitom.chassis.configuration.utils.instanceGroupMaxSize
+import org.sollecitom.chassis.configuration.utils.instanceGroupName
+import org.sollecitom.chassis.configuration.utils.instanceId
+import org.sollecitom.chassis.configuration.utils.instanceInfo
 import org.sollecitom.chassis.core.domain.networking.Port
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.application.dispatching.invoke
-import org.sollecitom.chassis.example.command_endpoint.adapters.driven.pulsar.nats.command.publisher.PulsarNatsCommandPublisher
+import org.sollecitom.chassis.example.command_endpoint.adapters.driven.pulsar.nats.command.publisher.ResultAwareCommandPublisher
+import org.sollecitom.chassis.example.command_endpoint.adapters.driven.pulsar.nats.command.publisher.commandPublisher
 import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.HttpDrivingAdapter
 import org.sollecitom.chassis.example.command_endpoint.application.user.registration.RegisterUserHandler
 import org.sollecitom.chassis.example.command_endpoint.application.user.registration.invoke
 import org.sollecitom.chassis.example.command_endpoint.configuration.ServiceProperties
 import org.sollecitom.chassis.lens.core.extensions.base.javaURI
-import org.sollecitom.chassis.lens.core.extensions.identity.id
 import org.sollecitom.chassis.logger.core.loggable.Loggable
+import org.sollecitom.chassis.messaging.configuration.utils.topic
 import org.sollecitom.chassis.web.api.utils.api.HealthHttpDrivingAdapter
 import org.sollecitom.chassis.web.service.domain.WebInterface
 import org.sollecitom.chassis.web.service.domain.WebService
@@ -26,7 +29,7 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
 
     constructor(environment: Environment) : this(environment = environment, coreDataGenerators = CoreDataGenerator.provider(environment))
 
-    private val commandPublisher = PulsarNatsCommandPublisher(configuration = PulsarNatsCommandPublisher.Configuration.from(environment))
+    private val commandPublisher = commandPublisher(configuration = ResultAwareCommandPublisher.Configuration.from(environment))
     private val registerUserHandler = RegisterUserHandler(receivedCommandPublisher = commandPublisher, commandResultSubscriber = commandPublisher)
     private val application: Application = Application(registerUserHandler)
     private val httpDrivingAdapter = HttpDrivingAdapter(application = application, configuration = HttpDrivingAdapter.Configuration.from(environment))
@@ -51,16 +54,19 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
     }
 
     object Configuration {
-        val pulsarBrokerURIKey: BiDiLens<Environment, *> = EnvironmentKey.javaURI().required("pulsar.broker.uri")
-        val topicKey: BiDiLens<Environment, *> = EnvironmentKey.string().required("pulsar.topic")
-
-        //        val topicKey = EnvironmentKey.topic().required("pulsar.topic")
-        val instanceIdKey: BiDiLens<Environment, *> = EnvironmentKey.id().required("pulsar.consumer.instance.id") // TODO remove this, and replace it with the instance.id top-level property
+        val pulsarBrokerURIKey = EnvironmentKey.javaURI().required("pulsar.broker.uri")
+        val topicKey = EnvironmentKey.topic().required("pulsar.topic")
+        val instanceIdKey = EnvironmentKey.instanceId
+        val instancesGroupMaxSize = EnvironmentKey.instanceGroupMaxSize
+        val instanceGroupName = EnvironmentKey.instanceGroupName
     }
 
-    private fun PulsarNatsCommandPublisher.Configuration.Companion.from(environment: Environment): PulsarNatsCommandPublisher.Configuration {
+    private fun ResultAwareCommandPublisher.Configuration.Companion.from(environment: Environment): ResultAwareCommandPublisher.Configuration {
 
-        TODO("implement")
+        val pulsarBrokerURI = Configuration.pulsarBrokerURIKey(environment)
+        val topic = Configuration.topicKey(environment)
+        val instanceInfo = environment.instanceInfo()
+        return ResultAwareCommandPublisher.Configuration(pulsarBrokerURI = pulsarBrokerURI, topic = topic, instanceInfo = instanceInfo)
     }
 
     companion object : Loggable()

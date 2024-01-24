@@ -9,9 +9,9 @@ import org.sollecitom.chassis.ddd.domain.CommandResultSubscriber
 import org.sollecitom.chassis.ddd.domain.CommandWasReceived
 import org.sollecitom.chassis.ddd.domain.ReceivedCommandPublisher
 
-class InMemoryCommandProcessor<in COMMAND : Command<RESULT, ACCESS>, out RESULT : Any, out ACCESS : Access>(private val process: suspend context(InvocationContext<ACCESS>)(CommandWasReceived<COMMAND>) -> RESULT) : ReceivedCommandPublisher<COMMAND, ACCESS>, CommandResultSubscriber<COMMAND, RESULT, ACCESS> {
+class InMemoryCommandProcessor<in COMMAND : Command<RESULT, ACCESS>, out RESULT : Any, out ACCESS : Access>(private val process: suspend context(InvocationContext<ACCESS>)(CommandWasReceived<COMMAND>) -> RESULT) : ReceivedCommandPublisher<COMMAND, ACCESS>, CommandResultSubscriber {
 
-    private val results = mutableMapOf<CommandWasReceived<COMMAND>, CompletableDeferred<RESULT>>()
+    private val results = mutableMapOf<CommandWasReceived<*>, CompletableDeferred<Any>>()
 
     context(InvocationContext<ACCESS>)
     override suspend fun publish(event: CommandWasReceived<COMMAND>) {
@@ -21,10 +21,11 @@ class InMemoryCommandProcessor<in COMMAND : Command<RESULT, ACCESS>, out RESULT 
     }
 
     context(InvocationContext<ACCESS>)
-    override fun resultForCommand(event: CommandWasReceived<COMMAND>): Deferred<RESULT> {
+    @Suppress("UNCHECKED_CAST")
+    override fun <COMMAND : Command<R, ACCESS>, R : Any, ACCESS : Access> resultForCommand(event: CommandWasReceived<COMMAND>): Deferred<R> {
 
-        val result = CompletableDeferred<RESULT>()
+        val result = CompletableDeferred<Any>()
         results[event] = result
-        return result
+        return result as Deferred<R> // TODO revisit this, as it's not type-safe this way
     }
 }

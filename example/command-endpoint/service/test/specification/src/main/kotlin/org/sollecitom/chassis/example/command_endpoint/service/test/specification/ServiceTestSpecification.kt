@@ -18,10 +18,11 @@ import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
-import org.sollecitom.chassis.ddd.domain.Event
+import org.sollecitom.chassis.ddd.domain.Command
+import org.sollecitom.chassis.ddd.domain.CommandWasReceived
 import org.sollecitom.chassis.ddd.test.utils.hasInvocationContext
 import org.sollecitom.chassis.ddd.test.utils.isOriginating
-import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
+import org.sollecitom.chassis.example.event.domain.user.registration.RegisterUser
 import org.sollecitom.chassis.example.event.serialization.json.jsonSerde
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.invoke
@@ -72,9 +73,12 @@ interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestS
         val response = responseInFlight.await()
 
         assertThat(response.status).isEqualTo(Status.ACCEPTED)
-        assertThat(message.value).isInstanceOf<UserRegistrationRequestWasSubmitted>()
+        assertThat(message.value).isInstanceOf<CommandWasReceived<RegisterUser>>()
         assertThat(message.value).hasInvocationContext(invocationContext)
         assertThat(message.value).isOriginating()
+        assertThat(message.value.command).isInstanceOf<RegisterUser>()
+        val receivedCommand = message.value.command as RegisterUser
+        assertThat(receivedCommand.emailAddress).isEqualTo(emailAddress)
     }
 
     companion object : HttpApiDefinition {
@@ -87,7 +91,7 @@ private class StubbedRegisterUserProcessor(topic: PulsarTopic, pulsarClient: Pul
 
     private val consumer = pulsarClient.newConsumer(schema).topics(topic).subscriptionName("a subscription").subscribe()
 
-    suspend fun awaitProcessedMessage(): Message<Event> {
+    suspend fun awaitProcessedMessage(): Message<CommandWasReceived<Command<*, *>>> {
 
         val message = consumer.consume()
         // TODO publish the result to the NATS topic
@@ -95,6 +99,6 @@ private class StubbedRegisterUserProcessor(topic: PulsarTopic, pulsarClient: Pul
     }
 
     companion object {
-        private val schema = Event.jsonSerde.asPulsarSchema()
+        private val schema = CommandWasReceived.jsonSerde.asPulsarSchema()
     }
 }

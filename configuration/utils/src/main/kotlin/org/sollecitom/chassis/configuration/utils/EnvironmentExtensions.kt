@@ -44,7 +44,7 @@ fun Environment.Companion.fromYaml(input: InputStream): Environment {
     return MapEnvironment.from(map.flatten().toMap().toProperties())
 }
 
-fun Environment.instanceInfo(): InstanceInfo = InstanceInfo(EnvironmentKey.instanceId(this), EnvironmentKey.instancesGroupMaxSize(this), EnvironmentKey.instanceGroupName(this))
+fun Environment.instanceInfo(): InstanceInfo = InstanceInfo(EnvironmentKey.instanceId(this), EnvironmentKey.instanceGroupMaxSize(this), EnvironmentKey.instanceGroupName(this))
 
 fun Environment.Companion.fromFiles(files: List<File>): Environment = files.map { Environment.fromYaml(it) }.foldRight(EMPTY) { item, accumulator -> item overrides accumulator }
 

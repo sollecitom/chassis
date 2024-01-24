@@ -4,7 +4,7 @@
   "additionalProperties": false,
   "allOf": [
     {
-      "$ref": "/ddd/event/Event.json"
+      "$ref": "/ddd/command/Command.json"
     }
   ],
   "required": [
@@ -16,7 +16,7 @@
       "$ref": "/core/identity/Id.json"
     },
     "entity-type": {
-      "$ref": "/ddd/happening/HappeningType.json"
+      "$ref": "/core/identity/Id.json"
     }
   }
 }

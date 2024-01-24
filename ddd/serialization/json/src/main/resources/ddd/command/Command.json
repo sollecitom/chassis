@@ -2,20 +2,11 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "additionalProperties": false,
-  "allOf": [
-    {
-      "$ref": "/ddd/event/Event.json"
-    }
-  ],
   "required": [
-    "entity-id",
-    "entity-type"
+    "type"
   ],
   "properties": {
-    "entity-id": {
-      "$ref": "/core/identity/Id.json"
-    },
-    "entity-type": {
+    "type": {
       "$ref": "/ddd/happening/HappeningType.json"
     }
   }

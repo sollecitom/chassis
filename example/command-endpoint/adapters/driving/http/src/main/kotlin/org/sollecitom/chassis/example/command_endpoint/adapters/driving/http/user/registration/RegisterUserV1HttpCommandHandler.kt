@@ -3,7 +3,7 @@ package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.us
 import org.http4k.core.Body
 import org.http4k.core.Response
 import org.http4k.core.Status
-import org.sollecitom.chassis.example.command_endpoint.domain.user.registration.RegisterUser
+import org.sollecitom.chassis.example.event.domain.user.registration.RegisterUser
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.jsonObject
 import org.sollecitom.chassis.http4k.utils.lens.map

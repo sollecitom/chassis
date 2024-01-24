@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "type"
+  ],
+  "allOf": [
+    {
+      "$ref": "/ddd/command/Command.json"
+    }
+  ],
+  "properties": {
+    "type": {
+      "$ref": "/example/event/domain/user/registration/RegisterUserCommandType.json"
+    },
+    "id": {},
+    "timestamp": {},
+    "context": {},
+    "email-address": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

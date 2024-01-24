@@ -13,7 +13,7 @@ private val instanceIdKey = EnvironmentKey.int().required("instance.id", "The se
 val EnvironmentKey.instanceId get() = instanceIdKey
 
 private val instancesGroupMaxSizeKey = EnvironmentKey.int().required("instance.group.max.size", "The maximum instances count. Minimum is 256. Used to generate TSIDs.")
-val EnvironmentKey.instancesGroupMaxSize get() = instancesGroupMaxSizeKey
+val EnvironmentKey.instanceGroupMaxSize get() = instancesGroupMaxSizeKey
 
 private val instanceGroupNameKey = EnvironmentKey.name().required("instance.group.name", "The name of the instance group. Basically, the service name.")
 val EnvironmentKey.instanceGroupName get() = instanceGroupNameKey

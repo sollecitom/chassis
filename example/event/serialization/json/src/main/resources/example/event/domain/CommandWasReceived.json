@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "type"
+  ],
+  "allOf": [
+    {
+      "$ref": "/ddd/event/Event.json"
+    }
+  ],
+  "properties": {
+    "type": {
+      "$ref": "/example/event/domain/CommandWasReceivedType.json"
+    },
+    "command-type": {
+      "$ref": "/example/event/domain/CommandWasReceivedType.json"
+    },
+    "command": {
+      "$ref": "/example/event/domain/Command.json"
+    }
+  }
+}

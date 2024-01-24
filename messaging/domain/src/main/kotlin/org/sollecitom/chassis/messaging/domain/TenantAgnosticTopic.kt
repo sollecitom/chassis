@@ -10,4 +10,8 @@ data class TenantAgnosticTopic(val name: Name) {
     }
 
     fun withoutTenant(persistent: Boolean = true) = Topic.of(persistent = persistent, namespace = null, name = name)
+
+    companion object
 }
+
+fun TenantAgnosticTopic.Companion.parse(value: String) = TenantAgnosticTopic(Name(value))

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "type"
+  ],
+  "allOf": [
+    {
+      "$ref": "/ddd/command/Command.json"
+    }
+  ],
+  "properties": {
+    "type": {}
+  },
+  "oneOf": [
+    {
+      "$ref": "/example/event/domain/user/registration/RegisterUserCommand.json"
+    }
+  ]
+}

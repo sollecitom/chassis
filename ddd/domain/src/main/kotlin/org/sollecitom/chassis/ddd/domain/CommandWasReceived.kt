@@ -12,6 +12,6 @@ sealed class CommandWasReceived<out COMMAND : Command<*, *>>(val command: COMMAN
     override val type get() = Companion.type
 
     companion object {
-        private val type = Happening.Type("command-was-received".let(::Name), 1.let(::IntVersion))
+        val type = Happening.Type("command-was-received".let(::Name), 1.let(::IntVersion))
     }
 }

@@ -19,9 +19,9 @@ import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticate
 import org.sollecitom.chassis.correlation.logging.test.utils.haveContext
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.domain.Command
-import org.sollecitom.chassis.example.command_endpoint.domain.user.registration.RegisterUser
-import org.sollecitom.chassis.example.command_endpoint.domain.user.registration.User
-import org.sollecitom.chassis.example.command_endpoint.domain.user.registration.UserWithPendingRegistration
+import org.sollecitom.chassis.example.event.domain.user.registration.RegisterUser
+import org.sollecitom.chassis.example.event.domain.user.registration.User
+import org.sollecitom.chassis.example.event.domain.user.registration.UserWithPendingRegistration
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.contentLength
 import org.sollecitom.chassis.http4k.utils.lens.contentType

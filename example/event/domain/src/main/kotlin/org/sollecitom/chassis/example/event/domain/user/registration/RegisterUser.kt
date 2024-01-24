@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.command_endpoint.domain.user.registration
+package org.sollecitom.chassis.example.event.domain.user.registration
 
 import org.sollecitom.chassis.core.domain.email.EmailAddress
 import org.sollecitom.chassis.core.domain.naming.Name
@@ -7,6 +7,7 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.Happening
 
+// TODO add tenant to it
 data class RegisterUser(val emailAddress: EmailAddress) : Command<RegisterUser.Result, Access> {
 
     override val requiresAuthentication get() = false

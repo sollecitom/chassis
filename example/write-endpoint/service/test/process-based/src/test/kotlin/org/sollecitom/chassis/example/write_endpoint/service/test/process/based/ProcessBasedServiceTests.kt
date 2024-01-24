@@ -10,7 +10,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.configuration.utils.from
 import org.sollecitom.chassis.configuration.utils.instanceGroupName
 import org.sollecitom.chassis.configuration.utils.instanceId
-import org.sollecitom.chassis.configuration.utils.instancesGroupMaxSize
+import org.sollecitom.chassis.configuration.utils.instanceGroupMaxSize
 import org.sollecitom.chassis.core.domain.lifecycle.startBlocking
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
@@ -48,7 +48,7 @@ private class ProcessBasedServiceTests : ServiceTestSpecification, CoreDataGener
                 UserRepositoryDrivenAdapter.Configuration.instanceIdKey to newId.internal().stringValue,
         )
     }
-    private val serviceConfig = mapOf(EnvironmentKey.instanceId to "0", EnvironmentKey.instancesGroupMaxSize to "256", EnvironmentKey.instanceGroupName to "example-write-endpoint")
+    private val serviceConfig = mapOf(EnvironmentKey.instanceId to "0", EnvironmentKey.instanceGroupMaxSize to "256", EnvironmentKey.instanceGroupName to "example-write-endpoint")
     private val environment by lazy { Environment.from(drivingAdapterConfig + healthDrivingAdapterConfig + drivenAdapterConfig + serviceConfig) }
     override val service by lazy { Service(environment) }
     override val httpClient = ApacheAsyncClient()
