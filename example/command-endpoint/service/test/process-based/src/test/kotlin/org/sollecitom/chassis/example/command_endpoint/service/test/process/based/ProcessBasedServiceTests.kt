@@ -8,9 +8,9 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.configuration.utils.from
+import org.sollecitom.chassis.configuration.utils.instanceGroupMaxSize
 import org.sollecitom.chassis.configuration.utils.instanceGroupName
 import org.sollecitom.chassis.configuration.utils.instanceId
-import org.sollecitom.chassis.configuration.utils.instanceGroupMaxSize
 import org.sollecitom.chassis.core.domain.lifecycle.startBlocking
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
@@ -43,9 +43,11 @@ private class ProcessBasedServiceTests : ServiceTestSpecification, CoreDataGener
     private val healthDrivingAdapterConfig = mapOf(EnvironmentKey.healthPort to "0")
     private val drivenAdapterConfig by lazy {
         mapOf(
-            Service.Configuration.pulsarBrokerURIKey to pulsar.pulsarBrokerUrl,
-            Service.Configuration.topicKey to topic.fullName.value,
-            Service.Configuration.instanceIdKey to newId.internal().stringValue,
+                Service.Configuration.pulsarBrokerURIKey to pulsar.pulsarBrokerUrl,
+                Service.Configuration.topicKey to topic.fullName.value,
+                Service.Configuration.instanceIdKey to "1",
+                Service.Configuration.instanceGroupName to "example-command-endpoint", // TODO externalize this and replace in the whole project
+                Service.Configuration.instancesGroupMaxSize to "256",
         )
     }
     private val serviceConfig = mapOf(EnvironmentKey.instanceId to "0", EnvironmentKey.instanceGroupMaxSize to "256", EnvironmentKey.instanceGroupName to "example-write-endpoint")

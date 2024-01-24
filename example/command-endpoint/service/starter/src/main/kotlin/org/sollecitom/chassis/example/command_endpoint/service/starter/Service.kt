@@ -56,9 +56,9 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
     object Configuration {
         val pulsarBrokerURIKey = EnvironmentKey.javaURI().required("pulsar.broker.uri")
         val topicKey = EnvironmentKey.topic().required("pulsar.topic")
-        val instanceIdKey = EnvironmentKey.instanceId
-        val instancesGroupMaxSize = EnvironmentKey.instanceGroupMaxSize
-        val instanceGroupName = EnvironmentKey.instanceGroupName
+        val instanceIdKey get() = EnvironmentKey.instanceId
+        val instancesGroupMaxSize get() = EnvironmentKey.instanceGroupMaxSize
+        val instanceGroupName get() = EnvironmentKey.instanceGroupName
     }
 
     private fun ResultAwareCommandPublisher.Configuration.Companion.from(environment: Environment): ResultAwareCommandPublisher.Configuration {
