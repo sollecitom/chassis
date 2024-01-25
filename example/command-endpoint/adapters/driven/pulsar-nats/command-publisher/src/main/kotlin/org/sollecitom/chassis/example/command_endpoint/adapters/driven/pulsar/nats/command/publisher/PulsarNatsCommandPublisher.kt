@@ -74,8 +74,9 @@ internal class PulsarNatsCommandPublisher(private val brokerURI: URI, private va
     override fun <COMMAND : Command<RESULT, ACCESS>, RESULT : Any, ACCESS : Access> resultForCommand(event: CommandWasReceived<COMMAND>): Deferred<RESULT> {
 
         val deferred = CompletableDeferred<RESULT>()
+        //  TODO connect to NATS
         scope.launch {
-            // TODO connect to NATS, parse the result, and complete the deferred
+            // TODO receive from NATS, parse the result, and complete the deferred
             delay(3000)
             val result = RegisterUser.Result.Accepted(user = UserWithPendingRegistration(StringId("something")))
             deferred.complete(result as RESULT)
