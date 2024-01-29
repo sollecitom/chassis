@@ -97,7 +97,7 @@ interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestS
 
 private class StubbedRegisterUserProcessor(topic: Topic, pulsarClient: PulsarClient) {
 
-    private val consumer = pulsarClient.newConsumer(schema).topics(topic).subscriptionName("a subscription").subscribe()
+    private val consumer = pulsarClient.newConsumer(schema).topics(topic).subscriptionName("a-subscription").subscribe()
 
     suspend fun awaitProcessedMessage(): Message<CommandWasReceived<Command<*, *>>> {
 
