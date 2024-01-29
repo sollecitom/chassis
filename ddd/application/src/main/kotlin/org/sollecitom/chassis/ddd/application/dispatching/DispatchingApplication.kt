@@ -12,13 +12,14 @@ private class DispatchingApplication(handlers: Set<CommandHandler<*, *, *>>) : A
     private val handlerByType = handlers.associateBy(CommandHandler<*, *, *>::commandType)
 
     context(InvocationContext<ACCESS>)
-    @Suppress("UNCHECKED_CAST")
     override suspend fun <RESULT, ACCESS : Access> invoke(command: Command<RESULT, ACCESS>): RESULT {
 
-
-        val handler = handlerByType[command.type]?.let { it as CommandHandler<Command<RESULT, ACCESS>, RESULT, ACCESS> } ?: error("No handler for command with type ${command.type}. This should never happen.")
+        val handler = handlerFor(command)
         return with(this@InvocationContext) { handler.process(command) }
     }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun <ACCESS : Access, RESULT> handlerFor(command: Command<RESULT, ACCESS>) = handlerByType[command.type]?.let { it as CommandHandler<Command<RESULT, ACCESS>, RESULT, ACCESS> } ?: error("No handler for command with type ${command.type}. This should never happen.")
 
     companion object : Loggable()
 }

@@ -53,6 +53,7 @@ private class DispatchingApplicationTests : CoreDataGenerator by CoreDataGenerat
 private class SomeCommandHandler(private val stubbedResult: SomeCommand.Result) : CommandHandler<SomeCommand, SomeCommand.Result, Access.Unauthenticated> {
 
     override val commandType: Happening.Type get() = SomeCommand.type
+
     private lateinit var capturedCommand: SomeCommand
     private lateinit var capturedInvocationContext: InvocationContext<Access.Unauthenticated>
 
@@ -70,7 +71,7 @@ private class SomeCommandHandler(private val stubbedResult: SomeCommand.Result) 
 
 private data class SomeCommand(val intensity: Int) : Command<SomeCommand.Result, Access.Unauthenticated> {
 
-    override val requiresAuthentication = false
+    override val accessRequirements get() = Command.AccessRequirements.None
     override val type: Happening.Type get() = Companion.type
 
     sealed interface Result {

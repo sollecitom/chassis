@@ -44,7 +44,7 @@ components:
       explode: false
       schema:
         $ref: '/correlation/context/InvocationContext.json'
-        # Move to a file?
+        # TODO Move to a file
         example: { "trace": { "originating": { "created-at": "2023-08-30T10:51:33.917751Z","id": { "type": "ulid","value": "01H9313XJP07FCQT6QTJVR79RW" } },"parent": { "created-at": "2023-08-30T10:51:34.917751Z","id": { "type": "ulid","value": "01H9313XJP07FCQT6QTJVR79RX" } },"invocation": { "created-at": "2023-08-30T10:51:36.917751Z","id": { "type": "ulid","value": "01H9313XJP07FCQT6QTJVR79RY" } },"external": { "action-id": { "type": "string","value": "01H9313XJP07FCQT6QTJVR79RV" },"invocation-id": { "type": "string","value": "01H9313XJP07FCQT6QTJVR79RT" } } },"access": { "authorization": { "roles": { "values": [ ] } },"origin": { "ip-address": "127.0.0.1" },"type": "unauthenticated" } }
     contentLength:
       name: content-length
@@ -123,3 +123,13 @@ components:
       description: A dependent service is not responding.
     UnexpectedError:
       description: Something went wrong unexpectedly.
+      content:
+        text/plain:
+          schema:
+            type: string
+          example: "Something went wrong on the server"
+      headers:
+        content-type:
+          $ref: '#/components/headers/contentType'
+        content-length:
+          $ref: '#/components/headers/contentLength'

@@ -4,6 +4,7 @@ import org.http4k.core.Method
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.UNAUTHORIZED
+import org.http4k.core.Status.Companion.UNPROCESSABLE_ENTITY
 import org.http4k.lens.Path
 import org.http4k.lens.int
 import org.http4k.routing.bind
@@ -11,7 +12,9 @@ import org.http4k.routing.routes
 import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.correlation.logging.utils.log
 import org.sollecitom.chassis.ddd.application.Application
+import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.Happening
+import org.sollecitom.chassis.ddd.domain.ifInvalid
 import org.sollecitom.chassis.http4k.utils.lens.composite
 import org.sollecitom.chassis.lens.core.extensions.naming.name
 import org.sollecitom.chassis.logger.core.loggable.Loggable
@@ -23,24 +26,26 @@ class CommandsEndpoint(private val application: Application, handlers: Set<HttpC
     override val path = "/commands/{$COMMAND_TYPE_PATH_PARAM}/v{$COMMAND_TYPE_VERSION_PATH_PARAM}"
     override val methods = setOf(Method.POST)
 
-    override val route = routes(
-        acceptCommand()
-    )
+    override val route = routes(acceptCommand())
 
     private fun acceptCommand() = path bind Method.POST toWithInvocationContext { request ->
 
         val commandType = commandType(request)
         logger.log { "Received command with type $commandType" }
 
-        val handler = handlerByType[commandType] ?: return@toWithInvocationContext commandType.unknown()
-        val command = handler.parseCommand(request).takeUnless { it.requiresAuthentication && !access.isAuthenticated } ?: return@toWithInvocationContext commandType.unauthenticated()
+        val handler = handlerByType[commandType] ?: return@toWithInvocationContext unknown(commandType)
+        val command = handler.parseCommand(request)
+        command.accessRequirements.check(this@toWithInvocationContext).ifInvalid { return@toWithInvocationContext it.toResponse(commandType) }
         val result = application(command)
         handler.convertToResponse(result)
     }
 
-    private fun Happening.Type.unknown() = Response(BAD_REQUEST.description("Command type with name: ${name.value} and version: ${version.value} is unknown")) // TODO create a function for this (maybe)
+    private fun Command.AccessRequirements.Result.Invalid.toResponse(type: Happening.Type): Response = when (this) {
+        Command.AccessRequirements.Result.Invalid.Authenticated -> Response(UNPROCESSABLE_ENTITY.description("Command type with name: ${type.name.value} and version: ${type.version.value} is only available with unauthenticated access")) // TODO create a function for this (maybe)
+        Command.AccessRequirements.Result.Invalid.Unauthenticated -> Response(UNAUTHORIZED.description("Command type with name: ${type.name.value} and version: ${type.version.value} requires authentication")) // TODO create a function for this (maybe)
+    }
 
-    private fun Happening.Type.unauthenticated() = Response(UNAUTHORIZED.description("Command type with name: ${name.value} and version: ${version.value} requires authentication")) // TODO create a function for this (maybe)
+    private fun unknown(type: Happening.Type) = Response(BAD_REQUEST.description("Command type with name: ${type.name.value} and version: ${type.version.value} is unknown")) // TODO create a function for this (maybe)
 
     companion object : Loggable() {
 

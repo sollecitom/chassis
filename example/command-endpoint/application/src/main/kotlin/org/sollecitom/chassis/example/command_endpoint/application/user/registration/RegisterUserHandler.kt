@@ -16,6 +16,7 @@ class RegisterUserHandler(private val receivedCommandPublisher: ReceivedCommandP
     context(InvocationContext<Access>)
     override suspend fun process(command: RegisterUser): RegisterUser.Result = coroutineScope {
 
+        if (access.isAuthenticated) error("Access should be un authenticated")
         val event = command.wasReceived()
         val result = event.deferredResult()
         event.publish()

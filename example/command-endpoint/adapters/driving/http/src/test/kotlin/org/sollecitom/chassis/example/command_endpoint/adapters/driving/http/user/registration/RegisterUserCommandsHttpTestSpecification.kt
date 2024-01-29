@@ -15,6 +15,7 @@ import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
 import org.sollecitom.chassis.correlation.core.domain.toggles.standard.invocation.visibility.InvocationVisibility
 import org.sollecitom.chassis.correlation.core.domain.toggles.withToggle
+import org.sollecitom.chassis.correlation.core.test.utils.context.authenticated
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.correlation.logging.test.utils.haveContext
 import org.sollecitom.chassis.ddd.application.Application
@@ -66,7 +67,23 @@ interface RegisterUserCommandsHttpTestSpecification : CoreDataGenerator, WithHtt
         val response = api(request)
 
         assertThat(response).compliesWithOpenApiForRequest(request)
-        assertThat(response.status).isEqualTo(Status.UNPROCESSABLE_ENTITY) // TODO change to OK
+        assertThat(response.status).isEqualTo(Status.UNPROCESSABLE_ENTITY) // TODO change to OK and check the payload for errors
+    }
+
+    @Test
+    fun `attempting to submit a register user command with authenticated access`() {
+
+        val api = httpDrivingAdapter()
+        val commandType = RegisterUser.type
+        val json = registerUserPayload("bruce@waynecorp.com".let(::EmailAddress))
+        val invocationContext = InvocationContext.authenticated()
+        val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
+        request.ensureCompliantWithOpenApi()
+
+        val response = api(request)
+
+        assertThat(response).compliesWithOpenApiForRequest(request)
+        assertThat(response.status).isEqualTo(Status.UNPROCESSABLE_ENTITY)
     }
 
     @Test
@@ -82,7 +99,7 @@ interface RegisterUserCommandsHttpTestSpecification : CoreDataGenerator, WithHtt
         val response = api(request)
 
         assertThat(response).compliesWithOpenApiForRequest(request)
-        assertThat(response.status).isEqualTo(Status.BAD_REQUEST) // TODO change to OK or UNPROCESSABLE_ENTITY
+        assertThat(response.status).isEqualTo(Status.BAD_REQUEST) // TODO change to OK or UNPROCESSABLE_ENTITY and check the payload for errors
     }
 
     @Test
@@ -114,7 +131,7 @@ interface RegisterUserCommandsHttpTestSpecification : CoreDataGenerator, WithHtt
         val response = api(request)
 
         assertThat(response).doesNotComplyWithOpenApiForRequest(request, ValidationReportError.Request.UnknownPath)
-        assertThat(response.status).isEqualTo(Status.BAD_REQUEST) // TODO change to OK
+        assertThat(response.status).isEqualTo(Status.BAD_REQUEST) // TODO change to OK and check the payload for errors
     }
 
     private fun registerUserPayload(emailAddress: EmailAddress) = registerUserPayload(emailAddress.value)

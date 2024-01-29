@@ -11,8 +11,7 @@ import org.sollecitom.chassis.ddd.domain.Happening
 sealed interface RegisterUser<RESULT> : Command<RESULT, Access.Unauthenticated> {
 
     val emailAddress: EmailAddress
-
-    override val requiresAuthentication get() = false
+    override val accessRequirements get() = Command.AccessRequirements.None
 
     companion object {
         val typeName = "register-user".let(::Name)

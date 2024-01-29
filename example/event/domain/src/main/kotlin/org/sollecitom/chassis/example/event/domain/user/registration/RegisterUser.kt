@@ -8,9 +8,9 @@ import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.Happening
 
 // TODO add tenant to it
-data class RegisterUser(val emailAddress: EmailAddress) : Command<RegisterUser.Result, Access> {
+data class RegisterUser(val emailAddress: EmailAddress) : Command<RegisterUser.Result, Access.Unauthenticated> {
 
-    override val requiresAuthentication get() = false
+    override val accessRequirements get() = Command.AccessRequirements.UnauthenticatedAccessOnly
     override val type: Happening.Type get() = Companion.type
 
     override fun toString() = "RegisterUser(emailAddress=${emailAddress.value}, type=${type.name.value}, version=${version.value})"
