@@ -19,7 +19,7 @@ import org.sollecitom.chassis.example.command_endpoint.application.user.registra
 import org.sollecitom.chassis.example.command_endpoint.configuration.ServiceProperties
 import org.sollecitom.chassis.lens.core.extensions.base.javaURI
 import org.sollecitom.chassis.logger.core.loggable.Loggable
-import org.sollecitom.chassis.messaging.configuration.utils.topic
+import org.sollecitom.chassis.messaging.configuration.utils.tenantAgnosticTopic
 import org.sollecitom.chassis.web.api.utils.api.HealthHttpDrivingAdapter
 import org.sollecitom.chassis.web.service.domain.WebInterface
 import org.sollecitom.chassis.web.service.domain.WebService
@@ -55,7 +55,7 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
 
     object Configuration {
         val pulsarBrokerURIKey = EnvironmentKey.javaURI().required("pulsar.broker.uri")
-        val topicKey = EnvironmentKey.topic().required("pulsar.topic")
+        val topicKey = EnvironmentKey.tenantAgnosticTopic().required("pulsar.topic.name")
         val instanceIdKey get() = EnvironmentKey.instanceId
         val instancesGroupMaxSize get() = EnvironmentKey.instanceGroupMaxSize
         val instanceGroupName get() = EnvironmentKey.instanceGroupName

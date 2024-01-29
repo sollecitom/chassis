@@ -6,6 +6,7 @@ import org.apache.pulsar.client.api.Schema
 import org.sollecitom.chassis.core.domain.identity.InstanceInfo
 import org.sollecitom.chassis.core.domain.lifecycle.Startable
 import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
+import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.messaging.domain.Message
 import org.sollecitom.chassis.messaging.domain.MessageStream
 import org.sollecitom.chassis.messaging.domain.ReceivedMessage
@@ -19,7 +20,7 @@ internal class PulsarMessageStream<VALUE>(private val instanceInfo: InstanceInfo
 
     override val messages: Flow<ReceivedMessage<VALUE>> get() = consumer.messages
 
-    override suspend fun publish(message: Message<VALUE>) = producer.produce(message)
+    override suspend fun publish(message: Message<VALUE>) = producer.produce(message, topic)
 
     override suspend fun start() {
 
@@ -33,9 +34,9 @@ internal class PulsarMessageStream<VALUE>(private val instanceInfo: InstanceInfo
         consumer.stop()
     }
 
-    private fun PulsarClient.messageProducer(instanceInfo: InstanceInfo) = pulsarMessageProducer(topic) { newProducer(schema).topic(it).producerName("${instanceInfo.groupName.value}-producer-${instanceInfo.id}").create() }
+    private fun PulsarClient.messageProducer(instanceInfo: InstanceInfo) = pulsarMessageProducer(name = "${instanceInfo.groupName.value}-producer-${instanceInfo.id}".let(::Name)) { newProducer(schema).topic(it) }
 
-    private fun PulsarClient.messageConsumer(instanceInfo: InstanceInfo) = pulsarMessageConsumer(topic) { newConsumer(schema).topics(it).consumerName("${instanceInfo.groupName.value}-consumer-${instanceInfo.id}").subscriptionName(instanceInfo.groupName.value).subscribe() }
+    private fun PulsarClient.messageConsumer(instanceInfo: InstanceInfo) = pulsarMessageConsumer(topic = topic) { newConsumer(schema).topics(it).consumerName("${instanceInfo.groupName.value}-consumer-${instanceInfo.id}").subscriptionName(instanceInfo.groupName.value).subscribe() }
 }
 
 fun <VALUE> MessageStream.Companion.pulsar(instanceInfo: InstanceInfo, topic: Topic, schema: Schema<VALUE>, clientSupplier: () -> PulsarClient): MessageStream<VALUE> = PulsarMessageStream(instanceInfo, topic, schema, clientSupplier)

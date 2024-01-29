@@ -11,4 +11,6 @@ fun <IN : Any> BiDiLensSpec<IN, String>.topic() = map(StringBiDiMappings.topic()
 
 fun StringBiDiMappings.topic() = BiDiMapping(Topic::parse) { it.fullName.value }
 
+fun <IN : Any> BiDiLensSpec<IN, String>.tenantAgnosticTopic() = map(StringBiDiMappings.tenantAgnosticTopic())
+
 fun StringBiDiMappings.tenantAgnosticTopic() = BiDiMapping(TenantAgnosticTopic.Companion::parse) { it.name.value }

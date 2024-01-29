@@ -8,8 +8,11 @@ import org.sollecitom.chassis.core.domain.identity.InstanceInfo
 import org.sollecitom.chassis.core.domain.identity.StringId
 import org.sollecitom.chassis.core.domain.lifecycle.Startable
 import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
+import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import org.sollecitom.chassis.correlation.core.domain.context.targetTenant
+import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 import org.sollecitom.chassis.correlation.logging.utils.log
 import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.CommandResultSubscriber
@@ -21,7 +24,7 @@ import org.sollecitom.chassis.example.event.serialization.json.jsonSerde
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.messaging.domain.Message
 import org.sollecitom.chassis.messaging.domain.OutboundMessage
-import org.sollecitom.chassis.messaging.domain.Topic
+import org.sollecitom.chassis.messaging.domain.TenantAgnosticTopic
 import org.sollecitom.chassis.pulsar.json.serialization.asPulsarSchema
 import org.sollecitom.chassis.pulsar.messaging.adapter.messageProducer
 import org.sollecitom.chassis.pulsar.utils.brokerURI
@@ -34,7 +37,7 @@ fun commandPublisher(configuration: ResultAwareCommandPublisher.Configuration): 
 
 interface ResultAwareCommandPublisher : ReceivedCommandPublisher<Command<*, *>, Access>, CommandResultSubscriber, Startable, Stoppable {
 
-    data class Configuration(val pulsarBrokerURI: URI, val topic: Topic, val instanceInfo: InstanceInfo) {
+    data class Configuration(val pulsarBrokerURI: URI, val topic: TenantAgnosticTopic, val instanceInfo: InstanceInfo) {
 
         companion object
     }
@@ -43,17 +46,13 @@ interface ResultAwareCommandPublisher : ReceivedCommandPublisher<Command<*, *>, 
 }
 
 // TODO make this re-usable, and move it
-internal class PulsarNatsCommandPublisher(private val brokerURI: URI, private val topic: Topic, private val instanceInfo: InstanceInfo, private val schema: Schema<CommandWasReceived<*>>, private val scope: CoroutineScope = CoroutineScope(SupervisorJob()), private val customize: ClientBuilder.() -> ClientBuilder = { this }) : ResultAwareCommandPublisher {
+internal class PulsarNatsCommandPublisher(private val brokerURI: URI, private val topic: TenantAgnosticTopic, private val instanceInfo: InstanceInfo, private val schema: Schema<CommandWasReceived<*>>, private val scope: CoroutineScope = CoroutineScope(SupervisorJob()), private val customize: ClientBuilder.() -> ClientBuilder = { this }) : ResultAwareCommandPublisher {
 
     private val pulsarClient: PulsarClient by lazy { PulsarClient.builder().customize().brokerURI(brokerURI).build() }
 
-    // TODO use a map of producers, one per tenant
-    private val messageProducer by lazy { pulsarClient.messageProducer(topic, schema, instanceInfo) }
+    private val messageProducer by lazy { pulsarClient.messageProducer(instanceInfo, schema) }
 
-    override suspend fun start() {
-
-        messageProducer.start()
-    }
+    override suspend fun start() = messageProducer.start()
 
     override suspend fun stop() {
 
@@ -65,7 +64,7 @@ internal class PulsarNatsCommandPublisher(private val brokerURI: URI, private va
     override suspend fun publish(event: CommandWasReceived<Command<*, *>>) {
 
         val message = event.asOutboundMessage()
-        val messageId = messageProducer.produce(message) // TODO look up producer by tenant `this@InvocationContext.access.authenticatedOrNull()?.actor?.account?.tenant`
+        val messageId = messageProducer.produce(message, topic.withTenant(targetTenant))
         logger.log { "Produced received command with type ${event.command.type} with message ID $messageId" }
     }
 
@@ -89,6 +88,8 @@ internal class PulsarNatsCommandPublisher(private val brokerURI: URI, private va
         // TODO use the email address as key, and populate the properties - use a MessageConverter for this
         return OutboundMessage(key = "", value = this, properties = emptyMap(), context = Message.Context())
     }
+
+    private fun TenantAgnosticTopic.withTenant(tenant: Tenant) = withTenant(tenant.id.stringValue.let(::Name))
 
     companion object : Loggable()
 }

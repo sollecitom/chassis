@@ -32,3 +32,5 @@ sealed interface Actor {
 }
 
 val Actor.Account.localeOrNull: Locale? get() = if (this is Actor.UserAccount) locale else null
+
+val Actor.tenant: Tenant get() = account.tenant

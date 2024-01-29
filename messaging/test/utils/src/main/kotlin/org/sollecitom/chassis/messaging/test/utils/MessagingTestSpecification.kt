@@ -27,12 +27,12 @@ interface MessagingTestSpecification : CoreDataGenerator { // TODO add Avro test
 
         val producedMessages = mutableListOf<Message<String>>()
         val originatingMessage = OutboundMessage("key-0", "value-0", emptyMap(), Message.Context())
-        val originatingMessageId = producer.produce(originatingMessage).also { producedMessages += originatingMessage }
+        val originatingMessageId = producer.produce(originatingMessage, topic).also { producedMessages += originatingMessage }
         var parentMessageId = originatingMessageId
         val messagesCount = 5
         (1..<messagesCount).forEach { index ->
             val message = OutboundMessage("key-$index", "value-$index", emptyMap(), Message.Context(parentMessageId = parentMessageId, originatingMessageId = originatingMessageId))
-            parentMessageId = producer.produce(message).also { producedMessages += message }
+            parentMessageId = producer.produce(message, topic).also { producedMessages += message }
         }
 
         val receivedMessages = consumer.messages.take(messagesCount).toList()

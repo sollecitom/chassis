@@ -11,21 +11,25 @@ import org.sollecitom.chassis.kotlin.extensions.async.await
 import org.sollecitom.chassis.messaging.domain.Message
 import org.sollecitom.chassis.messaging.domain.MessageProducer
 import org.sollecitom.chassis.messaging.domain.Topic
+import java.util.concurrent.ConcurrentHashMap
 
-internal class PulsarMessageProducer<in VALUE>(override val topic: Topic, initializeProducer: (Topic) -> Producer<VALUE>) : MessageProducer<VALUE> {
+internal class PulsarMessageProducer<in VALUE>(override val name: Name, private val initializeProducer: (Topic) -> ProducerBuilder<VALUE>) : MessageProducer<VALUE> {
 
-    private val producer by lazy { initializeProducer(topic) }
-    override val name by lazy { Name(producer.producerName) }
+    private val producers = ConcurrentHashMap<Topic, Producer<VALUE>>()
 
-    override suspend fun produce(message: Message<VALUE>) = producer.produce(message)
+    override suspend fun produce(message: Message<VALUE>, topic: Topic) = topic.producer.produce(message)
 
-    override suspend fun start() = check(producer.isConnected) { "Producer is not connected!" }
+    override suspend fun start() {}
 
-    override suspend fun stop() = producer.closeAsync().await()
+    override suspend fun stop() = producers.values.forEach { it.closeAsync().await() }
 
     override fun close() = stopBlocking()
+
+    private val Topic.producer: Producer<VALUE> get() = producers.computeIfAbsent(this) { topic -> initializeProducer(topic).producerName(this@PulsarMessageProducer.name.value).create() }
 }
 
-fun <VALUE> pulsarMessageProducer(topic: Topic, initializeProducer: (Topic) -> Producer<VALUE>): MessageProducer<VALUE> = PulsarMessageProducer(topic, initializeProducer)
+fun <VALUE> pulsarMessageProducer(name: Name, initializeProducer: (Topic) -> ProducerBuilder<VALUE>): MessageProducer<VALUE> = PulsarMessageProducer(name, initializeProducer)
 
-fun <VALUE> PulsarClient.messageProducer(topic: Topic, schema: Schema<VALUE>, instanceInfo: InstanceInfo, customize: ProducerBuilder<VALUE>.() -> ProducerBuilder<VALUE> = { this }) = pulsarMessageProducer(topic) { newProducer(schema).topic(it).producerName("${instanceInfo.groupName.value}-producer-${instanceInfo.id}").customize().create() }
+fun <VALUE> PulsarClient.messageProducer(name: Name, schema: Schema<VALUE>, customize: ProducerBuilder<VALUE>.() -> ProducerBuilder<VALUE> = { this }) = pulsarMessageProducer(name) { newProducer(schema).topic(it).customize() }
+
+fun <VALUE> PulsarClient.messageProducer(instanceInfo: InstanceInfo, schema: Schema<VALUE>, customize: ProducerBuilder<VALUE>.() -> ProducerBuilder<VALUE> = { this }) = messageProducer(name = "${instanceInfo.groupName.value}-producer-${instanceInfo.id}".let(::Name), schema, customize)

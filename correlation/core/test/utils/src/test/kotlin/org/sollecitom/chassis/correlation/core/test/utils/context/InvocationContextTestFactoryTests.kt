@@ -91,7 +91,7 @@ private class InvocationContextTestFactoryTests : CoreDataGenerator by CoreDataG
         val trace = Trace.create(externalInvocationTrace = ExternalInvocationTrace.create(invocationId = invocationId))
         val access = Access.authenticated(actor = Actor.direct(account = Actor.Account.user(id = actorId, tenant = Tenant(id = tenantId))))
         val toggles = Toggles.create()
-        val context = InvocationContext(access = access, trace = trace, toggles = toggles)
+        val context = InvocationContext(access = access, trace = trace, toggles = toggles, specifiedTargetTenant = null)
 
         val idempotency = context.idempotency
 

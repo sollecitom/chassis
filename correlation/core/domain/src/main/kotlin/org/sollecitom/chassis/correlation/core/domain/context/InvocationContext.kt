@@ -3,12 +3,14 @@ package org.sollecitom.chassis.correlation.core.domain.context
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
+import org.sollecitom.chassis.correlation.core.domain.access.tenantOrNull
 import org.sollecitom.chassis.correlation.core.domain.idempotency.IdempotencyContext
+import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
 import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
 
-data class InvocationContext<out ACCESS : Access>(val access: ACCESS, val trace: Trace, val toggles: Toggles) {
+data class InvocationContext<out ACCESS : Access>(val access: ACCESS, val trace: Trace, val toggles: Toggles, val specifiedTargetTenant: Tenant?) {
 
     val idempotency: IdempotencyContext = IdempotencyContext(access.idempotencyNamespace, trace.idempotencyKey)
 
@@ -16,6 +18,10 @@ data class InvocationContext<out ACCESS : Access>(val access: ACCESS, val trace:
 
     companion object
 }
+
+val <ACCESS : Access> InvocationContext<ACCESS>.targetTenantOrNull: Tenant? get() = specifiedTargetTenant ?: access.tenantOrNull
+val <ACCESS : Access> InvocationContext<ACCESS>.targetTenant: Tenant get() = targetTenantOrNull ?: error("Expected target tenant not to be null")
+
 
 private val Trace.idempotencyKey: Name get() = external.invocationId.stringValue.let(::Name)
 

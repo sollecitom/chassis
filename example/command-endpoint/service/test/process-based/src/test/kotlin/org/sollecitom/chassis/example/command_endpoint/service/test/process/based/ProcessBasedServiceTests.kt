@@ -12,6 +12,8 @@ import org.sollecitom.chassis.configuration.utils.instanceGroupMaxSize
 import org.sollecitom.chassis.configuration.utils.instanceGroupName
 import org.sollecitom.chassis.configuration.utils.instanceId
 import org.sollecitom.chassis.core.domain.lifecycle.startBlocking
+import org.sollecitom.chassis.core.domain.naming.Name
+import org.sollecitom.chassis.core.test.utils.random
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.example.command_endpoint.service.starter.Service
@@ -20,7 +22,7 @@ import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.logging.standard.configuration.configureLogging
-import org.sollecitom.chassis.messaging.domain.Topic
+import org.sollecitom.chassis.messaging.domain.TenantAgnosticTopic
 import org.sollecitom.chassis.messaging.test.utils.create
 import org.sollecitom.chassis.pulsar.test.utils.admin
 import org.sollecitom.chassis.pulsar.test.utils.client
@@ -37,7 +39,8 @@ private class ProcessBasedServiceTests : ServiceTestSpecification, CoreDataGener
     override val pulsar = newPulsarContainer()
     override val pulsarClient by lazy { pulsar.client() }
     override val pulsarAdmin by lazy { pulsar.admin() }
-    override val topic = Topic.create()
+    override val topic = TenantAgnosticTopic.create()
+    override val tenantName = Name.random()
 
     private val drivingAdapterConfig = mapOf(EnvironmentKey.servicePort to "0")
     private val healthDrivingAdapterConfig = mapOf(EnvironmentKey.healthPort to "0")

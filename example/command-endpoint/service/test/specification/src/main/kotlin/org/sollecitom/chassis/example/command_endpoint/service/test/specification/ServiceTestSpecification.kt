@@ -15,8 +15,11 @@ import org.http4k.core.Status
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.sollecitom.chassis.core.domain.email.EmailAddress
+import org.sollecitom.chassis.core.domain.identity.StringId
+import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.CommandWasReceived
@@ -26,6 +29,7 @@ import org.sollecitom.chassis.example.event.domain.user.registration.RegisterUse
 import org.sollecitom.chassis.example.event.serialization.json.jsonSerde
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.invoke
+import org.sollecitom.chassis.messaging.domain.TenantAgnosticTopic
 import org.sollecitom.chassis.messaging.domain.Topic
 import org.sollecitom.chassis.pulsar.json.serialization.asPulsarSchema
 import org.sollecitom.chassis.pulsar.messaing.test.utils.ensureTopicExists
@@ -46,12 +50,14 @@ interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestS
     val pulsar: PulsarContainer
     val pulsarClient: PulsarClient
     val pulsarAdmin: PulsarAdmin
-    val topic: Topic
+    val topic: TenantAgnosticTopic
+    val tenantName: Name
+    val topicWithTenant: Topic get() = topic.withTenant(tenantName)
     override val timeout: Duration get() = 10.seconds
 
     fun specificationBeforeAll() {
         pulsar.start()
-        pulsarAdmin.ensureTopicExists(topic = topic, isAllowAutoUpdateSchema = true)
+        pulsarAdmin.ensureTopicExists(topic = topicWithTenant, isAllowAutoUpdateSchema = true)
     }
 
     fun specificationAfterAll() {
@@ -63,11 +69,11 @@ interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestS
 
         val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
         val json = JSONObject().put("email", JSONObject().put("address", emailAddress.value))
-        val invocationContext = InvocationContext.unauthenticated()
+        val invocationContext = InvocationContext.unauthenticated(specifiedTargetTenant = { tenantName.asTenant() })
 
         val request = Request(Method.POST, service.httpURLWithPath("commands/register-user/v1")).body(json).withInvocationContext(invocationContext)
 
-        val downstreamProcessor = StubbedRegisterUserProcessor(topic, pulsarClient)
+        val downstreamProcessor = StubbedRegisterUserProcessor(topicWithTenant, pulsarClient)
         val responseInFlight = async(start = UNDISPATCHED) { httpClient(request) }
         val message = downstreamProcessor.awaitProcessedMessage()
         val response = responseInFlight.await()
@@ -80,6 +86,8 @@ interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestS
         val receivedCommand = message.value.command as RegisterUser
         assertThat(receivedCommand.emailAddress).isEqualTo(emailAddress)
     }
+
+    private fun Name.asTenant() = Tenant(id = StringId(value))
 
     companion object : HttpApiDefinition {
 

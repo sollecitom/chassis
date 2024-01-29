@@ -15,6 +15,9 @@
     },
     "toggles": {
       "$ref": "/correlation/toggles/Toggles.json"
+    },
+    "specified-target-tenant": {
+      "$ref": "/correlation/tenancy/Tenant.json"
     }
   }
 }

@@ -3,15 +3,15 @@ package org.sollecitom.chassis.correlation.core.serialization.json.context
 import org.json.JSONObject
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace
 import org.sollecitom.chassis.correlation.core.serialization.json.access.jsonSerde
+import org.sollecitom.chassis.correlation.core.serialization.json.tenancy.jsonSerde
 import org.sollecitom.chassis.correlation.core.serialization.json.toggles.jsonSerde
 import org.sollecitom.chassis.correlation.core.serialization.json.trace.jsonSerde
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
-import org.sollecitom.chassis.json.utils.serde.JsonSerde
-import org.sollecitom.chassis.json.utils.serde.getValue
-import org.sollecitom.chassis.json.utils.serde.setValue
+import org.sollecitom.chassis.json.utils.serde.*
 
 private object InvocationContextJsonSerde : JsonSerde.SchemaAware<InvocationContext<*>> {
 
@@ -22,6 +22,7 @@ private object InvocationContextJsonSerde : JsonSerde.SchemaAware<InvocationCont
         setValue(Fields.ACCESS, value.access, Access.jsonSerde)
         setValue(Fields.TRACE, value.trace, Trace.jsonSerde)
         setValue(Fields.TOGGLES, value.toggles, Toggles.jsonSerde)
+        setValueOrNull(Fields.SPECIFIED_TARGET_TENANT, value.specifiedTargetTenant, Tenant.jsonSerde)
     }
 
     override fun deserialize(json: JSONObject): InvocationContext<*> {
@@ -29,13 +30,15 @@ private object InvocationContextJsonSerde : JsonSerde.SchemaAware<InvocationCont
         val access = json.getValue(Fields.ACCESS, Access.jsonSerde)
         val trace = json.getValue(Fields.TRACE, Trace.jsonSerde)
         val toggles = json.getValue(Fields.TOGGLES, Toggles.jsonSerde)
-        return InvocationContext(access = access, trace = trace, toggles = toggles)
+        val tenant = json.getValueOrNull(Fields.SPECIFIED_TARGET_TENANT, Tenant.jsonSerde)
+        return InvocationContext(access = access, trace = trace, toggles = toggles, specifiedTargetTenant = tenant)
     }
 
     private object Fields {
         const val ACCESS = "access"
         const val TRACE = "trace"
         const val TOGGLES = "toggles"
+        const val SPECIFIED_TARGET_TENANT = "specified-target-tenant"
     }
 }
 

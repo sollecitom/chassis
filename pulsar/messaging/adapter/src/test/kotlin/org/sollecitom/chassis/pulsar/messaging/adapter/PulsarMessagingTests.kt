@@ -6,6 +6,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.logger.core.LoggingLevel
@@ -41,7 +42,7 @@ private class PulsarMessagingTests : MessagingTestSpecification, CoreDataGenerat
 
     override fun newTopic(): Topic = Topic.create().also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) }
 
-    override fun newMessageProducer(topic: Topic, name: String): MessageProducer<String> = pulsarMessageProducer(topic) { pulsarClient.newProducer(Schema.STRING).topic(it).producerName(name).create() }
+    override fun newMessageProducer(topic: Topic, name: String): MessageProducer<String> = pulsarMessageProducer(name.let(::Name)) { pulsarClient.newProducer(Schema.STRING).topic(it) }
 
     override fun newMessageConsumer(topics: Set<Topic>, subscriptionName: String, name: String): MessageConsumer<String> = pulsarMessageConsumer(topics) { pulsarClient.newConsumer(Schema.STRING).topics(it).subscriptionName(subscriptionName).subscriptionInitialPosition(SubscriptionInitialPosition.Earliest).consumerName(name).subscribe() }
 }
