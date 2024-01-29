@@ -24,9 +24,7 @@ import org.sollecitom.chassis.messaging.domain.Topic
 import org.sollecitom.chassis.messaging.test.utils.create
 import org.sollecitom.chassis.pulsar.test.utils.admin
 import org.sollecitom.chassis.pulsar.test.utils.client
-import org.sollecitom.chassis.pulsar.test.utils.create
 import org.sollecitom.chassis.pulsar.test.utils.newPulsarContainer
-import org.sollecitom.chassis.pulsar.utils.PulsarTopic
 
 //@Disabled // TODO re-enable
 @TestInstance(PER_CLASS)
