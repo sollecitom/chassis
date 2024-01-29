@@ -6,7 +6,6 @@ import org.http4k.lens.StringBiDiMappings
 import org.http4k.lens.map
 import org.sollecitom.chassis.messaging.domain.TenantAgnosticTopic
 import org.sollecitom.chassis.messaging.domain.Topic
-import org.sollecitom.chassis.messaging.domain.parse
 
 fun <IN : Any> BiDiLensSpec<IN, String>.topic() = map(StringBiDiMappings.topic())
 

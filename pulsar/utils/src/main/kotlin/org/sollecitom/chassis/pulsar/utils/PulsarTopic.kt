@@ -3,6 +3,7 @@ package org.sollecitom.chassis.pulsar.utils
 import org.sollecitom.chassis.core.domain.naming.Name
 import java.util.regex.Pattern
 
+// TODO remove
 sealed class PulsarTopic(val persistent: Boolean, val namespace: Namespace?, val name: Name) {
 
     val protocol: Name get() = if (persistent) Persistent.protocol else NonPersistent.protocol

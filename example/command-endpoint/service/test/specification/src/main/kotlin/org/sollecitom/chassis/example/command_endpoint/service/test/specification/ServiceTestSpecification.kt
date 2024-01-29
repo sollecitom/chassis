@@ -26,11 +26,11 @@ import org.sollecitom.chassis.example.event.domain.user.registration.RegisterUse
 import org.sollecitom.chassis.example.event.serialization.json.jsonSerde
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.invoke
+import org.sollecitom.chassis.messaging.domain.Topic
 import org.sollecitom.chassis.pulsar.json.serialization.asPulsarSchema
-import org.sollecitom.chassis.pulsar.utils.PulsarTopic
+import org.sollecitom.chassis.pulsar.messaing.test.utils.ensureTopicExists
+import org.sollecitom.chassis.pulsar.messaing.test.utils.topics
 import org.sollecitom.chassis.pulsar.utils.consume
-import org.sollecitom.chassis.pulsar.utils.ensureTopicExists
-import org.sollecitom.chassis.pulsar.utils.topics
 import org.sollecitom.chassis.web.api.test.utils.MonitoringEndpointsTestSpecification
 import org.sollecitom.chassis.web.api.test.utils.httpURLWithPath
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
@@ -46,7 +46,7 @@ interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestS
     val pulsar: PulsarContainer
     val pulsarClient: PulsarClient
     val pulsarAdmin: PulsarAdmin
-    val topic: PulsarTopic
+    val topic: Topic
     override val timeout: Duration get() = 10.seconds
 
     fun specificationBeforeAll() {
@@ -87,7 +87,7 @@ interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestS
     }
 }
 
-private class StubbedRegisterUserProcessor(topic: PulsarTopic, pulsarClient: PulsarClient) {
+private class StubbedRegisterUserProcessor(topic: Topic, pulsarClient: PulsarClient) {
 
     private val consumer = pulsarClient.newConsumer(schema).topics(topic).subscriptionName("a subscription").subscribe()
 

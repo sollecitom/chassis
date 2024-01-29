@@ -20,6 +20,8 @@ import org.sollecitom.chassis.lens.core.extensions.networking.healthPort
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.logging.standard.configuration.configureLogging
+import org.sollecitom.chassis.messaging.domain.Topic
+import org.sollecitom.chassis.messaging.test.utils.create
 import org.sollecitom.chassis.pulsar.test.utils.admin
 import org.sollecitom.chassis.pulsar.test.utils.client
 import org.sollecitom.chassis.pulsar.test.utils.create
@@ -37,7 +39,7 @@ private class ProcessBasedServiceTests : ServiceTestSpecification, CoreDataGener
     override val pulsar = newPulsarContainer()
     override val pulsarClient by lazy { pulsar.client() }
     override val pulsarAdmin by lazy { pulsar.admin() }
-    override val topic = PulsarTopic.create()
+    override val topic = Topic.create()
 
     private val drivingAdapterConfig = mapOf(EnvironmentKey.servicePort to "0")
     private val healthDrivingAdapterConfig = mapOf(EnvironmentKey.healthPort to "0")

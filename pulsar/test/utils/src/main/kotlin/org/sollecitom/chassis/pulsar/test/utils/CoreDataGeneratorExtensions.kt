@@ -7,6 +7,7 @@ import org.sollecitom.chassis.kotlin.extensions.text.strings
 import org.sollecitom.chassis.pulsar.utils.PulsarTopic
 import org.sollecitom.chassis.pulsar.utils.TenantAgnosticPulsarTopic
 
+// TODO remove all of these
 context(RandomGenerator)
 fun PulsarTopic.Companion.create(persistent: Boolean = true, tenant: Name = randomName(), namespaceName: Name = randomName(), name: Name = randomName(), namespace: PulsarTopic.Namespace? = PulsarTopic.Namespace(tenant = tenant, name = namespaceName)): PulsarTopic = of(persistent, namespace, name)
 

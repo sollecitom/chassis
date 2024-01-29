@@ -52,7 +52,7 @@ sealed class Topic(val persistent: Boolean, val namespace: Namespace?, val name:
 
     companion object {
 
-        private const val SEPARATOR = "/"
+        internal const val SEPARATOR = "/"
         private const val EXPECTED_PARTS_COUNT = 5
         private const val PROTOCOL_GROUP = "(persistent|non-persistent)"
         private const val TENANT_GROUP = "([a-zA-Z0-9\\-]+)"

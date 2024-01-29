@@ -72,6 +72,7 @@ module("pulsar", "test", "utils")
 module("pulsar", "json", "serialization")
 module("pulsar", "avro", "serialization")
 module("pulsar", "messaging", "adapter")
+module("pulsar", "messaging", "test", "utils")
 
 module("nats", "client")
 module("nats", "test", "utils")
