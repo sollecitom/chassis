@@ -99,5 +99,6 @@ sealed class Topic(val persistent: Boolean, val namespace: Namespace?, val name:
         fun nonPersistent(name: Name, namespace: Namespace? = null): Topic = NonPersistent(namespace, name)
     }
 
-    data class Partition(val topic: Topic, val index: Int)
+    @JvmInline
+    value class Partition(val index: Int)
 }

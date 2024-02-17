@@ -6,7 +6,7 @@ import org.sollecitom.chassis.messaging.domain.Topic
 
 internal data class PulsarMessageId(override val topic: Topic, private val delegate: MessageIdAdv) : Message.Id {
 
-    override val partition: Topic.Partition? = delegate.partitionIndex.takeUnless { it == -1 }?.let { Topic.Partition(topic, it) }
+    override val partition: Topic.Partition? = delegate.partitionIndex.takeUnless { it == -1 }?.let(Topic::Partition)
 
     internal fun toByteArray(): ByteArray = delegate.toByteArray()
 

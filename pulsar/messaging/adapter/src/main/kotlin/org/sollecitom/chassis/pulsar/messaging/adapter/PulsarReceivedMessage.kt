@@ -16,7 +16,6 @@ internal class PulsarReceivedMessage<out VALUE>(private val delegate: Message<VA
     override val id: org.sollecitom.chassis.messaging.domain.Message.Id by lazy { (delegate.messageId as MessageIdAdv).adapted(topic = delegate.topicName.withoutPartitionId().let(Topic.Companion::parse)) }
     override val key: String get() = delegate.key
     override val value: VALUE get() = delegate.value
-    override val bytes: ByteArray get() = delegate.data
     override val publishedAt: Instant by lazy { Instant.fromEpochMilliseconds(delegate.publishTime) }
     override val properties by lazy { ProtocolProperties.removeFrom(delegate.properties) }
     override val context by lazy { MessageContextPropertiesSerde.deserialize(delegate.properties) }

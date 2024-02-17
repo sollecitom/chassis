@@ -6,7 +6,6 @@ import org.sollecitom.chassis.core.domain.naming.Name
 interface ReceivedMessage<out VALUE> : Message<VALUE>, Comparable<ReceivedMessage<*>> {
 
     val id: Message.Id
-    val bytes: ByteArray
     val publishedAt: Instant
     val producerName: Name
 

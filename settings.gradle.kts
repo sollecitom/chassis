@@ -77,6 +77,10 @@ module("pulsar", "messaging", "test", "utils")
 module("nats", "client")
 module("nats", "test", "utils")
 
+module("example", "in-memory", "eda", "domain")
+module("example", "in-memory", "eda", "test", "stubs")
+module("example", "in-memory", "eda", "test", "specification")
+
 module("example", "event", "domain")
 module("example", "event", "serialization", "json")
 module("example", "event", "serialization", "avro")
