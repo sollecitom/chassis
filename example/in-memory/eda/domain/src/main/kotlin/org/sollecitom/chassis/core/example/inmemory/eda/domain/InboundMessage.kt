@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.core.example.inmemory.eda.test.stubs
+package org.sollecitom.chassis.core.example.inmemory.eda.domain
 
 import kotlinx.datetime.Instant
 import org.sollecitom.chassis.core.domain.naming.Name

@@ -8,9 +8,9 @@ sealed class Topic(val persistent: Boolean, val namespace: Namespace?, val name:
     val protocol: Name get() = if (persistent) Persistent.protocol else NonPersistent.protocol
     val fullName: Name = fullRawName(protocol, namespace, name)
 
-    class Persistent(namespace: Namespace?, name: Name) : Topic(true, namespace, name) {
+    override fun toString() = fullName.value
 
-        override fun toString() = "Topic.Persistent(namespace='$namespace', name='$name')"
+    class Persistent(namespace: Namespace?, name: Name) : Topic(true, namespace, name) {
 
         companion object {
             val protocol = "persistent".let(::Name)
@@ -18,8 +18,6 @@ sealed class Topic(val persistent: Boolean, val namespace: Namespace?, val name:
     }
 
     class NonPersistent(namespace: Namespace?, name: Name) : Topic(false, namespace, name) {
-
-        override fun toString() = "Topic.NonPersistent(namespace='$namespace', name='$name')"
 
         companion object {
             val protocol = "non-persistent".let(::Name)
