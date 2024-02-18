@@ -52,7 +52,7 @@ internal class PulsarNatsCommandPublisher(private val brokerURI: URI, private va
 
     private val messageProducer by lazy { pulsarClient.messageProducer(instanceInfo, schema) }
 
-    override suspend fun start() = messageProducer.start()
+    override suspend fun start() {}
 
     override suspend fun stop() {
 

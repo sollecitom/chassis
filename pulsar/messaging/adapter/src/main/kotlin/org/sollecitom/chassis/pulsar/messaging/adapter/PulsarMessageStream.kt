@@ -24,8 +24,6 @@ internal class PulsarMessageStream<VALUE>(private val instanceInfo: InstanceInfo
 
     override suspend fun start() {
 
-        consumer.start()
-        producer.start()
     }
 
     override suspend fun stop() {

@@ -1,10 +1,9 @@
 package org.sollecitom.chassis.messaging.domain
 
-import org.sollecitom.chassis.core.domain.lifecycle.Startable
 import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 import org.sollecitom.chassis.core.domain.naming.Name
 
-interface MessageProducer<in VALUE> : Startable, Stoppable, AutoCloseable {
+interface MessageProducer<in VALUE> : Stoppable, AutoCloseable {
 
     val name: Name
 

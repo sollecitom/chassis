@@ -1,5 +1,6 @@
 package org.sollecitom.chassis.core.example.inmemory.eda.test.specification
 
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -12,10 +13,7 @@ import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.RandomGenerator
 import org.sollecitom.chassis.kotlin.extensions.text.string
-import org.sollecitom.chassis.messaging.domain.Message
-import org.sollecitom.chassis.messaging.domain.MessageProducer
-import org.sollecitom.chassis.messaging.domain.OutboundMessage
-import org.sollecitom.chassis.messaging.domain.Topic
+import org.sollecitom.chassis.messaging.domain.*
 import org.sollecitom.chassis.messaging.test.utils.create
 import kotlin.time.Duration.Companion.seconds
 
@@ -28,35 +26,39 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
     @Test
     fun `one producer and one consumer on a single topic`() = runTest(timeout = timeout) {
 
-        val topic = Topic.create().also { framework.createTopic(it) }
-
+        val topic = newTopic()
         val userId = newId.ulid.monotonic()
         val command = SubscribeUser(userId)
         val event = CommandWasReceivedEvent(command)
         val outboundMessage = outboundMessage(event)
-
         val producer = newProducer<CommandWasReceivedEvent>()
+        val consumer = newConsumer<CommandWasReceivedEvent>(topics = setOf(topic))
+
         val producedMessageId = producer.produce(outboundMessage, topic)
 
         println(producedMessageId) // TODO continue
     }
 
+    private suspend fun newTopic(name: Name = Name.random()): Topic = Topic.create().also { framework.createTopic(it) }
+
     private fun <VALUE> newProducer(name: Name = Name.random()): MessageProducer<VALUE> = framework.newProducer(name)
+
+    private fun <VALUE> newConsumer(topics: Set<Topic>, name: Name = Name.random(), subscriptionName: Name = Name.random()): MessageConsumer<VALUE> = framework.newConsumer(topics, name, subscriptionName)
 }
 
 interface EventPropagationFramework {
 
     fun <VALUE> newProducer(name: Name): MessageProducer<VALUE>
+    fun <VALUE> newConsumer(topics: Set<Topic>, name: Name, subscriptionName: Name): MessageConsumer<VALUE>
 
     suspend fun createTopic(topic: Topic)
 }
 
 class InMemoryEventPropagationFramework : EventPropagationFramework {
 
-    override fun <VALUE> newProducer(name: Name): MessageProducer<VALUE> {
+    override fun <VALUE> newProducer(name: Name): MessageProducer<VALUE> = InnerProducer(name)
 
-        return InMemoryMessageProducer(name)
-    }
+    override fun <VALUE> newConsumer(topics: Set<Topic>, name: Name, subscriptionName: Name): MessageConsumer<VALUE> = InnerConsumer(topics, name, subscriptionName)
 
     override suspend fun createTopic(topic: Topic) {
 
@@ -79,12 +81,24 @@ class InMemoryEventPropagationFramework : EventPropagationFramework {
         return Topic.Partition(index = 1) // TODO change
     }
 
-    inner class InMemoryMessageProducer<VALUE>(override val name: Name) : MessageProducer<VALUE> {
+    private inner class InnerProducer<VALUE>(override val name: Name) : MessageProducer<VALUE> {
 
         override suspend fun produce(message: Message<VALUE>, topic: Topic) = topic.send(message)
 
-        override suspend fun start() {
+        override suspend fun stop() {
         }
+
+        override fun close() = stopBlocking()
+    }
+
+    private inner class InnerConsumer<VALUE>(override val topics: Set<Topic>, override val name: Name, override val subscriptionName: Name) : MessageConsumer<VALUE> {
+
+        override suspend fun receive(): ReceivedMessage<VALUE> {
+            TODO("Not yet implemented")
+        }
+
+        override val messages: Flow<ReceivedMessage<VALUE>>
+            get() = TODO("Not yet implemented")
 
         override suspend fun stop() {
         }

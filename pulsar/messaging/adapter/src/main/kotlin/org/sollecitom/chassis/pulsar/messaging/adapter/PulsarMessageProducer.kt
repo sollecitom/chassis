@@ -19,8 +19,6 @@ internal class PulsarMessageProducer<in VALUE>(override val name: Name, private 
 
     override suspend fun produce(message: Message<VALUE>, topic: Topic) = topic.producer.produce(message)
 
-    override suspend fun start() {}
-
     override suspend fun stop() = producers.values.forEach { it.closeAsync().await() }
 
     override fun close() = stopBlocking()
