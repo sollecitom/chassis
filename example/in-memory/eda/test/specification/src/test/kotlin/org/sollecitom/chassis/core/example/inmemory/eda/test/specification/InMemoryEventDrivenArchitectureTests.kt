@@ -49,7 +49,7 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
         assertThat(receivedMessage).matches(outboundMessage)
     }
 
-    private suspend fun newTopic(name: Name = Name.random()): Topic = Topic.create().also { framework.createTopic(it) }
+    private suspend fun newTopic(persistent: Boolean = true, tenant: Name = Name.random(), namespaceName: Name = Name.random(), namespace: Topic.Namespace? = Topic.Namespace(tenant = tenant, name = namespaceName), name: Name = Name.random()): Topic = Topic.create(persistent, tenant, namespaceName, namespace, name).also { framework.createTopic(it) }
 
     private fun <VALUE> newProducer(name: Name = Name.random()): MessageProducer<VALUE> = framework.newProducer(name)
 
