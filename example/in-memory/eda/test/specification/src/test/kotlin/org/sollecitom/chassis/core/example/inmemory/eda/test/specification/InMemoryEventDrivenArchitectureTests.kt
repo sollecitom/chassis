@@ -2,6 +2,10 @@ package org.sollecitom.chassis.core.example.inmemory.eda.test.specification
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import kotlinx.coroutines.CoroutineStart.UNDISPATCHED
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
@@ -21,6 +25,8 @@ import org.sollecitom.chassis.kotlin.extensions.text.string
 import org.sollecitom.chassis.messaging.domain.*
 import org.sollecitom.chassis.messaging.test.utils.create
 import org.sollecitom.chassis.messaging.test.utils.matches
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 @TestInstance(PER_CLASS)
@@ -30,7 +36,7 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
     private val framework: EventPropagationFramework = InMemoryEventPropagationFramework(timeGenerator = this)
 
     @Test
-    fun `one producer and one consumer on a single topic`() = runTest(timeout = timeout) {
+    fun `consuming an already produced message`() = runTest(timeout = timeout) {
 
         val topic = newTopic()
         val userId = newId.ulid.monotonic()
@@ -42,6 +48,27 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
 
         val producedMessageId = producer.produce(outboundMessage, topic)
         val receivedMessage = consumer.receive()
+
+        assertThat(receivedMessage.id).isEqualTo(producedMessageId)
+        assertThat(receivedMessage.topic).isEqualTo(topic)
+        assertThat(receivedMessage.producerName).isEqualTo(producer.name)
+        assertThat(receivedMessage).matches(outboundMessage)
+    }
+
+    @Test
+    fun `awaiting for a message to be produced`() = runTest(timeout = timeout) {
+
+        val topic = newTopic()
+        val userId = newId.ulid.monotonic()
+        val command = SubscribeUser(userId)
+        val event = CommandWasReceivedEvent(command)
+        val outboundMessage = outboundMessage(event)
+        val producer = newProducer<CommandWasReceivedEvent>()
+        val consumer = newConsumer<CommandWasReceivedEvent>(topics = setOf(topic))
+
+        val consumingMessage = async(start = UNDISPATCHED) { consumer.receive() }
+        val producedMessageId = producer.produce(outboundMessage, topic)
+        val receivedMessage = consumingMessage.await()
 
         assertThat(receivedMessage.id).isEqualTo(producedMessageId)
         assertThat(receivedMessage.topic).isEqualTo(topic)
@@ -66,11 +93,12 @@ interface EventPropagationFramework {
 
 class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator) : EventPropagationFramework, TimeGenerator by timeGenerator {
 
-    private val clusterMessages = mutableListOf<Any>()
+    private val messageStorage = MessageStorage()
+    private val offsets = mutableMapOf<Name, PartitionOffset>()
 
     override fun <VALUE> newProducer(name: Name): MessageProducer<VALUE> = InnerProducer(name)
 
-    override fun <VALUE> newConsumer(topics: Set<Topic>, name: Name, subscriptionName: Name): MessageConsumer<VALUE> = InnerConsumer(topics, name, subscriptionName)
+    override fun <VALUE> newConsumer(topics: Set<Topic>, name: Name, subscriptionName: Name): MessageConsumer<VALUE> = InnerConsumer(topics.single(), name, subscriptionName) // TODO remove the single after making it work with multiple
 
     override suspend fun createTopic(topic: Topic) {
 
@@ -84,19 +112,81 @@ class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator
     private suspend fun <VALUE> Topic.send(message: Message<VALUE>, producerName: Name): Message.Id = synchronized(this) {
 
         val partition = partitionFor(message)
-        val offset = (clusterMessages.size + 1).toLong()
-        val messageId = MessageId(offset = offset, topic = this, partition = partition)
-        val publishedAt = clock.now()
-        val inboundMessage = message.inbound(messageId, publishedAt, producerName) { }
-        clusterMessages.add(inboundMessage)
-        messageId
+        messageStorage.topicPartition<VALUE>(this, partition).append { offset ->
+            val messageId = MessageId(offset = offset, topic = this, partition = partition)
+            val publishedAt = clock.now()
+            message.inbound(messageId, publishedAt, producerName) { }
+        }
     }
 
     private fun <VALUE> Message<VALUE>.inbound(id: MessageId, publishedAt: Instant, producerName: Name, acknowledge: suspend (ReceivedMessage<VALUE>) -> Unit): InboundMessage<VALUE> = InboundMessage(id, key, value, properties, publishedAt, producerName, context, acknowledge)
 
-    private fun partitionFor(message: Message<*>): Topic.Partition? {
+    private fun partitionFor(message: Message<*>): Topic.Partition {
 
         return Topic.Partition(index = 1) // TODO change
+    }
+
+    private suspend fun <VALUE> nextMessage(topic: Topic, consumerName: Name, subscriptionName: Name): ReceivedMessage<VALUE> {
+
+        val partition = partitionFor(topic, consumerName, subscriptionName)
+        val offset = partitionOffset(subscriptionName).getAndIncrement(topic, partition)
+        val partitionStorage = messageStorage.topicPartition<VALUE>(topic, partition) // TODO use a set here
+        return partitionStorage.messageAtOffset(offset)
+    }
+
+    private fun partitionOffset(subscriptionName: Name) = offsets.computeIfAbsent(subscriptionName) { PartitionOffset() }
+
+    private class PartitionOffset {
+
+        private val offsetByPartition: MutableMap<TopicPartition, Long> = ConcurrentHashMap()
+
+        fun getAndIncrement(topic: Topic, partition: Topic.Partition): Long {
+
+            val next = offsetByPartition.compute(TopicPartition(topic, partition)) { _, currentOrNull ->
+                val current = currentOrNull ?: 0L
+                current + 1
+            }!!
+            return next - 1
+        }
+    }
+
+    private fun partitionFor(topic: Topic, consumerName: Name, subscriptionName: Name): Topic.Partition { // TODO make this a set
+
+        return Topic.Partition(index = 1) // TODO change
+    }
+
+    private class MessageStorage {
+
+        private val partitions = ConcurrentHashMap<TopicPartition, TopicPartitionStorage<*>>()
+
+        fun <VALUE> topicPartition(topic: Topic, partition: Topic.Partition): TopicPartitionStorage<VALUE> {
+
+            return partitions.computeIfAbsent(TopicPartition(topic, partition)) { TopicPartitionStorage<VALUE>(topic, partition) } as TopicPartitionStorage<VALUE>
+        }
+    }
+
+    private data class TopicPartition(val topic: Topic, val partition: Topic.Partition)
+
+    private class TopicPartitionStorage<VALUE>(private val topic: Topic, private val partition: Topic.Partition) {
+
+        private val storage = mutableListOf<ReceivedMessage<VALUE>>()
+
+        fun append(messageForOffset: (offset: Long) -> ReceivedMessage<VALUE>): MessageId = synchronized(this) {
+
+            val offset = storage.size.toLong()
+            storage.add(messageForOffset(offset))
+            MessageId(offset, topic, partition)
+        }
+
+        suspend fun messageAtOffset(offset: Long): ReceivedMessage<VALUE> = coroutineScope {
+
+            async(start = UNDISPATCHED) {
+                while (storage.size <= offset.toInt()) {
+                    delay(50.milliseconds)
+                }
+                storage[offset.toInt()]
+            }.await()
+        }
     }
 
     private inner class InnerProducer<VALUE>(override val name: Name) : MessageProducer<VALUE> {
@@ -109,11 +199,13 @@ class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator
         override fun close() = stopBlocking()
     }
 
-    private inner class InnerConsumer<VALUE>(override val topics: Set<Topic>, override val name: Name, override val subscriptionName: Name) : MessageConsumer<VALUE> {
+    private inner class InnerConsumer<VALUE>(private val topic: Topic, override val name: Name, override val subscriptionName: Name) : MessageConsumer<VALUE> {
+
+        override val topics: Set<Topic> = setOf(topic) // TODO change after making it work with multiple topics
 
         override suspend fun receive(): ReceivedMessage<VALUE> {
 
-            return clusterMessages.iterator().next() as ReceivedMessage<VALUE>
+            return nextMessage(topic, name, subscriptionName)
         }
 
         override val messages: Flow<ReceivedMessage<VALUE>>
