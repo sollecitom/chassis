@@ -6,7 +6,6 @@ import kotlinx.coroutines.CoroutineStart.UNDISPATCHED
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import org.junit.jupiter.api.Test
@@ -26,6 +25,7 @@ import org.sollecitom.chassis.messaging.domain.*
 import org.sollecitom.chassis.messaging.test.utils.create
 import org.sollecitom.chassis.messaging.test.utils.matches
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
@@ -33,7 +33,7 @@ import kotlin.time.Duration.Companion.seconds
 private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     private val timeout = 10.seconds
-    private val framework: EventPropagationFramework = InMemoryEventPropagationFramework(timeGenerator = this)
+    private val framework: EventPropagationFramework = InMemoryEventPropagationFramework(timeGenerator = this, options = InMemoryEventPropagationFramework.Options(consumerPollingDelay = 50.milliseconds))
 
     @Test
     fun `consuming an already produced message`() = runTest(timeout = timeout) {
@@ -91,14 +91,14 @@ interface EventPropagationFramework {
     suspend fun createTopic(topic: Topic)
 }
 
-class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator) : EventPropagationFramework, TimeGenerator by timeGenerator {
+class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator, private val options: Options) : EventPropagationFramework, TimeGenerator by timeGenerator {
 
     private val messageStorage = MessageStorage()
     private val offsets = mutableMapOf<Name, PartitionOffset>()
 
     override fun <VALUE> newProducer(name: Name): MessageProducer<VALUE> = InnerProducer(name)
 
-    override fun <VALUE> newConsumer(topics: Set<Topic>, name: Name, subscriptionName: Name): MessageConsumer<VALUE> = InnerConsumer(topics.single(), name, subscriptionName) // TODO remove the single after making it work with multiple
+    override fun <VALUE> newConsumer(topics: Set<Topic>, name: Name, subscriptionName: Name): MessageConsumer<VALUE> = InnerConsumer(topics.single(), name, subscriptionName, options.consumerPollingDelay) // TODO remove the single after making it work with multiple
 
     override suspend fun createTopic(topic: Topic) {
 
@@ -126,12 +126,12 @@ class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator
         return Topic.Partition(index = 1) // TODO change
     }
 
-    private suspend fun <VALUE> nextMessage(topic: Topic, consumerName: Name, subscriptionName: Name): ReceivedMessage<VALUE> {
+    private suspend fun <VALUE> nextMessage(topic: Topic, consumerName: Name, subscriptionName: Name, pollingDelay: Duration): ReceivedMessage<VALUE> {
 
         val partition = partitionFor(topic, consumerName, subscriptionName)
         val offset = partitionOffset(subscriptionName).getAndIncrement(topic, partition)
         val partitionStorage = messageStorage.topicPartition<VALUE>(topic, partition) // TODO use a set here
-        return partitionStorage.messageAtOffset(offset)
+        return partitionStorage.messageAtOffset(offset, pollingDelay)
     }
 
     private fun partitionOffset(subscriptionName: Name) = offsets.computeIfAbsent(subscriptionName) { PartitionOffset() }
@@ -178,11 +178,12 @@ class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator
             MessageId(offset, topic, partition)
         }
 
-        suspend fun messageAtOffset(offset: Long): ReceivedMessage<VALUE> = coroutineScope {
+        suspend fun messageAtOffset(offset: Long, pollingDelay: Duration): ReceivedMessage<VALUE> = coroutineScope {
 
+            if (storage.size > offset.toInt()) return@coroutineScope storage[offset.toInt()]
             async(start = UNDISPATCHED) {
                 while (storage.size <= offset.toInt()) {
-                    delay(50.milliseconds)
+                    delay(pollingDelay)
                 }
                 storage[offset.toInt()]
             }.await()
@@ -199,23 +200,22 @@ class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator
         override fun close() = stopBlocking()
     }
 
-    private inner class InnerConsumer<VALUE>(private val topic: Topic, override val name: Name, override val subscriptionName: Name) : MessageConsumer<VALUE> {
+    private inner class InnerConsumer<VALUE>(private val topic: Topic, override val name: Name, override val subscriptionName: Name, private val pollingDelay: Duration) : MessageConsumer<VALUE> {
 
         override val topics: Set<Topic> = setOf(topic) // TODO change after making it work with multiple topics
 
         override suspend fun receive(): ReceivedMessage<VALUE> {
 
-            return nextMessage(topic, name, subscriptionName)
+            return nextMessage(topic, name, subscriptionName, pollingDelay)
         }
-
-        override val messages: Flow<ReceivedMessage<VALUE>>
-            get() = TODO("Not yet implemented")
 
         override suspend fun stop() {
         }
 
         override fun close() = stopBlocking()
     }
+
+    data class Options(val consumerPollingDelay: Duration)
 }
 
 data class MessageId(val offset: Long, override val topic: Topic, override val partition: Topic.Partition?) : Message.Id {

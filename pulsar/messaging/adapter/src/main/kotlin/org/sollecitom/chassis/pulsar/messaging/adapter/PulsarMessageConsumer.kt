@@ -19,8 +19,6 @@ internal class PulsarMessageConsumer<out VALUE>(override val topics: Set<Topic>,
 
     override suspend fun receive() = consumer.nextReceivedMessage()
 
-    override val messages get() = consumer.receivedMessages
-
     override suspend fun stop() = consumer.closeAsync().await()
 
     override fun close() = stopBlocking()

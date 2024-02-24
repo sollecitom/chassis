@@ -7,10 +7,7 @@ import org.sollecitom.chassis.core.domain.identity.InstanceInfo
 import org.sollecitom.chassis.core.domain.lifecycle.Startable
 import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.messaging.domain.Message
-import org.sollecitom.chassis.messaging.domain.MessageStream
-import org.sollecitom.chassis.messaging.domain.ReceivedMessage
-import org.sollecitom.chassis.messaging.domain.Topic
+import org.sollecitom.chassis.messaging.domain.*
 
 internal class PulsarMessageStream<VALUE>(private val instanceInfo: InstanceInfo, private val topic: Topic, private val schema: Schema<VALUE>, clientSupplier: () -> PulsarClient) : MessageStream<VALUE>, Startable, Stoppable {
 
