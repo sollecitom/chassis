@@ -5,4 +5,4 @@ interface HashFunction<RESULT : Any> {
     operator fun invoke(bytes: ByteArray, offset: Int = 0, length: Int = bytes.size): RESULT
 }
 
-fun <VALUE : Any, RESULT : Any> HashFunction<RESULT>.invoke(value: VALUE, toByteArray: VALUE.() -> ByteArray) = invoke(bytes = value.toByteArray())
+operator fun <VALUE : Any, RESULT : Any> HashFunction<RESULT>.invoke(value: VALUE, toByteArray: VALUE.() -> ByteArray) = invoke(bytes = value.toByteArray())

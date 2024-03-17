@@ -1,11 +1,15 @@
 package org.sollecitom.chassis.core.example.inmemory.eda.test.specification
 
+import assertk.Assert
 import assertk.assertThat
+import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import kotlinx.coroutines.CoroutineStart.UNDISPATCHED
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import org.junit.jupiter.api.Test
@@ -20,6 +24,9 @@ import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.RandomGenerator
 import org.sollecitom.chassis.core.utils.TimeGenerator
+import org.sollecitom.chassis.hashing.utils.HashFunction
+import org.sollecitom.chassis.hashing.utils.invoke
+import org.sollecitom.chassis.hashing.utils.xxh.Xxh3
 import org.sollecitom.chassis.kotlin.extensions.text.string
 import org.sollecitom.chassis.messaging.domain.*
 import org.sollecitom.chassis.messaging.test.utils.create
@@ -49,10 +56,7 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
         val producedMessageId = producer.produce(outboundMessage, topic)
         val receivedMessage = consumer.receive()
 
-        assertThat(receivedMessage.id).isEqualTo(producedMessageId)
-        assertThat(receivedMessage.topic).isEqualTo(topic)
-        assertThat(receivedMessage.producerName).isEqualTo(producer.name)
-        assertThat(receivedMessage).matches(outboundMessage)
+        assertThat(receivedMessage).matches(producedMessageId, topic, producer.name, outboundMessage)
     }
 
     @Test
@@ -70,48 +74,88 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
         val producedMessageId = producer.produce(outboundMessage, topic)
         val receivedMessage = consumingMessage.await()
 
-        assertThat(receivedMessage.id).isEqualTo(producedMessageId)
-        assertThat(receivedMessage.topic).isEqualTo(topic)
-        assertThat(receivedMessage.producerName).isEqualTo(producer.name)
-        assertThat(receivedMessage).matches(outboundMessage)
+        assertThat(receivedMessage).matches(producedMessageId, topic, producer.name, outboundMessage)
     }
 
-    private suspend fun newTopic(persistent: Boolean = true, tenant: Name = Name.random(), namespaceName: Name = Name.random(), namespace: Topic.Namespace? = Topic.Namespace(tenant = tenant, name = namespaceName), name: Name = Name.random()): Topic = Topic.create(persistent, tenant, namespaceName, namespace, name).also { framework.createTopic(it) }
+    @Test
+    fun `consuming a partitioned topic with a single consumer`() = runTest(timeout = timeout) {
+
+        val topic = newTopic(partitions = 2)
+        val command1 = SubscribeUser(userId = newId.ulid.monotonic())
+        val outboundMessage1 = outboundMessage(command1.wasReceived())
+        val command2 = SubscribeUser(userId = newId.ulid.monotonic())
+        val outboundMessage2 = outboundMessage(command2.wasReceived())
+        val producer = newProducer<CommandWasReceivedEvent>()
+        val consumer = newConsumer<CommandWasReceivedEvent>(topics = setOf(topic))
+
+        val messageId1 = producer.produce(outboundMessage1, topic)
+        val messageId2 = producer.produce(outboundMessage2, topic)
+        val receivedMessages = consumer.messages.take(2).toList()
+
+        assertThat(receivedMessages).hasSize(2)
+        assertThat(receivedMessages[0]).matches(messageId1, topic, producer.name, outboundMessage1)
+        assertThat(receivedMessages[1]).matches(messageId2, topic, producer.name, outboundMessage2)
+        assertThat(receivedMessages[0].id.partition?.index).isEqualTo(0)
+        assertThat(receivedMessages[1].id.partition?.index).isEqualTo(1)
+    }
+
+    private suspend fun newTopic(persistent: Boolean = true, tenant: Name = Name.random(), namespaceName: Name = Name.random(), namespace: Topic.Namespace? = Topic.Namespace(tenant = tenant, name = namespaceName), name: Name = Name.random(), partitions: Int = 1): Topic = Topic.create(persistent, tenant, namespaceName, namespace, name).also { framework.createTopic(it, partitions) }
 
     private fun <VALUE> newProducer(name: Name = Name.random()): MessageProducer<VALUE> = framework.newProducer(name)
 
     private fun <VALUE> newConsumer(topics: Set<Topic>, name: Name = Name.random(), subscriptionName: Name = Name.random()): MessageConsumer<VALUE> = framework.newConsumer(topics, name, subscriptionName)
+
+    private fun Assert<ReceivedMessage<CommandWasReceivedEvent>>.matches(producedMessageId: Message.Id, topic: Topic, producerName: Name, outboundMessage: Message<CommandWasReceivedEvent>) = given { receivedMessage ->
+
+        assertk.assertThat(receivedMessage.id).isEqualTo(producedMessageId)
+        assertk.assertThat(receivedMessage.topic).isEqualTo(topic)
+        assertk.assertThat(receivedMessage.producerName).isEqualTo(producerName)
+        assertk.assertThat(receivedMessage).matches(outboundMessage)
+    }
 }
 
 interface EventPropagationFramework {
 
-    fun <VALUE> newProducer(name: Name): MessageProducer<VALUE>
+    fun <VALUE> newProducer(name: Name, partitioningStrategy: PartitioningStrategy<VALUE> = KeyHashingPartitioningStrategy()): MessageProducer<VALUE>
     fun <VALUE> newConsumer(topics: Set<Topic>, name: Name, subscriptionName: Name): MessageConsumer<VALUE>
 
-    suspend fun createTopic(topic: Topic)
+    suspend fun createTopic(topic: Topic, partitions: Int = 1)
+}
+
+interface PartitioningStrategy<VALUE> {
+
+    fun partitionIndexForMessage(message: Message<VALUE>, partitionsCount: Int): Int
+}
+
+class KeyHashingPartitioningStrategy<VALUE>(seed: Long? = null) : PartitioningStrategy<VALUE> {
+
+    private val hashFunction: HashFunction<Long> = seed?.let { Xxh3.hash64(it) } ?: Xxh3.hash64
+
+    override fun partitionIndexForMessage(message: Message<VALUE>, partitionsCount: Int): Int {
+
+        val keyHash = hashFunction(message.key, String::toByteArray)
+        return keyHash.mod(partitionsCount)
+    }
 }
 
 class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator, private val options: Options) : EventPropagationFramework, TimeGenerator by timeGenerator {
 
     private val messageStorage = MessageStorage()
     private val offsets = mutableMapOf<Name, PartitionOffset>()
+    private val partitionsCountByTopic = mutableMapOf<Topic, Int>()
 
-    override fun <VALUE> newProducer(name: Name): MessageProducer<VALUE> = InnerProducer(name)
+    override fun <VALUE> newProducer(name: Name, partitioningStrategy: PartitioningStrategy<VALUE>): MessageProducer<VALUE> = InnerProducer(name, partitioningStrategy)
 
     override fun <VALUE> newConsumer(topics: Set<Topic>, name: Name, subscriptionName: Name): MessageConsumer<VALUE> = InnerConsumer(topics.single(), name, subscriptionName, options.consumerPollingDelay) // TODO remove the single after making it work with multiple
 
-    override suspend fun createTopic(topic: Topic) {
+    override suspend fun createTopic(topic: Topic, partitions: Int) {
 
+        partitionsCountByTopic += topic to partitions
     }
 
-    private fun Topic.partitionForMessage(message: Message<*>): Topic.Partition {
+    private suspend fun <VALUE> Topic.send(message: Message<VALUE>, producerName: Name, partitioningStrategy: PartitioningStrategy<VALUE>): Message.Id = synchronized(this) {
 
-        return Topic.Partition(index = 1)
-    }
-
-    private suspend fun <VALUE> Topic.send(message: Message<VALUE>, producerName: Name): Message.Id = synchronized(this) {
-
-        val partition = partitionFor(message)
+        val partition = message.targetPartition(topic = this, partitioningStrategy = partitioningStrategy)
         messageStorage.topicPartition<VALUE>(this, partition).append { offset ->
             val messageId = MessageId(offset = offset, topic = this, partition = partition)
             val publishedAt = clock.now()
@@ -119,19 +163,24 @@ class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator
         }
     }
 
+    private fun <VALUE> Message<VALUE>.targetPartition(topic: Topic, partitioningStrategy: PartitioningStrategy<VALUE>): Topic.Partition = Topic.Partition(index = partitioningStrategy.partitionIndexForMessage(this, topic.partitionsCount))
+
+    private val Topic.partitionsCount: Int get() = partitionsCountByTopic[this] ?: error("Topic $this doesn't exist")
+
     private fun <VALUE> Message<VALUE>.inbound(id: MessageId, publishedAt: Instant, producerName: Name, acknowledge: suspend (ReceivedMessage<VALUE>) -> Unit): InboundMessage<VALUE> = InboundMessage(id, key, value, properties, publishedAt, producerName, context, acknowledge)
-
-    private fun partitionFor(message: Message<*>): Topic.Partition {
-
-        return Topic.Partition(index = 1) // TODO change
-    }
 
     private suspend fun <VALUE> nextMessage(topic: Topic, consumerName: Name, subscriptionName: Name, pollingDelay: Duration): ReceivedMessage<VALUE> {
 
-        val partition = partitionFor(topic, consumerName, subscriptionName)
+        // TODO modify this to poll across all the partitions assigned to the consumer, in the subscription, on the topic
+        val partition = nextPartitionForConsumer(topic, consumerName, subscriptionName)
         val offset = partitionOffset(subscriptionName).getAndIncrement(topic, partition)
         val partitionStorage = messageStorage.topicPartition<VALUE>(topic, partition) // TODO use a set here
         return partitionStorage.messageAtOffset(offset, pollingDelay)
+    }
+
+    private fun nextPartitionForConsumer(topic: Topic, consumerName: Name, subscriptionName: Name): Topic.Partition { // TODO make this a set
+
+        return Topic.Partition(index = 0) // TODO change
     }
 
     private fun partitionOffset(subscriptionName: Name) = offsets.computeIfAbsent(subscriptionName) { PartitionOffset() }
@@ -148,11 +197,6 @@ class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator
             }!!
             return next - 1
         }
-    }
-
-    private fun partitionFor(topic: Topic, consumerName: Name, subscriptionName: Name): Topic.Partition { // TODO make this a set
-
-        return Topic.Partition(index = 1) // TODO change
     }
 
     private class MessageStorage {
@@ -190,9 +234,9 @@ class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator
         }
     }
 
-    private inner class InnerProducer<VALUE>(override val name: Name) : MessageProducer<VALUE> {
+    private inner class InnerProducer<VALUE>(override val name: Name, private val partitioningStrategy: PartitioningStrategy<VALUE>) : MessageProducer<VALUE> {
 
-        override suspend fun produce(message: Message<VALUE>, topic: Topic) = topic.send(message = message, producerName = name)
+        override suspend fun produce(message: Message<VALUE>, topic: Topic) = topic.send(message = message, producerName = name, partitioningStrategy)
 
         override suspend fun stop() {
         }

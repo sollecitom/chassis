@@ -5,4 +5,5 @@ dependencies {
     testImplementation(projects.chassisTestUtils)
     testImplementation(projects.chassisCorrelationCoreTestUtils)
     testImplementation(projects.chassisMessagingTestUtils)
+    testImplementation(projects.chassisHashingUtils) // TODO move to domain
 }

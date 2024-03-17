@@ -98,5 +98,10 @@ sealed class Topic(val persistent: Boolean, val namespace: Namespace?, val name:
     }
 
     @JvmInline
-    value class Partition(val index: Int)
+    value class Partition(val index: Int) {
+
+        init {
+            require(index >= 0)
+        }
+    }
 }
