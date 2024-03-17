@@ -4,6 +4,7 @@ import assertk.Assert
 import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
+import kotlinx.coroutines.CoroutineStart.LAZY
 import kotlinx.coroutines.CoroutineStart.UNDISPATCHED
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -27,6 +28,7 @@ import org.sollecitom.chassis.core.utils.TimeGenerator
 import org.sollecitom.chassis.hashing.utils.HashFunction
 import org.sollecitom.chassis.hashing.utils.invoke
 import org.sollecitom.chassis.hashing.utils.xxh.Xxh3
+import org.sollecitom.chassis.kotlin.extensions.async.awaitAny
 import org.sollecitom.chassis.kotlin.extensions.text.string
 import org.sollecitom.chassis.messaging.domain.*
 import org.sollecitom.chassis.messaging.test.utils.create
@@ -85,7 +87,7 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
         val outboundMessage1 = outboundMessage(command1.wasReceived())
         val command2 = SubscribeUser(userId = newId.ulid.monotonic())
         val outboundMessage2 = outboundMessage(command2.wasReceived())
-        val producer = newProducer<CommandWasReceivedEvent>()
+        val producer = newProducer<CommandWasReceivedEvent>() // TODO ensure the first message goes on partition 1, and the second one on partition 2
         val consumer = newConsumer<CommandWasReceivedEvent>(topics = setOf(topic))
 
         val messageId1 = producer.produce(outboundMessage1, topic)
@@ -93,7 +95,7 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
         val receivedMessages = consumer.messages.take(2).toList()
 
         assertThat(receivedMessages).hasSize(2)
-        assertThat(receivedMessages[0]).matches(messageId1, topic, producer.name, outboundMessage1)
+        assertThat(receivedMessages[0]).matches(messageId1, topic, producer.name, outboundMessage1) // TODO the order here cannot be guaranteed, use the partition to figure out which message it should be
         assertThat(receivedMessages[1]).matches(messageId2, topic, producer.name, outboundMessage2)
         assertThat(receivedMessages[0].id.partition?.index).isEqualTo(0)
         assertThat(receivedMessages[1].id.partition?.index).isEqualTo(1)
@@ -103,7 +105,7 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
 
     private suspend fun newTopic(persistent: Boolean = true, tenant: Name = Name.random(), namespaceName: Name = Name.random(), namespace: Topic.Namespace? = Topic.Namespace(tenant = tenant, name = namespaceName), name: Name = Name.random(), partitions: Int = 1): Topic = Topic.create(persistent, tenant, namespaceName, namespace, name).also { framework.createTopic(it, partitions) }
 
-    private fun <VALUE> newProducer(name: Name = Name.random()): MessageProducer<VALUE> = framework.newProducer(name)
+    private fun <VALUE> newProducer(name: Name = Name.random(), partitioningStrategy: PartitioningStrategy<VALUE> = KeyHashingPartitioningStrategy()): MessageProducer<VALUE> = framework.newProducer(name, partitioningStrategy)
 
     private fun <VALUE> newConsumer(topics: Set<Topic>, name: Name = Name.random(), subscriptionName: Name = Name.random()): MessageConsumer<VALUE> = framework.newConsumer(topics, name, subscriptionName)
 
@@ -143,7 +145,7 @@ class KeyHashingPartitioningStrategy<VALUE>(seed: Long? = null) : PartitioningSt
 class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator, private val options: Options) : EventPropagationFramework, TimeGenerator by timeGenerator {
 
     private val messageStorage = MessageStorage()
-    private val offsets = mutableMapOf<Name, PartitionOffset>()
+    private val offsets = mutableMapOf<Name, SubscriptionOffsets>()
     private val partitionsCountByTopic = mutableMapOf<Topic, Int>()
 
     override fun <VALUE> newProducer(name: Name, partitioningStrategy: PartitioningStrategy<VALUE>): MessageProducer<VALUE> = InnerProducer(name, partitioningStrategy)
@@ -173,24 +175,35 @@ class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator
 
     private suspend fun <VALUE> nextMessage(topic: Topic, consumerName: Name, subscriptionName: Name, pollingDelay: Duration): ReceivedMessage<VALUE> {
 
-        // TODO modify this to poll across all the partitions assigned to the consumer, in the subscription, on the topic
-        val partition = nextPartitionForConsumer(topic, consumerName, subscriptionName)
-        val offset = partitionOffset(subscriptionName).getAndIncrement(topic, partition)
-        val partitionStorage = messageStorage.topicPartition<VALUE>(topic, partition) // TODO use a set here
-        return partitionStorage.messageAtOffset(offset, pollingDelay)
+        val assignedPartitions = assignedPartitions(consumerName, subscriptionName, topic)
+        val offsets = subscriptionOffsets(subscriptionName)
+        return nextMessage(topic, assignedPartitions, offsets, pollingDelay)
     }
 
-    private fun nextPartitionForConsumer(topic: Topic, consumerName: Name, subscriptionName: Name): Topic.Partition { // TODO make this a set
+    private suspend fun <VALUE> nextMessage(topic: Topic, assignedPartitions: Set<Topic.Partition>, offsets: SubscriptionOffsets, pollingDelay: Duration): ReceivedMessage<VALUE> = coroutineScope {
 
-        return Topic.Partition(index = 0) // TODO change
+        val currentOffsets = assignedPartitions.associateWith { partition -> offsets.get(topic, partition) }
+        // TODO refactor
+        val tasks = currentOffsets.map { (partition, currentOffset) ->
+            async(start = LAZY) { messageStorage.topicPartition<VALUE>(topic, partition).messageAtOffset(currentOffset, pollingDelay) }
+        }
+        val nextMessage = tasks.awaitAny()!! // TODO find a way to avoid using always the same partition
+        nextMessage.id.partition?.let { partition -> offsets.getAndIncrement(topic, partition) }
+        nextMessage
     }
 
-    private fun partitionOffset(subscriptionName: Name) = offsets.computeIfAbsent(subscriptionName) { PartitionOffset() }
+    private fun assignedPartitions(consumerName: Name, subscriptionName: Name, topic: Topic): Set<Topic.Partition> {
 
-    private class PartitionOffset {
+        return setOf(Topic.Partition(index = 0), Topic.Partition(index = 1)) // TODO change
+    }
+
+    private fun subscriptionOffsets(subscriptionName: Name) = offsets.computeIfAbsent(subscriptionName) { SubscriptionOffsets() }
+
+    private class SubscriptionOffsets {
 
         private val offsetByPartition: MutableMap<TopicPartition, Long> = ConcurrentHashMap()
 
+        // TODO do we need the topic here? Can only single-topic consumer subscriptions be enough?
         fun getAndIncrement(topic: Topic, partition: Topic.Partition): Long {
 
             val next = offsetByPartition.compute(TopicPartition(topic, partition)) { _, currentOrNull ->
@@ -199,6 +212,8 @@ class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator
             }!!
             return next - 1
         }
+
+        fun get(topic: Topic, partition: Topic.Partition): Long = offsetByPartition[TopicPartition(topic, partition)] ?: 0L
     }
 
     private class MessageStorage {
