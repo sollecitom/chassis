@@ -99,6 +99,8 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
         assertThat(receivedMessages[1].id.partition?.index).isEqualTo(1)
     }
 
+    // TODO add a test to acknowledge (or not) a message
+
     private suspend fun newTopic(persistent: Boolean = true, tenant: Name = Name.random(), namespaceName: Name = Name.random(), namespace: Topic.Namespace? = Topic.Namespace(tenant = tenant, name = namespaceName), name: Name = Name.random(), partitions: Int = 1): Topic = Topic.create(persistent, tenant, namespaceName, namespace, name).also { framework.createTopic(it, partitions) }
 
     private fun <VALUE> newProducer(name: Name = Name.random()): MessageProducer<VALUE> = framework.newProducer(name)
