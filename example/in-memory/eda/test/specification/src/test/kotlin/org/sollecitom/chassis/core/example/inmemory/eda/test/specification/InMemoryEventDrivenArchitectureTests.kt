@@ -41,7 +41,7 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
         val topic = newTopic()
         val userId = newId.ulid.monotonic()
         val command = SubscribeUser(userId)
-        val event = CommandWasReceivedEvent(command)
+        val event = command.wasReceived()
         val outboundMessage = outboundMessage(event)
         val producer = newProducer<CommandWasReceivedEvent>()
         val consumer = newConsumer<CommandWasReceivedEvent>(topics = setOf(topic))
@@ -61,7 +61,7 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
         val topic = newTopic()
         val userId = newId.ulid.monotonic()
         val command = SubscribeUser(userId)
-        val event = CommandWasReceivedEvent(command)
+        val event = command.wasReceived()
         val outboundMessage = outboundMessage(event)
         val producer = newProducer<CommandWasReceivedEvent>()
         val consumer = newConsumer<CommandWasReceivedEvent>(topics = setOf(topic))
@@ -239,3 +239,5 @@ data class CommandWasReceivedEvent(val command: Command) // TODO add more to thi
 sealed interface Command
 data class SubscribeUser(val userId: Id) : Command
 data class UnsubscribeUser(val userId: Id) : Command
+
+fun Command.wasReceived(): CommandWasReceivedEvent = CommandWasReceivedEvent(command = this)
