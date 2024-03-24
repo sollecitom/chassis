@@ -101,7 +101,12 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
         assertThat(messageOnPartition1).matches(messageId2, topic, producer.name, outboundMessage2)
     }
 
-    // TODO add a test to acknowledge (or not) a message
+    // TODO remaining tests
+    // acknowledge (or not) a message
+    // partitions assignment to multiple consumers (exclusive)
+    // re-consume from offset
+    // increasing the number of consumers at runtime
+    // re-balancing partitions
 
     private suspend fun newTopic(persistent: Boolean = true, tenant: Name = Name.random(), namespaceName: Name = Name.random(), namespace: Topic.Namespace? = Topic.Namespace(tenant = tenant, name = namespaceName), name: Name = Name.random(), partitions: Int = 1): Topic = Topic.create(persistent, tenant, namespaceName, namespace, name).also { framework.createTopic(it, partitions) }
 
