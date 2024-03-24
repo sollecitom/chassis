@@ -87,7 +87,7 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
         val outboundMessage1 = outboundMessage(command1.wasReceived())
         val command2 = SubscribeUser(userId = newId.ulid.monotonic())
         val outboundMessage2 = outboundMessage(command2.wasReceived())
-        val producer = newProducer<CommandWasReceivedEvent>() // TODO ensure the first message goes on partition 1, and the second one on partition 2
+        val producer = newProducer<CommandWasReceivedEvent> { msg, _ -> if (msg == outboundMessage1) 0 else 1 }
         val consumer = newConsumer<CommandWasReceivedEvent>(topics = setOf(topic))
 
         val messageId1 = producer.produce(outboundMessage1, topic)
@@ -95,10 +95,10 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
         val receivedMessages = consumer.messages.take(2).toList()
 
         assertThat(receivedMessages).hasSize(2)
-        assertThat(receivedMessages[0]).matches(messageId1, topic, producer.name, outboundMessage1) // TODO the order here cannot be guaranteed, use the partition to figure out which message it should be
-        assertThat(receivedMessages[1]).matches(messageId2, topic, producer.name, outboundMessage2)
-        assertThat(receivedMessages[0].id.partition?.index).isEqualTo(0)
-        assertThat(receivedMessages[1].id.partition?.index).isEqualTo(1)
+        val messageOnPartition0 = receivedMessages.single { it.id.partition?.index == 0 }
+        val messageOnPartition1 = receivedMessages.single { it.id.partition?.index == 1 }
+        assertThat(messageOnPartition0).matches(messageId1, topic, producer.name, outboundMessage1)
+        assertThat(messageOnPartition1).matches(messageId2, topic, producer.name, outboundMessage2)
     }
 
     // TODO add a test to acknowledge (or not) a message
@@ -106,6 +106,8 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
     private suspend fun newTopic(persistent: Boolean = true, tenant: Name = Name.random(), namespaceName: Name = Name.random(), namespace: Topic.Namespace? = Topic.Namespace(tenant = tenant, name = namespaceName), name: Name = Name.random(), partitions: Int = 1): Topic = Topic.create(persistent, tenant, namespaceName, namespace, name).also { framework.createTopic(it, partitions) }
 
     private fun <VALUE> newProducer(name: Name = Name.random(), partitioningStrategy: PartitioningStrategy<VALUE> = KeyHashingPartitioningStrategy()): MessageProducer<VALUE> = framework.newProducer(name, partitioningStrategy)
+
+    private fun <VALUE> newProducer(name: Name = Name.random(), choosePartition: (message: Message<VALUE>, partitionsCount: Int) -> Int): MessageProducer<VALUE> = newProducer(name, FunctionalPartitionStrategy(choosePartition))
 
     private fun <VALUE> newConsumer(topics: Set<Topic>, name: Name = Name.random(), subscriptionName: Name = Name.random()): MessageConsumer<VALUE> = framework.newConsumer(topics, name, subscriptionName)
 
@@ -116,6 +118,11 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
         assertk.assertThat(receivedMessage.producerName).isEqualTo(producerName)
         assertk.assertThat(receivedMessage).matches(outboundMessage)
     }
+}
+
+class FunctionalPartitionStrategy<VALUE>(private val choosePartition: (message: Message<VALUE>, partitionsCount: Int) -> Int) : PartitioningStrategy<VALUE> {
+
+    override fun partitionIndexForMessage(message: Message<VALUE>, partitionsCount: Int) = choosePartition(message, partitionsCount)
 }
 
 interface EventPropagationFramework {
