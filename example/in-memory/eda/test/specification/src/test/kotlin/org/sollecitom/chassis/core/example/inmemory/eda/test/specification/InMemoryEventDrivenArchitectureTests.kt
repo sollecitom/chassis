@@ -39,7 +39,7 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 @TestInstance(PER_CLASS)
-private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDataGenerator.testProvider {
+private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDataGenerator.testProvider { // TODO turn this into a spec, and test Pulsar and Kafka behind the abstraction
 
     private val timeout = 10.seconds
     private val framework: EventPropagationFramework = InMemoryEventPropagationFramework(timeGenerator = this, options = InMemoryEventPropagationFramework.Options(consumerPollingDelay = 50.milliseconds))
