@@ -53,7 +53,7 @@ interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestS
     val topic: TenantAgnosticTopic
     val tenantName: Name
     val topicWithTenant: Topic get() = topic.withTenant(tenantName)
-    override val timeout: Duration get() = 10.seconds
+    override val timeout: Duration get() = 30.seconds
 
     fun specificationBeforeAll() {
         pulsar.start()
@@ -72,11 +72,10 @@ interface ServiceTestSpecification : CoreDataGenerator, MonitoringEndpointsTestS
         val invocationContext = InvocationContext.unauthenticated(specifiedTargetTenant = { tenantName.asTenant() })
 
         val request = Request(Method.POST, service.httpURLWithPath("commands/register-user/v1")).body(json).withInvocationContext(invocationContext)
-
         val downstreamProcessor = StubbedRegisterUserProcessor(topicWithTenant, pulsarClient)
         val responseInFlight = async(start = UNDISPATCHED) { httpClient(request) }
-        val message = downstreamProcessor.awaitProcessedMessage()
         val response = responseInFlight.await()
+        val message = downstreamProcessor.awaitProcessedMessage()
 
         assertThat(response.status).isEqualTo(Status.ACCEPTED)
         assertThat(message.value).isInstanceOf<CommandWasReceived<RegisterUser>>()

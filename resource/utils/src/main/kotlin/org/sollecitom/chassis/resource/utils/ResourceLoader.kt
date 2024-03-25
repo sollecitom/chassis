@@ -2,6 +2,7 @@ package org.sollecitom.chassis.resource.utils
 
 import com.google.common.io.Resources
 import java.io.InputStream
+import java.net.URI
 import java.net.URL
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
@@ -17,5 +18,9 @@ object ResourceLoader {
 
     fun readAsText(resourceName: String): String = resolve(resourceName).readText()
 
-    fun resolve(resourceName: String): URL = Resources.getResource(resourceName)
+    fun resolve(resourceName: String): URL = try {
+        URI.create(resourceName).toURL()
+    } catch (error: IllegalArgumentException) {
+        Resources.getResource(resourceName)
+    }
 }

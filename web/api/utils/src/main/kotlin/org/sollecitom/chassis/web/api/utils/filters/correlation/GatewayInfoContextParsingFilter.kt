@@ -37,8 +37,14 @@ internal class GatewayInfoContextParsingFilter(private val key: InvocationContex
 
     private fun invocationContext(request: Request, headerNames: HttpHeaderNames.Correlation): InvocationContext<Access>? {
 
-        val rawValue = request.header(headerNames.invocationContext) ?: return null
+        val rawValue = request.rawInvocationContextValue(headerNames) ?: return null
         val jsonValue = runCatching { JSONObject(rawValue) }.getOrElse { error("Invalid value for header ${headerNames.invocationContext}. Must be a JSON object.") }
         return InvocationContext.jsonSerde.deserialize(jsonValue)
+    }
+
+    private fun Request.rawInvocationContextValue(headerNames: HttpHeaderNames.Correlation): String? {
+
+        // TODO the comma in the JSON payload ends up producing multiple header values - fix this with Base64 or something, and go back to request.header(headerNames.invocationContext)
+        return headers.filter { it.first == headerNames.invocationContext }.map { it.second }.takeUnless { it.isEmpty() }?.joinToString()
     }
 }

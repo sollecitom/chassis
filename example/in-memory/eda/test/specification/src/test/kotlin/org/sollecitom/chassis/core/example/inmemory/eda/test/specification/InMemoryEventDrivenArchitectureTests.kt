@@ -102,6 +102,7 @@ private class InMemoryEventDrivenArchitectureTests : CoreDataGenerator by CoreDa
     }
 
     // TODO remaining tests
+    // consume multiple messages on 1 partition, when there are more than 1 partitions on a topic
     // acknowledge (or not) a message
     // partitions assignment to multiple consumers (exclusive)
     // re-consume from offset
