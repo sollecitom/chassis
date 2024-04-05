@@ -10,6 +10,12 @@ interface EmailAddressValidator {
 
         data object Success : Result
 
-        sealed class Failure(val explanation: String) : Result
+        sealed class Failure(val explanation: String) : Result {
+
+            data class BlacklistedEmailDomain(val domain: String) : Failure("Cannot use an email address with domain '$domain'")
+        }
     }
+
+    companion object
 }
+

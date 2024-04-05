@@ -16,6 +16,6 @@ value class EmailAddress(val value: String) : Comparable<EmailAddress> {
 
     companion object {
 
-        private const val PREFIX_FROM_DOMAIN_SEPARATOR = "@"
+        const val PREFIX_FROM_DOMAIN_SEPARATOR = "@"
     }
 }

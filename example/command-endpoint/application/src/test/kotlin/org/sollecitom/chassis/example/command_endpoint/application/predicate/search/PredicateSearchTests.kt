@@ -5,6 +5,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
 import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -21,6 +22,8 @@ import org.sollecitom.chassis.ddd.domain.CommandWasReceived
 import org.sollecitom.chassis.ddd.domain.ReceivedCommandPublisher
 import org.sollecitom.chassis.ddd.test.utils.hasInvocationContext
 import org.sollecitom.chassis.example.command_endpoint.domain.predicate.search.EmailAddressValidator
+import org.sollecitom.chassis.example.command_endpoint.domain.predicate.search.NoOp
+import org.sollecitom.chassis.example.command_endpoint.domain.predicate.search.withDomainBlacklist
 import org.sollecitom.chassis.example.event.domain.predicate.search.DeviceDescription
 import org.sollecitom.chassis.example.event.domain.predicate.search.DeviceInformation
 import org.sollecitom.chassis.example.event.domain.predicate.search.FindPredicateDevice
@@ -48,30 +51,43 @@ private class PredicateSearchTests : CoreDataGenerator by CoreDataGenerator.test
         assertThat(publishedEvent).isNotNull().hasCommandAndContext(command, invocationContext)
     }
 
-    private fun newHandler(emailAddressValidator: EmailAddressValidator = NoOpEmailAddressValidator, publish: suspend context(InvocationContext<Access>)(CommandWasReceived<FindPredicateDevice>) -> Unit): CommandHandler<FindPredicateDevice, FindPredicateDevice.Result, Access> {
+    @Test
+    fun `searching for a predicate device with a disallowed email address`() = runTest {
 
-        val publisher = InMemoryPublisher(publish)
+        val emailAddress = "bruce@gmail.com".let(::EmailAddress)
+        val deviceInformation = deviceInformation(description = "Another amazing device", productCode = "27ACD18")
+        val command = FindPredicateDevice(emailAddress, deviceInformation)
+        val invocationContext = InvocationContext.unauthenticated()
+        var publishedEvent: CommandWasReceived<FindPredicateDevice>? = null
+        val handler = newHandler(emailAddressValidator = EmailAddressValidator.withDomainBlacklist(blacklist = setOf("gmail.com"))) { event ->
+            publishedEvent = event
+        }
+
+        val result = with(invocationContext) { handler.process(command) }
+
+        assertThat(result).wasRejectedBecauseOfDisallowedEmailAddress()
+        assertThat(publishedEvent).isNull()
+    }
+
+    private fun newHandler(emailAddressValidator: EmailAddressValidator = EmailAddressValidator.NoOp, publish: suspend context(InvocationContext<Access>)(CommandWasReceived<FindPredicateDevice>) -> Unit): CommandHandler<FindPredicateDevice, FindPredicateDevice.Result, Access> {
+
+        val publisher = FunctionalPublisher(publish)
         return FindPredicateDeviceHandler(receivedCommandPublisher = publisher, emailAddressValidator = emailAddressValidator, uniqueIdGenerator = this, timeGenerator = this)
     }
 
     private fun deviceInformation(description: String, productCode: String? = null) = DeviceInformation(description.let(::Name).let(::DeviceDescription), productCode?.let(::ProductCode))
 
     private fun Assert<FindPredicateDevice.Result>.wasAccepted() = given { result -> assertThat(result).isInstanceOf<FindPredicateDevice.Result.Accepted>() }
-//
-//    private fun Assert<RegisterUser.Result>.wasRejectedBecauseAnotherUserHasTheSameEmailAddress(user: User) = given { result -> assertThat(result).isEqualTo(EmailAddressAlreadyInUse(user = user)) }
 
-    private class InMemoryPublisher(private val publish: suspend context(InvocationContext<Access>)(CommandWasReceived<FindPredicateDevice>) -> Unit) : ReceivedCommandPublisher<FindPredicateDevice, Access> {
+    private fun Assert<FindPredicateDevice.Result>.wasRejectedBecauseOfDisallowedEmailAddress() = given { result -> assertThat(result).isInstanceOf<FindPredicateDevice.Result.Rejected.DisallowedEmailAddress>() }
+
+    private class FunctionalPublisher(private val publish: suspend context(InvocationContext<Access>)(CommandWasReceived<FindPredicateDevice>) -> Unit) : ReceivedCommandPublisher<FindPredicateDevice, Access> {
 
         context(InvocationContext<Access>)
         override suspend fun publish(event: CommandWasReceived<FindPredicateDevice>) {
 
             publish(this@InvocationContext, event)
         }
-    }
-
-    private object NoOpEmailAddressValidator : EmailAddressValidator {
-
-        override fun validate(emailAddress: EmailAddress) = EmailAddressValidator.Result.Success
     }
 }
 
