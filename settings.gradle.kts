@@ -81,9 +81,9 @@ module("example", "in-memory", "eda", "domain")
 module("example", "in-memory", "eda", "test", "stubs")
 module("example", "in-memory", "eda", "test", "specification")
 
-module("example", "event", "domain")
-module("example", "event", "serialization", "json")
-module("example", "event", "serialization", "avro")
+module("example", "shared-model", "domain")
+module("example", "shared-model", "serialization", "json")
+module("example", "shared-model", "serialization", "avro")
 
 module("example", "command-endpoint", "configuration")
 module("example", "command-endpoint", "domain")

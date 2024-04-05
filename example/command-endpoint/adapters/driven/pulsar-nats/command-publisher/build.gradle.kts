@@ -3,7 +3,7 @@ dependencies {
     api(projects.chassisMessagingConfigurationUtils)
 
     implementation(projects.chassisPulsarJsonSerialization) // TODO replace with Avro
-    implementation(projects.chassisExampleEventSerializationJson) // TODO replace with Avro
+    implementation(projects.chassisExampleSharedModelSerializationJson) // TODO replace with Avro
     implementation(projects.chassisJsonUtils) // TODO replace with Avro
 
     implementation(projects.chassisExampleCommandEndpointConfiguration)

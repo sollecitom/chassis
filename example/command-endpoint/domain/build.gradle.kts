@@ -1,5 +1,5 @@
 dependencies {
-    api(projects.chassisExampleEventDomain)
+    api(projects.chassisExampleSharedModelDomain)
 
     testImplementation(projects.chassisExampleCommandEndpointConfiguration)
     testImplementation(projects.chassisTestUtils)

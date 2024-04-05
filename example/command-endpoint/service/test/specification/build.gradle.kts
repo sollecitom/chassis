@@ -3,8 +3,8 @@ dependencies {
     api(projects.chassisWebApiTestUtils)
     api(projects.chassisTestUtils)
     api(projects.chassisCorrelationCoreTestUtils)
-    api(projects.chassisExampleEventDomain)
-    api(projects.chassisExampleEventSerializationJson)
+    api(projects.chassisExampleSharedModelDomain)
+    api(projects.chassisExampleSharedModelSerializationJson) // TODO replace with Avro
     api(projects.chassisDddTestUtils)
     api(projects.chassisKotlinExtensions)
     api(projects.chassisPulsarMessagingTestUtils)
