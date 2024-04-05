@@ -12,6 +12,7 @@ import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
+import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
@@ -87,15 +88,16 @@ private class InvocationContextTestFactoryTests : CoreDataGenerator by CoreDataG
 
         val invocationId = newId.external()
         val actorId = newId.internal()
+        val customerId = newId.internal()
         val tenantId = newId.internal()
         val trace = Trace.create(externalInvocationTrace = ExternalInvocationTrace.create(invocationId = invocationId))
-        val access = Access.authenticated(actor = Actor.direct(account = Actor.Account.user(id = actorId, tenant = Tenant(id = tenantId))))
+        val access = Access.authenticated(actor = Actor.direct(account = Actor.Account.user(id = actorId, customer = Customer(id = customerId), tenant = Tenant(id = tenantId))))
         val toggles = Toggles.create()
         val context = InvocationContext(access = access, trace = trace, toggles = toggles, specifiedTargetTenant = null)
 
         val idempotency = context.idempotency
 
-        assertThat(idempotency.namespace).isNotNull().isEqualTo("${tenantId.stringValue}-${actorId.stringValue}".let(::Name))
+        assertThat(idempotency.namespace).isNotNull().isEqualTo("${tenantId.stringValue}-${customerId.stringValue}-${actorId.stringValue}".let(::Name))
         assertThat(idempotency.key).isEqualTo(trace.external.invocationId.stringValue.let(::Name))
         assertThat(idempotency.id()).isEqualTo("${idempotency.namespace!!.value}-${idempotency.key.value}".let(::Name))
         assertThat(idempotency.id(separator = "*")).isEqualTo("${idempotency.namespace!!.value}*${idempotency.key.value}".let(::Name))

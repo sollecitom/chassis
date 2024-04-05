@@ -22,8 +22,6 @@ import org.sollecitom.chassis.example.event.domain.user.registration.RegisterUse
 import org.sollecitom.chassis.example.event.domain.user.registration.UserWithPendingRegistration
 import org.sollecitom.chassis.example.event.serialization.json.jsonSerde
 import org.sollecitom.chassis.logger.core.loggable.Loggable
-import org.sollecitom.chassis.messaging.domain.Message
-import org.sollecitom.chassis.messaging.domain.OutboundMessage
 import org.sollecitom.chassis.messaging.domain.TenantAgnosticTopic
 import org.sollecitom.chassis.pulsar.json.serialization.asPulsarSchema
 import org.sollecitom.chassis.pulsar.messaging.adapter.messageProducer
@@ -32,7 +30,7 @@ import java.net.URI
 
 private val schema = CommandWasReceived.jsonSerde.asPulsarSchema()
 
-fun commandPublisher(configuration: ResultAwareCommandPublisher.Configuration): ResultAwareCommandPublisher = PulsarNatsCommandPublisher(configuration.pulsarBrokerURI, configuration.topic, configuration.instanceInfo, schema)
+fun commandPublisher(configuration: ResultAwareCommandPublisher.Configuration, messageConverter: MessageConverter<CommandWasReceived<*>> = CommandWasReceivedMessageConverter): ResultAwareCommandPublisher = PulsarNatsCommandPublisher(PulsarPublisher(configuration.pulsarBrokerURI, configuration.topic, configuration.instanceInfo, schema, messageConverter))
 
 interface ResultAwareCommandPublisher : ReceivedCommandPublisher<Command<*, *>, Access>, CommandResultSubscriber, Startable, Stoppable {
 
@@ -44,8 +42,7 @@ interface ResultAwareCommandPublisher : ReceivedCommandPublisher<Command<*, *>, 
     companion object
 }
 
-// TODO make this re-usable, and move it
-internal class PulsarNatsCommandPublisher(private val brokerURI: URI, private val topic: TenantAgnosticTopic, private val instanceInfo: InstanceInfo, private val schema: Schema<CommandWasReceived<*>>, private val scope: CoroutineScope = CoroutineScope(SupervisorJob()), private val customize: ClientBuilder.() -> ClientBuilder = { this }) : ResultAwareCommandPublisher {
+internal class PulsarPublisher(private val brokerURI: URI, private val topic: TenantAgnosticTopic, private val instanceInfo: InstanceInfo, private val schema: Schema<CommandWasReceived<*>>, private val messageConverter: MessageConverter<CommandWasReceived<*>>, private val customize: ClientBuilder.() -> ClientBuilder = { this }) : ReceivedCommandPublisher<Command<*, *>, Access>, Startable, Stoppable {
 
     private val pulsarClient: PulsarClient by lazy { PulsarClient.builder().customize().brokerURI(brokerURI).build() }
 
@@ -62,9 +59,27 @@ internal class PulsarNatsCommandPublisher(private val brokerURI: URI, private va
     context(InvocationContext<Access>)
     override suspend fun publish(event: CommandWasReceived<Command<*, *>>) {
 
-        val message = event.asOutboundMessage()
+        val message = messageConverter.toMessage(event)
         val messageId = messageProducer.produce(message, topic.withTenant(targetTenant))
-        logger.log { "Produced received command with type ${event.command.type} with message ID $messageId" }
+        PulsarNatsCommandPublisher.logger.log { "Produced received command with type ${event.command.type} with message ID $messageId" }
+    }
+
+    private fun TenantAgnosticTopic.withTenant(tenant: Tenant) = withTenant(tenant.id.stringValue.let(::Name))
+
+    companion object : Loggable()
+}
+
+// TODO make this re-usable, and move it
+internal class PulsarNatsCommandPublisher(private val publisher: PulsarPublisher, private val scope: CoroutineScope = CoroutineScope(SupervisorJob())) : ResultAwareCommandPublisher, ReceivedCommandPublisher<Command<*, *>, Access> by publisher {
+
+    override suspend fun start() {
+
+        publisher.start()
+    }
+
+    override suspend fun stop() {
+
+        publisher.stop()
     }
 
     context(InvocationContext<ACCESS>)
@@ -76,19 +91,11 @@ internal class PulsarNatsCommandPublisher(private val brokerURI: URI, private va
         scope.launch {
             // TODO receive from NATS, parse the result, and complete the deferred
             delay(3000)
-            val result = RegisterUser.Result.Accepted(user = UserWithPendingRegistration(StringId("something")))
+            val result = RegisterUser.Result.Accepted(user = UserWithPendingRegistration(StringId("something"))) // TODO fix this by reading the type from the message and by using a deserializer
             deferred.complete(result as RESULT)
         }
         return deferred
     }
-
-    private fun <COMMAND : Command<*, *>> CommandWasReceived<COMMAND>.asOutboundMessage(): Message<CommandWasReceived<COMMAND>> {
-
-        // TODO use the email address as key, and populate the properties - use a MessageConverter for this
-        return OutboundMessage(key = "", value = this, properties = emptyMap(), context = Message.Context())
-    }
-
-    private fun TenantAgnosticTopic.withTenant(tenant: Tenant) = withTenant(tenant.id.stringValue.let(::Name))
 
     companion object : Loggable()
 }

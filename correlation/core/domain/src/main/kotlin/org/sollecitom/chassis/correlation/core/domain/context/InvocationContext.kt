@@ -6,7 +6,6 @@ import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.access.actor.customer
 import org.sollecitom.chassis.correlation.core.domain.access.actor.tenant
 import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
-import org.sollecitom.chassis.correlation.core.domain.access.customerOrNull
 import org.sollecitom.chassis.correlation.core.domain.access.tenantOrNull
 import org.sollecitom.chassis.correlation.core.domain.idempotency.IdempotencyContext
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
@@ -31,7 +30,7 @@ private val Trace.idempotencyKey: Name get() = external.invocationId.stringValue
 
 private val Access.idempotencyNamespace: Name? get() = authenticatedOrNull()?.actor?.idempotencyNamespace
 
-private val Actor.idempotencyNamespace: Name get() = IdempotencyContext.combinedNamespace(account.tenant.id.stringValue, account.id.stringValue)
+private val Actor.idempotencyNamespace: Name get() = IdempotencyContext.combinedNamespace(account.tenant.id.stringValue, account.customer.id.stringValue, account.id.stringValue)
 
 @Suppress("UNCHECKED_CAST")
 fun InvocationContext<Access>.authenticatedOrNull(): InvocationContext<Access.Authenticated>? = access.authenticatedOrNull()?.let { copy(access = it) as InvocationContext<Access.Authenticated> }
