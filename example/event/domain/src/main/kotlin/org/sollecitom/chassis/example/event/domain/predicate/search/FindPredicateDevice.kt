@@ -20,8 +20,7 @@ data class FindPredicateDevice(val emailAddress: EmailAddress, val deviceInforma
 
         sealed interface Rejected : Result {
 
-            // TODO can this ever be rejected e.g., based on a blacklist or whitelist of email domains?
-            data class UnsupportedPersonalEmailAddress(val emailAddress: EmailAddress) : Rejected
+            data class DisallowedEmailAddress(val explanation: String) : Rejected
         }
     }
 
