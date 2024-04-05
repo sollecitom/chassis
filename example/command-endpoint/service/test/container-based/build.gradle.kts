@@ -21,6 +21,7 @@ dependencies {
     containerBasedServiceTestImplementation(projects.chassisExampleCommandEndpointServiceTestSpecification)
     containerBasedServiceTestImplementation(projects.chassisTestContainersUtils)
     containerBasedServiceTestImplementation(projects.chassisCoreTestUtils)
+    containerBasedServiceTestImplementation(projects.chassisMessagingTestUtils)
 }
 
 val containerBasedSystemTestTask: TaskProvider<Task> = tasks.named("containerBasedServiceTest") {

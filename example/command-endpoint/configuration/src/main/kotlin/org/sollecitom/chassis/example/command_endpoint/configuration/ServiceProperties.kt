@@ -10,7 +10,8 @@ object ServiceProperties {
 
     const val INSTANCE_ID = "INSTANCE_ID"
     const val INSTANCE_GROUP_MAX_SIZE = "INSTANCE_GROUP_MAX_SIZE"
+    const val INSTANCE_GROUP_NAME = "INSTANCE_GROUP_NAME"
 
     const val PULSAR_BROKER_URI = "PULSAR_BROKER_URI"
-    const val PULSAR_TOPIC = "PULSAR_TOPIC"
+    const val PULSAR_TOPIC_NAME = "PULSAR_TOPIC_NAME"
 }
