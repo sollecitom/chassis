@@ -15,6 +15,9 @@
   "oneOf": [
     {
       "$ref": "/example/event/domain/user/registration/RegisterUserCommand.json"
+    },
+    {
+      "$ref": "/example/event/domain/predicate/search/FindPredicateDeviceCommand.json"
     }
   ]
 }

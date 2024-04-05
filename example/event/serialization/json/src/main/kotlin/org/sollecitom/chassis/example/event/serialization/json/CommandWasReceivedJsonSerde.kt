@@ -7,7 +7,9 @@ import org.sollecitom.chassis.ddd.domain.GenericCommandWasReceived
 import org.sollecitom.chassis.ddd.domain.Happening
 import org.sollecitom.chassis.ddd.serialization.json.event.EventJsonSerdeSupport
 import org.sollecitom.chassis.ddd.serialization.json.happening.jsonSerde
+import org.sollecitom.chassis.example.event.domain.predicate.search.FindPredicateDevice
 import org.sollecitom.chassis.example.event.domain.user.registration.RegisterUser
+import org.sollecitom.chassis.example.event.serialization.json.predicate.search.FindPredicateDeviceJsonSerde
 import org.sollecitom.chassis.example.event.serialization.json.user.registration.RegisterUserJsonSerde
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
@@ -27,6 +29,10 @@ private object CommandWasReceivedJsonSerde : JsonSerde.SchemaAware<CommandWasRec
                 RegisterUserJsonSerde.serialize(command)
             }
 
+            is FindPredicateDevice -> {
+                FindPredicateDeviceJsonSerde.serialize(command)
+            }
+
             else -> error("Unknown command type ${command.type}")
         }
         return json.put(Fields.COMMAND, serializedCommand)
@@ -38,12 +44,15 @@ private object CommandWasReceivedJsonSerde : JsonSerde.SchemaAware<CommandWasRec
         if (type != CommandWasReceived.type) error("Cannot deserialize event with type ${type}. Only ${CommandWasReceived.type} is supported.")
         val commandType = json.getValue(Fields.COMMAND_TYPE, Happening.Type.jsonSerde)
         val serializedCommand = json.getJSONObject(Fields.COMMAND)
-        return when {
-            commandType == RegisterUser.type -> {
+        return when (commandType) {
+            RegisterUser.type -> {
                 val command = RegisterUserJsonSerde.deserialize(serializedCommand)
                 GenericCommandWasReceived(command, id, timestamp, context)
             }
-
+            FindPredicateDevice.type -> {
+                val command = FindPredicateDeviceJsonSerde.deserialize(serializedCommand)
+                GenericCommandWasReceived(command, id, timestamp, context)
+            }
             else -> error("Unsupported event type $commandType")
         }
     }

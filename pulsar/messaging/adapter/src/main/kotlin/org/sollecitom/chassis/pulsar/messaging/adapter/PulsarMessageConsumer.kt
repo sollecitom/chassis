@@ -19,6 +19,8 @@ internal class PulsarMessageConsumer<out VALUE>(override val topics: Set<Topic>,
 
     override suspend fun receive() = consumer.nextReceivedMessage()
 
+    override suspend fun start() = check(consumer.isConnected) { "Pulsar consumer is not connected" }
+
     override suspend fun stop() = consumer.closeAsync().await()
 
     override fun close() = stopBlocking()

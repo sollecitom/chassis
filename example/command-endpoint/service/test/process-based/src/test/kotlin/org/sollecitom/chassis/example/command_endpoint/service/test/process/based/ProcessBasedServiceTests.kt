@@ -28,7 +28,6 @@ import org.sollecitom.chassis.pulsar.test.utils.admin
 import org.sollecitom.chassis.pulsar.test.utils.client
 import org.sollecitom.chassis.pulsar.test.utils.newPulsarContainer
 
-//@Disabled // TODO re-enable
 @TestInstance(PER_CLASS)
 private class ProcessBasedServiceTests : ServiceTestSpecification, CoreDataGenerator by CoreDataGenerator.testProvider {
 

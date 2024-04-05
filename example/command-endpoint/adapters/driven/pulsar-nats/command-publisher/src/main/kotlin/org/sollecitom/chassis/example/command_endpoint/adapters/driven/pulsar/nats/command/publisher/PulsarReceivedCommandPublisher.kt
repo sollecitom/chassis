@@ -37,7 +37,8 @@ internal class PulsarReceivedCommandPublisher(private val brokerURI: URI, privat
     override suspend fun publish(event: CommandWasReceived<Command<*, *>>) {
 
         val message = messageConverter.toMessage(event)
-        val messageId = messageProducer.produce(message, topic.withTenant(targetTenant))
+        val topicWithTenant = topic.withTenant(targetTenant)
+        val messageId = messageProducer.produce(message, topicWithTenant)
         logger.log { "Produced received command with type ${event.command.type} with message ID $messageId" }
     }
 

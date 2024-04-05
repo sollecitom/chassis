@@ -15,7 +15,6 @@ import kotlin.time.Duration.Companion.seconds
 
 interface MonitoringEndpointsTestSpecification : WebServiceTestSpecification {
 
-    val timeout: Duration get() = 30.seconds
     val livenessPath: String get() = DEFAULT_LIVENESS_PATH
     val readinessPath: String get() = DEFAULT_READINESS_PATH
 

@@ -283,6 +283,10 @@ class InMemoryEventPropagationFramework(private val timeGenerator: TimeGenerator
             return nextMessage(topic, name, subscriptionName, pollingDelay)
         }
 
+        override suspend fun start() {
+
+        }
+
         override suspend fun stop() {
         }
 

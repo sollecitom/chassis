@@ -4,10 +4,11 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
+import org.sollecitom.chassis.core.domain.lifecycle.Startable
 import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 import org.sollecitom.chassis.core.domain.naming.Name
 
-interface MessageConsumer<out VALUE> : Stoppable, AutoCloseable {
+interface MessageConsumer<out VALUE> : Startable, Stoppable, AutoCloseable {
 
     val name: Name
     val subscriptionName: Name
