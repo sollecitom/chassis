@@ -83,6 +83,14 @@ private class FunctionalPublisher(private val publish: suspend context(Invocatio
 
         publish(this@InvocationContext, event)
     }
+
+    override suspend fun start() {
+
+    }
+
+    override suspend fun stop() {
+
+    }
 }
 
 private fun Assert<FindPredicateDevice.Result>.wasAccepted() = given { result -> assertThat(result).isInstanceOf<FindPredicateDevice.Result.Accepted>() }

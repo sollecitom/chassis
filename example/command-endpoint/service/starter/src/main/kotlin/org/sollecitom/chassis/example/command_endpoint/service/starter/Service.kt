@@ -11,8 +11,8 @@ import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.provider
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.application.dispatching.invoke
-import org.sollecitom.chassis.example.command_endpoint.adapters.driven.pulsar.nats.command.publisher.ResultAwareCommandPublisher
-import org.sollecitom.chassis.example.command_endpoint.adapters.driven.pulsar.nats.command.publisher.commandPublisher
+import org.sollecitom.chassis.example.command_endpoint.adapters.driven.pulsar.nats.command.publisher.PulsarAndNatsCommandPublisherConfiguration
+import org.sollecitom.chassis.example.command_endpoint.adapters.driven.pulsar.nats.command.publisher.pulsarAndNatsCommandPublisher
 import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.HttpDrivingAdapter
 import org.sollecitom.chassis.example.command_endpoint.application.user.registration.RegisterUserHandler
 import org.sollecitom.chassis.example.command_endpoint.application.user.registration.invoke
@@ -29,7 +29,7 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
 
     constructor(environment: Environment) : this(environment = environment, coreDataGenerators = CoreDataGenerator.provider(environment))
 
-    private val commandPublisher = commandPublisher(configuration = ResultAwareCommandPublisher.Configuration.from(environment))
+    private val commandPublisher = pulsarAndNatsCommandPublisher(configuration = PulsarAndNatsCommandPublisherConfiguration.from(environment))
     private val registerUserHandler = RegisterUserHandler(receivedCommandPublisher = commandPublisher, commandResultSubscriber = commandPublisher)
     private val application: Application = Application(registerUserHandler)
     private val httpDrivingAdapter = HttpDrivingAdapter(application = application, configuration = HttpDrivingAdapter.Configuration.from(environment))
@@ -61,12 +61,12 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
         val instanceGroupName get() = EnvironmentKey.instanceGroupName
     }
 
-    private fun ResultAwareCommandPublisher.Configuration.Companion.from(environment: Environment): ResultAwareCommandPublisher.Configuration {
+    private fun PulsarAndNatsCommandPublisherConfiguration.Companion.from(environment: Environment): PulsarAndNatsCommandPublisherConfiguration {
 
         val pulsarBrokerURI = Configuration.pulsarBrokerURIKey(environment)
         val topic = Configuration.topicKey(environment)
         val instanceInfo = environment.instanceInfo()
-        return ResultAwareCommandPublisher.Configuration(pulsarBrokerURI = pulsarBrokerURI, topic = topic, instanceInfo = instanceInfo)
+        return PulsarAndNatsCommandPublisherConfiguration(pulsarBrokerURI = pulsarBrokerURI, topic = topic, instanceInfo = instanceInfo)
     }
 
     companion object : Loggable()

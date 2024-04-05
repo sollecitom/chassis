@@ -28,4 +28,12 @@ class InMemoryCommandProcessor<in COMMAND : Command<RESULT, ACCESS>, out RESULT 
         results[event] = result
         return result as Deferred<R> // TODO revisit this, as it's not type-safe this way
     }
+
+    override suspend fun start() {
+
+    }
+
+    override suspend fun stop() {
+
+    }
 }
