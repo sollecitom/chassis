@@ -8,7 +8,7 @@ import org.sollecitom.chassis.web.api.utils.endpoint.Endpoint
 import org.sollecitom.chassis.web.api.utils.filters.StandardHttpFilter
 
 context(HttpApiDefinition)
-fun mainHttpApi(endpoints: List<Endpoint>, requestedPort: RequestedPort, requestFilter: Filter = StandardHttpFilter.forRequests(), responseFilter: Filter = StandardHttpFilter.forResponses()) = HttpApi(endpoints, requestedPort, requestFilter, responseFilter)
+fun mainHttpApi(endpoints: Set<Endpoint>, requestedPort: RequestedPort, requestFilter: Filter = StandardHttpFilter.forRequests(), responseFilter: Filter = StandardHttpFilter.forResponses()) = HttpApi(endpoints, requestedPort, requestFilter, responseFilter)
 
 fun healthHttpApi(requestedPort: RequestedPort, app: HttpHandler = standardHealthApp()) = HttpApi(app, requestedPort)
 

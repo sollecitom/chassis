@@ -16,7 +16,7 @@ import org.http4k.cloudnative.env.Port as Http4kPort
 
 class HttpApi(private val app: HttpHandler, private val requestedPort: RequestedPort) : Startable, Stoppable, HttpHandler {
 
-    constructor(endpoints: List<Endpoint>, requestedPort: RequestedPort, requestFilter: Filter = Filter.NoOp, responseFilter: Filter = Filter.NoOp) : this(app(endpoints, requestFilter, responseFilter), requestedPort)
+    constructor(endpoints: Set<Endpoint>, requestedPort: RequestedPort, requestFilter: Filter = Filter.NoOp, responseFilter: Filter = Filter.NoOp) : this(app(endpoints, requestFilter, responseFilter), requestedPort)
 
     private val server = server(app)
     val port: Port get() = server.port().let(::Port)
@@ -37,6 +37,6 @@ class HttpApi(private val app: HttpHandler, private val requestedPort: Requested
 
     companion object {
 
-        private fun app(endpoints: List<Endpoint>, requestFilter: Filter, responseFilter: Filter): HttpHandler = requestFilter.then(routes(*endpoints.map(Endpoint::route).toTypedArray())).withFilter(responseFilter)
+        private fun app(endpoints: Set<Endpoint>, requestFilter: Filter, responseFilter: Filter): HttpHandler = requestFilter.then(routes(*endpoints.map(Endpoint::route).toTypedArray())).withFilter(responseFilter)
     }
 }

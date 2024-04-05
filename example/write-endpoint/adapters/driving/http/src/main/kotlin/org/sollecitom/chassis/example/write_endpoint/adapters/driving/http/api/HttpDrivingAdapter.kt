@@ -22,7 +22,7 @@ class HttpDrivingAdapter(private val application: Application, configuration: Co
 
     constructor(application: Application, environment: Environment) : this(application, Configuration.from(environment))
 
-    private val api = mainHttpApi(endpoints = listOf(RegisterUserCommandsEndpoint.V1(application::invoke), UnknownCommandsEndpoint()), requestedPort = configuration.requestedPort)
+    private val api = mainHttpApi(endpoints = setOf(RegisterUserCommandsEndpoint.V1(application::invoke), UnknownCommandsEndpoint()), requestedPort = configuration.requestedPort)
     override val port: Port get() = api.port
 
     override fun invoke(request: Request) = api(request)
