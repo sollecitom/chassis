@@ -15,9 +15,13 @@ import org.sollecitom.chassis.example.command_endpoint.adapters.driven.pulsar.na
 import org.sollecitom.chassis.example.command_endpoint.adapters.driven.pulsar.nats.command.publisher.pulsarAndNatsCommandPublisher
 import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.HttpDrivingAdapter
 import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.invoke
+import org.sollecitom.chassis.example.command_endpoint.application.predicate.search.FindPredicateDeviceHandler
+import org.sollecitom.chassis.example.command_endpoint.application.predicate.search.invoke
 import org.sollecitom.chassis.example.command_endpoint.application.user.registration.RegisterUserHandler
 import org.sollecitom.chassis.example.command_endpoint.application.user.registration.invoke
 import org.sollecitom.chassis.example.command_endpoint.configuration.ServiceProperties
+import org.sollecitom.chassis.example.command_endpoint.domain.predicate.search.EmailAddressValidator
+import org.sollecitom.chassis.example.command_endpoint.domain.predicate.search.NoOp
 import org.sollecitom.chassis.lens.core.extensions.base.javaURI
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.messaging.configuration.utils.tenantAgnosticTopic
@@ -32,7 +36,9 @@ class Service(private val environment: Environment, coreDataGenerators: CoreData
 
     private val commandPublisher = pulsarAndNatsCommandPublisher(configuration = PulsarAndNatsCommandPublisherConfiguration.from(environment))
     private val registerUserHandler = RegisterUserHandler(receivedCommandPublisher = commandPublisher, commandResultSubscriber = commandPublisher)
-    private val application: Application = Application(registerUserHandler)
+    private val emailAddressValidator = EmailAddressValidator.NoOp
+    private val findPredicateDeviceHandler = FindPredicateDeviceHandler(receivedCommandPublisher = commandPublisher, emailAddressValidator = emailAddressValidator)
+    private val application: Application = Application(registerUserHandler, findPredicateDeviceHandler)
     private val httpDrivingAdapter = HttpDrivingAdapter(application = application, configuration = HttpDrivingAdapter.Configuration.from(environment))
     private val healthHttpDrivingAdapter = HealthHttpDrivingAdapter(environment = environment)
 

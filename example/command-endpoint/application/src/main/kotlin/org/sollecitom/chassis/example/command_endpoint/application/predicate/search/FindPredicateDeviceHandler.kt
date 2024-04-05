@@ -39,3 +39,5 @@ class FindPredicateDeviceHandler(private val receivedCommandPublisher: ReceivedC
     companion object
 }
 
+context(TimeGenerator, UniqueIdGenerator)
+operator fun FindPredicateDeviceHandler.Companion.invoke(receivedCommandPublisher: ReceivedCommandPublisher<FindPredicateDevice, Access>, emailAddressValidator: EmailAddressValidator) = FindPredicateDeviceHandler(receivedCommandPublisher = receivedCommandPublisher, emailAddressValidator = emailAddressValidator, uniqueIdGenerator = this@UniqueIdGenerator, timeGenerator = this@TimeGenerator)
