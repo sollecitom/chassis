@@ -2,7 +2,6 @@ package org.sollecitom.chassis.example.command_endpoint.application.predicate.se
 
 import assertk.Assert
 import assertk.assertThat
-import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
 import assertk.assertions.isNotNull
 import assertk.assertions.isNull
@@ -17,10 +16,9 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.ddd.application.dispatching.CommandHandler
-import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.CommandWasReceived
 import org.sollecitom.chassis.ddd.domain.ReceivedCommandPublisher
-import org.sollecitom.chassis.ddd.test.utils.hasInvocationContext
+import org.sollecitom.chassis.ddd.test.utils.hasCommandAndContext
 import org.sollecitom.chassis.example.command_endpoint.domain.predicate.search.EmailAddressValidator
 import org.sollecitom.chassis.example.command_endpoint.domain.predicate.search.NoOp
 import org.sollecitom.chassis.example.command_endpoint.domain.predicate.search.withDomainBlacklist
@@ -76,24 +74,17 @@ private class PredicateSearchTests : CoreDataGenerator by CoreDataGenerator.test
     }
 
     private fun deviceInformation(description: String, productCode: String? = null) = DeviceInformation(description.let(::Name).let(::DeviceDescription), productCode?.let(::ProductCode))
+}
 
-    private fun Assert<FindPredicateDevice.Result>.wasAccepted() = given { result -> assertThat(result).isInstanceOf<FindPredicateDevice.Result.Accepted>() }
+private class FunctionalPublisher(private val publish: suspend context(InvocationContext<Access>)(CommandWasReceived<FindPredicateDevice>) -> Unit) : ReceivedCommandPublisher<FindPredicateDevice, Access> {
 
-    private fun Assert<FindPredicateDevice.Result>.wasRejectedBecauseOfDisallowedEmailAddress() = given { result -> assertThat(result).isInstanceOf<FindPredicateDevice.Result.Rejected.DisallowedEmailAddress>() }
+    context(InvocationContext<Access>)
+    override suspend fun publish(event: CommandWasReceived<FindPredicateDevice>) {
 
-    private class FunctionalPublisher(private val publish: suspend context(InvocationContext<Access>)(CommandWasReceived<FindPredicateDevice>) -> Unit) : ReceivedCommandPublisher<FindPredicateDevice, Access> {
-
-        context(InvocationContext<Access>)
-        override suspend fun publish(event: CommandWasReceived<FindPredicateDevice>) {
-
-            publish(this@InvocationContext, event)
-        }
+        publish(this@InvocationContext, event)
     }
 }
 
-// TODO move this somewhere common
-private fun <COMMAND : Command<*, *>> Assert<CommandWasReceived<COMMAND>>.hasCommandAndContext(command: COMMAND, context: InvocationContext<Access>) = given { event ->
+private fun Assert<FindPredicateDevice.Result>.wasAccepted() = given { result -> assertThat(result).isInstanceOf<FindPredicateDevice.Result.Accepted>() }
 
-    assertThat(event.command).isEqualTo(command)
-    assertThat(event).hasInvocationContext(context)
-}
+private fun Assert<FindPredicateDevice.Result>.wasRejectedBecauseOfDisallowedEmailAddress() = given { result -> assertThat(result).isInstanceOf<FindPredicateDevice.Result.Rejected.DisallowedEmailAddress>() }
