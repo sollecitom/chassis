@@ -30,7 +30,6 @@ import org.sollecitom.chassis.pulsar.messaging.adapter.messageProducer
 import org.sollecitom.chassis.pulsar.utils.brokerURI
 import java.net.URI
 
-
 private val schema = CommandWasReceived.jsonSerde.asPulsarSchema()
 
 fun commandPublisher(configuration: ResultAwareCommandPublisher.Configuration): ResultAwareCommandPublisher = PulsarNatsCommandPublisher(configuration.pulsarBrokerURI, configuration.topic, configuration.instanceInfo, schema)
