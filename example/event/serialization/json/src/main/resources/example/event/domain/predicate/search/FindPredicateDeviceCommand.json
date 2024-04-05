@@ -4,7 +4,7 @@
   "required": [
     "type",
     "email-address",
-    "device"
+    "device-information"
   ],
   "allOf": [
     {
@@ -22,8 +22,8 @@
       "type": "string",
       "minLength": 1
     },
-    "device": {
-      "$ref": "/example/event/domain/predicate/search/Device.json"
+    "device-information": {
+      "$ref": "/example/event/domain/predicate/search/DeviceInformation.json"
     }
   }
 }
