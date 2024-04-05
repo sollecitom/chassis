@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "description"
+  ],
+  "properties": {
+    "description": {
+      "$ref": "/example/event/domain/predicate/search/DeviceDescription.json"
+    },
+    "product-code": {
+      "$ref": "/example/event/domain/predicate/search/ProductCode.json"
+    }
+  }
+}

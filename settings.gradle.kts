@@ -85,6 +85,7 @@ module("example", "event", "domain")
 module("example", "event", "serialization", "json")
 module("example", "event", "serialization", "avro")
 
+// TODO remove this whole service after command-endpoint works
 module("example", "write-endpoint", "configuration")
 module("example", "write-endpoint", "domain")
 module("example", "write-endpoint", "application")

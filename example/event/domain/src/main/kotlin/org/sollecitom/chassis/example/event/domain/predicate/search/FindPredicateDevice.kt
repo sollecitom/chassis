@@ -8,12 +8,12 @@ import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.Happening
 import org.sollecitom.chassis.example.event.domain.user.registration.RegisterUser
 
-data class FindPredicateDevice(val emailAddress: EmailAddress) : Command<RegisterUser.Result, Access> {
+data class FindPredicateDevice(val emailAddress: EmailAddress, val device: Device) : Command<RegisterUser.Result, Access> {
 
     override val accessRequirements get() = Command.AccessRequirements.UnauthenticatedAccessOnly
     override val type: Happening.Type get() = Companion.type
 
-    override fun toString() = "FindPredicateDevice(emailAddress=${emailAddress.value}, type=${type.name.value}, version=${version.value})"
+    override fun toString() = "FindPredicateDevice(emailAddress=${emailAddress.value}, device=${device}, type=${type.name.value}, version=${version.value})"
 
     sealed interface Result {
 
