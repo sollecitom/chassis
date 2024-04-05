@@ -4,6 +4,7 @@ import org.junit.jupiter.api.TestInstance
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 
+// TODO add input checks for description, email address, and product code in the HTTP endpoint
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 private class PredicateSearchTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
