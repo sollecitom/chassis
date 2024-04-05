@@ -85,17 +85,6 @@ module("example", "event", "domain")
 module("example", "event", "serialization", "json")
 module("example", "event", "serialization", "avro")
 
-// TODO remove this whole service after command-endpoint works
-module("example", "write-endpoint", "configuration")
-module("example", "write-endpoint", "domain")
-module("example", "write-endpoint", "application")
-module("example", "write-endpoint", "adapters", "driving", "http")
-module("example", "write-endpoint", "adapters", "driven", "user", "repository")
-module("example", "write-endpoint", "service", "starter")
-module("example", "write-endpoint", "service", "test", "specification")
-module("example", "write-endpoint", "service", "test", "process-based")
-module("example", "write-endpoint", "service", "test", "container-based")
-
 module("example", "command-endpoint", "configuration")
 module("example", "command-endpoint", "domain")
 module("example", "command-endpoint", "application")
