@@ -18,7 +18,7 @@ import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticate
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.test.utils.hasInvocationContext
 import org.sollecitom.chassis.ddd.test.utils.isOriginating
-import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
+import org.sollecitom.chassis.example.event.domain.user.registration.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.event.serialization.json.jsonSerde
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.http4k.utils.lens.invoke

@@ -1,12 +1,12 @@
-package org.sollecitom.chassis.example.event.serialization.json
+package org.sollecitom.chassis.example.event.serialization.json.user.registration
 
 import org.json.JSONObject
 import org.sollecitom.chassis.ddd.domain.Happening
 import org.sollecitom.chassis.ddd.serialization.json.event.EventJsonSerdeSupport
 import org.sollecitom.chassis.ddd.serialization.json.happening.jsonSerde
-import org.sollecitom.chassis.example.event.domain.UserRegistrationEvent
-import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasAlreadySubmitted
-import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
+import org.sollecitom.chassis.example.event.domain.user.registration.UserRegistrationEvent
+import org.sollecitom.chassis.example.event.domain.user.registration.UserRegistrationRequestWasAlreadySubmitted
+import org.sollecitom.chassis.example.event.domain.user.registration.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.json.utils.serde.getValue

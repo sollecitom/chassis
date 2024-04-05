@@ -1,11 +1,12 @@
-package org.sollecitom.chassis.example.event.serialization.json
+package org.sollecitom.chassis.example.event.serialization.json.user
 
 import org.json.JSONObject
 import org.sollecitom.chassis.ddd.domain.Happening
 import org.sollecitom.chassis.ddd.serialization.json.event.EventJsonSerdeSupport
 import org.sollecitom.chassis.ddd.serialization.json.happening.jsonSerde
-import org.sollecitom.chassis.example.event.domain.UserEvent
-import org.sollecitom.chassis.example.event.domain.UserRegistrationEvent
+import org.sollecitom.chassis.example.event.domain.user.UserEvent
+import org.sollecitom.chassis.example.event.domain.user.registration.UserRegistrationEvent
+import org.sollecitom.chassis.example.event.serialization.json.user.registration.UserRegistrationEventJsonSerde
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.json.utils.serde.getValue
@@ -19,6 +20,7 @@ internal object UserEventJsonSerde : JsonSerde.SchemaAware<UserEvent>, EventJson
 
     override fun serialize(value: UserEvent) = when (value) {
         is UserRegistrationEvent -> UserRegistrationEventJsonSerde.serialize(value)
+        else -> error("Unsupported user event $value")
     }
 
     override fun deserialize(json: JSONObject): UserEvent {

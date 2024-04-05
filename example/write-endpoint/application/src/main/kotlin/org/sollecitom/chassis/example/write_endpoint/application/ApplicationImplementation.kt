@@ -8,9 +8,9 @@ import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.application.LoggingApplicationAdapter
 import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.PublishedEvent
-import org.sollecitom.chassis.example.event.domain.UserRegistrationEvent
-import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasAlreadySubmitted
-import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
+import org.sollecitom.chassis.example.event.domain.user.registration.UserRegistrationEvent
+import org.sollecitom.chassis.example.event.domain.user.registration.UserRegistrationRequestWasAlreadySubmitted
+import org.sollecitom.chassis.example.event.domain.user.registration.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Accepted
 import org.sollecitom.chassis.example.write_endpoint.application.user.RegisterUser.V1.Result.Rejected.EmailAddressAlreadyInUse

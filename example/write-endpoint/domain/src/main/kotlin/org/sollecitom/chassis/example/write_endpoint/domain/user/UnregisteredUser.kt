@@ -8,8 +8,8 @@ import org.sollecitom.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.ddd.domain.PublishedEvent
 import org.sollecitom.chassis.ddd.domain.toEventContext
-import org.sollecitom.chassis.example.event.domain.UserEvent
-import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
+import org.sollecitom.chassis.example.event.domain.user.UserEvent
+import org.sollecitom.chassis.example.event.domain.user.registration.UserRegistrationRequestWasSubmitted
 
 context(UniqueIdGenerator, TimeGenerator)
 internal class UnregisteredUser(override val id: Id, private val emailAddress: EmailAddress, private val publish: suspend (UserEvent) -> Deferred<Unit>) : User {

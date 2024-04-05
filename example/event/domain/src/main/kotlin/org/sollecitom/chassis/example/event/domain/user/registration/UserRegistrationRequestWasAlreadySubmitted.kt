@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.event.domain
+package org.sollecitom.chassis.example.event.domain.user.registration
 
 import kotlinx.datetime.Instant
 import org.sollecitom.chassis.core.domain.email.EmailAddress

@@ -18,9 +18,9 @@ import org.sollecitom.chassis.ddd.domain.framework.EventFramework
 import org.sollecitom.chassis.ddd.event.framework.memory.inMemory
 import org.sollecitom.chassis.ddd.test.utils.hasInvocationContext
 import org.sollecitom.chassis.ddd.test.utils.isOriginating
-import org.sollecitom.chassis.example.event.domain.UserEvent
-import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasAlreadySubmitted
-import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
+import org.sollecitom.chassis.example.event.domain.user.UserEvent
+import org.sollecitom.chassis.example.event.domain.user.registration.UserRegistrationRequestWasAlreadySubmitted
+import org.sollecitom.chassis.example.event.domain.user.registration.UserRegistrationRequestWasSubmitted
 import org.sollecitom.chassis.example.write_endpoint.domain.user.EventSourcedUserRepository
 import kotlin.time.Duration.Companion.seconds
 

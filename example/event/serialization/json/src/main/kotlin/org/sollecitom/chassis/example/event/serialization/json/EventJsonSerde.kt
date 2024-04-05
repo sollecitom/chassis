@@ -4,7 +4,8 @@ import org.json.JSONObject
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.Happening
 import org.sollecitom.chassis.ddd.serialization.json.happening.jsonSerde
-import org.sollecitom.chassis.example.event.domain.UserEvent
+import org.sollecitom.chassis.example.event.domain.user.UserEvent
+import org.sollecitom.chassis.example.event.serialization.json.user.UserEventJsonSerde
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.json.utils.serde.getValue

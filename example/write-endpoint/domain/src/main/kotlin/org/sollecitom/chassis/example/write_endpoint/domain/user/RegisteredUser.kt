@@ -7,9 +7,9 @@ import org.sollecitom.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.ddd.domain.PublishedEvent
 import org.sollecitom.chassis.ddd.domain.toEventContext
-import org.sollecitom.chassis.example.event.domain.UserEvent
-import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasAlreadySubmitted
-import org.sollecitom.chassis.example.event.domain.UserRegistrationRequestWasSubmitted
+import org.sollecitom.chassis.example.event.domain.user.UserEvent
+import org.sollecitom.chassis.example.event.domain.user.registration.UserRegistrationRequestWasAlreadySubmitted
+import org.sollecitom.chassis.example.event.domain.user.registration.UserRegistrationRequestWasSubmitted
 
 context(UniqueIdGenerator, TimeGenerator)
 internal class RegisteredUser(private val pastUserRegistrationRequest: UserRegistrationRequestWasSubmitted, private val publish: suspend (UserEvent) -> Deferred<Unit>) : User {
@@ -25,5 +25,5 @@ internal class RegisteredUser(private val pastUserRegistrationRequest: UserRegis
     }
 
     context(InvocationContext<*>)
-    private fun UserRegistrationRequestWasSubmitted.alreadySubmitted() = UserRegistrationRequestWasAlreadySubmitted.V1(emailAddress = emailAddress, userId = userId, id = newId.internal(), timestamp = clock.now(), context = this@InvocationContext.toEventContext())
+    private fun UserRegistrationRequestWasSubmitted.alreadySubmitted() = org.sollecitom.chassis.example.event.domain.user.registration.UserRegistrationRequestWasAlreadySubmitted.V1(emailAddress = emailAddress, userId = userId, id = newId.internal(), timestamp = clock.now(), context = this@InvocationContext.toEventContext())
 }

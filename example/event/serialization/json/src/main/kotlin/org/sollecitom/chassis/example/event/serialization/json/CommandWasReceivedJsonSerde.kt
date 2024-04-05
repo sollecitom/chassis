@@ -8,6 +8,7 @@ import org.sollecitom.chassis.ddd.domain.Happening
 import org.sollecitom.chassis.ddd.serialization.json.event.EventJsonSerdeSupport
 import org.sollecitom.chassis.ddd.serialization.json.happening.jsonSerde
 import org.sollecitom.chassis.example.event.domain.user.registration.RegisterUser
+import org.sollecitom.chassis.example.event.serialization.json.user.registration.RegisterUserJsonSerde
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde
 import org.sollecitom.chassis.json.utils.serde.getValue
