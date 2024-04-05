@@ -6,9 +6,8 @@ import org.sollecitom.chassis.core.domain.versioning.IntVersion
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.Happening
-import org.sollecitom.chassis.example.event.domain.user.registration.RegisterUser
 
-data class FindPredicateDevice(val emailAddress: EmailAddress, val deviceInformation: DeviceInformation) : Command<RegisterUser.Result, Access> {
+data class FindPredicateDevice(val emailAddress: EmailAddress, val deviceInformation: DeviceInformation) : Command<FindPredicateDevice.Result, Access> {
 
     override val accessRequirements get() = Command.AccessRequirements.UnauthenticatedAccessOnly
     override val type: Happening.Type get() = Companion.type
