@@ -9,10 +9,12 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
+import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
 import org.sollecitom.chassis.correlation.core.domain.access.session.Session
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 import org.sollecitom.chassis.correlation.core.test.utils.access.session.federated
 import org.sollecitom.chassis.correlation.core.test.utils.access.session.simple
+import org.sollecitom.chassis.correlation.core.test.utils.customer.create
 import org.sollecitom.chassis.correlation.core.test.utils.tenancy.create
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
@@ -81,13 +83,15 @@ private class AuthenticationTestFactoryTests : CoreDataGenerator by CoreDataGene
         }
 
         @Test
-        fun `with given token and tenant`() {
+        fun `with given token, customer, and tenant`() {
 
             val token = Authentication.Token.create()
+            val customer = Customer.create()
             val tenant = Tenant.create()
 
-            val authentication = Authentication.federated(tenant = tenant, token = token)
+            val authentication = Authentication.federated(customer = customer, tenant = tenant, token = token)
 
+            assertThat(authentication.session.identityProvider.customer).isEqualTo(customer)
             assertThat(authentication.session.identityProvider.tenant).isEqualTo(tenant)
         }
     }

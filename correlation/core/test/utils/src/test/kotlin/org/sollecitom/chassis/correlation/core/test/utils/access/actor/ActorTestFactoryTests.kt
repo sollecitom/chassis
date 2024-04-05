@@ -12,8 +12,10 @@ import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.access.actor.impersonating
 import org.sollecitom.chassis.correlation.core.domain.access.actor.onBehalfOf
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
+import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 import org.sollecitom.chassis.correlation.core.test.utils.access.authentication.federated
+import org.sollecitom.chassis.correlation.core.test.utils.customer.create
 import org.sollecitom.chassis.correlation.core.test.utils.tenancy.create
 
 @TestInstance(PER_CLASS)
@@ -25,9 +27,10 @@ private class ActorTestFactoryTests : CoreDataGenerator by CoreDataGenerator.tes
         @Test
         fun `with given arguments`() {
 
+            val customer = Customer.create()
             val tenant = Tenant.create()
-            val account = Actor.Account.user(tenant = tenant)
-            val authentication = Authentication.federated(tenant = tenant)
+            val account = Actor.Account.user(customer = customer, tenant = tenant)
+            val authentication = Authentication.federated(customer = customer, tenant = tenant)
 
             val actor = Actor.direct(account = account, authentication = authentication)
 

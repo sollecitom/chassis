@@ -3,6 +3,10 @@ package org.sollecitom.chassis.correlation.core.domain.context
 import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
+import org.sollecitom.chassis.correlation.core.domain.access.actor.customer
+import org.sollecitom.chassis.correlation.core.domain.access.actor.tenant
+import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
+import org.sollecitom.chassis.correlation.core.domain.access.customerOrNull
 import org.sollecitom.chassis.correlation.core.domain.access.tenantOrNull
 import org.sollecitom.chassis.correlation.core.domain.idempotency.IdempotencyContext
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
@@ -42,3 +46,9 @@ fun InvocationContext<Access>.unauthenticatedOrNull(): InvocationContext<Access.
 fun InvocationContext<Access>.unauthenticatedOrThrow() = unauthenticatedOrNull() ?: error("Invocation context is authenticated")
 
 fun InvocationContext<Access>.unauthenticatedOrFailure(): Result<InvocationContext<Access.Unauthenticated>> = runCatching { unauthenticatedOrThrow() }
+
+val InvocationContext<*>.customerOrNull: Customer? get() = authenticatedOrNull()?.customer
+val InvocationContext<Access.Authenticated>.customer: Customer get() = access.actor.customer
+
+val InvocationContext<*>.tenantOrNull: Tenant? get() = authenticatedOrNull()?.tenant
+val InvocationContext<Access.Authenticated>.tenant: Tenant get() = access.actor.tenant

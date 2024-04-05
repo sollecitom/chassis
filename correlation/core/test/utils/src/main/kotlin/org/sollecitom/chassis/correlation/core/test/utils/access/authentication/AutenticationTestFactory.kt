@@ -8,12 +8,14 @@ import org.sollecitom.chassis.correlation.core.domain.access.authentication.Auth
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.CredentialsBasedAuthentication
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.FederatedAuthentication
 import org.sollecitom.chassis.correlation.core.domain.access.authentication.StatelessAuthentication
+import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
 import org.sollecitom.chassis.correlation.core.domain.access.session.FederatedSession
 import org.sollecitom.chassis.correlation.core.domain.access.session.Session
 import org.sollecitom.chassis.correlation.core.domain.access.session.SimpleSession
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 import org.sollecitom.chassis.correlation.core.test.utils.access.session.federated
 import org.sollecitom.chassis.correlation.core.test.utils.access.session.simple
+import org.sollecitom.chassis.correlation.core.test.utils.customer.create
 import org.sollecitom.chassis.correlation.core.test.utils.tenancy.create
 import kotlin.time.Duration.Companion.minutes
 
@@ -36,7 +38,7 @@ context(UniqueIdGenerator, TimeGenerator)
 fun Authentication.Companion.federated(timeNow: Instant = clock.now(), token: Authentication.Token = Authentication.Token.create(timeNow = timeNow), session: FederatedSession = Session.federated()): FederatedAuthentication = FederatedAuthentication(token = token, session = session)
 
 context(UniqueIdGenerator, TimeGenerator)
-fun Authentication.Companion.federated(timeNow: Instant = clock.now(), tenant: Tenant = Tenant.create(), token: Authentication.Token = Authentication.Token.create(timeNow = timeNow), session: FederatedSession = Session.federated(tenant = tenant)): FederatedAuthentication = FederatedAuthentication(token = token, session = session)
+fun Authentication.Companion.federated(timeNow: Instant = clock.now(), customer: Customer = Customer.create(), tenant: Tenant = Tenant.create(), token: Authentication.Token = Authentication.Token.create(timeNow = timeNow), session: FederatedSession = Session.federated(customer = customer, tenant = tenant)): FederatedAuthentication = FederatedAuthentication(token = token, session = session)
 
 context(UniqueIdGenerator, TimeGenerator)
 fun Authentication.Companion.stateless(timeNow: Instant = clock.now(), token: Authentication.Token = Authentication.Token.create(timeNow = timeNow)): StatelessAuthentication = StatelessAuthentication(token = token)

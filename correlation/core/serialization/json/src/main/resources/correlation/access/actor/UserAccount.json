@@ -6,6 +6,7 @@
     "type",
     "id",
     "locale",
+    "customer",
     "tenant"
   ],
   "properties": {
@@ -19,6 +20,9 @@
     "locale": {
       "type": "string",
       "minLength": 1
+    },
+    "customer": {
+      "$ref": "/correlation/customer/Customer.json"
     },
     "tenant": {
       "$ref": "/correlation/tenancy/Tenant.json"

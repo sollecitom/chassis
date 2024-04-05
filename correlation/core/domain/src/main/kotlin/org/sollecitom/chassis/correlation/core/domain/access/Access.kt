@@ -1,8 +1,10 @@
 package org.sollecitom.chassis.correlation.core.domain.access
 
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
+import org.sollecitom.chassis.correlation.core.domain.access.actor.customer
 import org.sollecitom.chassis.correlation.core.domain.access.actor.tenant
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
+import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
 import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
 import org.sollecitom.chassis.correlation.core.domain.access.scope.AccessScope
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
@@ -37,6 +39,7 @@ sealed interface Access {
     companion object
 }
 
+val Access.customerOrNull: Customer? get() = authenticatedOrNull()?.actor?.customer
 val Access.tenantOrNull: Tenant? get() = authenticatedOrNull()?.actor?.tenant
 
 fun Access.authenticatedOrThrow(): Access.Authenticated = authenticatedOrNull() ?: error("Access is unauthenticated")

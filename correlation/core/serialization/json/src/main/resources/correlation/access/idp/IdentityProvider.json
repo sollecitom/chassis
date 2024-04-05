@@ -4,12 +4,16 @@
   "additionalProperties": false,
   "required": [
     "name",
+    "customer",
     "tenant"
   ],
   "properties": {
     "name": {
       "type": "string",
       "minLength": 1
+    },
+    "customer": {
+      "$ref": "/correlation/customer/Customer.json"
     },
     "tenant": {
       "$ref": "/correlation/tenancy/Tenant.json"

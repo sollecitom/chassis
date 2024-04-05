@@ -4,7 +4,9 @@ import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.serialization.json.identity.jsonSerde
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
+import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
+import org.sollecitom.chassis.correlation.core.serialization.json.customer.jsonSerde
 import org.sollecitom.chassis.correlation.core.serialization.json.tenancy.jsonSerde
 import org.sollecitom.chassis.json.utils.getRequiredString
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
@@ -23,6 +25,7 @@ internal object UserAccountJsonSerde : JsonSerde.SchemaAware<Actor.UserAccount> 
         put(Fields.TYPE, TYPE_VALUE)
         setValue(Fields.ID, value.id, Id.jsonSerde)
         put(Fields.LOCALE, value.locale.toLanguageTag())
+        setValue(Fields.CUSTOMER, value.customer, Customer.jsonSerde)
         setValue(Fields.TENANT, value.tenant, Tenant.jsonSerde)
     }
 
@@ -32,14 +35,16 @@ internal object UserAccountJsonSerde : JsonSerde.SchemaAware<Actor.UserAccount> 
         check(type == TYPE_VALUE) { "Invalid type '$type'. Must be '$TYPE_VALUE'" }
         val id = json.getValue(Fields.ID, Id.jsonSerde)
         val locale = json.getRequiredString(Fields.LOCALE).let(Locale::forLanguageTag)
+        val customer = json.getValue(Fields.CUSTOMER, Customer.jsonSerde)
         val tenant = json.getValue(Fields.TENANT, Tenant.jsonSerde)
-        return Actor.UserAccount(id = id, locale = locale, tenant = tenant)
+        return Actor.UserAccount(id = id, locale = locale, customer = customer, tenant = tenant)
     }
 
     private object Fields {
         const val TYPE = "type"
         const val ID = "id"
         const val LOCALE = "locale"
+        const val CUSTOMER = "customer"
         const val TENANT = "tenant"
     }
 }
