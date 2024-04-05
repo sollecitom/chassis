@@ -30,15 +30,15 @@ import org.sollecitom.chassis.web.api.test.utils.LocalHttpDrivingAdapterTestSpec
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
 import org.sollecitom.chassis.web.api.utils.api.withInvocationContext
 
-interface FindPredicateCommandsHttpTestSpecification : CoreDataGenerator, WithHttp4kOpenApiValidationSupport, HttpApiDefinition, LocalHttpDrivingAdapterTestSpecification {
+interface FindPredicateDeviceCommandsHttpTestSpecification : CoreDataGenerator, WithHttp4kOpenApiValidationSupport, HttpApiDefinition, LocalHttpDrivingAdapterTestSpecification {
 
     private val commandType get() = FindPredicateDevice.type
 
     @Test
-    fun `submitting a find predicate command without product code`() {
+    fun `submitting a find predicate device command without product code`() {
 
         val api = httpDrivingAdapter { _ -> FindPredicateDevice.Result.Accepted }
-        val json = findPredicateDevicePayload(emailAddress = "bruce@waynecorp.com", deviceDescription = "Some device")
+        val json = findPredicateDevicePayload(emailAddress = "bruce@waynecorp.com", description = "Some device")
         val invocationContext = InvocationContext.unauthenticated().withToggle(Toggles.InvocationVisibility, InvocationVisibility.HIGH)
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
         request.ensureCompliantWithOpenApi()
@@ -51,10 +51,10 @@ interface FindPredicateCommandsHttpTestSpecification : CoreDataGenerator, WithHt
     }
 
     @Test
-    fun `submitting a find predicate command with product code`() {
+    fun `submitting a find predicate device command with product code`() {
 
         val api = httpDrivingAdapter { _ -> FindPredicateDevice.Result.Accepted }
-        val json = findPredicateDevicePayload(emailAddress = "bruce@waynecorp.com", deviceDescription = "Some device", productCode = "38BEE27")
+        val json = findPredicateDevicePayload(emailAddress = "bruce@waynecorp.com", description = "Some device", productCode = "38BEE27")
         val invocationContext = InvocationContext.unauthenticated().withToggle(Toggles.InvocationVisibility, InvocationVisibility.HIGH)
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
         request.ensureCompliantWithOpenApi()
@@ -67,10 +67,10 @@ interface FindPredicateCommandsHttpTestSpecification : CoreDataGenerator, WithHt
     }
 
     @Test
-    fun `submitting a find predicate command with authenticated access`() {
+    fun `submitting a find predicate device command with authenticated access`() {
 
         val api = httpDrivingAdapter { _ -> FindPredicateDevice.Result.Accepted }
-        val json = findPredicateDevicePayload(emailAddress = "bruce@waynecorp.com", deviceDescription = "Some device", productCode = "38BEE27")
+        val json = findPredicateDevicePayload(emailAddress = "bruce@waynecorp.com", description = "Some device", productCode = "38BEE27")
         val invocationContext = InvocationContext.authenticated().withToggle(Toggles.InvocationVisibility, InvocationVisibility.HIGH)
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
         request.ensureCompliantWithOpenApi()
@@ -83,10 +83,10 @@ interface FindPredicateCommandsHttpTestSpecification : CoreDataGenerator, WithHt
     }
 
     @Test
-    fun `attempting to submit a find predicate command with an invalid email address`() {
+    fun `attempting to submit a find predicate device command with an invalid email address`() {
 
         val api = httpDrivingAdapter { _ -> FindPredicateDevice.Result.Accepted }
-        val json = findPredicateDevicePayload(emailAddress = "invalid-email-address", deviceDescription = "Some device")
+        val json = findPredicateDevicePayload(emailAddress = "invalid-email-address", description = "Some device")
         val invocationContext = InvocationContext.unauthenticated().withToggle(Toggles.InvocationVisibility, InvocationVisibility.HIGH)
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
         request.ensureCompliantWithOpenApi()
@@ -98,10 +98,10 @@ interface FindPredicateCommandsHttpTestSpecification : CoreDataGenerator, WithHt
     }
 
     @Test
-    fun `attempting to submit a find predicate command with a disallowed email address`() {
+    fun `attempting to submit a find predicate device command with a disallowed email address`() {
 
         val api = httpDrivingAdapter { _ -> FindPredicateDevice.Result.Rejected.DisallowedEmailAddress("Gmail email domain is disallowed") }
-        val json = findPredicateDevicePayload(emailAddress = "bruce@gmail.com", deviceDescription = "Some device")
+        val json = findPredicateDevicePayload(emailAddress = "bruce@gmail.com", description = "Some device")
         val invocationContext = InvocationContext.unauthenticated().withToggle(Toggles.InvocationVisibility, InvocationVisibility.HIGH)
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).withInvocationContext(invocationContext)
         request.ensureCompliantWithOpenApi()
@@ -109,17 +109,17 @@ interface FindPredicateCommandsHttpTestSpecification : CoreDataGenerator, WithHt
         val response = api(request)
 
         assertThat(response).compliesWithOpenApiForRequest(request)
-        assertThat(response.status).isEqualTo(Status.BAD_REQUEST) // TODO change to OK or UNPROCESSABLE_ENTITY and check the payload for errors
+        assertThat(response.status).isEqualTo(Status.UNPROCESSABLE_ENTITY) // TODO change to OK maybe
     }
 
     @Test
-    fun `attempting to submit a find predicate command with an invalid content type`() {
+    fun `attempting to submit a find predicate device command with an invalid content type`() {
 
         val api = httpDrivingAdapter { _ -> FindPredicateDevice.Result.Accepted }
-        val json = findPredicateDevicePayload(emailAddress = "bruce@waynecorp.com", deviceDescription = "Some device")
+        val json = findPredicateDevicePayload(emailAddress = "bruce@waynecorp.com", description = "Some device")
         val invocationContext = InvocationContext.unauthenticated().withToggle(Toggles.InvocationVisibility, InvocationVisibility.HIGH)
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v${commandType.version.value}")).body(json).contentType(ContentType.TEXT_PLAIN).contentLength(json.toString().length).withInvocationContext(invocationContext)
-        request.ensureCompliantWithOpenApi()
+        request.ensureNonCompliantWithOpenApi(error = ValidationReportError.Request.ContentTypeNotAllowed)
 
         val response = api(request)
 
@@ -128,13 +128,13 @@ interface FindPredicateCommandsHttpTestSpecification : CoreDataGenerator, WithHt
     }
 
     @Test
-    fun `attempting to submit a find predicate command with an invalid version`() {
+    fun `attempting to submit a find predicate device command with an invalid version`() {
 
         val api = httpDrivingAdapter { _ -> FindPredicateDevice.Result.Accepted }
-        val json = findPredicateDevicePayload(emailAddress = "bruce@waynecorp.com", deviceDescription = "Some device")
+        val json = findPredicateDevicePayload(emailAddress = "bruce@waynecorp.com", description = "Some device")
         val invocationContext = InvocationContext.unauthenticated().withToggle(Toggles.InvocationVisibility, InvocationVisibility.HIGH)
         val request = Request(Method.POST, path("commands/${commandType.name.value}/v!")).body(json).withInvocationContext(invocationContext)
-        request.ensureCompliantWithOpenApi()
+        request.ensureNonCompliantWithOpenApi(error = ValidationReportError.Request.UnknownPath)
 
         val response = api(request)
 
@@ -142,7 +142,7 @@ interface FindPredicateCommandsHttpTestSpecification : CoreDataGenerator, WithHt
         assertThat(response.status).isEqualTo(Status.BAD_REQUEST) // TODO change to OK and check the payload for errors
     }
 
-    private fun findPredicateDevicePayload(emailAddress: String, deviceDescription: String, productCode: String? = null): JSONObject = JSONObject().put("email", JSONObject().put("address", emailAddress).put("device-information", JSONObject().put("description", deviceDescription).put("product-code", productCode)))
+    private fun findPredicateDevicePayload(emailAddress: String, description: String, productCode: String? = null): JSONObject = JSONObject().put("email", JSONObject().put("address", emailAddress)).put("device", JSONObject().put("description", description).put("product-code", productCode))
 
     private fun httpDrivingAdapter(handle: suspend context(InvocationContext<Access>)(FindPredicateDevice) -> FindPredicateDevice.Result = { _ -> FindPredicateDevice.Result.Accepted }) = httpDrivingAdapter(application = StubbedApplication(handle))
 

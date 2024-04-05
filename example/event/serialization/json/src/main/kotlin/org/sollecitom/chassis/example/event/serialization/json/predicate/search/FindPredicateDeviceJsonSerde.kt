@@ -16,18 +16,18 @@ internal object FindPredicateDeviceJsonSerde : JsonSerde.SchemaAware<FindPredica
 
     override fun serialize(value: FindPredicateDevice) = JSONObject().apply {
         put(Fields.EMAIL_ADDRESS, value.emailAddress.value)
-        setValue(Fields.DEVICE_INFORMATION, value.deviceInformation, DeviceInformationJsonSerde)
+        setValue(Fields.DEVICE, value.device, DeviceJsonSerde)
     }
 
     override fun deserialize(json: JSONObject): FindPredicateDevice {
 
         val emailAddress = json.getRequiredString(Fields.EMAIL_ADDRESS).let(::EmailAddress)
-        val device = json.getValue(Fields.DEVICE_INFORMATION, DeviceInformationJsonSerde)
+        val device = json.getValue(Fields.DEVICE, DeviceJsonSerde)
         return FindPredicateDevice(emailAddress, device)
     }
 
     private object Fields {
         const val EMAIL_ADDRESS = "email-address"
-        const val DEVICE_INFORMATION = "device-information"
+        const val DEVICE = "device"
     }
 }

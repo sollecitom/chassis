@@ -6,7 +6,7 @@
   ],
   "properties": {
     "description": {
-      "$ref": "/example/event/domain/predicate/search/DeviceDescription.json"
+      "$ref": "/example/event/domain/predicate/search/Description.json"
     },
     "product-code": {
       "$ref": "/example/event/domain/predicate/search/ProductCode.json"

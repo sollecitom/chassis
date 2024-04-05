@@ -4,6 +4,36 @@ info:
   description: Accepts commands to register a user.
   version: "1.0"
 paths:
+  /commands/find-predicate-device/v1:
+    post:
+      operationId: findPredicateDeviceV1
+      summary: Submits a find predicate device V1 command to find the predicate of a medical device.
+      parameters:
+        - $ref: '#/components/parameters/invocationContext'
+        - $ref: '#/components/parameters/accept'
+        - $ref: '#/components/parameters/contentLength'
+      requestBody:
+        description: Details with information about the device and the requester.
+        content:
+          application/json:
+            schema:
+              $ref: '/api/schemas/json/predicate/search/FindPredicateDeviceCommandV1.json'
+            example: { "email": { "address": "bruce@waynecorp.com" }, "device": { "description": "Blood pump", "product-code": "38BEE27" } }
+        required: true
+      responses:
+        "202":
+          $ref: '#/components/responses/Accepted-FindPredicateDeviceCommand'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "415":
+          $ref: '#/components/responses/UnsupportedMediaType'
+        422:
+          $ref: '#/components/responses/UnprocessableEntity'
+        500:
+          $ref: '#/components/responses/UnexpectedError'
+        502:
+          $ref: '#/components/responses/BadGateway'
+
   /commands/register-user/v1:
     post:
       operationId: registerUserV1
@@ -22,7 +52,7 @@ paths:
         required: true
       responses:
         "202":
-          $ref: '#/components/responses/Accepted'
+          $ref: '#/components/responses/Accepted-RegisterUserCommand'
         "400":
           $ref: '#/components/responses/BadRequest'
         "415":
@@ -33,6 +63,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
         502:
           $ref: '#/components/responses/BadGateway'
+
 components:
   parameters:
     invocationContext:
@@ -101,7 +132,7 @@ components:
       required: true
       description: Content length
   responses:
-    Accepted:
+    Accepted-RegisterUserCommand:
       description: The command was accepted.
       content:
         application/json:
@@ -113,6 +144,8 @@ components:
           $ref: '#/components/headers/contentType'
         content-length:
           $ref: '#/components/headers/contentLength'
+    Accepted-FindPredicateDeviceCommand:
+      description: The command was accepted.
     BadRequest:
       description: The request could not be understood e.g., headers, query parameters or request body are malformed.
     UnsupportedMediaType:

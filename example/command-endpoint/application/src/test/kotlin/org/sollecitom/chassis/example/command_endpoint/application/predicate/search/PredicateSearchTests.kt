@@ -22,8 +22,8 @@ import org.sollecitom.chassis.ddd.test.utils.hasCommandAndContext
 import org.sollecitom.chassis.example.command_endpoint.domain.predicate.search.EmailAddressValidator
 import org.sollecitom.chassis.example.command_endpoint.domain.predicate.search.NoOp
 import org.sollecitom.chassis.example.command_endpoint.domain.predicate.search.withDomainBlacklist
-import org.sollecitom.chassis.example.event.domain.predicate.search.DeviceDescription
-import org.sollecitom.chassis.example.event.domain.predicate.search.DeviceInformation
+import org.sollecitom.chassis.example.event.domain.predicate.search.Description
+import org.sollecitom.chassis.example.event.domain.predicate.search.Device
 import org.sollecitom.chassis.example.event.domain.predicate.search.FindPredicateDevice
 import org.sollecitom.chassis.example.event.domain.predicate.search.ProductCode
 
@@ -35,7 +35,7 @@ private class PredicateSearchTests : CoreDataGenerator by CoreDataGenerator.test
     fun `searching for a predicate device with an allowed email address`() = runTest {
 
         val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
-        val deviceInformation = deviceInformation(description = "Some amazing device", productCode = "38BEE27")
+        val deviceInformation = device(description = "Some amazing device", productCode = "38BEE27")
         val command = FindPredicateDevice(emailAddress, deviceInformation)
         val invocationContext = InvocationContext.unauthenticated()
         var publishedEvent: CommandWasReceived<FindPredicateDevice>? = null
@@ -53,7 +53,7 @@ private class PredicateSearchTests : CoreDataGenerator by CoreDataGenerator.test
     fun `searching for a predicate device with a disallowed email address`() = runTest {
 
         val emailAddress = "bruce@gmail.com".let(::EmailAddress)
-        val deviceInformation = deviceInformation(description = "Another amazing device", productCode = "27ACD18")
+        val deviceInformation = device(description = "Another amazing device", productCode = "27ACD18")
         val command = FindPredicateDevice(emailAddress, deviceInformation)
         val invocationContext = InvocationContext.unauthenticated()
         var publishedEvent: CommandWasReceived<FindPredicateDevice>? = null
@@ -73,7 +73,7 @@ private class PredicateSearchTests : CoreDataGenerator by CoreDataGenerator.test
         return FindPredicateDeviceHandler(receivedCommandPublisher = publisher, emailAddressValidator = emailAddressValidator, uniqueIdGenerator = this, timeGenerator = this)
     }
 
-    private fun deviceInformation(description: String, productCode: String? = null) = DeviceInformation(description.let(::Name).let(::DeviceDescription), productCode?.let(::ProductCode))
+    private fun device(description: String, productCode: String? = null) = Device(description.let(::Name).let(::Description), productCode?.let(::ProductCode))
 }
 
 private class FunctionalPublisher(private val publish: suspend context(InvocationContext<Access>)(CommandWasReceived<FindPredicateDevice>) -> Unit) : ReceivedCommandPublisher<FindPredicateDevice, Access> {

@@ -7,12 +7,12 @@ import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.ddd.domain.Command
 import org.sollecitom.chassis.ddd.domain.Happening
 
-data class FindPredicateDevice(val emailAddress: EmailAddress, val deviceInformation: DeviceInformation) : Command<FindPredicateDevice.Result, Access> {
+data class FindPredicateDevice(val emailAddress: EmailAddress, val device: Device) : Command<FindPredicateDevice.Result, Access> {
 
-    override val accessRequirements get() = Command.AccessRequirements.UnauthenticatedAccessOnly
+    override val accessRequirements get() = Command.AccessRequirements.None
     override val type: Happening.Type get() = Companion.type
 
-    override fun toString() = "FindPredicateDevice(emailAddress=${emailAddress.value}, device=${deviceInformation}, type=${type.name.value}, version=${version.value})"
+    override fun toString() = "FindPredicateDevice(emailAddress=${emailAddress.value}, device=${device}, type=${type.name.value}, version=${version.value})"
 
     sealed interface Result {
 

@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http
 
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
@@ -8,7 +7,7 @@ import org.sollecitom.chassis.core.domain.networking.RequestedPort
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.application.Application
-import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.predicate.search.FindPredicateCommandsHttpTestSpecification
+import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.predicate.search.FindPredicateDeviceCommandsHttpTestSpecification
 import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.unknown.commands.UnknownCommandsHttpTestSpecification
 import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.user.registration.RegisterUserCommandsHttpTestSpecification
 import org.sollecitom.chassis.logger.core.LoggingLevel.INFO
@@ -39,8 +38,7 @@ private class HttpDrivingAdapterContractTests : WithHttp4kOpenApiValidationSuppo
     @Nested
     inner class UnknownCommands : UnknownCommandsHttpTestSpecification, WithHttp4kOpenApiValidationSupport by this, HttpApiDefinition by this, CoreDataGenerator by this, LocalHttpDrivingAdapterTestSpecification by this
 
-    @Disabled // TODO re-enable
     @Nested
-    inner class FindPredicateCommands : FindPredicateCommandsHttpTestSpecification, WithHttp4kOpenApiValidationSupport by this, HttpApiDefinition by this, CoreDataGenerator by this, LocalHttpDrivingAdapterTestSpecification by this
+    inner class FindPredicateDeviceCommands : FindPredicateDeviceCommandsHttpTestSpecification, WithHttp4kOpenApiValidationSupport by this, HttpApiDefinition by this, CoreDataGenerator by this, LocalHttpDrivingAdapterTestSpecification by this
 }
 
