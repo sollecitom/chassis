@@ -15,6 +15,7 @@ import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
 import org.sollecitom.chassis.correlation.core.domain.toggles.standard.invocation.visibility.InvocationVisibility
 import org.sollecitom.chassis.correlation.core.domain.toggles.withToggle
+import org.sollecitom.chassis.correlation.core.serialization.json.context.jsonSerde
 import org.sollecitom.chassis.correlation.core.test.utils.context.authenticated
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.correlation.logging.test.utils.haveContext
@@ -148,7 +149,7 @@ interface RegisterUserCommandsHttpTestSpecification : CoreDataGenerator, WithHtt
             val context = this@InvocationContext
             return when (command) {
                 is RegisterUser -> handleRegisterUserV1(context, command) as RESULT
-                else -> error("Unknown command type ${command.type}")
+                else -> error("Unsupported command type ${command.type}")
             }
         }
     }
