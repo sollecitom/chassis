@@ -1,53 +1,83 @@
 package org.sollecitom.chassis.example.command_endpoint.application.predicate.search
 
+import assertk.Assert
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isInstanceOf
+import assertk.assertions.isNotNull
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.sollecitom.chassis.core.domain.email.EmailAddress
+import org.sollecitom.chassis.core.domain.naming.Name
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
+import org.sollecitom.chassis.correlation.core.domain.access.Access
+import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
+import org.sollecitom.chassis.ddd.application.dispatching.CommandHandler
+import org.sollecitom.chassis.ddd.domain.Command
+import org.sollecitom.chassis.ddd.domain.CommandWasReceived
+import org.sollecitom.chassis.ddd.domain.ReceivedCommandPublisher
+import org.sollecitom.chassis.ddd.test.utils.hasInvocationContext
+import org.sollecitom.chassis.example.command_endpoint.domain.predicate.search.EmailAddressValidator
+import org.sollecitom.chassis.example.event.domain.predicate.search.DeviceDescription
+import org.sollecitom.chassis.example.event.domain.predicate.search.DeviceInformation
+import org.sollecitom.chassis.example.event.domain.predicate.search.FindPredicateDevice
+import org.sollecitom.chassis.example.event.domain.predicate.search.ProductCode
 
 // TODO add input checks for description, email address, and product code in the HTTP endpoint
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 private class PredicateSearchTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
-//    @Test
-//    fun `registering a user with an email address never used before`() = runTest {
-//
-//        val emailAddress = "fresh-address@gmail.com".let(::EmailAddress)
-//        val command = RegisterUser(emailAddress = emailAddress)
-//        val invocationContext = InvocationContext.unauthenticated()
-//        val handler = newHandler { _: EmailAddress -> null }
-//
-//        val result = with(invocationContext) { handler.process(command) }
-//
-//        assertThat(result).wasAccepted()
-//    }
-//
-//    @Test
-//    fun `registering a user with an email address that was used before the command was received`() = runTest {
-//
-//        val emailAddress = "stale-address@gmail.com".let(::EmailAddress)
-//        val command = RegisterUser(emailAddress = emailAddress)
-//        val invocationContext = InvocationContext.unauthenticated()
-//        val anotherUser = User(id = newId.forEntities())
-//        val handler = newHandler { address: EmailAddress -> address.takeIf { it == emailAddress }?.let { anotherUser } }
-//
-//        val result = with(invocationContext) { handler.process(command) }
-//
-//        assertThat(result).wasRejectedBecauseAnotherUserHasTheSameEmailAddress(user = anotherUser)
-//    }
-//
-//    private fun newHandler(process: suspend context(InvocationContext<Access>)(CommandWasReceived<RegisterUser>) -> RegisterUser.Result): CommandHandler<RegisterUser, RegisterUser.Result, Access> {
-//
-//        val processor = InMemoryCommandProcessor(process)
-//        return RegisterUserHandler(receivedCommandPublisher = processor, commandResultSubscriber = processor, uniqueIdGenerator = this@RegisterUserTests, timeGenerator = this@RegisterUserTests)
-//    }
-//
-//    private fun newHandler(findExistingUser: suspend (EmailAddress) -> User? = { null }) = newHandler(process = { event ->
-//
-//        val existingUser = findExistingUser(event.command.emailAddress)
-//        existingUser?.let { EmailAddressAlreadyInUse(user = it) } ?: Accepted(user = UserWithPendingRegistration(id = newId.forEntities()))
-//    })
-//
-//    private fun Assert<RegisterUser.Result>.wasAccepted() = given { result -> assertThat(result).isInstanceOf<Accepted>() }
+    @Test
+    fun `searching for a predicate device with an allowed email address`() = runTest {
+
+        val emailAddress = "bruce@waynecorp.com".let(::EmailAddress)
+        val deviceInformation = deviceInformation(description = "Some amazing device", productCode = "38BEE27")
+        val command = FindPredicateDevice(emailAddress, deviceInformation)
+        val invocationContext = InvocationContext.unauthenticated()
+        var publishedEvent: CommandWasReceived<FindPredicateDevice>? = null
+        val handler = newHandler { event ->
+            publishedEvent = event
+        }
+
+        val result = with(invocationContext) { handler.process(command) }
+
+        assertThat(result).wasAccepted()
+        assertThat(publishedEvent).isNotNull().hasCommandAndContext(command, invocationContext)
+    }
+
+    private fun newHandler(emailAddressValidator: EmailAddressValidator = NoOpEmailAddressValidator, publish: suspend context(InvocationContext<Access>)(CommandWasReceived<FindPredicateDevice>) -> Unit): CommandHandler<FindPredicateDevice, FindPredicateDevice.Result, Access> {
+
+        val publisher = InMemoryPublisher(publish)
+        return FindPredicateDeviceHandler(receivedCommandPublisher = publisher, emailAddressValidator = emailAddressValidator, uniqueIdGenerator = this, timeGenerator = this)
+    }
+
+    private fun deviceInformation(description: String, productCode: String? = null) = DeviceInformation(description.let(::Name).let(::DeviceDescription), productCode?.let(::ProductCode))
+
+    private fun Assert<FindPredicateDevice.Result>.wasAccepted() = given { result -> assertThat(result).isInstanceOf<FindPredicateDevice.Result.Accepted>() }
 //
 //    private fun Assert<RegisterUser.Result>.wasRejectedBecauseAnotherUserHasTheSameEmailAddress(user: User) = given { result -> assertThat(result).isEqualTo(EmailAddressAlreadyInUse(user = user)) }
+
+    private class InMemoryPublisher(private val publish: suspend context(InvocationContext<Access>)(CommandWasReceived<FindPredicateDevice>) -> Unit) : ReceivedCommandPublisher<FindPredicateDevice, Access> {
+
+        context(InvocationContext<Access>)
+        override suspend fun publish(event: CommandWasReceived<FindPredicateDevice>) {
+
+            publish(this@InvocationContext, event)
+        }
+    }
+
+    private object NoOpEmailAddressValidator : EmailAddressValidator {
+
+        override fun validate(emailAddress: EmailAddress) = EmailAddressValidator.Result.Success
+    }
+}
+
+// TODO move this somewhere common
+private fun <COMMAND : Command<*, *>> Assert<CommandWasReceived<COMMAND>>.hasCommandAndContext(command: COMMAND, context: InvocationContext<Access>) = given { event ->
+
+    assertThat(event.command).isEqualTo(command)
+    assertThat(event).hasInvocationContext(context)
 }
