@@ -18,11 +18,11 @@ import org.sollecitom.chassis.example.event.domain.user.registration.RegisterUse
 import org.sollecitom.chassis.http4k.utils.lens.body
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
 import org.sollecitom.chassis.openapi.validation.request.validator.ValidationReportError
-import org.sollecitom.chassis.web.api.test.utils.LocalHttpDrivingAdapterTestSpecification
+import org.sollecitom.chassis.web.api.test.utils.LocalCommandBasedHttpDrivingAdapterTestSpecification
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
 import org.sollecitom.chassis.web.api.utils.api.withInvocationContext
 
-interface UnknownCommandsHttpTestSpecification : CoreDataGenerator, WithHttp4kOpenApiValidationSupport, HttpApiDefinition, LocalHttpDrivingAdapterTestSpecification {
+interface UnknownCommandsHttpTestSpecification : CoreDataGenerator, WithHttp4kOpenApiValidationSupport, HttpApiDefinition, LocalCommandBasedHttpDrivingAdapterTestSpecification {
 
     @Test
     fun `attempting to submit a command with a nonexistent type`() {

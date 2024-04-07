@@ -8,7 +8,6 @@ import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 interface HttpApiDefinition {
 
     val headerNames: HttpHeaderNames
-//    val openApiFileLocation: String
 }
 
 context(HttpApiDefinition)

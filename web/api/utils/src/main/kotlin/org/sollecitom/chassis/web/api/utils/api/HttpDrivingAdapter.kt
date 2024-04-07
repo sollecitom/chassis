@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.command_endpoint.adapters.driving.http
+package org.sollecitom.chassis.web.api.utils.api
 
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.EnvironmentKey
@@ -8,7 +8,6 @@ import org.sollecitom.chassis.core.domain.networking.RequestedPort
 import org.sollecitom.chassis.ddd.domain.hexagonal.DrivingAdapter
 import org.sollecitom.chassis.lens.core.extensions.networking.servicePort
 
-// TODO move and share
 interface HttpDrivingAdapter : DrivingAdapter.WithPortBinding, HttpHandler {
 
     data class Configuration(val requestedPort: RequestedPort) {

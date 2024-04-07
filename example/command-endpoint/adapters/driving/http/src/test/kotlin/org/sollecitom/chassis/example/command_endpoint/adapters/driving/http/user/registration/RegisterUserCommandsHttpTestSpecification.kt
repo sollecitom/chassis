@@ -15,7 +15,6 @@ import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
 import org.sollecitom.chassis.correlation.core.domain.toggles.standard.invocation.visibility.InvocationVisibility
 import org.sollecitom.chassis.correlation.core.domain.toggles.withToggle
-import org.sollecitom.chassis.correlation.core.serialization.json.context.jsonSerde
 import org.sollecitom.chassis.correlation.core.test.utils.context.authenticated
 import org.sollecitom.chassis.correlation.core.test.utils.context.unauthenticated
 import org.sollecitom.chassis.correlation.logging.test.utils.haveContext
@@ -30,11 +29,11 @@ import org.sollecitom.chassis.http4k.utils.lens.contentType
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
 import org.sollecitom.chassis.openapi.validation.request.validator.ValidationReportError
 import org.sollecitom.chassis.test.utils.standard.output.withCapturedStandardOutput
-import org.sollecitom.chassis.web.api.test.utils.LocalHttpDrivingAdapterTestSpecification
+import org.sollecitom.chassis.web.api.test.utils.LocalCommandBasedHttpDrivingAdapterTestSpecification
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
 import org.sollecitom.chassis.web.api.utils.api.withInvocationContext
 
-interface RegisterUserCommandsHttpTestSpecification : CoreDataGenerator, WithHttp4kOpenApiValidationSupport, HttpApiDefinition, LocalHttpDrivingAdapterTestSpecification {
+interface RegisterUserCommandsHttpTestSpecification : CoreDataGenerator, WithHttp4kOpenApiValidationSupport, HttpApiDefinition, LocalCommandBasedHttpDrivingAdapterTestSpecification {
 
     @Test
     fun `submitting a register user command for an unregistered user`() {

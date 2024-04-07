@@ -26,11 +26,11 @@ import org.sollecitom.chassis.http4k.utils.lens.contentType
 import org.sollecitom.chassis.openapi.validation.http4k.test.utils.WithHttp4kOpenApiValidationSupport
 import org.sollecitom.chassis.openapi.validation.request.validator.ValidationReportError
 import org.sollecitom.chassis.test.utils.standard.output.withCapturedStandardOutput
-import org.sollecitom.chassis.web.api.test.utils.LocalHttpDrivingAdapterTestSpecification
+import org.sollecitom.chassis.web.api.test.utils.LocalCommandBasedHttpDrivingAdapterTestSpecification
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
 import org.sollecitom.chassis.web.api.utils.api.withInvocationContext
 
-interface FindPredicateDeviceCommandsHttpTestSpecification : CoreDataGenerator, WithHttp4kOpenApiValidationSupport, HttpApiDefinition, LocalHttpDrivingAdapterTestSpecification {
+interface FindPredicateDeviceCommandsHttpTestSpecification : CoreDataGenerator, WithHttp4kOpenApiValidationSupport, HttpApiDefinition, LocalCommandBasedHttpDrivingAdapterTestSpecification {
 
     private val commandType get() = FindPredicateDevice.type
 

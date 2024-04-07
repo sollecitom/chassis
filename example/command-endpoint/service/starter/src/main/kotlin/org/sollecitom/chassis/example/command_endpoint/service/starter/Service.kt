@@ -13,7 +13,7 @@ import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.ddd.application.dispatching.invoke
 import org.sollecitom.chassis.example.command_endpoint.adapters.driven.pulsar.nats.command.publisher.PulsarAndNatsCommandPublisherConfiguration
 import org.sollecitom.chassis.example.command_endpoint.adapters.driven.pulsar.nats.command.publisher.pulsarAndNatsCommandPublisher
-import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.HttpDrivingAdapter
+import org.sollecitom.chassis.web.api.utils.api.HttpDrivingAdapter
 import org.sollecitom.chassis.example.command_endpoint.adapters.driving.http.invoke
 import org.sollecitom.chassis.example.command_endpoint.application.predicate.search.FindPredicateDeviceHandler
 import org.sollecitom.chassis.example.command_endpoint.application.predicate.search.invoke

@@ -5,6 +5,7 @@ import org.sollecitom.chassis.core.domain.networking.Port
 import org.sollecitom.chassis.ddd.application.Application
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
+import org.sollecitom.chassis.web.api.utils.api.HttpDrivingAdapter
 import org.sollecitom.chassis.web.api.utils.api.mainHttpApi
 import org.sollecitom.chassis.web.api.utils.command.handler.HttpCommandHandler
 import org.sollecitom.chassis.web.api.utils.endpoint.CommandsEndpoint
