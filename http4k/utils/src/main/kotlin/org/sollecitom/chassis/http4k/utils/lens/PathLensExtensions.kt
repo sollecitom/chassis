@@ -8,6 +8,6 @@ import org.http4k.lens.Path
 
 inline fun <reified T> Path.composite(name: String, noinline lensGet: (Request) -> T): Lens<Request, T> {
 
-    val meta = Meta(true, "path", ParamMeta.ObjectParam, name)
+    val meta = Meta(true, "path", ParamMeta.ObjectParam, name, null, emptyMap())
     return Lens(meta, lensGet)
 }
