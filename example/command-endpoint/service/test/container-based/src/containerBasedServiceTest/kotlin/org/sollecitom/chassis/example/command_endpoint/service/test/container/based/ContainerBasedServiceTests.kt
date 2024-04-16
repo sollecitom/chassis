@@ -41,7 +41,6 @@ private class ContainerBasedServiceTests : ServiceTestSpecification, CoreDataGen
     @BeforeAll
     fun beforeAll() {
         specificationBeforeAll()
-        println("BOOM ${serviceContainer.commandParts}")
         serviceContainer.start()
     }
 
