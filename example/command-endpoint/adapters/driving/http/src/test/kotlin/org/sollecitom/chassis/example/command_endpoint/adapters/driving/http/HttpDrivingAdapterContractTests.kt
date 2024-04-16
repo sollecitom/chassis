@@ -42,4 +42,3 @@ private class HttpDrivingAdapterContractTests : WithHttp4kOpenApiValidationSuppo
     @Nested
     inner class FindPredicateDeviceCommands : FindPredicateDeviceCommandsHttpTestSpecification, WithHttp4kOpenApiValidationSupport by this, HttpApiDefinition by this, CoreDataGenerator by this, LocalCommandBasedHttpDrivingAdapterTestSpecification by this
 }
-

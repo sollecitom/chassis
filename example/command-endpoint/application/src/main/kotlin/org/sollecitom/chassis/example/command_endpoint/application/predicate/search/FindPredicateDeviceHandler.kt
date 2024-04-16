@@ -1,6 +1,5 @@
 package org.sollecitom.chassis.example.command_endpoint.application.predicate.search
 
-import kotlinx.coroutines.coroutineScope
 import org.sollecitom.chassis.core.utils.TimeGenerator
 import org.sollecitom.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.Access
@@ -17,12 +16,12 @@ class FindPredicateDeviceHandler(private val receivedCommandPublisher: ReceivedC
     override val commandType get() = FindPredicateDevice.type
 
     context(InvocationContext<Access>)
-    override suspend fun process(command: FindPredicateDevice): FindPredicateDevice.Result = coroutineScope {
+    override suspend fun process(command: FindPredicateDevice): FindPredicateDevice.Result {
 
-        emailAddressValidator.validate(command.emailAddress).andIfFailure { return@coroutineScope it.asDisallowed() }
+        emailAddressValidator.validate(command.emailAddress).andIfFailure { return it.asDisallowed() }
         val event = command.wasReceived()
         event.publish()
-        FindPredicateDevice.Result.Accepted
+        return FindPredicateDevice.Result.Accepted
     }
 
     context(InvocationContext<Access>)
