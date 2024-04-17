@@ -6,6 +6,9 @@ import com.vdurmont.semver4j.Semver
 import groovy.lang.Closure
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 buildscript { repositories { RepositoryConfiguration.BuildScript.apply(this) } }
 
@@ -91,8 +94,8 @@ allprojects {
 
 fun String.toVersionNumber() = Semver(this)
 
-val ComponentSelectionWithCurrent.currentSemanticVersion: Semver get() = Semver(currentVersion)
-val ComponentSelectionWithCurrent.candidateSemanticVersion: Semver get() = Semver(candidate.version)
+val ComponentSelectionWithCurrent.currentSemanticVersion: DependencyVersion get() = DependencyVersion(currentVersion)
+val ComponentSelectionWithCurrent.candidateSemanticVersion: DependencyVersion get() = DependencyVersion(candidate.version)
 
 fun ComponentSelectionWithCurrent.wouldDowngradeVersion(): Boolean = currentSemanticVersion > candidateSemanticVersion
 fun ComponentSelectionWithCurrent.wouldDestabilizeAStableVersion(): Boolean = currentSemanticVersion.isStable && !candidateSemanticVersion.isStable
@@ -121,3 +124,35 @@ versionCatalogUpdate { // TODO add https://github.com/gradle-update/update-gradl
 }
 
 val containerBasedServiceTest: Task = tasks.register("containerBasedServiceTest").get()
+
+sealed interface DependencyVersion : Comparable<DependencyVersion> {
+
+    val isStable: Boolean
+
+    companion object
+}
+
+class SemverDependencyVersion(private val value: Semver) : DependencyVersion {
+
+    override val isStable: Boolean get() = value.isStable
+
+    override fun compareTo(other: DependencyVersion) = value.compareTo((other as SemverDependencyVersion).value)
+
+    companion object {
+        fun fromRawVersion(rawVersion: String) = Semver(rawVersion).let(::SemverDependencyVersion)
+    }
+}
+
+class DateDependencyVersion(private val releaseDate: LocalDate) : DependencyVersion {
+
+    override val isStable = true
+
+    override fun compareTo(other: DependencyVersion) = releaseDate.compareTo((other as DateDependencyVersion).releaseDate)
+
+    companion object {
+
+        fun fromRawVersion(rawVersion: String) = LocalDate.parse(rawVersion, DateTimeFormatter.BASIC_ISO_DATE).let(::DateDependencyVersion)
+    }
+}
+
+operator fun DependencyVersion.Companion.invoke(rawVersion: String): DependencyVersion = runCatching { SemverDependencyVersion.fromRawVersion(rawVersion) }.getOrElse { DateDependencyVersion.fromRawVersion(rawVersion) }
