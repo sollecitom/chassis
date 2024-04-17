@@ -8,7 +8,6 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 buildscript { repositories { RepositoryConfiguration.BuildScript.apply(this) } }
 
@@ -139,7 +138,7 @@ class SemverDependencyVersion(private val value: Semver) : DependencyVersion {
     override fun compareTo(other: DependencyVersion) = value.compareTo((other as SemverDependencyVersion).value)
 
     companion object {
-        fun fromRawVersion(rawVersion: String) = Semver(rawVersion).let(::SemverDependencyVersion)
+        fun fromRawVersion(rawVersion: String) = Semver(rawVersion, Semver.SemverType.LOOSE).let(::SemverDependencyVersion)
     }
 }
 
