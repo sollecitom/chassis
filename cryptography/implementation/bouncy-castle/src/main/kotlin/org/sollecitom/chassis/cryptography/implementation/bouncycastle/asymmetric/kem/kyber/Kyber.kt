@@ -29,8 +29,5 @@ private class KyberAlgorithmOperationCustomizer(private val random: SecureRandom
             Kyber.Variant.KYBER_512 -> KyberParameterSpec.kyber512
             Kyber.Variant.KYBER_768 -> KyberParameterSpec.kyber768
             Kyber.Variant.KYBER_1024 -> KyberParameterSpec.kyber1024
-            Kyber.Variant.KYBER_512_AES -> KyberParameterSpec.kyber512_aes
-            Kyber.Variant.KYBER_768_AES -> KyberParameterSpec.kyber768_aes
-            Kyber.Variant.KYBER_1024_AES -> KyberParameterSpec.kyber1024_aes
         }
 }

@@ -29,9 +29,6 @@ private class DilithiumAlgorithmOperationCustomizer(private val random: SecureRa
             Dilithium.Variant.DILITHIUM_2 -> DilithiumParameterSpec.dilithium2
             Dilithium.Variant.DILITHIUM_3 -> DilithiumParameterSpec.dilithium3
             Dilithium.Variant.DILITHIUM_5 -> DilithiumParameterSpec.dilithium5
-            Dilithium.Variant.DILITHIUM_2_AES -> DilithiumParameterSpec.dilithium2_aes
-            Dilithium.Variant.DILITHIUM_3_AES -> DilithiumParameterSpec.dilithium3_aes
-            Dilithium.Variant.DILITHIUM_5_AES -> DilithiumParameterSpec.dilithium5_aes
         }
 }
 
