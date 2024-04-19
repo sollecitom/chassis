@@ -1,6 +1,7 @@
 package org.sollecitom.chassis.web.api.utils.api
 
 import org.http4k.cloudnative.health.Health
+import org.http4k.cloudnative.health.ReadinessCheck
 import org.http4k.core.Filter
 import org.http4k.core.HttpHandler
 import org.sollecitom.chassis.core.domain.networking.RequestedPort
@@ -12,4 +13,4 @@ fun mainHttpApi(endpoints: Set<Endpoint>, requestedPort: RequestedPort, requestF
 
 fun healthHttpApi(requestedPort: RequestedPort, app: HttpHandler = standardHealthApp()) = HttpApi(app, requestedPort)
 
-fun standardHealthApp(): HttpHandler = Health()
+fun standardHealthApp(checks: List<ReadinessCheck> = emptyList()): HttpHandler = Health(checks = checks)
