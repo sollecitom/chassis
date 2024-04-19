@@ -11,6 +11,6 @@ import org.sollecitom.chassis.web.api.utils.filters.StandardHttpFilter
 context(HttpApiDefinition)
 fun mainHttpApi(endpoints: Set<Endpoint>, requestedPort: RequestedPort, requestFilter: Filter = StandardHttpFilter.forRequests(), responseFilter: Filter = StandardHttpFilter.forResponses()) = HttpApi(endpoints, requestedPort, requestFilter, responseFilter)
 
-fun healthHttpApi(requestedPort: RequestedPort, app: HttpHandler = standardHealthApp()) = HttpApi(app, requestedPort)
+fun healthHttpApi(requestedPort: RequestedPort, checks: List<ReadinessCheck> = emptyList()) = HttpApi(standardHealthApp(checks), requestedPort)
 
 fun standardHealthApp(checks: List<ReadinessCheck> = emptyList()): HttpHandler = Health(checks = checks)
