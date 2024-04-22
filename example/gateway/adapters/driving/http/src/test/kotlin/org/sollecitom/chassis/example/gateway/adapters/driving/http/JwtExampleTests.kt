@@ -66,7 +66,7 @@ private class JwtExampleTests {
         // The output of the X25519 ECDH-ES key agreement and KDF will be the content encryption key
         jwe.algorithmHeaderValue = KeyManagementAlgorithmIdentifiers.ECDH_ES
         // The content encryption key is used to encrypt the payload with a composite AES-CBC / HMAC SHA2 encryption algorithm
-        val encAlg = ContentEncryptionAlgorithmIdentifiers.AES_128_CBC_HMAC_SHA_256 // TODO try AES_256
+        val encAlg = ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512
         jwe.encryptionMethodHeaderParameter = encAlg
         // We encrypt to the receiver using their public key
         jwe.key = receiverJwk.publicKey
@@ -82,7 +82,7 @@ private class JwtExampleTests {
 
         val jwsAlgConstraints = AlgorithmConstraints(ConstraintType.PERMIT, AlgorithmIdentifiers.EDDSA)
         val jweAlgConstraints = AlgorithmConstraints(ConstraintType.PERMIT, KeyManagementAlgorithmIdentifiers.ECDH_ES)
-        val jweEncConstraints = AlgorithmConstraints(ConstraintType.PERMIT, ContentEncryptionAlgorithmIdentifiers.AES_128_CBC_HMAC_SHA_256)
+        val jweEncConstraints = AlgorithmConstraints(ConstraintType.PERMIT, ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512)
 
         val jwtConsumer = JwtConsumerBuilder()
                 .setRequireExpirationTime() // the JWT must have an expiration time
