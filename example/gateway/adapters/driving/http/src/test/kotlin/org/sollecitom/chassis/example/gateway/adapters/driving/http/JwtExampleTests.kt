@@ -17,12 +17,14 @@ import org.jose4j.jwt.consumer.JwtConsumerBuilder
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.sollecitom.chassis.core.test.utils.testProvider
+import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.logging.standard.configuration.configureLogging
 
 
 @TestInstance(PER_CLASS)
-private class JwtExampleTests { // CFR https://bitbucket.org/b_c/jose4j/wiki/JWT%20Examples#markdown-header-producing-and-consuming-signed-and-encrypted-jwt-using-rfc8037s-ed25519-eddsa-and-x25519-ecdh
+private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvider { // CFR https://bitbucket.org/b_c/jose4j/wiki/JWT%20Examples#markdown-header-producing-and-consuming-signed-and-encrypted-jwt-using-rfc8037s-ed25519-eddsa-and-x25519-ecdh
 
     init {
         configureLogging(defaultMinimumLoggingLevel = LoggingLevel.INFO)
