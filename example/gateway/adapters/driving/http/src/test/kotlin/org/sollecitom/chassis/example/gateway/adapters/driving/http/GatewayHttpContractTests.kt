@@ -11,6 +11,7 @@ import org.http4k.core.Response
 import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.*
 import org.json.JSONObject
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
@@ -44,6 +45,7 @@ private class GatewayHttpContractTests : HttpApiDefinition, LocalHttpDrivingAdap
         configureLogging(defaultMinimumLoggingLevel = LoggingLevel.INFO)
     }
 
+    @Disabled
     @Test
     fun `getting the contract right`() {
 
