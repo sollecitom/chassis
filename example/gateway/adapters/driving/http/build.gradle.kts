@@ -20,4 +20,6 @@ dependencies {
     testImplementation(projects.chassisCorrelationLoggingTestUtils)
     testImplementation(projects.chassisResourceUtils)
     testImplementation(projects.chassisOpenapiValidationHttp4kTestUtils)
+
+    testImplementation(libs.jose4j) // TODO move to a JWT module and import this as implementation instead
 }

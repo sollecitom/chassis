@@ -1,6 +1,6 @@
 package org.sollecitom.chassis.web.api.utils.headers
 
-internal class CompanySpecificHttpHeaderNames(private val companyName: String) : HttpHeaderNames {
+internal class CompanySpecificHttpHeaderNames(private val companyName: String, override val gateway: HttpHeaderNames.Gateway) : HttpHeaderNames {
 
     override val correlation: HttpHeaderNames.Correlation = CorrelationHeaderNames(companyName)
 

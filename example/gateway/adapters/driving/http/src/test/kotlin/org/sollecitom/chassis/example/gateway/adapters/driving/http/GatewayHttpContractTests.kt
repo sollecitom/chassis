@@ -1,15 +1,17 @@
 package org.sollecitom.chassis.example.gateway.adapters.driving.http
 
+import assertk.Assert
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
 import org.http4k.core.HttpHandler
 import org.http4k.core.Method
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.OK
-import org.http4k.core.cookie.cookies
 import org.http4k.routing.*
 import org.json.JSONObject
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
@@ -17,15 +19,20 @@ import org.sollecitom.chassis.core.domain.networking.Port
 import org.sollecitom.chassis.core.domain.networking.RequestedPort
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
+import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import org.sollecitom.chassis.correlation.core.serialization.json.context.jsonSerde
 import org.sollecitom.chassis.http4k.utils.lens.body
+import org.sollecitom.chassis.json.test.utils.compliesWith
 import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import org.sollecitom.chassis.logging.standard.configuration.configureLogging
+import org.sollecitom.chassis.test.utils.assertions.succeeded
 import org.sollecitom.chassis.web.api.test.utils.LocalHttpDrivingAdapterTestSpecification
 import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
 import org.sollecitom.chassis.web.api.utils.api.HttpDrivingAdapter
 import org.sollecitom.chassis.web.api.utils.api.mainHttpApi
 import org.sollecitom.chassis.web.api.utils.endpoint.Endpoint
+import org.sollecitom.chassis.web.api.utils.filters.GatewayHttpFilter
 import org.sollecitom.chassis.web.api.utils.headers.HttpHeaderNames
 import org.sollecitom.chassis.web.api.utils.headers.of
 
@@ -38,29 +45,57 @@ private class GatewayHttpContractTests : HttpApiDefinition, LocalHttpDrivingAdap
         configureLogging(defaultMinimumLoggingLevel = LoggingLevel.INFO)
     }
 
+    @Disabled
     @Test
     fun `getting the contract right`() {
 
-        // TODO inject routing configuration here
-        // TODO inject the ability to perform a downstream request here
-        val gateway = gateway()
+        val downStreamResponse = Response(OK).header("Secret header", "secret header value")
+        var downstreamRequest: Request? = null
+        val downstreamRoute = { _: Request -> true }.asRouter().bind { request ->
+            downstreamRequest = request
+            downStreamResponse
+        }
+        val gateway = gateway(downstreamRoute)
         val json = JSONObject().put("key", "value")
         val request = Request(Method.POST, path("something")).body(json)
 
         val response = gateway(request)
 
-        assertThat(response.status).isEqualTo(OK)
+        assertThat(response).isEqualTo(downStreamResponse)
+        assertThat(downstreamRequest).wasRoutedWithInvocationContext()
     }
 
-    // TODO pass an application to this
-    private fun gateway(): HttpHandler = HttpDrivingAdapter(configuration = GatewayConfiguration(HttpDrivingAdapter.Configuration(requestedPort = RequestedPort.randomAvailable), headerNames))
+    private fun gateway(vararg downstreamRoutes: RoutingHttpHandler): HttpHandler = HttpDrivingAdapter(configuration = GatewayConfiguration(HttpDrivingAdapter.Configuration(requestedPort = RequestedPort.randomAvailable), headerNames), downstreamRoutes.toSet())
+
+    context(HttpApiDefinition)
+    private val Request.invocationContextHeaderOrNull
+        get() = header(headerNames.correlation.invocationContext)
+
+    context(HttpApiDefinition)
+    private val Request.invocationContextHeader
+        get() = invocationContextHeaderOrNull ?: error("No invocation context header '${headerNames.correlation.invocationContext}' present")
+
+    private fun String.toJSON() = JSONObject(this)
+
+    // TODO pass here additional expectations about the context
+    private fun Assert<Request?>.wasRoutedWithInvocationContext() = given { request ->
+
+        assertThat(request).isNotNull()
+        request!!
+        assertThat(request.invocationContextHeader).isNotNull()
+        assertThat(request.invocationContextHeader.toJSON()).compliesWith(InvocationContext.jsonSerde.schema)
+        val deserializationAttempt = runCatching {
+            val downstreamRequestInvocationContext = InvocationContext.jsonSerde.deserialize(request.invocationContextHeader.toJSON())
+        }
+        assertThat(deserializationAttempt).succeeded()
+    }
 }
 
-operator fun HttpDrivingAdapter.Companion.invoke(configuration: GatewayConfiguration): HttpDrivingAdapter = GatewayHttpDrivingAdapter(configuration)
+operator fun HttpDrivingAdapter.Companion.invoke(configuration: GatewayConfiguration, downstreamRoutes: Set<RoutingHttpHandler>): HttpDrivingAdapter = GatewayHttpDrivingAdapter(configuration, downstreamRoutes)
 
 data class GatewayConfiguration(val http: HttpDrivingAdapter.Configuration, override val headerNames: HttpHeaderNames) : HttpApiDefinition
 
-class GatewayHttpDrivingAdapter(private val configuration: GatewayConfiguration) : HttpDrivingAdapter, HttpApiDefinition by configuration {
+class GatewayHttpDrivingAdapter(private val configuration: GatewayConfiguration, private val downstreamRoutes: Set<RoutingHttpHandler>) : HttpDrivingAdapter, HttpApiDefinition by configuration {
 
     private val api = mainHttpApi()
     override val port: Port get() = api.port
@@ -79,50 +114,26 @@ class GatewayHttpDrivingAdapter(private val configuration: GatewayConfiguration)
         logger.info { "Stopped" }
     }
 
-    // TODO don't use the application here?
-    private fun mainHttpApi() = mainHttpApi(endpoints = setOf(GatewayEndpoint()), requestedPort = configuration.http.requestedPort)
+    private fun mainHttpApi() = mainHttpApi(endpoints = setOf(RoutingEndpoint(downstreamRoutes)), requestFilter = GatewayHttpFilter.forRequests(), responseFilter = GatewayHttpFilter.forResponses(), requestedPort = configuration.http.requestedPort)
 
     companion object : Loggable()
 }
 
-class GatewayEndpoint : Endpoint {
+class RoutingEndpoint(private val downstreamRoutes: Set<RoutingHttpHandler>) : Endpoint {
 
     private val pathTemplate = "path"
     override val path = "/{$pathTemplate}"
     override val methods = Method.entries.toSortedSet()
     private val router: Router = { _: Request -> true }.asRouter()
-
     override val route: RoutingHttpHandler = routes(router.bind(Handler()))
+    private val downstreamRoute: RoutingHttpHandler = routes(*downstreamRoutes.toTypedArray())
 
     private inner class Handler : HttpHandler {
 
         override fun invoke(request: Request): Response {
 
-            val host = request.uri.host
-            val authority = request.uri.authority
-            val scheme = request.uri.scheme
-            val path = request.uri.path
-            val query = request.uri.query
-            val fragment = request.uri.fragment
-            val userInfo = request.uri.userInfo
-            println("host: $host")
-            println("path: $path")
-            println("authority: $authority")
-            println("scheme: $scheme")
-            println("query: $query")
-            println("fragment: $fragment")
-            println("userInfo: $userInfo")
-
-            val method = request.method
-            println("method: $method")
-            val headers = request.headers.groupBy { it.first }.mapValues { it.value.map { param -> param.second } }
-            println("headers: $headers")
-
-            val version = request.version
-//            val body = request.body
-            val source = request.source // the origin IP address, etc.
-            val cookies = request.cookies()
-            return Response(OK)
+            // TODO add logging, etc.
+            return downstreamRoute(request)
         }
     }
 
