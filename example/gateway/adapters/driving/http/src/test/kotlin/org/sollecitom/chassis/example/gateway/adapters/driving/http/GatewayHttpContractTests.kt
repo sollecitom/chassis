@@ -41,7 +41,8 @@ private class GatewayHttpContractTests : HttpApiDefinition, LocalHttpDrivingAdap
     @Test
     fun `getting the contract right`() {
 
-        // TODO allow the route here somehow
+        // TODO inject routing configuration here
+        // TODO inject the ability to perform a downstream request here
         val gateway = gateway()
         val json = JSONObject().put("key", "value")
         val request = Request(Method.POST, path("something")).body(json)
