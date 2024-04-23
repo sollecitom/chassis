@@ -1,7 +1,10 @@
 package org.sollecitom.chassis.example.gateway.adapters.driving.http
 
 import assertk.assertThat
+import assertk.assertions.containsExactly
+import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
+import kotlinx.datetime.Instant
 import org.jose4j.jwa.AlgorithmConstraints
 import org.jose4j.jwa.AlgorithmConstraints.ConstraintType
 import org.jose4j.jwe.ContentEncryptionAlgorithmIdentifiers
@@ -26,8 +29,10 @@ import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.RandomGenerator
 import org.sollecitom.chassis.json.test.utils.containsSameEntriesAs
 import org.sollecitom.chassis.kotlin.extensions.text.string
+import org.sollecitom.chassis.kotlin.extensions.time.truncatedToSeconds
 import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.logging.standard.configuration.configureLogging
+import org.sollecitom.chassis.test.utils.assertions.containsSameElementsAs
 import java.security.KeyPair
 import java.security.PrivateKey
 import java.security.PublicKey
@@ -49,27 +54,37 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
         val issuer = newED25519JwtIssuer(issuerKeyId)
         val audienceKeyId = "audience key"
         val audience = newX25519JwtAudience(audienceKeyId)
+        val processor = newAudienceSpecificJwtProcessor(audience, issuer.name, issuer.publicKey, acceptableContentEncryptionAlgorithms = setOf(ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512))
 
+        val jwtId = newId.ulid.monotonic().stringValue
+        val subject = "subject"
         val issuingTime = clock.now()
-        val expiryTime = clock.now()
+        val expirationTime = clock.now() + 30.minutes
+        val notBeforeTime = issuingTime - 5.seconds
         val claims = JwtClaims()
-        claims.jwtId = newId.ulid.monotonic().stringValue
+        claims.jwtId = jwtId
         claims.issuer = issuer.name.value
         claims.setAudience(audience.name.value)
-        claims.subject = "subject" // should be a user ID
+        claims.subject = subject
         claims.issuedAt = NumericDate.fromMilliseconds(issuingTime.toEpochMilliseconds())
-        claims.expirationTime = NumericDate.fromMilliseconds((expiryTime + 30.minutes).toEpochMilliseconds())
-        claims.notBefore = NumericDate.fromMilliseconds((issuingTime - 5.seconds).toEpochMilliseconds())
+        claims.expirationTime = NumericDate.fromMilliseconds(expirationTime.toEpochMilliseconds())
+        claims.notBefore = NumericDate.fromMilliseconds(notBeforeTime.toEpochMilliseconds())
+        val rolesClaim = "roles"
         val roles = mutableListOf("role-1", "role-2")
-        claims.setStringListClaim("roles", roles)
+        claims.setStringListClaim(rolesClaim, roles)
         val claimsJson = claims.toJson().let(::JSONObject)
 
         val issuedEncryptedJwt = issuer.issueEncryptedJwt(claimsJson, audience)
-
-
-        val processor = newAudienceSpecificJwtProcessor(audience, issuer.name, issuer.publicKey, acceptableContentEncryptionAlgorithms = setOf(ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512))
-
         val processedJwt = processor.process(issuedEncryptedJwt)
+
+        assertThat(processedJwt.id).isEqualTo(jwtId)
+        assertThat(processedJwt.subject).isEqualTo(subject)
+        assertThat(processedJwt.issuerName).isEqualTo(issuer.name)
+        assertThat(processedJwt.audienceNames).containsOnly(audience.name)
+        assertThat(processedJwt.issuedAt).isEqualTo(issuingTime.truncatedToSeconds())
+        assertThat(processedJwt.expirationTime).isEqualTo(expirationTime.truncatedToSeconds())
+        assertThat(processedJwt.notBeforeTime).isEqualTo(notBeforeTime.truncatedToSeconds())
+        assertThat(processedJwt.getStringListClaimValue(rolesClaim)).containsSameElementsAs(roles)
         assertThat(processedJwt.claimsAsJson).containsSameEntriesAs(claimsJson)
     }
 
@@ -157,9 +172,15 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
 
 interface JwtIssuer : JwtParty {
 
-    fun issueEncryptedJwt(claims: JSONObject, audience: JwtAudience, contentEncryptionAlgorithm: JwtContentEncryptionAlgorithm = JwtContentEncryptionAlgorithm.AES_256_CBC_HMAC_SHA_512): String
+    fun issueEncryptedJwt(claims: JSONObject, audience: JwtAudience, contentEncryptionAlgorithm: JwtContentEncryptionAlgorithm = JwtContentEncryptionAlgorithm.AES_256_CBC_HMAC_SHA_512): String {
+
+        val innerJwt = issueJwt(claims)
+        return encryptJwt(innerJwt, audience, contentEncryptionAlgorithm)
+    }
 
     fun issueJwt(claims: JSONObject): String
+
+    fun encryptJwt(innerJwt: String, audience: JwtAudience, contentEncryptionAlgorithm: JwtContentEncryptionAlgorithm): String
 }
 
 interface JwtAudience : JwtParty {
@@ -198,12 +219,6 @@ private class ED25519JoseIssuerAdapter(private val keyPair: KeyPair, private val
 
     override val publicKey: PublicKey get() = keyPair.public
 
-    override fun issueEncryptedJwt(claims: JSONObject, audience: JwtAudience, contentEncryptionAlgorithm: JwtContentEncryptionAlgorithm): String {
-
-        val innerJwt = issueJwt(claims)
-        return encrypt(innerJwt, audience, contentEncryptionAlgorithm)
-    }
-
     override fun issueJwt(claims: JSONObject): String {
 
         val jws = JsonWebSignature()
@@ -214,7 +229,7 @@ private class ED25519JoseIssuerAdapter(private val keyPair: KeyPair, private val
         return jws.compactSerialization
     }
 
-    private fun encrypt(innerJwt: String, audience: JwtAudience, contentEncryptionAlgorithm: JwtContentEncryptionAlgorithm): String {
+    override fun encryptJwt(innerJwt: String, audience: JwtAudience, contentEncryptionAlgorithm: JwtContentEncryptionAlgorithm): String {
 
         val jwe = JsonWebEncryption()
         jwe.algorithmHeaderValue = KeyManagementAlgorithmIdentifiers.ECDH_ES
@@ -327,10 +342,32 @@ private class AudienceSpecificJoseJwtProcessor(private val audience: JwtAudience
 
 interface JWT {
 
+    val id: String
+    val subject: String
     val claimsAsJson: JSONObject
+    val issuerName: Name
+    val audienceNames: List<Name>
+    val issuedAt: Instant
+    val expirationTime: Instant?
+    val notBeforeTime: Instant?
+
+    fun hasClaim(name: String): Boolean
+    fun getStringListClaimValue(name: String): List<String>
 }
 
 private class JoseJwtAdapter(private val delegate: JwtClaims) : JWT {
 
+    override val id: String get() = delegate.jwtId
+    override val subject: String get() = delegate.subject
     override val claimsAsJson = delegate.toJson().let(::JSONObject)
+    override val issuerName = delegate.issuer.let(::Name)
+    override val audienceNames = delegate.audience.map(::Name)
+    override val issuedAt: Instant = delegate.issuedAt.let { Instant.fromEpochMilliseconds(it.valueInMillis) }
+    override val expirationTime: Instant? = delegate.expirationTime?.let { Instant.fromEpochMilliseconds(it.valueInMillis) }
+    override val notBeforeTime: Instant? = delegate.notBefore?.let { Instant.fromEpochMilliseconds(it.valueInMillis) }
+
+    override fun hasClaim(name: String): Boolean = delegate.hasClaim(name)
+
+    override fun getStringListClaimValue(name: String): List<String> = delegate.getStringListClaimValue(name)
+    // TODO add other claim getters
 }
