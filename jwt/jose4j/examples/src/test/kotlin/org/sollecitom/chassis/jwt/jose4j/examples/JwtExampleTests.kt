@@ -3,43 +3,22 @@ package org.sollecitom.chassis.jwt.jose4j.examples
 import assertk.assertThat
 import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
-import kotlinx.datetime.Instant
-import org.jose4j.jwa.AlgorithmConstraints.ConstraintType
-import org.jose4j.jwe.JsonWebEncryption
-import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers
-import org.jose4j.jwk.HttpsJwks
-import org.jose4j.jwk.OctetKeyPairJsonWebKey
-import org.jose4j.jwk.OkpJwkGenerator
-import org.jose4j.jws.AlgorithmIdentifiers
-import org.jose4j.jws.JsonWebSignature
-import org.jose4j.jwt.JwtClaims
-import org.jose4j.jwt.consumer.JwtConsumer
-import org.jose4j.jwt.consumer.JwtConsumerBuilder
-import org.jose4j.keys.resolvers.HttpsJwksVerificationKeyResolver
-import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.core.test.utils.random
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
-import org.sollecitom.chassis.core.utils.RandomGenerator
 import org.sollecitom.chassis.json.test.utils.containsSameEntriesAs
-import org.sollecitom.chassis.jwt.domain.*
-import org.sollecitom.chassis.jwt.jose4j.utils.X25519JoseAudienceAdapter
+import org.sollecitom.chassis.jwt.domain.JwtContentEncryptionAlgorithm
 import org.sollecitom.chassis.jwt.jose4j.utils.expiryTime
 import org.sollecitom.chassis.jwt.jose4j.utils.issuingTime
 import org.sollecitom.chassis.jwt.jose4j.utils.notBeforeTime
-import org.sollecitom.chassis.kotlin.extensions.text.string
+import org.sollecitom.chassis.jwt.test.utils.*
 import org.sollecitom.chassis.kotlin.extensions.time.truncatedToSeconds
 import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.logging.standard.configuration.configureLogging
 import org.sollecitom.chassis.test.utils.assertions.containsSameElementsAs
-import java.net.URI
-import java.security.KeyPair
-import java.security.PrivateKey
-import java.security.PublicKey
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
@@ -128,159 +107,4 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
         assertThat(processedJwt.getStringListClaimValue(rolesClaim)).containsSameElementsAs(roles)
         assertThat(processedJwt.claimsAsJson).containsSameEntriesAs(claimsJson)
     }
-}
-
-private fun jwtClaims(configure: (JwtClaims) -> Unit): JwtClaims = JwtClaims().also(configure)
-
-private fun jwtClaimsJson(configure: (JwtClaims) -> Unit): JSONObject = jwtClaims(configure).toJson().let(::JSONObject)
-
-// TODO move to cryptography/test-utils and replace with bouncy-castle
-context(RandomGenerator)
-fun newKeyPair(keyType: String): KeyPair {
-
-    val jwk = OkpJwkGenerator.generateJwk(keyType, null, secureRandom) // TODO pass a SecureRandom here (add that to RandomGenerator)
-    return KeyPair(jwk.publicKey, jwk.privateKey)
-}
-
-context(RandomGenerator)
-fun newED25519JwtIssuer(keyId: String = random.string(wordLength = 6), name: Name = Name.random()): JwtIssuer {
-
-    val keyPair = newKeyPair(OctetKeyPairJsonWebKey.SUBTYPE_ED25519)
-    return ED25519JoseIssuerAdapter(keyPair, keyId, name)
-}
-
-class ED25519JoseIssuerAdapter(private val keyPair: KeyPair, private val keyId: String, override val name: Name) : JwtIssuer {
-
-    init {
-        require(keyPair.public.algorithm == EDDSA_ALGORITHM) { "Public key must use ${OctetKeyPairJsonWebKey.SUBTYPE_ED25519}" }
-        require(keyPair.private.algorithm == EDDSA_ALGORITHM) { "Private key must use ${OctetKeyPairJsonWebKey.SUBTYPE_ED25519}" }
-    }
-
-    override val publicKey: PublicKey get() = keyPair.public
-
-    override fun issueJwt(claims: JSONObject): String {
-
-        val jws = JsonWebSignature()
-        jws.payload = claims.toString()
-        jws.key = keyPair.private
-        jws.keyIdHeaderValue = keyId
-        jws.algorithmHeaderValue = EDDSA_ALGORITHM
-        return jws.compactSerialization
-    }
-
-    override fun encryptJwt(innerJwt: String, audience: JwtAudience, contentEncryptionAlgorithm: JwtContentEncryptionAlgorithm): String {
-
-        val jwe = JsonWebEncryption()
-        jwe.algorithmHeaderValue = KeyManagementAlgorithmIdentifiers.ECDH_ES
-        jwe.encryptionMethodHeaderParameter = contentEncryptionAlgorithm.value
-        jwe.key = audience.publicKey
-        jwe.keyIdHeaderValue = audience.keyId
-        jwe.contentTypeHeaderValue = OUTER_JWT_CONTENT_TYPE_HEADER_VALUE
-        jwe.payload = innerJwt
-        return jwe.compactSerialization
-    }
-
-    companion object {
-        private const val OUTER_JWT_CONTENT_TYPE_HEADER_VALUE = "JWT"
-        private const val EDDSA_ALGORITHM = AlgorithmIdentifiers.EDDSA
-    }
-}
-
-context(RandomGenerator)
-fun newX25519JwtAudience(keyId: String = random.string(wordLength = 6), name: Name = Name.random()): JwtAudience {
-
-    val keyPair = newKeyPair(OctetKeyPairJsonWebKey.SUBTYPE_X25519)
-    return X25519JoseAudienceAdapter(keyPair, keyId, name)
-}
-
-fun newJwtProcessorConfiguration(
-        requireSubject: Boolean = true,
-        requireIssuedAt: Boolean = true,
-        requireExpirationTime: Boolean = true,
-        maximumFutureValidityInMinutes: Int? = null,
-        acceptableSignatureAlgorithms: Set<String> = setOf(AlgorithmIdentifiers.EDDSA),
-        acceptableEncryptionKeyEstablishmentAlgorithms: Set<String> = setOf(KeyManagementAlgorithmIdentifiers.ECDH_ES),
-        acceptableContentEncryptionAlgorithms: Set<JwtContentEncryptionAlgorithm> = setOf(JwtContentEncryptionAlgorithm.AES_256_CBC_HMAC_SHA_512)
-) = JwtProcessor.Configuration(requireSubject, requireIssuedAt, requireExpirationTime, maximumFutureValidityInMinutes, acceptableSignatureAlgorithms, acceptableEncryptionKeyEstablishmentAlgorithms, acceptableContentEncryptionAlgorithms)
-
-fun newAudienceSpecificJwtProcessor(audience: JwtAudience, issuerName: Name, issuerPublicKey: PublicKey, configuration: JwtProcessor.Configuration = newJwtProcessorConfiguration()): JwtProcessor {
-
-    val builder = JwtConsumerBuilder()
-    builder.setExpectedIssuer(issuerName.value)
-    builder.setVerificationKey(issuerPublicKey)
-    builder.setExpectedAudience(audience.name.value)
-    builder.setDecryptionKey(audience.privateKey)
-    if (configuration.requireSubject) {
-        builder.setRequireSubject()
-    }
-    if (configuration.requireIssuedAt) {
-        builder.setRequireIssuedAt()
-    }
-    if (configuration.requireExpirationTime) {
-        builder.setRequireExpirationTime()
-    }
-    configuration.maximumFutureValidityInMinutes?.let(builder::setMaxFutureValidityInMinutes)
-    builder.setJwsAlgorithmConstraints(ConstraintType.PERMIT, *configuration.acceptableSignatureAlgorithms.toTypedArray())
-    builder.setJweAlgorithmConstraints(ConstraintType.PERMIT, *configuration.acceptableEncryptionKeyEstablishmentAlgorithms.toTypedArray())
-    builder.setJweContentEncryptionAlgorithmConstraints(ConstraintType.PERMIT, *configuration.acceptableContentEncryptionAlgorithms.map { it.value }.toTypedArray())
-    return JoseJwtProcessor(builder.build())
-}
-
-fun newJwtProcessor(issuerName: Name, issuerPublicKey: PublicKey, configuration: JwtProcessor.Configuration = newJwtProcessorConfiguration()): JwtProcessor {
-
-    val builder = JwtConsumerBuilder()
-    builder.setExpectedIssuer(issuerName.value)
-    builder.setSkipDefaultAudienceValidation()
-    builder.setVerificationKey(issuerPublicKey)
-    if (configuration.requireSubject) {
-        builder.setRequireSubject()
-    }
-    if (configuration.requireIssuedAt) {
-        builder.setRequireIssuedAt()
-    }
-    if (configuration.requireExpirationTime) {
-        builder.setRequireExpirationTime()
-    }
-    configuration.maximumFutureValidityInMinutes?.let(builder::setMaxFutureValidityInMinutes)
-    builder.setJwsAlgorithmConstraints(ConstraintType.PERMIT, *configuration.acceptableSignatureAlgorithms.toTypedArray())
-    return JoseJwtProcessor(builder.build())
-}
-
-fun newJKSJwtProcessor(issuerName: Name, jksUrl: URI): JwtProcessor {
-
-    val builder = JwtConsumerBuilder()
-    builder.setExpectedIssuer(issuerName.value)
-    builder.setSkipDefaultAudienceValidation()
-    builder.setVerificationKeyResolver(HttpsJwksVerificationKeyResolver(HttpsJwks(jksUrl.toString())))
-    return JoseJwtProcessor(builder.build())
-}
-
-fun newAudienceSpecificJwtProcessor(audience: JwtAudience, issuerName: Name, issuerPublicKey: PublicKey, acceptableSignatureAlgorithms: Set<String> = setOf(AlgorithmIdentifiers.EDDSA), acceptableEncryptionKeyEstablishmentAlgorithms: Set<String> = setOf(KeyManagementAlgorithmIdentifiers.ECDH_ES), acceptableContentEncryptionAlgorithms: Set<JwtContentEncryptionAlgorithm> = setOf(JwtContentEncryptionAlgorithm.AES_256_CBC_HMAC_SHA_512)): JwtProcessor = newAudienceSpecificJwtProcessor(audience, issuerName, issuerPublicKey, newJwtProcessorConfiguration(acceptableSignatureAlgorithms = acceptableSignatureAlgorithms, acceptableEncryptionKeyEstablishmentAlgorithms = acceptableEncryptionKeyEstablishmentAlgorithms, acceptableContentEncryptionAlgorithms = acceptableContentEncryptionAlgorithms))
-
-private class JoseJwtProcessor(private val consumer: JwtConsumer) : JwtProcessor {
-
-    private val noChecksConsumer = JwtConsumerBuilder().setSkipAllValidators().setDisableRequireSignature().setSkipSignatureVerification().build()
-
-    override fun readAndVerify(jwt: String) = consumer.processToClaims(jwt).toJwt()
-
-    override fun readWithoutVerifying(jwt: String) = noChecksConsumer.processToClaims(jwt).toJwt()
-
-    private fun JwtClaims.toJwt(): JWT = JoseJwtAdapter(this)
-}
-
-private class JoseJwtAdapter(private val delegate: JwtClaims) : JWT {
-
-    override val id: String get() = delegate.jwtId
-    override val subject: String get() = delegate.subject
-    override val claimsAsJson = delegate.toJson().let(::JSONObject)
-    override val issuerName = delegate.issuer.let(::Name)
-    override val audienceNames = delegate.audience.map(::Name)
-    override val issuedAt: Instant = delegate.issuedAt.let { Instant.fromEpochMilliseconds(it.valueInMillis) }
-    override val expirationTime: Instant? = delegate.expirationTime?.let { Instant.fromEpochMilliseconds(it.valueInMillis) }
-    override val notBeforeTime: Instant? = delegate.notBefore?.let { Instant.fromEpochMilliseconds(it.valueInMillis) }
-
-    override fun hasClaim(name: String): Boolean = delegate.hasClaim(name)
-
-    override fun getStringListClaimValue(name: String): List<String> = delegate.getStringListClaimValue(name)
-    override fun getStringClaimValue(name: String): String = delegate.getStringClaimValue(name)
 }
