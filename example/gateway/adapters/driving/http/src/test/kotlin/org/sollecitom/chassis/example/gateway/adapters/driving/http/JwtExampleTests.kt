@@ -12,15 +12,27 @@ import org.jose4j.jwk.OkpJwkGenerator
 import org.jose4j.jws.AlgorithmIdentifiers
 import org.jose4j.jws.JsonWebSignature
 import org.jose4j.jwt.JwtClaims
+import org.jose4j.jwt.NumericDate
 import org.jose4j.jwt.consumer.InvalidJwtException
 import org.jose4j.jwt.consumer.JwtConsumerBuilder
+import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.sollecitom.chassis.core.domain.naming.Name
+import org.sollecitom.chassis.core.test.utils.random
 import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
+import org.sollecitom.chassis.core.utils.RandomGenerator
+import org.sollecitom.chassis.json.test.utils.containsSameEntriesAs
+import org.sollecitom.chassis.kotlin.extensions.text.string
 import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.logging.standard.configuration.configureLogging
+import java.security.KeyPair
+import java.security.PrivateKey
+import java.security.PublicKey
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 
 @TestInstance(PER_CLASS)
@@ -31,13 +43,62 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
     }
 
     @Test
+    fun `RFC8037 Ed25519 EdDSA and X25519 ECDH JWT issuance and verification`() { // TODO finish this and migrate the types
+
+        val issuerKeyId = "issuer key"
+        val issuer = newED25519JwtIssuer(issuerKeyId)
+        val audienceKeyId = "audience key"
+        val audience = newX25519JwtAudience(audienceKeyId)
+
+        val issuingTime = clock.now()
+        val expiryTime = clock.now()
+        val claims = JwtClaims()
+        claims.jwtId = newId.ulid.monotonic().stringValue
+        claims.issuer = issuer.name.value
+        claims.setAudience(audience.name.value)
+        claims.subject = "subject" // should be a user ID
+        claims.issuedAt = NumericDate.fromMilliseconds(issuingTime.toEpochMilliseconds())
+        claims.expirationTime = NumericDate.fromMilliseconds((expiryTime + 30.minutes).toEpochMilliseconds())
+        claims.notBefore = NumericDate.fromMilliseconds((issuingTime - 5.seconds).toEpochMilliseconds())
+        val roles = mutableListOf("role-1", "role-2")
+        claims.setStringListClaim("roles", roles)
+        val claimsJson = claims.toJson().let(::JSONObject)
+
+        println(claimsJson)
+        val jwt = issuer.issueEncryptedJwt(claimsJson, audience)
+
+        println(jwt)
+
+        val jwsAlgConstraints = AlgorithmConstraints(ConstraintType.PERMIT, AlgorithmIdentifiers.EDDSA)
+        val jweAlgConstraints = AlgorithmConstraints(ConstraintType.PERMIT, KeyManagementAlgorithmIdentifiers.ECDH_ES)
+        val jweEncConstraints = AlgorithmConstraints(ConstraintType.PERMIT, ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512)
+
+        val jwtConsumer = JwtConsumerBuilder().setRequireExpirationTime() // the JWT must have an expiration time
+                .setMaxFutureValidityInMinutes(300) // but the  expiration time can't be too crazy
+                .setRequireSubject() // the JWT must have a subject claim
+                .setExpectedIssuer(issuer.name.value) // whom the JWT needs to have been issued by
+                .setExpectedAudience(audience.name.value) // to whom the JWT is intended for
+                .setDecryptionKey(audience.privateKey) // decrypt with the receiver's private key
+                .setVerificationKey(issuer.publicKey) // verify the signature with the issuer's public key
+                .setJwsAlgorithmConstraints(jwsAlgConstraints) // limits the acceptable signature algorithm(s)
+                .setJweAlgorithmConstraints(jweAlgConstraints) // limits acceptable encryption key establishment algorithm(s)
+                .setJweContentEncryptionAlgorithmConstraints(jweEncConstraints) // limits acceptable content encryption algorithm(s)
+                .build() // create the JwtConsumer instance
+
+        //  Validate the JWT and process it to the Claims
+        val jwtClaims = jwtConsumer.processToClaims(jwt)
+        println("JWT validation succeeded! " + jwtClaims.rawJson)
+        assertThat(jwtClaims.toJson().let(::JSONObject)).containsSameEntriesAs(claimsJson)
+    }
+
+    @Test
     fun `encrypted JWT issuance and verification using RFC8037 Ed25519 EdDSA and X25519 ECDH`() {
 
         val issuerJwk = OkpJwkGenerator.generateJwk(OctetKeyPairJsonWebKey.SUBTYPE_ED25519).also { it.keyId = "issuer key" }
         val receiverJwk = OkpJwkGenerator.generateJwk(OctetKeyPairJsonWebKey.SUBTYPE_X25519).also { it.keyId = "receiver key" }
         val claims = JwtClaims()
         claims.issuer = "issuer" // who creates the token and signs it
-        claims.setAudience("receiver") // to whom the token is intended to be sent
+        claims.setAudience("audience") // to whom the token is intended to be sent
         claims.setExpirationTimeMinutesInTheFuture(10f) // time when the token will expire (10 minutes from now)
         claims.setGeneratedJwtId() // a unique identifier for the token
         claims.setIssuedAtToNow() // when the token was issued/created (now)
@@ -55,6 +116,7 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
 
         val jws = JsonWebSignature()
         jws.payload = claims.toJson()
+        println("CLAIMS: ${claims.toJson()}")
         jws.key = issuerJwk.privateKey
         jws.keyIdHeaderValue = issuerJwk.keyId
         jws.algorithmHeaderValue = AlgorithmIdentifiers.EDDSA
@@ -86,8 +148,7 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
         val jweAlgConstraints = AlgorithmConstraints(ConstraintType.PERMIT, KeyManagementAlgorithmIdentifiers.ECDH_ES)
         val jweEncConstraints = AlgorithmConstraints(ConstraintType.PERMIT, ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512)
 
-        val jwtConsumer = JwtConsumerBuilder()
-                .setRequireExpirationTime() // the JWT must have an expiration time
+        val jwtConsumer = JwtConsumerBuilder().setRequireExpirationTime() // the JWT must have an expiration time
                 .setMaxFutureValidityInMinutes(300) // but the  expiration time can't be too crazy
                 .setRequireSubject() // the JWT must have a subject claim
                 .setExpectedIssuer("issuer") // whom the JWT needs to have been issued by
@@ -110,4 +171,112 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
             println("Invalid JWT! $e")
         }
     }
+}
+
+interface JwtIssuer : JwtParty {
+
+    fun issueEncryptedJwt(claims: JSONObject, audience: JwtAudience, contentEncryptionAlgorithm: JwtContentEncryptionAlgorithm = JwtContentEncryptionAlgorithm.AES_256_CBC_HMAC_SHA_512): String
+
+    fun issueJwt(claims: JSONObject): String
+}
+
+interface JwtAudience : JwtParty {
+
+    val keyId: String
+    val privateKey: PrivateKey
+}
+
+interface JwtParty {
+
+    val name: Name
+    val publicKey: PublicKey
+}
+
+// TODO move to cryptography/test-utils and replace with bouncy-castle
+context(RandomGenerator)
+fun newKeyPair(keyType: String): KeyPair {
+
+    val jwk = OkpJwkGenerator.generateJwk(keyType, null, secureRandom) // TODO pass a SecureRandom here (add that to RandomGenerator)
+    return KeyPair(jwk.publicKey, jwk.privateKey)
+}
+
+context(RandomGenerator)
+fun newED25519JwtIssuer(keyId: String = random.string(wordLength = 6), name: Name = Name.random()): JwtIssuer {
+
+    val keyPair = newKeyPair(OctetKeyPairJsonWebKey.SUBTYPE_ED25519)
+    return ED25519JoseIssuerAdapter(keyPair, keyId, name)
+}
+
+private class ED25519JoseIssuerAdapter(private val keyPair: KeyPair, private val keyId: String, override val name: Name) : JwtIssuer {
+
+    init {
+        require(keyPair.public.algorithm == EDDSA_ALGORITHM) { "Public key must use ${OctetKeyPairJsonWebKey.SUBTYPE_ED25519}" }
+        require(keyPair.private.algorithm == EDDSA_ALGORITHM) { "Private key must use ${OctetKeyPairJsonWebKey.SUBTYPE_ED25519}" }
+    }
+
+    override val publicKey: PublicKey get() = keyPair.public
+
+    override fun issueEncryptedJwt(claims: JSONObject, audience: JwtAudience, contentEncryptionAlgorithm: JwtContentEncryptionAlgorithm): String {
+
+        val innerJwt = issueJwt(claims)
+        return encrypt(innerJwt, audience, contentEncryptionAlgorithm)
+    }
+
+    override fun issueJwt(claims: JSONObject): String {
+
+        val jws = JsonWebSignature()
+        jws.payload = claims.toString()
+        jws.key = keyPair.private
+        jws.keyIdHeaderValue = keyId
+        jws.algorithmHeaderValue = EDDSA_ALGORITHM
+        return jws.compactSerialization
+    }
+
+    private fun encrypt(innerJwt: String, audience: JwtAudience, contentEncryptionAlgorithm: JwtContentEncryptionAlgorithm): String {
+
+        val jwe = JsonWebEncryption()
+        jwe.algorithmHeaderValue = KeyManagementAlgorithmIdentifiers.ECDH_ES
+        jwe.encryptionMethodHeaderParameter = contentEncryptionAlgorithm.value
+        jwe.key = audience.publicKey
+        jwe.keyIdHeaderValue = audience.keyId
+        jwe.contentTypeHeaderValue = OUTER_JWT_CONTENT_TYPE_HEADER_VALUE
+        jwe.payload = innerJwt
+        return jwe.compactSerialization
+    }
+
+    companion object {
+        private const val OUTER_JWT_CONTENT_TYPE_HEADER_VALUE = "JWT"
+        private const val EDDSA_ALGORITHM = AlgorithmIdentifiers.EDDSA
+    }
+}
+
+context(RandomGenerator)
+fun newX25519JwtAudience(keyId: String = random.string(wordLength = 6), name: Name = Name.random()): JwtAudience {
+
+    val keyPair = newKeyPair(OctetKeyPairJsonWebKey.SUBTYPE_X25519)
+    return X25519JoseAudienceAdapter(keyPair, keyId, name)
+}
+
+private class X25519JoseAudienceAdapter(private val keyPair: KeyPair, override val keyId: String, override val name: Name) : JwtAudience {
+
+    init {
+        require(keyPair.public.algorithm == KEY_ALGORITHM) { "Public key must use ${OctetKeyPairJsonWebKey.SUBTYPE_X25519}" }
+        require(keyPair.private.algorithm == KEY_ALGORITHM) { "Private key must use ${OctetKeyPairJsonWebKey.SUBTYPE_X25519}" }
+    }
+
+    override val publicKey: PublicKey get() = keyPair.public
+    override val privateKey: PrivateKey get() = keyPair.private
+
+    companion object {
+        private const val KEY_ALGORITHM = "XDH"
+    }
+}
+
+enum class JwtContentEncryptionAlgorithm(val value: String) {
+    AES_128_CBC_HMAC_SHA_256("A128CBC-HS256"),
+    AES_192_CBC_HMAC_SHA_384("A192CBC-HS384"),
+    AES_256_CBC_HMAC_SHA_512("A256CBC-HS512"),
+    AES_128_GCM("A128GCM"),
+    AES_192_GCM("A192GCM"),
+    AES_256_GCM("A256GCM")
 }

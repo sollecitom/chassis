@@ -19,7 +19,7 @@ fun Assert<JSONObject>.containsAtLeast(pair: Pair<String, Any>, vararg others: P
     assertThat(actual.toMap()).containsAtLeast(*arrayOf(pair) + others)
 }
 
-fun Assert<JSONObject>.isEqualTo(expected: JSONObject) = given { actual ->
+fun Assert<JSONObject>.containsSameEntriesAs(expected: JSONObject) = given { actual ->
 
     assertThat(actual.toMap()).containsSameEntriesAs(expected.toMap())
 }

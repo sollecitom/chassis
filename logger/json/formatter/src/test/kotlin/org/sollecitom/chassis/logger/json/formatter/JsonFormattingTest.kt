@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.json.test.utils.compliesWith
-import org.sollecitom.chassis.json.test.utils.isEqualTo
+import org.sollecitom.chassis.json.test.utils.containsSameEntriesAs
 import org.sollecitom.chassis.json.utils.getRequiredJSONObject
 import org.sollecitom.chassis.logger.core.LogEntry
 import org.sollecitom.chassis.logger.core.LoggingContext
@@ -59,7 +59,7 @@ private class JsonFormattingTest {
 
         val loggedContext = entryAsJsonObject.getRequiredJSONObject("context")
         val jsonKeyValue = loggedContext.getRequiredJSONObject("json-key")
-        assertThat(jsonKeyValue).isEqualTo(jsonContextValue)
+        assertThat(jsonKeyValue).containsSameEntriesAs(jsonContextValue)
         assertThat(entryAsJsonObject).compliesWith(LogEntry.jsonSchema)
     }
 }

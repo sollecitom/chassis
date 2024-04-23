@@ -7,3 +7,6 @@ import org.sollecitom.chassis.kotlin.extensions.text.strings
 
 context(RandomGenerator)
 fun Name.Companion.random(wordLengths: IntRange = 5..10, alphabet: CharRange = lowercaseCaseLetters): Name = random.strings(wordLengths, alphabet).iterator().next().let(::Name)
+
+context(RandomGenerator)
+fun Name.Companion.random(wordLength: Int, alphabet: CharRange = lowercaseCaseLetters): Name = random.strings(wordLength, alphabet).iterator().next().let(::Name)
