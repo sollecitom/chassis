@@ -23,14 +23,14 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 @TestInstance(PER_CLASS)
-private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvider { // CFR https://bitbucket.org/b_c/jose4j/wiki/JWT%20Examples#markdown-header-producing-and-consuming-signed-and-encrypted-jwt-using-rfc8037s-ed25519-eddsa-and-x25519-ecdh
+private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     init {
         configureLogging(defaultMinimumLoggingLevel = LoggingLevel.INFO)
     }
 
     @Test
-    fun `Ed25519 EdDSA issuance and verification`() { // TODO finish this and migrate the types
+    fun `Ed25519 EdDSA issuance and verification`() {
 
         val issuerKeyId = "issuer key"
         val issuer = newED25519JwtIssuer(issuerKeyId)
