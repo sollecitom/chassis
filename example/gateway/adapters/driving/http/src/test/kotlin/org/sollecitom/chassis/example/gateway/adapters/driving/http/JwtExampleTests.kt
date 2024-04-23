@@ -57,7 +57,7 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
         val jwtId = newId.ulid.monotonic().stringValue
         val subject = "subject"
         val issuingTime = clock.now()
-        val expirationTime = clock.now() + 30.minutes
+        val expiryTime = clock.now() + 30.minutes
         val notBeforeTime = issuingTime - 5.seconds
         val rolesClaim = "roles"
         val roles = mutableListOf("role-1", "role-2")
@@ -66,9 +66,9 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
             it.issuer = issuer.name.value
             it.setAudience(audienceName.value)
             it.subject = subject
-            it.issuedAt = NumericDate.fromMilliseconds(issuingTime.toEpochMilliseconds())
-            it.expirationTime = NumericDate.fromMilliseconds(expirationTime.toEpochMilliseconds())
-            it.notBefore = NumericDate.fromMilliseconds(notBeforeTime.toEpochMilliseconds())
+            it.issuingTime = issuingTime
+            it.expiryTime = expiryTime
+            it.notBeforeTime = notBeforeTime
             it.setStringListClaim(rolesClaim, roles)
         }
         val claimsJson = claims.toJson().let(::JSONObject)
@@ -81,7 +81,7 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
         assertThat(processedJwt.issuerName).isEqualTo(issuer.name)
         assertThat(processedJwt.audienceNames).containsOnly(audienceName)
         assertThat(processedJwt.issuedAt).isEqualTo(issuingTime.truncatedToSeconds())
-        assertThat(processedJwt.expirationTime).isEqualTo(expirationTime.truncatedToSeconds())
+        assertThat(processedJwt.expirationTime).isEqualTo(expiryTime.truncatedToSeconds())
         assertThat(processedJwt.notBeforeTime).isEqualTo(notBeforeTime.truncatedToSeconds())
         assertThat(processedJwt.getStringListClaimValue(rolesClaim)).containsSameElementsAs(roles)
         assertThat(processedJwt.claimsAsJson).containsSameEntriesAs(claimsJson)
@@ -98,7 +98,7 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
         val jwtId = newId.ulid.monotonic().stringValue
         val subject = "subject"
         val issuingTime = clock.now()
-        val expirationTime = clock.now() + 30.minutes
+        val expiryTime = clock.now() + 30.minutes
         val notBeforeTime = issuingTime - 5.seconds
         val rolesClaim = "roles"
         val roles = mutableListOf("role-1", "role-2")
@@ -107,9 +107,9 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
             it.issuer = issuer.name.value
             it.setAudience(audience.name.value)
             it.subject = subject
-            it.issuedAt = NumericDate.fromMilliseconds(issuingTime.toEpochMilliseconds())
-            it.expirationTime = NumericDate.fromMilliseconds(expirationTime.toEpochMilliseconds())
-            it.notBefore = NumericDate.fromMilliseconds(notBeforeTime.toEpochMilliseconds())
+            it.issuingTime = issuingTime
+            it.expiryTime = expiryTime
+            it.notBeforeTime = notBeforeTime
             it.setStringListClaim(rolesClaim, roles)
         }
         val claimsJson = claims.toJson().let(::JSONObject)
@@ -122,7 +122,7 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
         assertThat(processedJwt.issuerName).isEqualTo(issuer.name)
         assertThat(processedJwt.audienceNames).containsOnly(audience.name)
         assertThat(processedJwt.issuedAt).isEqualTo(issuingTime.truncatedToSeconds())
-        assertThat(processedJwt.expirationTime).isEqualTo(expirationTime.truncatedToSeconds())
+        assertThat(processedJwt.expirationTime).isEqualTo(expiryTime.truncatedToSeconds())
         assertThat(processedJwt.notBeforeTime).isEqualTo(notBeforeTime.truncatedToSeconds())
         assertThat(processedJwt.getStringListClaimValue(rolesClaim)).containsSameElementsAs(roles)
         assertThat(processedJwt.claimsAsJson).containsSameEntriesAs(claimsJson)
@@ -344,7 +344,10 @@ interface JWT {
     val notBeforeTime: Instant?
 
     fun hasClaim(name: String): Boolean
+
     fun getStringListClaimValue(name: String): List<String>
+
+    fun getStringClaimValue(name: String): String
 }
 
 private class JoseJwtAdapter(private val delegate: JwtClaims) : JWT {
@@ -361,5 +364,26 @@ private class JoseJwtAdapter(private val delegate: JwtClaims) : JWT {
     override fun hasClaim(name: String): Boolean = delegate.hasClaim(name)
 
     override fun getStringListClaimValue(name: String): List<String> = delegate.getStringListClaimValue(name)
-    // TODO add other claim getters
+    override fun getStringClaimValue(name: String): String = delegate.getStringClaimValue(name)
 }
+
+var JwtClaims.issuingTime: Instant
+    get() = issuedAt.toInstant()
+    set(value) {
+        issuedAt = value.toNumericDate()
+    }
+
+var JwtClaims.expiryTime: Instant?
+    get() = expirationTime?.toInstant()
+    set(value) {
+        expirationTime = value?.toNumericDate()
+    }
+
+var JwtClaims.notBeforeTime: Instant?
+    get() = notBefore?.toInstant()
+    set(value) {
+        notBefore = value?.toNumericDate()
+    }
+
+private fun Instant.toNumericDate() = toEpochMilliseconds().let(NumericDate::fromMilliseconds)
+private fun NumericDate.toInstant() = valueInMillis.let(Instant::fromEpochMilliseconds)
