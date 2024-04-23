@@ -54,7 +54,6 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
         val audienceKeyId = "audience key"
         val audience = newX25519JwtAudience(audienceKeyId)
         val processor = newAudienceSpecificJwtProcessor(audience, issuer.name, issuer.publicKey, acceptableContentEncryptionAlgorithms = setOf(ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512))
-
         val jwtId = newId.ulid.monotonic().stringValue
         val subject = "subject"
         val issuingTime = clock.now()
