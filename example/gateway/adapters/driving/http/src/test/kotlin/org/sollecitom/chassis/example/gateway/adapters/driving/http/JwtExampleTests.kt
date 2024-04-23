@@ -53,7 +53,7 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
         val issuer = newED25519JwtIssuer(issuerKeyId)
         val audienceKeyId = "audience key"
         val audience = newX25519JwtAudience(audienceKeyId)
-        val processor = newAudienceSpecificJwtProcessor(audience, issuer.name, issuer.publicKey, acceptableContentEncryptionAlgorithms = setOf(ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512))
+        val processor = newAudienceSpecificJwtProcessor(audience, issuer.name, issuer.publicKey, acceptableContentEncryptionAlgorithms = setOf(JwtContentEncryptionAlgorithm.AES_256_CBC_HMAC_SHA_512))
         val jwtId = newId.ulid.monotonic().stringValue
         val subject = "subject"
         val issuingTime = clock.now()
@@ -72,7 +72,7 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
         claims.setStringListClaim(rolesClaim, roles)
         val claimsJson = claims.toJson().let(::JSONObject)
 
-        val issuedEncryptedJwt = issuer.issueEncryptedJwt(claimsJson, audience)
+        val issuedEncryptedJwt = issuer.issueEncryptedJwt(claimsJson, audience, contentEncryptionAlgorithm = JwtContentEncryptionAlgorithm.AES_256_CBC_HMAC_SHA_512)
         val processedJwt = processor.process(issuedEncryptedJwt)
 
         assertThat(processedJwt.id).isEqualTo(jwtId)
@@ -282,7 +282,7 @@ interface JwtProcessor {
             val maximumFutureValidityInMinutes: Int?,
             val acceptableSignatureAlgorithms: Set<String>,
             val acceptableEncryptionKeyEstablishmentAlgorithms: Set<String>,
-            val acceptableContentEncryptionAlgorithms: Set<String>
+            val acceptableContentEncryptionAlgorithms: Set<JwtContentEncryptionAlgorithm>
     )
 
     companion object
@@ -295,16 +295,16 @@ fun newJwtProcessorConfiguration(
         maximumFutureValidityInMinutes: Int? = null,
         acceptableSignatureAlgorithms: Set<String> = setOf(AlgorithmIdentifiers.EDDSA),
         acceptableEncryptionKeyEstablishmentAlgorithms: Set<String> = setOf(KeyManagementAlgorithmIdentifiers.ECDH_ES),
-        acceptableContentEncryptionAlgorithms: Set<String> = setOf(ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512)
+        acceptableContentEncryptionAlgorithms: Set<JwtContentEncryptionAlgorithm> = setOf(JwtContentEncryptionAlgorithm.AES_256_CBC_HMAC_SHA_512)
 ) = JwtProcessor.Configuration(requireSubject, requireIssuedAt, requireExpirationTime, maximumFutureValidityInMinutes, acceptableSignatureAlgorithms, acceptableEncryptionKeyEstablishmentAlgorithms, acceptableContentEncryptionAlgorithms)
 
 fun newAudienceSpecificJwtProcessor(audience: JwtAudience, issuerName: Name, issuerPublicKey: PublicKey, configuration: JwtProcessor.Configuration = newJwtProcessorConfiguration()): JwtProcessor = AudienceSpecificJoseJwtProcessor(audience, issuerName, issuerPublicKey, configuration)
 
 fun newAudienceSpecificJwtProcessor(audience: JwtAudience, issuer: JwtIssuer, configuration: JwtProcessor.Configuration = newJwtProcessorConfiguration()): JwtProcessor = newAudienceSpecificJwtProcessor(audience, issuer.name, issuer.publicKey, configuration)
 
-fun newAudienceSpecificJwtProcessor(audience: JwtAudience, issuer: JwtIssuer, acceptableSignatureAlgorithms: Set<String> = setOf(AlgorithmIdentifiers.EDDSA), acceptableEncryptionKeyEstablishmentAlgorithms: Set<String> = setOf(KeyManagementAlgorithmIdentifiers.ECDH_ES), acceptableContentEncryptionAlgorithms: Set<String> = setOf(ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512)): JwtProcessor = newAudienceSpecificJwtProcessor(audience, issuer.name, issuer.publicKey, newJwtProcessorConfiguration(acceptableSignatureAlgorithms = acceptableSignatureAlgorithms, acceptableEncryptionKeyEstablishmentAlgorithms = acceptableEncryptionKeyEstablishmentAlgorithms, acceptableContentEncryptionAlgorithms = acceptableContentEncryptionAlgorithms))
+fun newAudienceSpecificJwtProcessor(audience: JwtAudience, issuer: JwtIssuer, acceptableSignatureAlgorithms: Set<String> = setOf(AlgorithmIdentifiers.EDDSA), acceptableEncryptionKeyEstablishmentAlgorithms: Set<String> = setOf(KeyManagementAlgorithmIdentifiers.ECDH_ES), acceptableContentEncryptionAlgorithms: Set<JwtContentEncryptionAlgorithm> = setOf(JwtContentEncryptionAlgorithm.AES_256_CBC_HMAC_SHA_512)): JwtProcessor = newAudienceSpecificJwtProcessor(audience, issuer.name, issuer.publicKey, newJwtProcessorConfiguration(acceptableSignatureAlgorithms = acceptableSignatureAlgorithms, acceptableEncryptionKeyEstablishmentAlgorithms = acceptableEncryptionKeyEstablishmentAlgorithms, acceptableContentEncryptionAlgorithms = acceptableContentEncryptionAlgorithms))
 
-fun newAudienceSpecificJwtProcessor(audience: JwtAudience, issuerName: Name, issuerPublicKey: PublicKey, acceptableSignatureAlgorithms: Set<String> = setOf(AlgorithmIdentifiers.EDDSA), acceptableEncryptionKeyEstablishmentAlgorithms: Set<String> = setOf(KeyManagementAlgorithmIdentifiers.ECDH_ES), acceptableContentEncryptionAlgorithms: Set<String> = setOf(ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512)): JwtProcessor = newAudienceSpecificJwtProcessor(audience, issuerName, issuerPublicKey, newJwtProcessorConfiguration(acceptableSignatureAlgorithms = acceptableSignatureAlgorithms, acceptableEncryptionKeyEstablishmentAlgorithms = acceptableEncryptionKeyEstablishmentAlgorithms, acceptableContentEncryptionAlgorithms = acceptableContentEncryptionAlgorithms))
+fun newAudienceSpecificJwtProcessor(audience: JwtAudience, issuerName: Name, issuerPublicKey: PublicKey, acceptableSignatureAlgorithms: Set<String> = setOf(AlgorithmIdentifiers.EDDSA), acceptableEncryptionKeyEstablishmentAlgorithms: Set<String> = setOf(KeyManagementAlgorithmIdentifiers.ECDH_ES), acceptableContentEncryptionAlgorithms: Set<JwtContentEncryptionAlgorithm> = setOf(JwtContentEncryptionAlgorithm.AES_256_CBC_HMAC_SHA_512)): JwtProcessor = newAudienceSpecificJwtProcessor(audience, issuerName, issuerPublicKey, newJwtProcessorConfiguration(acceptableSignatureAlgorithms = acceptableSignatureAlgorithms, acceptableEncryptionKeyEstablishmentAlgorithms = acceptableEncryptionKeyEstablishmentAlgorithms, acceptableContentEncryptionAlgorithms = acceptableContentEncryptionAlgorithms))
 
 private class AudienceSpecificJoseJwtProcessor(private val audience: JwtAudience, private val issuerName: Name, private val issuerPublicKey: PublicKey, private val configuration: JwtProcessor.Configuration) : JwtProcessor {
 
@@ -333,7 +333,7 @@ private class AudienceSpecificJoseJwtProcessor(private val audience: JwtAudience
         }
         builder.setJwsAlgorithmConstraints(ConstraintType.PERMIT, *configuration.acceptableSignatureAlgorithms.toTypedArray())
         builder.setJweAlgorithmConstraints(ConstraintType.PERMIT, *configuration.acceptableEncryptionKeyEstablishmentAlgorithms.toTypedArray())
-        builder.setJweContentEncryptionAlgorithmConstraints(ConstraintType.PERMIT, *configuration.acceptableContentEncryptionAlgorithms.toTypedArray())
+        builder.setJweContentEncryptionAlgorithmConstraints(ConstraintType.PERMIT, *configuration.acceptableContentEncryptionAlgorithms.map { it.value }.toTypedArray())
         return builder
     }
 
