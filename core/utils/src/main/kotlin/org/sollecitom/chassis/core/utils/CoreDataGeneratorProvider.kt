@@ -13,22 +13,15 @@ import org.sollecitom.chassis.kotlin.extensions.number.toByteArray
 import org.sollecitom.chassis.logger.core.loggable.Loggable
 import java.security.SecureRandom
 import kotlin.random.Random
+import kotlin.random.asKotlinRandom
 
-internal class CoreDataGeneratorProvider(private val environment: Environment, initialisedInstanceInfo: InstanceInfo? = null, initialisedClock: Clock? = null, initialisedRandom: Random? = null, seed: ByteArray? = null) : Loggable(), CoreDataGenerator {
+internal class CoreDataGeneratorProvider(private val environment: Environment, initialisedInstanceInfo: InstanceInfo? = null, initialisedClock: Clock? = null, seed: ByteArray? = null) : Loggable(), CoreDataGenerator {
 
-    override val random: Random = initialisedRandom ?: initialiseRandom()
     override val secureRandom: SecureRandom = SecureRandom(seed ?: initialiseSecureRandomSeed())
+    override val random: Random = secureRandom.asKotlinRandom()
     override val clock: Clock = initialisedClock ?: initialiseClock()
     private val clusterCoordinates = initialisedInstanceInfo ?: initialiseClusterCoordinates()
     override val newId: UniqueIdFactory by lazy { UniqueIdFactory.invoke(random = random, clock = clock, instanceInfo = clusterCoordinates) }
-
-    private fun initialiseRandom(): Random {
-
-        logger.info { "Reading random seed from property ${EnvironmentKey.randomSeed.meta.name}" }
-        val seed = EnvironmentKey.randomSeed(environment)
-        logger.info { "Initialised random from seed: $seed" }
-        return Random(seed)
-    }
 
     private fun initialiseSecureRandomSeed(): ByteArray {
 
@@ -53,4 +46,4 @@ internal class CoreDataGeneratorProvider(private val environment: Environment, i
     }
 }
 
-fun CoreDataGenerator.Companion.provider(environment: Environment = StandardEnvironment(), instanceInfo: InstanceInfo? = null, clock: Clock? = null, random: Random? = null, seed: ByteArray? = null): CoreDataGenerator = CoreDataGeneratorProvider(environment = environment, initialisedInstanceInfo = instanceInfo, initialisedClock = clock, initialisedRandom = random, seed = seed)
+fun CoreDataGenerator.Companion.provider(environment: Environment = StandardEnvironment(), instanceInfo: InstanceInfo? = null, clock: Clock? = null, seed: ByteArray? = null): CoreDataGenerator = CoreDataGeneratorProvider(environment = environment, initialisedInstanceInfo = instanceInfo, initialisedClock = clock, seed = seed)
