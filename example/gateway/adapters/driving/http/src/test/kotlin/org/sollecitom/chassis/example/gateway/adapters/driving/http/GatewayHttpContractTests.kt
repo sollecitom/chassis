@@ -45,7 +45,7 @@ private class GatewayHttpContractTests : HttpApiDefinition, LocalHttpDrivingAdap
         configureLogging(defaultMinimumLoggingLevel = LoggingLevel.INFO)
     }
 
-    @Disabled
+    @Disabled // TODO enable this and make it pass
     @Test
     fun `getting the contract right`() { // TODO add JWT to this, as header, and parse Access, etc. from it (use the jwt modules in Chassis)
 
