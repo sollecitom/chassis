@@ -59,7 +59,6 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
         val issuingTime = clock.now()
         val expirationTime = clock.now() + 30.minutes
         val notBeforeTime = issuingTime - 5.seconds
-
         val rolesClaim = "roles"
         val roles = mutableListOf("role-1", "role-2")
         val claims = claims {
