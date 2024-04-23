@@ -1,7 +1,6 @@
 package org.sollecitom.chassis.example.gateway.adapters.driving.http
 
 import assertk.assertThat
-import assertk.assertions.containsExactly
 import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
 import kotlinx.datetime.Instant
@@ -286,6 +285,8 @@ interface JwtProcessor {
             val acceptableEncryptionKeyEstablishmentAlgorithms: Set<String>,
             val acceptableContentEncryptionAlgorithms: Set<String>
     )
+
+    companion object
 }
 
 fun newJwtProcessorConfiguration(
