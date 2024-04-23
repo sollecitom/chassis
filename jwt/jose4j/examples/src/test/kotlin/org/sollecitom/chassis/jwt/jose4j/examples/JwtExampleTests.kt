@@ -27,6 +27,7 @@ import org.sollecitom.chassis.core.test.utils.testProvider
 import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.RandomGenerator
 import org.sollecitom.chassis.json.test.utils.containsSameEntriesAs
+import org.sollecitom.chassis.jwt.domain.*
 import org.sollecitom.chassis.kotlin.extensions.text.string
 import org.sollecitom.chassis.kotlin.extensions.time.truncatedToSeconds
 import org.sollecitom.chassis.logger.core.LoggingLevel
@@ -130,31 +131,6 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
     private fun claims(configure: (JwtClaims) -> Unit) = JwtClaims().also(configure)
 }
 
-interface JwtIssuer : JwtParty {
-
-    fun issueEncryptedJwt(claims: JSONObject, audience: JwtAudience, contentEncryptionAlgorithm: JwtContentEncryptionAlgorithm = JwtContentEncryptionAlgorithm.AES_256_CBC_HMAC_SHA_512): String {
-
-        val innerJwt = issueJwt(claims)
-        return encryptJwt(innerJwt, audience, contentEncryptionAlgorithm)
-    }
-
-    fun issueJwt(claims: JSONObject): String
-
-    fun encryptJwt(innerJwt: String, audience: JwtAudience, contentEncryptionAlgorithm: JwtContentEncryptionAlgorithm): String
-}
-
-interface JwtAudience : JwtParty {
-
-    val keyId: String
-    val privateKey: PrivateKey
-}
-
-interface JwtParty {
-
-    val name: Name
-    val publicKey: PublicKey
-}
-
 // TODO move to cryptography/test-utils and replace with bouncy-castle
 context(RandomGenerator)
 fun newKeyPair(keyType: String): KeyPair {
@@ -229,29 +205,6 @@ private class X25519JoseAudienceAdapter(private val keyPair: KeyPair, override v
     }
 }
 
-enum class JwtContentEncryptionAlgorithm(val value: String) {
-    AES_128_CBC_HMAC_SHA_256("A128CBC-HS256"), AES_192_CBC_HMAC_SHA_384("A192CBC-HS384"), AES_256_CBC_HMAC_SHA_512("A256CBC-HS512"), AES_128_GCM("A128GCM"), AES_192_GCM("A192GCM"), AES_256_GCM("A256GCM")
-}
-
-interface JwtProcessor {
-
-    fun readAndVerify(jwt: String): JWT
-
-    fun readWithoutVerifying(jwt: String): JWT
-
-    data class Configuration(
-            val requireSubject: Boolean,
-            val requireIssuedAt: Boolean,
-            val requireExpirationTime: Boolean,
-            val maximumFutureValidityInMinutes: Int?,
-            val acceptableSignatureAlgorithms: Set<String>,
-            val acceptableEncryptionKeyEstablishmentAlgorithms: Set<String>,
-            val acceptableContentEncryptionAlgorithms: Set<JwtContentEncryptionAlgorithm>
-    )
-
-    companion object
-}
-
 fun newJwtProcessorConfiguration(
         requireSubject: Boolean = true,
         requireIssuedAt: Boolean = true,
@@ -278,9 +231,7 @@ fun newAudienceSpecificJwtProcessor(audience: JwtAudience, issuerName: Name, iss
     if (configuration.requireExpirationTime) {
         builder.setRequireExpirationTime()
     }
-    if (configuration.maximumFutureValidityInMinutes != null) {
-        builder.setMaxFutureValidityInMinutes(configuration.maximumFutureValidityInMinutes)
-    }
+    configuration.maximumFutureValidityInMinutes?.let(builder::setMaxFutureValidityInMinutes)
     builder.setJwsAlgorithmConstraints(ConstraintType.PERMIT, *configuration.acceptableSignatureAlgorithms.toTypedArray())
     builder.setJweAlgorithmConstraints(ConstraintType.PERMIT, *configuration.acceptableEncryptionKeyEstablishmentAlgorithms.toTypedArray())
     builder.setJweContentEncryptionAlgorithmConstraints(ConstraintType.PERMIT, *configuration.acceptableContentEncryptionAlgorithms.map { it.value }.toTypedArray())
@@ -302,9 +253,7 @@ fun newJwtProcessor(issuerName: Name, issuerPublicKey: PublicKey, configuration:
     if (configuration.requireExpirationTime) {
         builder.setRequireExpirationTime()
     }
-    if (configuration.maximumFutureValidityInMinutes != null) {
-        builder.setMaxFutureValidityInMinutes(configuration.maximumFutureValidityInMinutes)
-    }
+    configuration.maximumFutureValidityInMinutes?.let(builder::setMaxFutureValidityInMinutes)
     builder.setJwsAlgorithmConstraints(ConstraintType.PERMIT, *configuration.acceptableSignatureAlgorithms.toTypedArray())
     return JoseJwtProcessor(builder.build())
 }
@@ -329,24 +278,6 @@ private class JoseJwtProcessor(private val consumer: JwtConsumer) : JwtProcessor
     override fun readWithoutVerifying(jwt: String) = noChecksConsumer.processToClaims(jwt).toJwt()
 
     private fun JwtClaims.toJwt(): JWT = JoseJwtAdapter(this)
-}
-
-interface JWT {
-
-    val id: String
-    val subject: String
-    val claimsAsJson: JSONObject
-    val issuerName: Name
-    val audienceNames: List<Name>
-    val issuedAt: Instant
-    val expirationTime: Instant?
-    val notBeforeTime: Instant?
-
-    fun hasClaim(name: String): Boolean
-
-    fun getStringListClaimValue(name: String): List<String>
-
-    fun getStringClaimValue(name: String): String
 }
 
 private class JoseJwtAdapter(private val delegate: JwtClaims) : JWT {
