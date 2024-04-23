@@ -77,6 +77,12 @@ module("pulsar", "messaging", "test", "utils")
 module("nats", "client")
 module("nats", "test", "utils")
 
+module("jwt", "domain")
+module("jwt", "jose4j", "processor")
+module("jwt", "jose4j", "issuer")
+module("jwt", "jose4j", "examples")
+module("jwt", "test", "utils")
+
 module("example", "in-memory", "eda", "domain")
 module("example", "in-memory", "eda", "test", "stubs")
 module("example", "in-memory", "eda", "test", "specification")

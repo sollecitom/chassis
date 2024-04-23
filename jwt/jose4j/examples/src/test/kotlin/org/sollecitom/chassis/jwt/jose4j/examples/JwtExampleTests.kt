@@ -1,4 +1,4 @@
-package org.sollecitom.chassis.example.gateway.adapters.driving.http
+package org.sollecitom.chassis.jwt.jose4j.examples
 
 import assertk.assertThat
 import assertk.assertions.containsOnly
@@ -38,7 +38,6 @@ import java.security.PrivateKey
 import java.security.PublicKey
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-
 
 @TestInstance(PER_CLASS)
 private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvider { // CFR https://bitbucket.org/b_c/jose4j/wiki/JWT%20Examples#markdown-header-producing-and-consuming-signed-and-encrypted-jwt-using-rfc8037s-ed25519-eddsa-and-x25519-ecdh
