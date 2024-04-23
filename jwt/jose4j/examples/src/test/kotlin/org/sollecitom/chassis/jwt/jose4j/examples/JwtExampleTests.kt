@@ -30,7 +30,7 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
     }
 
     @Test
-    fun `Ed25519 EdDSA issuance and verification`() {
+    fun `Ed25519 EdDSA JWT issuance and verification`() {
 
         val issuerKeyId = "issuer key"
         val issuer = newED25519JwtIssuer(issuerKeyId)
