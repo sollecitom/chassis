@@ -64,31 +64,13 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
         claims.setStringListClaim("roles", roles)
         val claimsJson = claims.toJson().let(::JSONObject)
 
-        println(claimsJson)
-        val jwt = issuer.issueEncryptedJwt(claimsJson, audience)
+        val issuedEncryptedJwt = issuer.issueEncryptedJwt(claimsJson, audience)
 
-        println(jwt)
 
-        val jwsAlgConstraints = AlgorithmConstraints(ConstraintType.PERMIT, AlgorithmIdentifiers.EDDSA)
-        val jweAlgConstraints = AlgorithmConstraints(ConstraintType.PERMIT, KeyManagementAlgorithmIdentifiers.ECDH_ES)
-        val jweEncConstraints = AlgorithmConstraints(ConstraintType.PERMIT, ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512)
+        val processor = newAudienceSpecificJwtProcessor(audience, issuer.name, issuer.publicKey, acceptableContentEncryptionAlgorithms = setOf(ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512))
 
-        val jwtConsumer = JwtConsumerBuilder().setRequireExpirationTime() // the JWT must have an expiration time
-                .setMaxFutureValidityInMinutes(300) // but the  expiration time can't be too crazy
-                .setRequireSubject() // the JWT must have a subject claim
-                .setExpectedIssuer(issuer.name.value) // whom the JWT needs to have been issued by
-                .setExpectedAudience(audience.name.value) // to whom the JWT is intended for
-                .setDecryptionKey(audience.privateKey) // decrypt with the receiver's private key
-                .setVerificationKey(issuer.publicKey) // verify the signature with the issuer's public key
-                .setJwsAlgorithmConstraints(jwsAlgConstraints) // limits the acceptable signature algorithm(s)
-                .setJweAlgorithmConstraints(jweAlgConstraints) // limits acceptable encryption key establishment algorithm(s)
-                .setJweContentEncryptionAlgorithmConstraints(jweEncConstraints) // limits acceptable content encryption algorithm(s)
-                .build() // create the JwtConsumer instance
-
-        //  Validate the JWT and process it to the Claims
-        val jwtClaims = jwtConsumer.processToClaims(jwt)
-        println("JWT validation succeeded! " + jwtClaims.rawJson)
-        assertThat(jwtClaims.toJson().let(::JSONObject)).containsSameEntriesAs(claimsJson)
+        val processedJwt = processor.process(issuedEncryptedJwt)
+        assertThat(processedJwt.claimsAsJson).containsSameEntriesAs(claimsJson)
     }
 
     @Test
@@ -273,10 +255,82 @@ private class X25519JoseAudienceAdapter(private val keyPair: KeyPair, override v
 }
 
 enum class JwtContentEncryptionAlgorithm(val value: String) {
-    AES_128_CBC_HMAC_SHA_256("A128CBC-HS256"),
-    AES_192_CBC_HMAC_SHA_384("A192CBC-HS384"),
-    AES_256_CBC_HMAC_SHA_512("A256CBC-HS512"),
-    AES_128_GCM("A128GCM"),
-    AES_192_GCM("A192GCM"),
-    AES_256_GCM("A256GCM")
+    AES_128_CBC_HMAC_SHA_256("A128CBC-HS256"), AES_192_CBC_HMAC_SHA_384("A192CBC-HS384"), AES_256_CBC_HMAC_SHA_512("A256CBC-HS512"), AES_128_GCM("A128GCM"), AES_192_GCM("A192GCM"), AES_256_GCM("A256GCM")
+}
+
+interface JwtProcessor {
+
+    fun process(jwt: String): JWT
+
+    data class Configuration(
+            val requireSubject: Boolean,
+            val requireIssuedAt: Boolean,
+            val requireExpirationTime: Boolean,
+            val maximumFutureValidityInMinutes: Int?,
+            val acceptableSignatureAlgorithms: Set<String>,
+            val acceptableEncryptionKeyEstablishmentAlgorithms: Set<String>,
+            val acceptableContentEncryptionAlgorithms: Set<String>
+    )
+}
+
+fun newJwtProcessorConfiguration(
+        requireSubject: Boolean = true,
+        requireIssuedAt: Boolean = true,
+        requireExpirationTime: Boolean = true,
+        maximumFutureValidityInMinutes: Int? = null,
+        acceptableSignatureAlgorithms: Set<String> = setOf(AlgorithmIdentifiers.EDDSA),
+        acceptableEncryptionKeyEstablishmentAlgorithms: Set<String> = setOf(KeyManagementAlgorithmIdentifiers.ECDH_ES),
+        acceptableContentEncryptionAlgorithms: Set<String> = setOf(ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512)
+) = JwtProcessor.Configuration(requireSubject, requireIssuedAt, requireExpirationTime, maximumFutureValidityInMinutes, acceptableSignatureAlgorithms, acceptableEncryptionKeyEstablishmentAlgorithms, acceptableContentEncryptionAlgorithms)
+
+fun newAudienceSpecificJwtProcessor(audience: JwtAudience, issuerName: Name, issuerPublicKey: PublicKey, configuration: JwtProcessor.Configuration = newJwtProcessorConfiguration()): JwtProcessor = AudienceSpecificJoseJwtProcessor(audience, issuerName, issuerPublicKey, configuration)
+
+fun newAudienceSpecificJwtProcessor(audience: JwtAudience, issuer: JwtIssuer, configuration: JwtProcessor.Configuration = newJwtProcessorConfiguration()): JwtProcessor = newAudienceSpecificJwtProcessor(audience, issuer.name, issuer.publicKey, configuration)
+
+fun newAudienceSpecificJwtProcessor(audience: JwtAudience, issuer: JwtIssuer, acceptableSignatureAlgorithms: Set<String> = setOf(AlgorithmIdentifiers.EDDSA), acceptableEncryptionKeyEstablishmentAlgorithms: Set<String> = setOf(KeyManagementAlgorithmIdentifiers.ECDH_ES), acceptableContentEncryptionAlgorithms: Set<String> = setOf(ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512)): JwtProcessor = newAudienceSpecificJwtProcessor(audience, issuer.name, issuer.publicKey, newJwtProcessorConfiguration(acceptableSignatureAlgorithms = acceptableSignatureAlgorithms, acceptableEncryptionKeyEstablishmentAlgorithms = acceptableEncryptionKeyEstablishmentAlgorithms, acceptableContentEncryptionAlgorithms = acceptableContentEncryptionAlgorithms))
+
+fun newAudienceSpecificJwtProcessor(audience: JwtAudience, issuerName: Name, issuerPublicKey: PublicKey, acceptableSignatureAlgorithms: Set<String> = setOf(AlgorithmIdentifiers.EDDSA), acceptableEncryptionKeyEstablishmentAlgorithms: Set<String> = setOf(KeyManagementAlgorithmIdentifiers.ECDH_ES), acceptableContentEncryptionAlgorithms: Set<String> = setOf(ContentEncryptionAlgorithmIdentifiers.AES_256_CBC_HMAC_SHA_512)): JwtProcessor = newAudienceSpecificJwtProcessor(audience, issuerName, issuerPublicKey, newJwtProcessorConfiguration(acceptableSignatureAlgorithms = acceptableSignatureAlgorithms, acceptableEncryptionKeyEstablishmentAlgorithms = acceptableEncryptionKeyEstablishmentAlgorithms, acceptableContentEncryptionAlgorithms = acceptableContentEncryptionAlgorithms))
+
+private class AudienceSpecificJoseJwtProcessor(private val audience: JwtAudience, private val issuerName: Name, private val issuerPublicKey: PublicKey, private val configuration: JwtProcessor.Configuration) : JwtProcessor {
+
+    private val consumer = consumer(configuration).setExpectedIssuer(issuerName.value).setVerificationKey(issuerPublicKey).setAudience(audience).build()
+
+    override fun process(jwt: String): JWT {
+
+        val claims = consumer.processToClaims(jwt)
+        return JoseJwtAdapter(claims)
+    }
+
+    private fun consumer(configuration: JwtProcessor.Configuration): JwtConsumerBuilder {
+
+        val builder = JwtConsumerBuilder()
+        if (configuration.requireSubject) {
+            builder.setRequireSubject()
+        }
+        if (configuration.requireIssuedAt) {
+            builder.setRequireIssuedAt()
+        }
+        if (configuration.requireExpirationTime) {
+            builder.setRequireExpirationTime()
+        }
+        if (configuration.maximumFutureValidityInMinutes != null) {
+            builder.setMaxFutureValidityInMinutes(configuration.maximumFutureValidityInMinutes)
+        }
+        builder.setJwsAlgorithmConstraints(ConstraintType.PERMIT, *configuration.acceptableSignatureAlgorithms.toTypedArray())
+        builder.setJweAlgorithmConstraints(ConstraintType.PERMIT, *configuration.acceptableEncryptionKeyEstablishmentAlgorithms.toTypedArray())
+        builder.setJweContentEncryptionAlgorithmConstraints(ConstraintType.PERMIT, *configuration.acceptableContentEncryptionAlgorithms.toTypedArray())
+        return builder
+    }
+
+    private fun JwtConsumerBuilder.setAudience(audience: JwtAudience): JwtConsumerBuilder = setExpectedAudience(audience.name.value).setDecryptionKey(audience.privateKey)
+}
+
+interface JWT {
+
+    val claimsAsJson: JSONObject
+}
+
+private class JoseJwtAdapter(private val delegate: JwtClaims) : JWT {
+
+    override val claimsAsJson = delegate.toJson().let(::JSONObject)
 }
