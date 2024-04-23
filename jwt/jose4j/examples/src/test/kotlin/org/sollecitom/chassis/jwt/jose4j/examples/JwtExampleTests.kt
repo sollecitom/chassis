@@ -13,7 +13,6 @@ import org.jose4j.jwk.OkpJwkGenerator
 import org.jose4j.jws.AlgorithmIdentifiers
 import org.jose4j.jws.JsonWebSignature
 import org.jose4j.jwt.JwtClaims
-import org.jose4j.jwt.NumericDate
 import org.jose4j.jwt.consumer.JwtConsumer
 import org.jose4j.jwt.consumer.JwtConsumerBuilder
 import org.jose4j.keys.resolvers.HttpsJwksVerificationKeyResolver
@@ -28,6 +27,10 @@ import org.sollecitom.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.core.utils.RandomGenerator
 import org.sollecitom.chassis.json.test.utils.containsSameEntriesAs
 import org.sollecitom.chassis.jwt.domain.*
+import org.sollecitom.chassis.jwt.jose4j.utils.X25519JoseAudienceAdapter
+import org.sollecitom.chassis.jwt.jose4j.utils.expiryTime
+import org.sollecitom.chassis.jwt.jose4j.utils.issuingTime
+import org.sollecitom.chassis.jwt.jose4j.utils.notBeforeTime
 import org.sollecitom.chassis.kotlin.extensions.text.string
 import org.sollecitom.chassis.kotlin.extensions.time.truncatedToSeconds
 import org.sollecitom.chassis.logger.core.LoggingLevel
@@ -61,7 +64,7 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
         val notBeforeTime = issuingTime - 5.seconds
         val rolesClaim = "roles"
         val roles = mutableListOf("role-1", "role-2")
-        val claims = claims {
+        val claimsJson = jwtClaimsJson {
             it.jwtId = jwtId
             it.issuer = issuer.name.value
             it.setAudience(audienceName.value)
@@ -71,7 +74,6 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
             it.notBeforeTime = notBeforeTime
             it.setStringListClaim(rolesClaim, roles)
         }
-        val claimsJson = claims.toJson().let(::JSONObject)
 
         val issuedJwt = issuer.issueJwt(claimsJson)
         val processedJwt = processor.readAndVerify(issuedJwt)
@@ -102,7 +104,7 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
         val notBeforeTime = issuingTime - 5.seconds
         val rolesClaim = "roles"
         val roles = mutableListOf("role-1", "role-2")
-        val claims = claims {
+        val claimsJson = jwtClaimsJson {
             it.jwtId = jwtId
             it.issuer = issuer.name.value
             it.setAudience(audience.name.value)
@@ -112,7 +114,6 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
             it.notBeforeTime = notBeforeTime
             it.setStringListClaim(rolesClaim, roles)
         }
-        val claimsJson = claims.toJson().let(::JSONObject)
 
         val issuedEncryptedJwt = issuer.issueEncryptedJwt(claimsJson, audience, contentEncryptionAlgorithm = JwtContentEncryptionAlgorithm.AES_256_CBC_HMAC_SHA_512)
         val processedJwt = processor.readAndVerify(issuedEncryptedJwt)
@@ -127,9 +128,11 @@ private class JwtExampleTests : CoreDataGenerator by CoreDataGenerator.testProvi
         assertThat(processedJwt.getStringListClaimValue(rolesClaim)).containsSameElementsAs(roles)
         assertThat(processedJwt.claimsAsJson).containsSameEntriesAs(claimsJson)
     }
-
-    private fun claims(configure: (JwtClaims) -> Unit) = JwtClaims().also(configure)
 }
+
+private fun jwtClaims(configure: (JwtClaims) -> Unit): JwtClaims = JwtClaims().also(configure)
+
+private fun jwtClaimsJson(configure: (JwtClaims) -> Unit): JSONObject = jwtClaims(configure).toJson().let(::JSONObject)
 
 // TODO move to cryptography/test-utils and replace with bouncy-castle
 context(RandomGenerator)
@@ -146,7 +149,7 @@ fun newED25519JwtIssuer(keyId: String = random.string(wordLength = 6), name: Nam
     return ED25519JoseIssuerAdapter(keyPair, keyId, name)
 }
 
-private class ED25519JoseIssuerAdapter(private val keyPair: KeyPair, private val keyId: String, override val name: Name) : JwtIssuer {
+class ED25519JoseIssuerAdapter(private val keyPair: KeyPair, private val keyId: String, override val name: Name) : JwtIssuer {
 
     init {
         require(keyPair.public.algorithm == EDDSA_ALGORITHM) { "Public key must use ${OctetKeyPairJsonWebKey.SUBTYPE_ED25519}" }
@@ -188,21 +191,6 @@ fun newX25519JwtAudience(keyId: String = random.string(wordLength = 6), name: Na
 
     val keyPair = newKeyPair(OctetKeyPairJsonWebKey.SUBTYPE_X25519)
     return X25519JoseAudienceAdapter(keyPair, keyId, name)
-}
-
-private class X25519JoseAudienceAdapter(private val keyPair: KeyPair, override val keyId: String, override val name: Name) : JwtAudience {
-
-    init {
-        require(keyPair.public.algorithm == KEY_ALGORITHM) { "Public key must use ${OctetKeyPairJsonWebKey.SUBTYPE_X25519}" }
-        require(keyPair.private.algorithm == KEY_ALGORITHM) { "Private key must use ${OctetKeyPairJsonWebKey.SUBTYPE_X25519}" }
-    }
-
-    override val publicKey: PublicKey get() = keyPair.public
-    override val privateKey: PrivateKey get() = keyPair.private
-
-    companion object {
-        private const val KEY_ALGORITHM = "XDH"
-    }
 }
 
 fun newJwtProcessorConfiguration(
@@ -296,24 +284,3 @@ private class JoseJwtAdapter(private val delegate: JwtClaims) : JWT {
     override fun getStringListClaimValue(name: String): List<String> = delegate.getStringListClaimValue(name)
     override fun getStringClaimValue(name: String): String = delegate.getStringClaimValue(name)
 }
-
-var JwtClaims.issuingTime: Instant
-    get() = issuedAt.toInstant()
-    set(value) {
-        issuedAt = value.toNumericDate()
-    }
-
-var JwtClaims.expiryTime: Instant?
-    get() = expirationTime?.toInstant()
-    set(value) {
-        expirationTime = value?.toNumericDate()
-    }
-
-var JwtClaims.notBeforeTime: Instant?
-    get() = notBefore?.toInstant()
-    set(value) {
-        notBefore = value?.toNumericDate()
-    }
-
-private fun Instant.toNumericDate() = toEpochMilliseconds().let(NumericDate::fromMilliseconds)
-private fun NumericDate.toInstant() = valueInMillis.let(Instant::fromEpochMilliseconds)

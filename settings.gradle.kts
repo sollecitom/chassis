@@ -80,6 +80,7 @@ module("nats", "test", "utils")
 module("jwt", "domain")
 module("jwt", "jose4j", "processor")
 module("jwt", "jose4j", "issuer")
+module("jwt", "jose4j", "utils")
 module("jwt", "jose4j", "examples")
 module("jwt", "test", "utils")
 
