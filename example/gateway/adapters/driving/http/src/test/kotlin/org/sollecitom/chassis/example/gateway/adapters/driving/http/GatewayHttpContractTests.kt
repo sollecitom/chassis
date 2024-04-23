@@ -47,7 +47,7 @@ private class GatewayHttpContractTests : HttpApiDefinition, LocalHttpDrivingAdap
 
     @Disabled
     @Test
-    fun `getting the contract right`() { // TODO add JWT to this, as header, and parse Access, etc. from it
+    fun `getting the contract right`() { // TODO add JWT to this, as header, and parse Access, etc. from it (use the jwt modules in Chassis)
 
         val downStreamResponse = Response(OK).header("Secret header", "secret header value")
         var downstreamRequest: Request? = null
