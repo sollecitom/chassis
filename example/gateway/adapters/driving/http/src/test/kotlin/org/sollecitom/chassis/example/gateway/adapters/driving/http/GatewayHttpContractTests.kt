@@ -85,9 +85,10 @@ private class GatewayHttpContractTests : HttpApiDefinition, LocalHttpDrivingAdap
         assertThat(request.invocationContextHeader).isNotNull()
         assertThat(request.invocationContextHeader.toJSON()).compliesWith(InvocationContext.jsonSerde.schema)
         val deserializationAttempt = runCatching {
-            val downstreamRequestInvocationContext = InvocationContext.jsonSerde.deserialize(request.invocationContextHeader.toJSON())
+            InvocationContext.jsonSerde.deserialize(request.invocationContextHeader.toJSON())
         }
         assertThat(deserializationAttempt).succeeded()
+        // TODO assert some more on the context itself
     }
 }
 
