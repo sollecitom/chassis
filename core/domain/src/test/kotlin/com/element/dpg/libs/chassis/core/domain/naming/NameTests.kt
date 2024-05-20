@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.test.utils.core.specifications.EqualsAndHashCodeTestSpecification
+import com.element.dpg.libs.chassis.test.utils.specifications.EqualsAndHashCodeTestSpecification
 
 @TestInstance(PER_CLASS)
 private class NameTests {

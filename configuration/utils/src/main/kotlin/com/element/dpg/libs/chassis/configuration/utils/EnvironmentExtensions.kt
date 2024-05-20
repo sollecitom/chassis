@@ -8,7 +8,7 @@ import org.http4k.format.JacksonYaml
 import org.http4k.lens.BiDiLens
 import org.sollecitom.chassis.core.domain.identity.InstanceInfo
 import org.sollecitom.chassis.kotlin.extensions.collections.toPairsArray
-import org.sollecitom.chassis.resource.utils.ResourceLoader
+import com.element.dpg.libs.chassis.resource.utils.ResourceLoader
 import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader

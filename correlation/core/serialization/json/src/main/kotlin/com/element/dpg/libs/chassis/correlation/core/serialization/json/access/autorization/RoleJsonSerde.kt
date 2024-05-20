@@ -1,0 +1,31 @@
+package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.autorization
+
+import org.json.JSONObject
+import org.sollecitom.chassis.core.domain.naming.Name
+import org.sollecitom.chassis.correlation.core.domain.access.authorization.Role
+import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
+import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
+import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
+
+private object RoleJsonSerde : JsonSerde.SchemaAware<Role> {
+
+    private const val SCHEMA_LOCATION = "correlation/access/authorization/Role.json"
+    override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
+
+    override fun serialize(value: Role) = JSONObject().apply {
+
+        put(Fields.NAME, value.name.value)
+    }
+
+    override fun deserialize(json: JSONObject): Role {
+
+        val name = json.getRequiredString(Fields.NAME).let(::Name)
+        return Role(name = name)
+    }
+
+    private object Fields {
+        const val NAME = "name"
+    }
+}
+
+val Role.Companion.jsonSerde: JsonSerde.SchemaAware<Role> get() = RoleJsonSerde

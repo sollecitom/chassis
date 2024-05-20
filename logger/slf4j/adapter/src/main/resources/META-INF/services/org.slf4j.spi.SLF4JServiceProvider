@@ -1,1 +1,1 @@
-org.sollecitom.chassis.logger.slf4j.provider.KLogSlf4jServiceProvider
+com.element.dpg.libs.chassis.logger.slf4j.provider.KLogSlf4jServiceProvider

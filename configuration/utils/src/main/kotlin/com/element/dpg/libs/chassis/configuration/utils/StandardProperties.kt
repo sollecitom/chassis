@@ -3,7 +3,7 @@ package com.element.dpg.libs.chassis.configuration.utils
 import org.http4k.cloudnative.env.EnvironmentKey
 import org.http4k.lens.int
 import org.http4k.lens.long
-import org.sollecitom.chassis.lens.core.extensions.naming.name
+import com.element.dpg.libs.chassis.lens.core.extensions.naming.name
 import kotlin.random.Random
 
 private val randomSeedKey = EnvironmentKey.long().defaulted("random.seed", Random.nextLong(), "The seed (long) used to initialise random data generation")

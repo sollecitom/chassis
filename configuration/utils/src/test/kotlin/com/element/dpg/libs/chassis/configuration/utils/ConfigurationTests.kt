@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.io.TempDir
-import org.sollecitom.chassis.lens.core.extensions.base.javaURI
+import com.element.dpg.libs.chassis.lens.core.extensions.base.javaURI
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path

@@ -5,18 +5,18 @@ import org.http4k.cloudnative.env.MapEnvironment
 import org.sollecitom.chassis.logger.core.*
 import org.sollecitom.chassis.logger.core.appender.PrintStreamAppender
 import org.sollecitom.chassis.logger.core.defaults.DefaultFormatToString
-import org.sollecitom.chassis.logger.json.formatter.DefaultFormatToJson
+import com.element.dpg.libs.chassis.logger.json.formatter.DefaultFormatToJson
 
 object StandardLoggingConfiguration {
 
     operator fun invoke(
-        environment: Environment,
-        minimumLoggingLevelEnvironmentVariableName: String = Properties.LOGGING_LEVEL_ENV_VARIABLE,
-        minimumLoggingLevelOverridesEnvironmentVariableName: String = Properties.LOGGING_LEVEL_OVERRIDES_ENV_VARIABLE,
-        logFormatEnvironmentVariableName: String = Properties.FORMAT_ENV_VARIABLE,
-        defaultMinimumLoggingLevel: LoggingLevel = LoggingLevel.INFO,
-        defaultMinimumLoggingLevelOverrides: Map<String, LoggingLevel> = emptyMap(),
-        defaultLogFormat: LogFormat = LogFormat.PLAIN
+            environment: Environment,
+            minimumLoggingLevelEnvironmentVariableName: String = Properties.LOGGING_LEVEL_ENV_VARIABLE,
+            minimumLoggingLevelOverridesEnvironmentVariableName: String = Properties.LOGGING_LEVEL_OVERRIDES_ENV_VARIABLE,
+            logFormatEnvironmentVariableName: String = Properties.FORMAT_ENV_VARIABLE,
+            defaultMinimumLoggingLevel: com.element.dpg.libs.chassis.logger.core.LoggingLevel = com.element.dpg.libs.chassis.logger.core.LoggingLevel.INFO,
+            defaultMinimumLoggingLevelOverrides: Map<String, com.element.dpg.libs.chassis.logger.core.LoggingLevel> = emptyMap(),
+            defaultLogFormat: LogFormat = LogFormat.PLAIN
     ) = invoke(
             minimumLoggingLevelEnvironmentVariableName,
             minimumLoggingLevelOverridesEnvironmentVariableName,
@@ -28,13 +28,13 @@ object StandardLoggingConfiguration {
     )
 
     operator fun invoke(
-        minimumLoggingLevelEnvironmentVariableName: String = Properties.LOGGING_LEVEL_ENV_VARIABLE,
-        minimumLoggingLevelOverridesEnvironmentVariableName: String = Properties.LOGGING_LEVEL_OVERRIDES_ENV_VARIABLE,
-        logFormatEnvironmentVariableName: String = Properties.FORMAT_ENV_VARIABLE,
-        defaultMinimumLoggingLevel: LoggingLevel = LoggingLevel.INFO,
-        defaultMinimumLoggingLevelOverrides: Map<String, LoggingLevel> = emptyMap(),
-        defaultLogFormat: LogFormat = LogFormat.PLAIN,
-        readConfigurationValue: (String) -> String? = ::defaultReadConfigurationValue
+            minimumLoggingLevelEnvironmentVariableName: String = Properties.LOGGING_LEVEL_ENV_VARIABLE,
+            minimumLoggingLevelOverridesEnvironmentVariableName: String = Properties.LOGGING_LEVEL_OVERRIDES_ENV_VARIABLE,
+            logFormatEnvironmentVariableName: String = Properties.FORMAT_ENV_VARIABLE,
+            defaultMinimumLoggingLevel: com.element.dpg.libs.chassis.logger.core.LoggingLevel = com.element.dpg.libs.chassis.logger.core.LoggingLevel.INFO,
+            defaultMinimumLoggingLevelOverrides: Map<String, com.element.dpg.libs.chassis.logger.core.LoggingLevel> = emptyMap(),
+            defaultLogFormat: LogFormat = LogFormat.PLAIN,
+            readConfigurationValue: (String) -> String? = ::defaultReadConfigurationValue
     ): LoggingCustomizer {
 
         val minimumLoggingLevelValue = defaultMinimumLoggingLevelFromEnvironment(minimumLoggingLevelEnvironmentVariableName, readConfigurationValue) ?: defaultMinimumLoggingLevel
@@ -44,9 +44,9 @@ object StandardLoggingConfiguration {
         return CombinedLoggingCustomizer(minimumLoggingLevelValue, minimumLoggingLevelOverridesValue, logFormatValue.asFormattingFunction())
     }
 
-    private fun defaultMinimumLoggingLevelFromEnvironment(key: String, readConfigurationValue: (String) -> String?): LoggingLevel? = readConfigurationValue(key)?.uppercase()?.let(LoggingLevel::valueOf)
+    private fun defaultMinimumLoggingLevelFromEnvironment(key: String, readConfigurationValue: (String) -> String?): com.element.dpg.libs.chassis.logger.core.LoggingLevel? = readConfigurationValue(key)?.uppercase()?.let(com.element.dpg.libs.chassis.logger.core.LoggingLevel::valueOf)
 
-    private fun minimumLoggingLevelOverridesFromEnvironment(key: String, readConfigurationValue: (String) -> String?): Map<String, LoggingLevel>? = readConfigurationValue(key)?.split(",")?.map { it.split("=") }?.associate { it.first() to LoggingLevel.valueOf(it.last()) }
+    private fun minimumLoggingLevelOverridesFromEnvironment(key: String, readConfigurationValue: (String) -> String?): Map<String, com.element.dpg.libs.chassis.logger.core.LoggingLevel>? = readConfigurationValue(key)?.split(",")?.map { it.split("=") }?.associate { it.first() to com.element.dpg.libs.chassis.logger.core.LoggingLevel.valueOf(it.last()) }
 
     private fun logFormatFromEnvironment(key: String, readConfigurationValue: (String) -> String?): LogFormat? = readConfigurationValue(key)?.lowercase()?.let(::parseLogFormat)
 
@@ -75,13 +75,13 @@ private fun defaultReadConfigurationValue(key: String): String? {
     return environment[key]
 }
 
-private class CombinedLoggingCustomizer(override val minimumLoggingLevel: LoggingLevel, override val minimumLoggingLevelOverrides: Map<String, LoggingLevel>, override val format: FormatLogEntry<String>) : LoggingCustomizer {
+private class CombinedLoggingCustomizer(override val minimumLoggingLevel: com.element.dpg.libs.chassis.logger.core.LoggingLevel, override val minimumLoggingLevelOverrides: Map<String, com.element.dpg.libs.chassis.logger.core.LoggingLevel>, override val format: FormatLogEntry<String>) : LoggingCustomizer {
 
-    override fun invoke(customizer: LoggerFactory.Customizer) {
+    override fun invoke(customizer: com.element.dpg.libs.chassis.logger.core.LoggerFactory.Customizer) {
         with(customizer) {
             loggingFunction = loggingFunction {
-                addAppender(PrintStreamAppender(maximumLevel = LoggingLevel.WARN, stream = System::out, format = format))
-                addAppender(PrintStreamAppender(minimumLevel = LoggingLevel.ERROR, stream = System::err, format = format))
+                addAppender(PrintStreamAppender(maximumLevel = com.element.dpg.libs.chassis.logger.core.LoggingLevel.WARN, stream = System::out, format = format))
+                addAppender(PrintStreamAppender(minimumLevel = com.element.dpg.libs.chassis.logger.core.LoggingLevel.ERROR, stream = System::err, format = format))
             }
             isEnabledForLoggerName = loggingLevelEnabler(defaultMinimumLoggingLevel = minimumLoggingLevel) {
                 minimumLoggingLevelOverrides.forEach { (loggerName, minimumLoggingLevel) -> loggerName withMinimumLoggingLevel minimumLoggingLevel }

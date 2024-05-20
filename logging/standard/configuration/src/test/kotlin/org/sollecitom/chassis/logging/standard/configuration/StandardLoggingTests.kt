@@ -6,13 +6,13 @@ import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.json.test.utils.compliesWith
+import com.element.dpg.libs.chassis.json.test.utils.compliesWith
 import org.sollecitom.chassis.logger.core.JvmLoggerFactory
 import org.sollecitom.chassis.logger.core.LogEntry
-import org.sollecitom.chassis.logger.json.formatter.jsonSchema
+import com.element.dpg.libs.chassis.logger.json.formatter.jsonSchema
 import org.sollecitom.chassis.logging.standard.configuration.LogFormat.JSON
 import org.sollecitom.chassis.logging.standard.configuration.LogFormat.PLAIN
-import org.sollecitom.chassis.test.utils.standard.output.withCapturedStandardOutput
+import com.element.dpg.libs.chassis.test.utils.output.withCapturedStandardOutput
 
 @TestInstance(PER_CLASS)
 private class StandardLoggingTests {
