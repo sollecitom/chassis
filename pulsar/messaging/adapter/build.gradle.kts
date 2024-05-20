@@ -4,7 +4,6 @@ dependencies {
     implementation(projects.chassisPulsarUtils)
 
     testImplementation(projects.chassisLoggingStandardSlf4jConfiguration)
-    testImplementation(projects.chassisDddEventFrameworkTestSpecification)
 //    testImplementation(projects.chassisPulsarAvroSerialization)
     testImplementation(projects.chassisPulsarJsonSerialization) // TODO swap to Avro
     testImplementation(projects.chassisDddEventStoreMemory)
