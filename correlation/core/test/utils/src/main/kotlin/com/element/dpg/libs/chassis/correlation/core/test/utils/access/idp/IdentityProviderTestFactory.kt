@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.correlation.core.test.utils.access.idp
 
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.core.utils.UniqueIdGenerator
-import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
-import org.sollecitom.chassis.correlation.core.domain.access.idp.IdentityProvider
-import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
+import com.element.dpg.libs.chassis.correlation.core.domain.access.customer.Customer
+import com.element.dpg.libs.chassis.correlation.core.domain.access.idp.IdentityProvider
+import com.element.dpg.libs.chassis.correlation.core.domain.tenancy.Tenant
 import com.element.dpg.libs.chassis.correlation.core.test.utils.customer.create
 import com.element.dpg.libs.chassis.correlation.core.test.utils.tenancy.create
 

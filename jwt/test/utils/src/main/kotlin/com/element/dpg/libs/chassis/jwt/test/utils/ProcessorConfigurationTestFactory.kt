@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.jwt.test.utils
 
-import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers
-import org.jose4j.jws.AlgorithmIdentifiers
 import com.element.dpg.libs.chassis.jwt.domain.JwtContentEncryptionAlgorithm
 import com.element.dpg.libs.chassis.jwt.domain.JwtProcessor
+import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers
+import org.jose4j.jws.AlgorithmIdentifiers
 
 fun newJwtProcessorConfiguration(
         requireSubject: Boolean = true,

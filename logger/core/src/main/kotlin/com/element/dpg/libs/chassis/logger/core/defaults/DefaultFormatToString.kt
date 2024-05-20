@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.logger.core.defaults
 
 import org.json.JSONObject
-import org.sollecitom.chassis.logger.core.FormatLogEntry
-import org.sollecitom.chassis.logger.core.LogEntry
-import org.sollecitom.chassis.logger.core.LoggingContext
+import com.element.dpg.libs.chassis.logger.core.FormatLogEntry
+import com.element.dpg.libs.chassis.logger.core.LogEntry
+import com.element.dpg.libs.chassis.logger.core.LoggingContext
 import com.element.dpg.libs.chassis.logger.core.LoggingLevel
 
 @Suppress("DEPRECATION")

@@ -1,11 +1,11 @@
 package com.element.dpg.libs.chassis.ddd.test.stubs
 
-import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.identity.Id
 import com.element.dpg.libs.chassis.core.utils.TimeGenerator
 import com.element.dpg.libs.chassis.core.utils.UniqueIdGenerator
-import org.sollecitom.chassis.ddd.domain.Event
+import com.element.dpg.libs.chassis.ddd.domain.Event
 import com.element.dpg.libs.chassis.ddd.test.utils.create
+import kotlinx.datetime.Instant
 
 context(UniqueIdGenerator, TimeGenerator)
 fun testEvents(): Sequence<TestEvent> = sequence {

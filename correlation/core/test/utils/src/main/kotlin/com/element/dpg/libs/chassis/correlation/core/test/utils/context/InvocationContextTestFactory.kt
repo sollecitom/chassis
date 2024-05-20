@@ -1,17 +1,15 @@
 package com.element.dpg.libs.chassis.correlation.core.test.utils.context
 
-import kotlinx.datetime.Instant
 import com.element.dpg.libs.chassis.core.utils.TimeGenerator
 import com.element.dpg.libs.chassis.core.utils.UniqueIdGenerator
-import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
-import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
-import org.sollecitom.chassis.correlation.core.domain.access.authorization.Roles
-import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
-import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
-import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
-import org.sollecitom.chassis.correlation.core.domain.trace.Trace
+import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.Actor
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authorization.Roles
+import com.element.dpg.libs.chassis.correlation.core.domain.access.origin.Origin
+import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
+import com.element.dpg.libs.chassis.correlation.core.domain.tenancy.Tenant
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.Toggles
+import com.element.dpg.libs.chassis.correlation.core.domain.trace.Trace
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.actor.direct
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.authenticated
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.authorization.TestRoles
@@ -20,6 +18,7 @@ import com.element.dpg.libs.chassis.correlation.core.test.utils.access.origin.cr
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.unauthenticated
 import com.element.dpg.libs.chassis.correlation.core.test.utils.toggles.create
 import com.element.dpg.libs.chassis.correlation.core.test.utils.trace.create
+import kotlinx.datetime.Instant
 
 context(UniqueIdGenerator, TimeGenerator)
 fun InvocationContext.Companion.create(

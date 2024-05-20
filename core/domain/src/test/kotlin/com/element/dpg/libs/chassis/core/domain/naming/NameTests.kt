@@ -4,11 +4,11 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isFailure
 import assertk.assertions.isInstanceOf
+import com.element.dpg.libs.chassis.test.utils.specifications.EqualsAndHashCodeTestSpecification
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import com.element.dpg.libs.chassis.test.utils.specifications.EqualsAndHashCodeTestSpecification
 
 @TestInstance(PER_CLASS)
 private class NameTests {

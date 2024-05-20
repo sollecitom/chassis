@@ -1,12 +1,12 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.toggles
 
-import org.json.JSONObject
-import org.sollecitom.chassis.correlation.core.domain.toggles.ToggleValue
-import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.ToggleValue
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.Toggles
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
 import com.element.dpg.libs.chassis.json.utils.serde.serde.getValues
 import com.element.dpg.libs.chassis.json.utils.serde.serde.setValues
+import org.json.JSONObject
 
 private object TogglesJsonSerde : JsonSerde.SchemaAware<Toggles> {
 

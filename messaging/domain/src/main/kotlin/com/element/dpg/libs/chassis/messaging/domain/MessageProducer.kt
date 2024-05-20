@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.messaging.domain
 
-import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.lifecycle.Stoppable
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 
 interface MessageProducer<in VALUE> : Stoppable, AutoCloseable {
 

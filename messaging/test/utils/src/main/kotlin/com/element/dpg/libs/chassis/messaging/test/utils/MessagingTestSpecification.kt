@@ -3,14 +3,13 @@ package com.element.dpg.libs.chassis.messaging.test.utils
 import assertk.assertThat
 import assertk.assertions.hasSameSizeAs
 import assertk.assertions.isEqualTo
+import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
+import com.element.dpg.libs.chassis.messaging.domain.*
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
-import com.element.dpg.libs.chassis.messaging.domain.*
-import org.sollecitom.chassis.messaging.domain.*
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 

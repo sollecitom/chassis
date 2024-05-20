@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.correlation.core.domain.access.session
 
-import org.sollecitom.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.identity.Id
 
 sealed interface Session {
 

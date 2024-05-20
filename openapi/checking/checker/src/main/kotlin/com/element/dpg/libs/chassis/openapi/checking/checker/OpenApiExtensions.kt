@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.openapi.checking.checker
 
 import io.swagger.v3.oas.models.OpenAPI
-import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
+import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
 
 fun OpenAPI.checkAgainstRules(vararg rules: OpenApiRule): ComplianceCheckResult = checkAgainstRules(rules.toSet())
 

@@ -1,13 +1,13 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.authentication
 
-import org.json.JSONObject
-import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
-import org.sollecitom.chassis.correlation.core.domain.access.authentication.CredentialsBasedAuthentication
-import org.sollecitom.chassis.correlation.core.domain.access.authentication.FederatedAuthentication
-import org.sollecitom.chassis.correlation.core.domain.access.authentication.StatelessAuthentication
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authentication.Authentication
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authentication.CredentialsBasedAuthentication
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authentication.FederatedAuthentication
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authentication.StatelessAuthentication
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
+import org.json.JSONObject
 
 private object AuthenticationJsonSerde : JsonSerde.SchemaAware<Authentication> {
 

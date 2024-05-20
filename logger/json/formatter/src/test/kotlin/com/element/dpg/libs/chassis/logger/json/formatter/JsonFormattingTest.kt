@@ -9,9 +9,9 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import com.element.dpg.libs.chassis.json.test.utils.compliesWith
 import com.element.dpg.libs.chassis.json.test.utils.containsSameEntriesAs
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredJSONObject
-import org.sollecitom.chassis.logger.core.LogEntry
-import org.sollecitom.chassis.logger.core.LoggingContext
-import org.sollecitom.chassis.logger.core.withEntries
+import com.element.dpg.libs.chassis.logger.core.LogEntry
+import com.element.dpg.libs.chassis.logger.core.LoggingContext
+import com.element.dpg.libs.chassis.logger.core.withEntries
 import java.time.Instant
 
 @TestInstance(PER_CLASS)

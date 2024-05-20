@@ -1,8 +1,8 @@
 package com.element.dpg.libs.chassis.logger.core.implementation
 
-import org.sollecitom.chassis.logger.core.FormatLogEntry
-import org.sollecitom.chassis.logger.core.Log
-import org.sollecitom.chassis.logger.core.LogEntry
+import com.element.dpg.libs.chassis.logger.core.FormatLogEntry
+import com.element.dpg.libs.chassis.logger.core.Log
+import com.element.dpg.libs.chassis.logger.core.LogEntry
 import com.element.dpg.libs.chassis.logger.core.LoggingLevel
 import java.io.PrintStream
 

@@ -1,12 +1,12 @@
 package com.element.dpg.libs.chassis.ddd.event.framework.memory
 
+import com.element.dpg.libs.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.ddd.domain.EntityEvent
+import com.element.dpg.libs.chassis.ddd.domain.Event
+import com.element.dpg.libs.chassis.ddd.domain.framework.EventFramework
+import com.element.dpg.libs.chassis.ddd.event.store.memory.InMemoryEventStore
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
-import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.ddd.domain.EntityEvent
-import org.sollecitom.chassis.ddd.domain.Event
-import org.sollecitom.chassis.ddd.domain.framework.EventFramework
-import com.element.dpg.libs.chassis.ddd.event.store.memory.InMemoryEventStore
 
 fun EventFramework.Mutable.Companion.inMemory(queryFactory: InMemoryEventStore.Query.Factory = InMemoryEventStore.Query.Factory.WithoutCustomQueries): EventFramework.Mutable = InMemoryEventFramework(queryFactory)
 

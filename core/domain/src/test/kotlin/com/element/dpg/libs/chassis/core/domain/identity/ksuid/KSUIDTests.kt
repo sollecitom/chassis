@@ -2,15 +2,15 @@ package com.element.dpg.libs.chassis.core.domain.identity.ksuid
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.element.dpg.libs.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.identity.factory.Factory
+import com.element.dpg.libs.chassis.core.domain.identity.utils.invoke
+import com.element.dpg.libs.chassis.kotlin.extensions.time.fixed
+import com.element.dpg.libs.chassis.kotlin.extensions.time.truncatedToSeconds
 import kotlinx.datetime.Clock
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.identity.factory.Factory
-import com.element.dpg.libs.chassis.core.domain.identity.utils.invoke
-import org.sollecitom.chassis.kotlin.extensions.time.fixed
-import org.sollecitom.chassis.kotlin.extensions.time.truncatedToSeconds
 import kotlin.time.Duration.Companion.days
 
 @TestInstance(PER_CLASS)

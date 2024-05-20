@@ -2,9 +2,8 @@
 
 package com.element.dpg.libs.chassis.core.domain.currency.known
 
-import com.element.dpg.libs.chassis.core.domain.currency.Currency
-import org.sollecitom.chassis.core.domain.currency.SpecificCurrencyAmount
-import org.sollecitom.chassis.kotlin.extensions.number.withPrecision
+import com.element.dpg.libs.chassis.core.domain.currency.SpecificCurrencyAmount
+import com.element.dpg.libs.chassis.kotlin.extensions.number.withPrecision
 import java.math.BigDecimal
 import kotlin.reflect.KClass
 

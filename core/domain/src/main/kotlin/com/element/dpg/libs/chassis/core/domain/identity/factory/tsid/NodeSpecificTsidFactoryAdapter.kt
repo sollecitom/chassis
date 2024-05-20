@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.core.domain.identity.factory.tsid
 
+import com.element.dpg.libs.chassis.core.domain.identity.TSID
+import com.element.dpg.libs.chassis.core.domain.identity.factory.SortableTimestampedUniqueIdentifierFactory
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
-import org.sollecitom.chassis.core.domain.identity.TSID
-import org.sollecitom.chassis.core.domain.identity.factory.SortableTimestampedUniqueIdentifierFactory
 import kotlin.random.Random
 import kotlin.random.asJavaRandom
 import io.hypersistence.tsid.TSID as Tsid

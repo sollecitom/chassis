@@ -1,9 +1,8 @@
 package com.element.dpg.libs.chassis.nats.client
 
+import com.element.dpg.libs.chassis.core.domain.lifecycle.Stoppable
 import io.nats.client.Message
-import io.nats.client.Options
 import kotlinx.coroutines.flow.Flow
-import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 
 interface NatsConsumer : Stoppable {
 

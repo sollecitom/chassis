@@ -1,12 +1,12 @@
 package com.element.dpg.libs.chassis.http4k.utils.lens
 
+import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonDeserializer
+import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerializer
 import org.http4k.core.ContentType
 import org.http4k.core.Response
 import org.http4k.filter.ResponseFilters
 import org.json.JSONArray
 import org.json.JSONObject
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonDeserializer
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerializer
 
 fun Response.bodyJsonObject(): JSONObject = bodyString().let(::JSONObject)
 

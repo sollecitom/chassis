@@ -1,16 +1,16 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.actor
 
-import org.json.JSONObject
-import org.sollecitom.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.identity.Id
 import com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde
-import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
-import org.sollecitom.chassis.correlation.core.serialization.json.customer.jsonSerde
-import org.sollecitom.chassis.correlation.core.serialization.json.tenancy.jsonSerde
+import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.Actor
+import com.element.dpg.libs.chassis.correlation.core.serialization.json.customer.jsonSerde
+import com.element.dpg.libs.chassis.correlation.core.serialization.json.tenancy.jsonSerde
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
 import com.element.dpg.libs.chassis.json.utils.serde.serde.getValue
 import com.element.dpg.libs.chassis.json.utils.serde.serde.setValue
+import org.json.JSONObject
 import java.util.*
 
 internal object UserAccountJsonSerde : JsonSerde.SchemaAware<Actor.UserAccount> {

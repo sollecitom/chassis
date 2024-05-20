@@ -1,10 +1,9 @@
 package com.element.dpg.libs.chassis.web.api.utils.filters.correlation
 
+import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
+import com.element.dpg.libs.chassis.web.api.utils.filters.RequestContextsProvider
 import org.http4k.lens.RequestContextKey
 import org.http4k.lens.RequestContextLens
-import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
-import org.sollecitom.chassis.web.api.utils.filters.RequestContextsProvider
 
 object InvocationContextFilter {
 

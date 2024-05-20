@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.messaging.domain
 
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.domain.naming.Name
 
 interface ReceivedMessage<out VALUE> : Message<VALUE>, Comparable<ReceivedMessage<*>> {
 

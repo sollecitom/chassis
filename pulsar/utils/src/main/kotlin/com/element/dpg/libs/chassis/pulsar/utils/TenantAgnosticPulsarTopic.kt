@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.pulsar.utils
 
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 
 // TODO remove
 data class TenantAgnosticPulsarTopic(val name: Name, val persistent: Boolean) {

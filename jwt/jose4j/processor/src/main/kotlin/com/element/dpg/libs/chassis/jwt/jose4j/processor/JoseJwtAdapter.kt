@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.jwt.jose4j.processor
 
+import com.element.dpg.libs.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.jwt.domain.JWT
 import kotlinx.datetime.Instant
 import org.jose4j.jwt.JwtClaims
 import org.json.JSONObject
-import org.sollecitom.chassis.core.domain.naming.Name
-import com.element.dpg.libs.chassis.jwt.domain.JWT
 
 internal class JoseJwtAdapter(private val delegate: JwtClaims) : JWT {
 

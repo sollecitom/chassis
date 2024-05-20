@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing.dilithium
 
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningAlgorithm
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
+import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing.SigningAlgorithm
+import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
+import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
 
 object Dilithium : SigningAlgorithm<Dilithium.KeyPairArguments> {
 

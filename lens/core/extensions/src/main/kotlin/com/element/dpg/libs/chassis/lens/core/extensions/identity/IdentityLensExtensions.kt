@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.lens.core.extensions.identity
 
+import com.element.dpg.libs.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.identity.ULID
+import com.element.dpg.libs.chassis.core.domain.identity.fromString
 import org.http4k.lens.*
-import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.identity.ULID
-import org.sollecitom.chassis.core.domain.identity.fromString
 
 fun Path.ulid() = map(StringBiDiMappings.ulid())
 fun <IN : Any> BiDiLensSpec<IN, String>.ulid() = map(StringBiDiMappings.ulid())

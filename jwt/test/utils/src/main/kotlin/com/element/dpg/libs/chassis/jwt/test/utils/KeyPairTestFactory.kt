@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.jwt.test.utils
 
-import org.jose4j.jwk.OkpJwkGenerator
 import com.element.dpg.libs.chassis.core.utils.RandomGenerator
+import org.jose4j.jwk.OkpJwkGenerator
 import java.security.KeyPair
 
 context(RandomGenerator)

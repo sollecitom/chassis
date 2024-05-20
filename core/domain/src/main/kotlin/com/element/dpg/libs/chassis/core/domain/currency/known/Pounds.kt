@@ -1,9 +1,8 @@
 package com.element.dpg.libs.chassis.core.domain.currency.known
 
-import com.element.dpg.libs.chassis.core.domain.currency.Currency
-import org.sollecitom.chassis.core.domain.currency.JavaCurrencyAdapter
-import org.sollecitom.chassis.core.domain.currency.SpecificCurrencyAmountTemplate
-import org.sollecitom.chassis.core.domain.currency.toUnits
+import com.element.dpg.libs.chassis.core.domain.currency.JavaCurrencyAdapter
+import com.element.dpg.libs.chassis.core.domain.currency.SpecificCurrencyAmountTemplate
+import com.element.dpg.libs.chassis.core.domain.currency.toUnits
 import java.math.BigDecimal
 import java.math.BigInteger
 

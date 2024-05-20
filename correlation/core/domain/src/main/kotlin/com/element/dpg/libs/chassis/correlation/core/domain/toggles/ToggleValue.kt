@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.correlation.core.domain.toggles
 
-import org.sollecitom.chassis.core.domain.traits.Identifiable
+import com.element.dpg.libs.chassis.core.domain.traits.Identifiable
 
 sealed interface ToggleValue<out VALUE : Any> : Identifiable {
 

@@ -3,7 +3,7 @@ package com.element.dpg.libs.chassis.core.test.utils.stubs
 import assertk.Assert
 import assertk.assertions.isNotZero
 import assertk.assertions.isZero
-import org.sollecitom.chassis.core.domain.currency.SpecificCurrencyAmount
+import com.element.dpg.libs.chassis.core.domain.currency.SpecificCurrencyAmount
 
 fun <CURRENCY : SpecificCurrencyAmount<CURRENCY>> Assert<CURRENCY>.isZero() = given { amount ->
 

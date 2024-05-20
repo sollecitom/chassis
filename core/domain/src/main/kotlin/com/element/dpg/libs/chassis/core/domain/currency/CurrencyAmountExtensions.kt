@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.core.domain.currency
 
-import org.sollecitom.chassis.kotlin.extensions.number.withPrecision
+import com.element.dpg.libs.chassis.kotlin.extensions.number.withPrecision
 import java.math.BigDecimal
 
 @Suppress("UNCHECKED_CAST")

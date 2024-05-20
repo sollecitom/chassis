@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.nats.test.utils
 
-import org.sollecitom.chassis.core.domain.networking.Port
+import com.element.dpg.libs.chassis.core.domain.networking.Port
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
 import org.testcontainers.utility.DockerImageName

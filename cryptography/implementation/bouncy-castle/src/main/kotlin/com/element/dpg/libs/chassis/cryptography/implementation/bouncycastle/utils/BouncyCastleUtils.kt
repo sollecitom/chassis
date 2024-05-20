@@ -3,8 +3,8 @@ package com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.ut
 import org.bouncycastle.jcajce.SecretKeyWithEncapsulation
 import org.bouncycastle.jcajce.spec.KEMExtractSpec
 import org.bouncycastle.jcajce.spec.KEMGenerateSpec
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.BCPQC_PROVIDER
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.BC_PROVIDER
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.BCPQC_PROVIDER
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.BC_PROVIDER
 import java.security.*
 import java.security.spec.AlgorithmParameterSpec
 import java.security.spec.PKCS8EncodedKeySpec

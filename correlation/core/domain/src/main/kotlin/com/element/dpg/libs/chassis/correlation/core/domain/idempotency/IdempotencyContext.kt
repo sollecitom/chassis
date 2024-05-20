@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.correlation.core.domain.idempotency
 
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 
 data class IdempotencyContext(val namespace: Name?, val key: Name) {
 

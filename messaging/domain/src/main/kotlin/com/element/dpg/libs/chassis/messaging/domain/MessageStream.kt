@@ -1,8 +1,8 @@
 package com.element.dpg.libs.chassis.messaging.domain
 
+import com.element.dpg.libs.chassis.core.domain.lifecycle.Startable
+import com.element.dpg.libs.chassis.core.domain.lifecycle.Stoppable
 import kotlinx.coroutines.flow.Flow
-import org.sollecitom.chassis.core.domain.lifecycle.Startable
-import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 
 interface MessageStream<VALUE> : Startable, Stoppable {
 

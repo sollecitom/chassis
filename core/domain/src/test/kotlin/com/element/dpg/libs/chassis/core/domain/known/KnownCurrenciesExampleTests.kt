@@ -4,11 +4,11 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isFailure
 import assertk.assertions.isInstanceOf
+import com.element.dpg.libs.chassis.core.domain.currency.div
+import com.element.dpg.libs.chassis.core.domain.currency.times
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.core.domain.currency.div
-import org.sollecitom.chassis.core.domain.currency.times
 
 @TestInstance(PER_CLASS)
 private class KnownCurrenciesExampleTests {

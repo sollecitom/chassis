@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.correlation.core.domain.access.authentication
 
+import com.element.dpg.libs.chassis.core.domain.identity.Id
 import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.domain.identity.Id
 
 sealed interface Authentication {
 

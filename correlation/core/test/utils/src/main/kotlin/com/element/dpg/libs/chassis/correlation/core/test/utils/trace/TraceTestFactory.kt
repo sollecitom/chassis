@@ -1,13 +1,13 @@
 package com.element.dpg.libs.chassis.correlation.core.test.utils.trace
 
-import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
+import com.element.dpg.libs.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
 import com.element.dpg.libs.chassis.core.utils.TimeGenerator
 import com.element.dpg.libs.chassis.core.utils.UniqueIdGenerator
-import org.sollecitom.chassis.correlation.core.domain.trace.ExternalInvocationTrace
-import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
-import org.sollecitom.chassis.correlation.core.domain.trace.Trace
+import com.element.dpg.libs.chassis.correlation.core.domain.trace.ExternalInvocationTrace
+import com.element.dpg.libs.chassis.correlation.core.domain.trace.InvocationTrace
+import com.element.dpg.libs.chassis.correlation.core.domain.trace.Trace
+import kotlinx.datetime.Instant
 import kotlin.time.Duration.Companion.seconds
 
 context(TimeGenerator)

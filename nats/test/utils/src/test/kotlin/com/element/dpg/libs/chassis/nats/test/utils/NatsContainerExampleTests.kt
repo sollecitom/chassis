@@ -2,6 +2,8 @@ package com.element.dpg.libs.chassis.nats.test.utils
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.element.dpg.libs.chassis.nats.client.toMultiMap
+import com.element.dpg.libs.chassis.test.utils.assertions.containsSameMultipleEntriesAs
 import io.nats.client.impl.Headers
 import io.nats.client.impl.NatsMessage
 import kotlinx.coroutines.CoroutineStart.UNDISPATCHED
@@ -13,8 +15,6 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import com.element.dpg.libs.chassis.nats.client.toMultiMap
-import com.element.dpg.libs.chassis.test.utils.assertions.containsSameMultipleEntriesAs
 import kotlin.time.Duration.Companion.seconds
 
 @TestInstance(PER_CLASS)

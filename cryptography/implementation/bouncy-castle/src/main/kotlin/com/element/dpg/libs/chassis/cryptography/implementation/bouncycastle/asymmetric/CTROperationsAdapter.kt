@@ -1,8 +1,8 @@
 package com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric
 
-import org.sollecitom.chassis.cryptography.domain.symmetric.EncryptedData
-import org.sollecitom.chassis.cryptography.domain.symmetric.EncryptionMode
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.EncryptedData
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.EncryptionMode
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.SecureRandom
 import javax.crypto.SecretKey
 

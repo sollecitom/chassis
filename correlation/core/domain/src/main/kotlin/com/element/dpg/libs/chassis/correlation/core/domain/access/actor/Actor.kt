@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.correlation.core.domain.access.actor
 
-import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
-import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
-import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
+import com.element.dpg.libs.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authentication.Authentication
+import com.element.dpg.libs.chassis.correlation.core.domain.access.customer.Customer
+import com.element.dpg.libs.chassis.correlation.core.domain.tenancy.Tenant
 import java.util.*
 
 sealed interface Actor {

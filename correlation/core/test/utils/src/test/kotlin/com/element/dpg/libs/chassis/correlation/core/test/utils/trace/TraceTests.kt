@@ -2,15 +2,15 @@ package com.element.dpg.libs.chassis.correlation.core.test.utils.trace
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
+import com.element.dpg.libs.chassis.correlation.core.domain.trace.ExternalInvocationTrace
+import com.element.dpg.libs.chassis.correlation.core.domain.trace.InvocationTrace
+import com.element.dpg.libs.chassis.correlation.core.domain.trace.Trace
+import com.element.dpg.libs.chassis.test.utils.assertions.failedThrowing
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
-import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
-import org.sollecitom.chassis.correlation.core.domain.trace.ExternalInvocationTrace
-import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
-import org.sollecitom.chassis.correlation.core.domain.trace.Trace
-import com.element.dpg.libs.chassis.test.utils.assertions.failedThrowing
 
 @TestInstance(PER_CLASS)
 private class TraceTests : CoreDataGenerator by CoreDataGenerator.testProvider {

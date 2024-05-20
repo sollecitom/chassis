@@ -1,18 +1,16 @@
 package com.element.dpg.libs.chassis.messaging.event.framework.materialised.view
 
+import com.element.dpg.libs.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.lifecycle.Startable
+import com.element.dpg.libs.chassis.core.domain.lifecycle.Stoppable
+import com.element.dpg.libs.chassis.ddd.domain.EntityEvent
+import com.element.dpg.libs.chassis.ddd.domain.Event
+import com.element.dpg.libs.chassis.ddd.domain.framework.EventFramework
+import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
+import com.element.dpg.libs.chassis.messaging.domain.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
-import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.lifecycle.Startable
-import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
-import org.sollecitom.chassis.ddd.domain.EntityEvent
-import org.sollecitom.chassis.ddd.domain.Event
-import org.sollecitom.chassis.ddd.domain.framework.EventFramework
-import com.element.dpg.libs.chassis.messaging.domain.EventStream
-import com.element.dpg.libs.chassis.messaging.domain.ReceivedMessage
-import org.sollecitom.chassis.logger.core.loggable.Loggable
-import org.sollecitom.chassis.messaging.domain.*
 
 // TODO make this generic with the event type?
 // TODO create the outbox variant in another module

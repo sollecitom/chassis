@@ -2,11 +2,11 @@ package com.element.dpg.libs.chassis.openapi.checking.checker.rules
 
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.Operation
-import org.sollecitom.chassis.openapi.checking.checker.model.OpenApiField
-import org.sollecitom.chassis.openapi.checking.checker.model.OperationWithContext
-import org.sollecitom.chassis.openapi.checking.checker.model.allOperations
-import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
-import org.sollecitom.chassis.openapi.checking.checker.rules.utils.trimmed
+import com.element.dpg.libs.chassis.openapi.checking.checker.model.OpenApiField
+import com.element.dpg.libs.chassis.openapi.checking.checker.model.OperationWithContext
+import com.element.dpg.libs.chassis.openapi.checking.checker.model.allOperations
+import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
+import com.element.dpg.libs.chassis.openapi.checking.checker.rules.utils.trimmed
 
 class MandatoryOperationFieldsRule(private val requiredFields: Set<OpenApiField<Operation, Any?>>) : OpenApiRule {
 

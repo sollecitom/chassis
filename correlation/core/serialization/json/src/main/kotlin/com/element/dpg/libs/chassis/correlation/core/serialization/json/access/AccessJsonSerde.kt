@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access
 
-import org.json.JSONObject
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
+import org.json.JSONObject
 
 private object AccessJsonSerde : JsonSerde.SchemaAware<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access> {
 

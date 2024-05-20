@@ -1,16 +1,16 @@
 package com.element.dpg.libs.chassis.core.utils
 
-import kotlinx.datetime.Clock
-import org.http4k.cloudnative.env.Environment
-import org.http4k.cloudnative.env.EnvironmentKey
 import com.element.dpg.libs.chassis.configuration.utils.StandardEnvironment
 import com.element.dpg.libs.chassis.configuration.utils.instanceInfo
 import com.element.dpg.libs.chassis.configuration.utils.randomSeed
-import org.sollecitom.chassis.core.domain.identity.InstanceInfo
-import org.sollecitom.chassis.core.domain.identity.factory.UniqueIdFactory
-import org.sollecitom.chassis.core.domain.identity.factory.invoke
-import org.sollecitom.chassis.kotlin.extensions.number.toByteArray
-import org.sollecitom.chassis.logger.core.loggable.Loggable
+import com.element.dpg.libs.chassis.core.domain.identity.InstanceInfo
+import com.element.dpg.libs.chassis.core.domain.identity.factory.UniqueIdFactory
+import com.element.dpg.libs.chassis.core.domain.identity.factory.invoke
+import com.element.dpg.libs.chassis.kotlin.extensions.number.toByteArray
+import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
+import kotlinx.datetime.Clock
+import org.http4k.cloudnative.env.Environment
+import org.http4k.cloudnative.env.EnvironmentKey
 import java.security.SecureRandom
 import kotlin.random.Random
 import kotlin.random.asKotlinRandom

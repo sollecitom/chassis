@@ -1,11 +1,11 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.origin.client.info
 
-import org.json.JSONObject
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
 import com.element.dpg.libs.chassis.json.utils.serde.serde.getValue
 import com.element.dpg.libs.chassis.json.utils.serde.serde.setValue
 import com.element.dpg.libs.chassis.web.client.info.domain.*
+import org.json.JSONObject
 
 private object ClientInfoJsonSerde : JsonSerde.SchemaAware<ClientInfo> {
 

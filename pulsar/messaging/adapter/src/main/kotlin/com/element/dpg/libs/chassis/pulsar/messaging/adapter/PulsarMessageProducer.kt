@@ -4,9 +4,9 @@ import org.apache.pulsar.client.api.Producer
 import org.apache.pulsar.client.api.ProducerBuilder
 import org.apache.pulsar.client.api.PulsarClient
 import org.apache.pulsar.client.api.Schema
-import org.sollecitom.chassis.core.domain.identity.InstanceInfo
-import org.sollecitom.chassis.core.domain.lifecycle.stopBlocking
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.identity.InstanceInfo
+import com.element.dpg.libs.chassis.core.domain.lifecycle.stopBlocking
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.kotlin.extensions.async.await
 import com.element.dpg.libs.chassis.messaging.domain.Message
 import com.element.dpg.libs.chassis.messaging.domain.MessageProducer

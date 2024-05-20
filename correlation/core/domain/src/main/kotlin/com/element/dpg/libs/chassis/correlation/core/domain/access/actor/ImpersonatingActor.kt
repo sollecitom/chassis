@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.correlation.core.domain.access.actor
 
-import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authentication.Authentication
 
 data class ImpersonatingActor(val impersonator: Actor.Account, val impersonated: Actor.Account, override val authentication: Authentication) : Actor {
 

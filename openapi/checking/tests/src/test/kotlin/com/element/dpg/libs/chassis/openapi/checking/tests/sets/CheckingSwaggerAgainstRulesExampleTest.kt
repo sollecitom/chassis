@@ -5,8 +5,8 @@ import com.element.dpg.libs.chassis.openapi.builder.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.openapi.checking.checker.checkAgainstRules
-import org.sollecitom.chassis.openapi.checking.checker.rules.LowercasePathNameRule
+import com.element.dpg.libs.chassis.openapi.checking.checker.checkAgainstRules
+import com.element.dpg.libs.chassis.openapi.checking.checker.rules.LowercasePathNameRule
 import com.element.dpg.libs.chassis.openapi.checking.test.utils.isNotCompliantWithOnlyViolation
 
 @TestInstance(PER_CLASS)

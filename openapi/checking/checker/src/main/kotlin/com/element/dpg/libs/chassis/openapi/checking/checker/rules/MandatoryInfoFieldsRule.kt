@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.openapi.checking.checker.rules
 
 import io.swagger.v3.oas.models.OpenAPI
-import org.sollecitom.chassis.openapi.checking.checker.model.OpenApiField
-import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
-import org.sollecitom.chassis.openapi.checking.checker.rules.utils.trimmed
+import com.element.dpg.libs.chassis.openapi.checking.checker.model.OpenApiField
+import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
+import com.element.dpg.libs.chassis.openapi.checking.checker.rules.utils.trimmed
 import io.swagger.v3.oas.models.info.Info as OpenApiInfo
 
 class MandatoryInfoFieldsRule(private val requiredFields: Set<OpenApiField<OpenApiInfo, Any?>>) : OpenApiRule {

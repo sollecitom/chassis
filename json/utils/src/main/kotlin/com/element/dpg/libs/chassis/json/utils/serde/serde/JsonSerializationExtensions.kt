@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.json.utils.serde.serde
 
-import org.json.JSONArray
-import org.json.JSONObject
 import com.element.dpg.libs.chassis.json.utils.serde.getJSONObjectOrNull
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredJSONArray
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredJSONObject
+import org.json.JSONArray
+import org.json.JSONObject
 
 fun <VALUE : Any> JSONObject.getValueOrNull(key: String, deserializer: JsonDeserializer<VALUE>): VALUE? = getJSONObjectOrNull(key)?.let(deserializer::deserialize)
 

@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.kotlin.extensions.text
 
-import org.sollecitom.chassis.kotlin.extensions.text.CharacterGroups.digitsAndLetters
+import com.element.dpg.libs.chassis.kotlin.extensions.text.CharacterGroups.digitsAndLetters
 import kotlin.random.Random
 
 fun Random.string(wordLength: Int, alphabet: Iterable<Char> = digitsAndLetters): String = strings(wordLength..wordLength, alphabet).iterator().next()

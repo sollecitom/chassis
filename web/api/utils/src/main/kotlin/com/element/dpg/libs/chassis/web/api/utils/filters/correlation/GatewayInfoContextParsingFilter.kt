@@ -1,14 +1,12 @@
 package com.element.dpg.libs.chassis.web.api.utils.filters.correlation
 
+import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
+import com.element.dpg.libs.chassis.correlation.core.serialization.json.context.jsonSerde
+import com.element.dpg.libs.chassis.web.api.utils.api.HttpApiDefinition
+import com.element.dpg.libs.chassis.web.api.utils.api.withInvocationContext
 import org.http4k.core.*
 import org.http4k.core.cookie.cookies
 import org.json.JSONObject
-import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
-import org.sollecitom.chassis.correlation.core.serialization.json.context.jsonSerde
-import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
-import org.sollecitom.chassis.web.api.utils.api.withInvocationContext
-import com.element.dpg.libs.chassis.web.api.utils.headers.HttpHeaderNames
 
 fun InvocationContextFilter.parseInvocationContextFromGatewayHeader(headerNames: com.element.dpg.libs.chassis.web.api.utils.headers.HttpHeaderNames.Correlation): Filter = GatewayInfoContextParsingFilter(key, headerNames)
 

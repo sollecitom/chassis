@@ -1,11 +1,11 @@
 package com.element.dpg.libs.chassis.core.domain.identity.factory
 
+import com.element.dpg.libs.chassis.core.domain.identity.InstanceInfo
+import com.element.dpg.libs.chassis.core.domain.identity.factory.ksuid.KsuidVariantSelectorAdapter
+import com.element.dpg.libs.chassis.core.domain.identity.factory.string.StringFactoryAdapter
+import com.element.dpg.libs.chassis.core.domain.identity.factory.tsid.TsidVariantSelectorAdapter
+import com.element.dpg.libs.chassis.core.domain.identity.factory.ulid.UlidVariantSelectorAdapter
 import kotlinx.datetime.Clock
-import org.sollecitom.chassis.core.domain.identity.InstanceInfo
-import org.sollecitom.chassis.core.domain.identity.factory.ksuid.KsuidVariantSelectorAdapter
-import org.sollecitom.chassis.core.domain.identity.factory.string.StringFactoryAdapter
-import org.sollecitom.chassis.core.domain.identity.factory.tsid.TsidVariantSelectorAdapter
-import org.sollecitom.chassis.core.domain.identity.factory.ulid.UlidVariantSelectorAdapter
 import kotlin.random.Random
 
 private class UniqueIdFactoryAdapter(random: Random = Random, clock: Clock = Clock.System, instanceInfo: InstanceInfo) : UniqueIdFactory {

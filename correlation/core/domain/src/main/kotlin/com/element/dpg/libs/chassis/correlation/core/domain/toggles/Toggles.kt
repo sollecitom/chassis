@@ -1,8 +1,7 @@
 package com.element.dpg.libs.chassis.correlation.core.domain.toggles
 
-import org.sollecitom.chassis.core.domain.identity.Id
-import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import com.element.dpg.libs.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
 
 data class Toggles(val values: Set<ToggleValue<*>> = emptySet()) {
 

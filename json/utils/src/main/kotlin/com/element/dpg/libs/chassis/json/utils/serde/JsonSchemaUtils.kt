@@ -1,11 +1,11 @@
 package com.element.dpg.libs.chassis.json.utils.serde
 
+import com.element.dpg.libs.chassis.resource.utils.ResourceLoader.openAsStream
 import com.github.erosb.jsonsKema.JsonParser
 import com.github.erosb.jsonsKema.SchemaClient
 import com.github.erosb.jsonsKema.SchemaLoader
 import com.github.erosb.jsonsKema.SchemaLoaderConfig
 import org.json.JSONObject
-import com.element.dpg.libs.chassis.resource.utils.ResourceLoader.openAsStream
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream

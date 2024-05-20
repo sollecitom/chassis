@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.core.serialization.json.identity
 
-import org.json.JSONObject
-import org.sollecitom.chassis.core.domain.identity.*
+import com.element.dpg.libs.chassis.core.domain.identity.*
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
+import org.json.JSONObject
 
 private object IdJsonSerde : JsonSerde.SchemaAware<Id> {
 

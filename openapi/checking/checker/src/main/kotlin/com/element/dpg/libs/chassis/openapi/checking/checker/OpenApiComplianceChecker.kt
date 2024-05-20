@@ -5,11 +5,11 @@ import java.net.URL
 
 interface OpenApiComplianceChecker {
 
-    fun check(openApiRaw: String): org.sollecitom.chassis.openapi.checking.checker.ComplianceCheckResult
+    fun check(openApiRaw: String): com.element.dpg.libs.chassis.openapi.checking.checker.ComplianceCheckResult
 
-    fun check(openApiLocation: URL): org.sollecitom.chassis.openapi.checking.checker.ComplianceCheckResult
+    fun check(openApiLocation: URL): com.element.dpg.libs.chassis.openapi.checking.checker.ComplianceCheckResult
 
-    fun check(openApi: OpenAPI): org.sollecitom.chassis.openapi.checking.checker.ComplianceCheckResult
+    fun check(openApi: OpenAPI): com.element.dpg.libs.chassis.openapi.checking.checker.ComplianceCheckResult
 
     companion object
 }

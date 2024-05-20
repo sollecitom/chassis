@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.symmetric.encryption.aes
 
-import org.sollecitom.chassis.cryptography.domain.symmetric.SecretKeyFactory
-import org.sollecitom.chassis.cryptography.domain.symmetric.SecretKeyGenerationOperations
-import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricKey
-import org.sollecitom.chassis.cryptography.domain.symmetric.encryption.aes.AES
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.symmetric.encryption.EncryptionAlgorithm
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.SecretKeyFactory
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.SecretKeyGenerationOperations
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.SymmetricKey
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.encryption.aes.AES
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.symmetric.encryption.EncryptionAlgorithm
 import java.security.SecureRandom
 
 object AES : EncryptionAlgorithm<AES.KeyArguments> {

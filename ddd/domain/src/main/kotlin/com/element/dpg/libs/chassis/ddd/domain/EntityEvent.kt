@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.ddd.domain
 
-import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 
 interface EntityEvent : Event {
 

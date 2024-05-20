@@ -1,12 +1,12 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.autorization
 
-import org.json.JSONObject
-import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
-import org.sollecitom.chassis.correlation.core.domain.access.authorization.Roles
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authorization.Roles
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
 import com.element.dpg.libs.chassis.json.utils.serde.serde.getValue
 import com.element.dpg.libs.chassis.json.utils.serde.serde.setValue
+import org.json.JSONObject
 
 private object AuthenticationPrincipalJsonSerde : JsonSerde.SchemaAware<AuthorizationPrincipal> {
 

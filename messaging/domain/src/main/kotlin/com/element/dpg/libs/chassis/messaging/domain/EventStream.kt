@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.messaging.domain
 
-import org.sollecitom.chassis.ddd.domain.Event
+import com.element.dpg.libs.chassis.ddd.domain.Event
 
 interface EventStream<EVENT : Event> : MessageStream<EVENT> {
 

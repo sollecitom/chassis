@@ -1,14 +1,14 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.origin
 
-import org.json.JSONObject
-import org.sollecitom.chassis.core.domain.networking.IpAddress
-import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
+import com.element.dpg.libs.chassis.core.domain.networking.IpAddress
+import com.element.dpg.libs.chassis.correlation.core.domain.access.origin.Origin
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
 import com.element.dpg.libs.chassis.json.utils.serde.serde.getValue
 import com.element.dpg.libs.chassis.json.utils.serde.serde.setValue
 import com.element.dpg.libs.chassis.web.client.info.domain.ClientInfo
+import org.json.JSONObject
 
 private object OriginJsonSerde : JsonSerde.SchemaAware<Origin> {
 

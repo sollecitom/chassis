@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.openapi.checking.checker.rule.field
 
 import io.swagger.v3.oas.models.OpenAPI
-import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
+import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
 
 fun interface FieldRule<in VALUE, out VIOLATION : OpenApiRule.Result.Violation> {
 

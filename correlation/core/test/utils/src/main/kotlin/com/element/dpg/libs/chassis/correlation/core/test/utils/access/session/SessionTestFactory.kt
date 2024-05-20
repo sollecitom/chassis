@@ -1,13 +1,13 @@
 package com.element.dpg.libs.chassis.correlation.core.test.utils.access.session
 
-import org.sollecitom.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.identity.Id
 import com.element.dpg.libs.chassis.core.utils.UniqueIdGenerator
-import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
-import org.sollecitom.chassis.correlation.core.domain.access.idp.IdentityProvider
-import org.sollecitom.chassis.correlation.core.domain.access.session.FederatedSession
-import org.sollecitom.chassis.correlation.core.domain.access.session.Session
-import org.sollecitom.chassis.correlation.core.domain.access.session.SimpleSession
-import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
+import com.element.dpg.libs.chassis.correlation.core.domain.access.customer.Customer
+import com.element.dpg.libs.chassis.correlation.core.domain.access.idp.IdentityProvider
+import com.element.dpg.libs.chassis.correlation.core.domain.access.session.FederatedSession
+import com.element.dpg.libs.chassis.correlation.core.domain.access.session.Session
+import com.element.dpg.libs.chassis.correlation.core.domain.access.session.SimpleSession
+import com.element.dpg.libs.chassis.correlation.core.domain.tenancy.Tenant
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.idp.create
 import com.element.dpg.libs.chassis.correlation.core.test.utils.customer.create
 import com.element.dpg.libs.chassis.correlation.core.test.utils.tenancy.create

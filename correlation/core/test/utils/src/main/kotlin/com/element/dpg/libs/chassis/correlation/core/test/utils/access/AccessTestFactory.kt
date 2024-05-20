@@ -2,12 +2,11 @@ package com.element.dpg.libs.chassis.correlation.core.test.utils.access
 
 import com.element.dpg.libs.chassis.core.utils.TimeGenerator
 import com.element.dpg.libs.chassis.core.utils.UniqueIdGenerator
-import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
-import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
-import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
-import org.sollecitom.chassis.correlation.core.domain.access.scope.AccessContainer
-import org.sollecitom.chassis.correlation.core.domain.access.scope.AccessScope
+import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.Actor
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
+import com.element.dpg.libs.chassis.correlation.core.domain.access.origin.Origin
+import com.element.dpg.libs.chassis.correlation.core.domain.access.scope.AccessContainer
+import com.element.dpg.libs.chassis.correlation.core.domain.access.scope.AccessScope
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.actor.direct
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.authorization.create
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.authorization.withoutRoles

@@ -1,12 +1,12 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.session
 
-import org.json.JSONObject
-import org.sollecitom.chassis.correlation.core.domain.access.session.FederatedSession
-import org.sollecitom.chassis.correlation.core.domain.access.session.Session
-import org.sollecitom.chassis.correlation.core.domain.access.session.SimpleSession
+import com.element.dpg.libs.chassis.correlation.core.domain.access.session.FederatedSession
+import com.element.dpg.libs.chassis.correlation.core.domain.access.session.Session
+import com.element.dpg.libs.chassis.correlation.core.domain.access.session.SimpleSession
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
+import org.json.JSONObject
 
 private object SessionJsonSerde : JsonSerde.SchemaAware<Session> {
 

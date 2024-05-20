@@ -2,14 +2,14 @@ package com.element.dpg.libs.chassis.web.api.test.utils
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.element.dpg.libs.chassis.core.domain.networking.Port
+import com.element.dpg.libs.chassis.http4k.utils.lens.invoke
+import com.element.dpg.libs.chassis.web.service.domain.WithWebInterface
 import kotlinx.coroutines.test.runTest
 import org.http4k.core.Method.GET
 import org.http4k.core.Request
 import org.http4k.core.Status
 import org.junit.jupiter.api.Test
-import org.sollecitom.chassis.core.domain.networking.Port
-import com.element.dpg.libs.chassis.http4k.utils.lens.invoke
-import com.element.dpg.libs.chassis.web.service.domain.WithWebInterface
 
 interface MonitoringEndpointsTestSpecification : WebServiceTestSpecification {
 

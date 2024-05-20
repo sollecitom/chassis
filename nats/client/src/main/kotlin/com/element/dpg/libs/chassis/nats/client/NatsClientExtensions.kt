@@ -1,8 +1,8 @@
 package com.element.dpg.libs.chassis.nats.client
 
+import com.element.dpg.libs.chassis.core.domain.networking.Port
 import io.nats.client.Options
 import io.nats.client.impl.Headers
-import org.sollecitom.chassis.core.domain.networking.Port
 
 fun Options.Builder.server(host: String, port: Int) = server("nats://$host:$port")
 

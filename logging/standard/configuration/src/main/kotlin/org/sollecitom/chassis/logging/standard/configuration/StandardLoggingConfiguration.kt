@@ -1,10 +1,10 @@
-package org.sollecitom.chassis.logging.standard.configuration
+package com.element.dpg.libs.chassis.logging.standard.configuration
 
 import org.http4k.cloudnative.env.Environment
 import org.http4k.cloudnative.env.MapEnvironment
-import org.sollecitom.chassis.logger.core.*
-import org.sollecitom.chassis.logger.core.appender.PrintStreamAppender
-import org.sollecitom.chassis.logger.core.defaults.DefaultFormatToString
+import com.element.dpg.libs.chassis.logger.core.*
+import com.element.dpg.libs.chassis.logger.core.appender.PrintStreamAppender
+import com.element.dpg.libs.chassis.logger.core.defaults.DefaultFormatToString
 import com.element.dpg.libs.chassis.logger.json.formatter.DefaultFormatToJson
 
 object StandardLoggingConfiguration {

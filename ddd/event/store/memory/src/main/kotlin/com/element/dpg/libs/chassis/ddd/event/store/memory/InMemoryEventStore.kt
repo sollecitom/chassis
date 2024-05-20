@@ -1,12 +1,12 @@
 package com.element.dpg.libs.chassis.ddd.event.store.memory
 
+import com.element.dpg.libs.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.ddd.domain.EntityEvent
+import com.element.dpg.libs.chassis.ddd.domain.Event
+import com.element.dpg.libs.chassis.ddd.domain.filterIsForEntityId
 import kotlinx.coroutines.*
 import kotlinx.coroutines.CoroutineStart.LAZY
 import kotlinx.coroutines.flow.*
-import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.ddd.domain.EntityEvent
-import org.sollecitom.chassis.ddd.domain.Event
-import org.sollecitom.chassis.ddd.domain.filterIsForEntityId
 import kotlin.coroutines.coroutineContext
 import kotlin.reflect.KClass
 import kotlin.time.Duration

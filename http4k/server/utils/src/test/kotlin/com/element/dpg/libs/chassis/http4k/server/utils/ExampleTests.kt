@@ -3,7 +3,6 @@ package com.element.dpg.libs.chassis.http4k.server.utils
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isTrue
-import com.element.dpg.libs.chassis.http4k.server.utils.asServer
 import kotlinx.coroutines.delay
 import org.http4k.client.ApacheClient
 import org.http4k.core.Method

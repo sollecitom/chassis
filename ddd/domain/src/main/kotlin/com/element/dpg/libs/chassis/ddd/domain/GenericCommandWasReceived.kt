@@ -1,11 +1,10 @@
 package com.element.dpg.libs.chassis.ddd.domain
 
-import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.identity.Id
 import com.element.dpg.libs.chassis.core.utils.TimeGenerator
 import com.element.dpg.libs.chassis.core.utils.UniqueIdGenerator
-import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
+import kotlinx.datetime.Instant
 
 class GenericCommandWasReceived<out COMMAND : Command<*, *>>(command: COMMAND, id: Id, timestamp: Instant, context: Event.Context) : CommandWasReceived<COMMAND>(command, id, timestamp, context) {
 

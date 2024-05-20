@@ -3,10 +3,10 @@ package com.element.dpg.libs.chassis.ddd.test.utils
 import assertk.Assert
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
-import org.sollecitom.chassis.ddd.domain.Command
-import org.sollecitom.chassis.ddd.domain.CommandWasReceived
-import org.sollecitom.chassis.ddd.domain.Event
+import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
+import com.element.dpg.libs.chassis.ddd.domain.Command
+import com.element.dpg.libs.chassis.ddd.domain.CommandWasReceived
+import com.element.dpg.libs.chassis.ddd.domain.Event
 
 fun Assert<Event>.hasInvocationContext(context: InvocationContext<*>) = given { event ->
 

@@ -1,8 +1,8 @@
-package org.sollecitom.chassis.logging.standard.configuration
+package com.element.dpg.libs.chassis.logging.standard.configuration
 
 import org.http4k.cloudnative.env.Environment
-import org.sollecitom.chassis.logger.core.JvmLoggerFactory
-import org.sollecitom.chassis.logger.core.Log
+import com.element.dpg.libs.chassis.logger.core.JvmLoggerFactory
+import com.element.dpg.libs.chassis.logger.core.Log
 import com.element.dpg.libs.chassis.logger.core.LoggingLevel
 
 fun configureLogging(defaultMinimumLoggingLevel: com.element.dpg.libs.chassis.logger.core.LoggingLevel = com.element.dpg.libs.chassis.logger.core.LoggingLevel.INFO) {

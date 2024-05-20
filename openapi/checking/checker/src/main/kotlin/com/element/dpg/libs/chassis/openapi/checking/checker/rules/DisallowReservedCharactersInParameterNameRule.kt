@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.openapi.checking.checker.rules
 
 import io.swagger.v3.oas.models.OpenAPI
-import org.sollecitom.chassis.kotlin.extensions.text.capitalized
-import org.sollecitom.chassis.openapi.checking.checker.model.ParameterWithLocation
-import org.sollecitom.chassis.openapi.checking.checker.model.allParameters
-import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
+import com.element.dpg.libs.chassis.kotlin.extensions.text.capitalized
+import com.element.dpg.libs.chassis.openapi.checking.checker.model.ParameterWithLocation
+import com.element.dpg.libs.chassis.openapi.checking.checker.model.allParameters
+import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
 
 object DisallowReservedCharactersInParameterNameRule : OpenApiRule {
 

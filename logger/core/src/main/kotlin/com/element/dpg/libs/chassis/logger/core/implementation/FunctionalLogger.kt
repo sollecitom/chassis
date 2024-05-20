@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.logger.core.implementation
 
 import org.slf4j.MDC
-import org.sollecitom.chassis.logger.core.*
+import com.element.dpg.libs.chassis.logger.core.*
 import java.time.Instant
 
 internal class FunctionalLogger(override val name: String, override val isEnabledForLoggerName: com.element.dpg.libs.chassis.logger.core.LoggingLevel.(name: String) -> Boolean, private val timeNow: () -> Instant, private val log: Log) : Logger {

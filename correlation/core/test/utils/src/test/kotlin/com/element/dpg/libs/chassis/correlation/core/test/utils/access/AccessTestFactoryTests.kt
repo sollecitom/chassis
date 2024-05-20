@@ -2,23 +2,16 @@ package com.element.dpg.libs.chassis.correlation.core.test.utils.access
 
 import assertk.assertThat
 import assertk.assertions.*
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.core.domain.networking.IpAddress
+import com.element.dpg.libs.chassis.core.domain.networking.IpAddress
 import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
-import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
+import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.Actor
 import com.element.dpg.libs.chassis.correlation.core.domain.access.authenticatedOrFailure
 import com.element.dpg.libs.chassis.correlation.core.domain.access.authenticatedOrThrow
-import com.element.dpg.libs.chassis.correlation.core.test.utils.access.authenticated
-import com.element.dpg.libs.chassis.correlation.core.test.utils.access.unauthenticated
-import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
-import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
-import org.sollecitom.chassis.correlation.core.domain.access.scope.AccessContainer
-import org.sollecitom.chassis.correlation.core.domain.access.scope.AccessScope
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
+import com.element.dpg.libs.chassis.correlation.core.domain.access.origin.Origin
+import com.element.dpg.libs.chassis.correlation.core.domain.access.scope.AccessContainer
+import com.element.dpg.libs.chassis.correlation.core.domain.access.scope.AccessScope
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.actor.direct
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.authorization.create
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.origin.create
@@ -26,6 +19,10 @@ import com.element.dpg.libs.chassis.correlation.core.test.utils.access.scope.cre
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.scope.withContainerStack
 import com.element.dpg.libs.chassis.test.utils.assertions.failedThrowing
 import com.element.dpg.libs.chassis.test.utils.assertions.succeededWithResult
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 
 @TestInstance(PER_CLASS)
 private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testProvider {

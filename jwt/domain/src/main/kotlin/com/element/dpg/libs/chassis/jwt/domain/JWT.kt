@@ -1,8 +1,8 @@
 package com.element.dpg.libs.chassis.jwt.domain
 
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import kotlinx.datetime.Instant
 import org.json.JSONObject
-import org.sollecitom.chassis.core.domain.naming.Name
 
 interface JWT {
 

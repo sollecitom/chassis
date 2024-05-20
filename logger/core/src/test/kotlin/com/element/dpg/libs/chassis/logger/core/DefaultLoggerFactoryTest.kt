@@ -6,7 +6,7 @@ import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.logger.core.defaults.DefaultLoggerFactory
+import com.element.dpg.libs.chassis.logger.core.defaults.DefaultLoggerFactory
 import java.time.Instant
 
 @TestInstance(PER_CLASS)

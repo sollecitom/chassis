@@ -1,11 +1,10 @@
 package com.element.dpg.libs.chassis.web.client.info.analyzer
 
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.web.client.info.domain.*
 import nl.basjes.parse.useragent.AgentField
 import nl.basjes.parse.useragent.UserAgent
 import nl.basjes.parse.useragent.UserAgentAnalyzer
-import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.web.client.info.domain.*
 
 operator fun ClientInfoAnalyzer.Companion.invoke(): ClientInfoAnalyzer = YauaaClientInfoAnalyzer
 

@@ -3,10 +3,7 @@ package com.element.dpg.libs.chassis.jwt.jose4j.examples
 import assertk.assertThat
 import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import com.element.dpg.libs.chassis.json.test.utils.containsSameEntriesAs
@@ -15,11 +12,12 @@ import com.element.dpg.libs.chassis.jwt.jose4j.utils.expiryTime
 import com.element.dpg.libs.chassis.jwt.jose4j.utils.issuingTime
 import com.element.dpg.libs.chassis.jwt.jose4j.utils.notBeforeTime
 import com.element.dpg.libs.chassis.jwt.test.utils.*
-import org.sollecitom.chassis.jwt.test.utils.*
-import org.sollecitom.chassis.kotlin.extensions.time.truncatedToSeconds
-import com.element.dpg.libs.chassis.logger.core.LoggingLevel
-import org.sollecitom.chassis.logging.standard.configuration.configureLogging
+import com.element.dpg.libs.chassis.kotlin.extensions.time.truncatedToSeconds
+import com.element.dpg.libs.chassis.logging.standard.configuration.configureLogging
 import com.element.dpg.libs.chassis.test.utils.assertions.containsSameElementsAs
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 

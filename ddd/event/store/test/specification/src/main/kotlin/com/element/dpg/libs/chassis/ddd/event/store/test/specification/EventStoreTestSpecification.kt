@@ -3,16 +3,16 @@
 package com.element.dpg.libs.chassis.ddd.event.store.test.specification
 
 import assertk.assertThat
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import com.element.dpg.libs.chassis.ddd.test.stubs.testEntityEvent
 import com.element.dpg.libs.chassis.ddd.test.stubs.testEntityEvents
 import com.element.dpg.libs.chassis.ddd.test.stubs.testEvent
 import com.element.dpg.libs.chassis.ddd.test.stubs.testEvents
 import com.element.dpg.libs.chassis.test.utils.assertions.containsSameElementsAs
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Test
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime

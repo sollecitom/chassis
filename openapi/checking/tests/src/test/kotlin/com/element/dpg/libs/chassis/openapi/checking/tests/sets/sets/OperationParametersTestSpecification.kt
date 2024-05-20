@@ -8,10 +8,10 @@ import com.element.dpg.libs.chassis.openapi.builder.get
 import com.element.dpg.libs.chassis.openapi.builder.parameters
 import com.element.dpg.libs.chassis.openapi.builder.post
 import com.element.dpg.libs.chassis.openapi.builder.put
-import org.sollecitom.chassis.openapi.checking.checker.rules.DisallowReservedCharactersInParameterNameRule
-import org.sollecitom.chassis.openapi.checking.checker.rules.WhitelistedAlphabetParameterNameRule
-import org.sollecitom.chassis.openapi.checking.checker.sets.StandardOpenApiRules
-import org.sollecitom.chassis.openapi.checking.checker.sets.checkAgainstRules
+import com.element.dpg.libs.chassis.openapi.checking.checker.rules.DisallowReservedCharactersInParameterNameRule
+import com.element.dpg.libs.chassis.openapi.checking.checker.rules.WhitelistedAlphabetParameterNameRule
+import com.element.dpg.libs.chassis.openapi.checking.checker.sets.StandardOpenApiRules
+import com.element.dpg.libs.chassis.openapi.checking.checker.sets.checkAgainstRules
 import com.element.dpg.libs.chassis.openapi.checking.test.utils.isCompliant
 import com.element.dpg.libs.chassis.openapi.checking.test.utils.isNotCompliantWithOnlyViolation
 

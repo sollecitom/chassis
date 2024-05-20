@@ -1,8 +1,8 @@
 package com.element.dpg.libs.chassis.correlation.core.test.utils.toggles
 
-import org.sollecitom.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.identity.Id
 import com.element.dpg.libs.chassis.core.utils.UniqueIdGenerator
-import org.sollecitom.chassis.correlation.core.domain.toggles.*
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.*
 
 fun Toggles.Companion.create(values: Set<ToggleValue<*>> = emptySet()) = Toggles(values)
 

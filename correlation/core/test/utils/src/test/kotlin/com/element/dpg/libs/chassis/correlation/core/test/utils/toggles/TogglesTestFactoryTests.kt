@@ -1,16 +1,16 @@
 package com.element.dpg.libs.chassis.correlation.core.test.utils.toggles
 
 import assertk.assertThat
+import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.BooleanToggleValue
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.DecimalToggleValue
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.EnumToggleValue
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.Toggles
+import com.element.dpg.libs.chassis.test.utils.assertions.containsSameElementsAs
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
-import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
-import org.sollecitom.chassis.correlation.core.domain.toggles.BooleanToggleValue
-import org.sollecitom.chassis.correlation.core.domain.toggles.DecimalToggleValue
-import org.sollecitom.chassis.correlation.core.domain.toggles.EnumToggleValue
-import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
-import com.element.dpg.libs.chassis.test.utils.assertions.containsSameElementsAs
 
 @TestInstance(PER_CLASS)
 private class TogglesTestFactoryTests : CoreDataGenerator by CoreDataGenerator.testProvider {

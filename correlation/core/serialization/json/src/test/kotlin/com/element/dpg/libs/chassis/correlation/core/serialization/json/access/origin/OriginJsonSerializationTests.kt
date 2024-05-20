@@ -1,13 +1,13 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.origin
 
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.core.domain.networking.IpAddress
+import com.element.dpg.libs.chassis.core.domain.networking.IpAddress
 import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
-import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
+import com.element.dpg.libs.chassis.correlation.core.domain.access.origin.Origin
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.origin.create
 import com.element.dpg.libs.chassis.json.test.utils.JsonSerdeTestSpecification
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 
 @TestInstance(PER_CLASS)
 private class OriginJsonSerializationTests : JsonSerdeTestSpecification<Origin>, CoreDataGenerator by CoreDataGenerator.testProvider {

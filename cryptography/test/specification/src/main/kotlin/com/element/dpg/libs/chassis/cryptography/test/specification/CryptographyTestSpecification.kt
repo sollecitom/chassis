@@ -4,18 +4,18 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
-import org.junit.jupiter.api.Test
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.kyber.Kyber.Variant.KYBER_1024
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.kyber.invoke
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.dilithium.Dilithium
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.dilithium.Dilithium.Variant.DILITHIUM_5
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.dilithium.invoke
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.verify
-import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
-import org.sollecitom.chassis.cryptography.domain.symmetric.decrypt
-import org.sollecitom.chassis.cryptography.domain.symmetric.encryption.aes.AES
-import org.sollecitom.chassis.cryptography.domain.symmetric.encryption.aes.AES.Variant.AES_256
-import org.sollecitom.chassis.cryptography.domain.symmetric.encryption.aes.invoke
+import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing.dilithium.Dilithium
+import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing.dilithium.Dilithium.Variant.DILITHIUM_5
+import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing.dilithium.invoke
+import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing.verify
+import com.element.dpg.libs.chassis.cryptography.domain.factory.CryptographicOperations
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.decrypt
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.encryption.aes.AES
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.encryption.aes.AES.Variant.AES_256
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.encryption.aes.invoke
+import org.junit.jupiter.api.Test
 
 
 @Suppress("FunctionName")

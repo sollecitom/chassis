@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.correlation.logging.utils
 
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
-import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
-import org.sollecitom.chassis.correlation.core.domain.toggles.invoke
-import org.sollecitom.chassis.correlation.core.domain.toggles.standard.invocation.visibility.InvocationVisibility
-import org.sollecitom.chassis.logger.core.Logger
+import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.Toggles
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.invoke
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.standard.invocation.visibility.InvocationVisibility
+import com.element.dpg.libs.chassis.logger.core.Logger
 import com.element.dpg.libs.chassis.logger.core.LoggingLevel
 
 context(InvocationContext<*>)

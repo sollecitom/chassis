@@ -2,17 +2,17 @@ package com.element.dpg.libs.chassis.correlation.core.test.utils.access.session
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
+import com.element.dpg.libs.chassis.correlation.core.domain.access.idp.IdentityProvider
+import com.element.dpg.libs.chassis.correlation.core.domain.access.session.Session
+import com.element.dpg.libs.chassis.correlation.core.domain.tenancy.Tenant
+import com.element.dpg.libs.chassis.correlation.core.test.utils.access.idp.create
+import com.element.dpg.libs.chassis.correlation.core.test.utils.tenancy.create
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
-import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
-import org.sollecitom.chassis.correlation.core.domain.access.idp.IdentityProvider
-import org.sollecitom.chassis.correlation.core.domain.access.session.Session
-import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
-import com.element.dpg.libs.chassis.correlation.core.test.utils.access.idp.create
-import com.element.dpg.libs.chassis.correlation.core.test.utils.tenancy.create
 
 @TestInstance(PER_CLASS)
 private class SessionTestFactoryTests : CoreDataGenerator by CoreDataGenerator.testProvider {

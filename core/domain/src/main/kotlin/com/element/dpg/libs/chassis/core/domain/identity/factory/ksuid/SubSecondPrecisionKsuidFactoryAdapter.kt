@@ -1,11 +1,11 @@
 package com.element.dpg.libs.chassis.core.domain.identity.factory.ksuid
 
+import com.element.dpg.libs.chassis.core.domain.identity.KSUID
+import com.element.dpg.libs.chassis.core.domain.identity.factory.SortableTimestampedUniqueIdentifierFactory
 import com.github.f4b6a3.ksuid.KsuidFactory
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
-import org.sollecitom.chassis.core.domain.identity.KSUID
-import org.sollecitom.chassis.core.domain.identity.factory.SortableTimestampedUniqueIdentifierFactory
 import kotlin.random.Random
 import kotlin.random.asJavaRandom
 

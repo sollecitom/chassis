@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.ddd.application.dispatching
 
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
 import com.element.dpg.libs.chassis.correlation.logging.utils.log
-import org.sollecitom.chassis.ddd.domain.Command
-import org.sollecitom.chassis.logger.core.loggable.Loggable
+import com.element.dpg.libs.chassis.ddd.domain.Command
+import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
 
 class LoggingApplicationAdapter(private val delegate: Application) : Application {
 

@@ -1,17 +1,17 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.idp
 
-import org.json.JSONObject
-import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
-import org.sollecitom.chassis.correlation.core.domain.access.idp.IdentityProvider
-import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
-import org.sollecitom.chassis.correlation.core.serialization.json.customer.jsonSerde
-import org.sollecitom.chassis.correlation.core.serialization.json.tenancy.jsonSerde
+import com.element.dpg.libs.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.correlation.core.domain.access.customer.Customer
+import com.element.dpg.libs.chassis.correlation.core.domain.access.idp.IdentityProvider
+import com.element.dpg.libs.chassis.correlation.core.domain.tenancy.Tenant
+import com.element.dpg.libs.chassis.correlation.core.serialization.json.customer.jsonSerde
+import com.element.dpg.libs.chassis.correlation.core.serialization.json.tenancy.jsonSerde
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
 import com.element.dpg.libs.chassis.json.utils.serde.serde.getValue
 import com.element.dpg.libs.chassis.json.utils.serde.serde.setValue
+import org.json.JSONObject
 
 private object IdentityProviderJsonSerde : JsonSerde.SchemaAware<IdentityProvider> {
 

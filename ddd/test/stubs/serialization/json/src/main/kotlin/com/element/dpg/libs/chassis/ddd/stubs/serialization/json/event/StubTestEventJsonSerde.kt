@@ -1,14 +1,14 @@
 package com.element.dpg.libs.chassis.ddd.stubs.serialization.json.event
 
-import org.json.JSONObject
-import org.sollecitom.chassis.ddd.domain.Event
-import org.sollecitom.chassis.ddd.domain.Happening
+import com.element.dpg.libs.chassis.ddd.domain.Event
+import com.element.dpg.libs.chassis.ddd.domain.Happening
 import com.element.dpg.libs.chassis.ddd.serialization.json.happening.jsonSerde
 import com.element.dpg.libs.chassis.ddd.test.stubs.TestEntityEvent
 import com.element.dpg.libs.chassis.ddd.test.stubs.TestEvent
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
 import com.element.dpg.libs.chassis.json.utils.serde.serde.getValue
+import org.json.JSONObject
 
 private object StubTestEventJsonSerde : JsonSerde.SchemaAware<Event> {
 

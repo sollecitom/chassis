@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.logger.core
 
-import org.sollecitom.chassis.logger.core.implementation.LongestPrefixMatchLoggingLevelEnabler
+import com.element.dpg.libs.chassis.logger.core.implementation.LongestPrefixMatchLoggingLevelEnabler
 
 fun loggingLevelEnabler(defaultMinimumLoggingLevel: com.element.dpg.libs.chassis.logger.core.LoggingLevel, customize: LoggingLevelEnablerCustomizer.() -> Unit): (com.element.dpg.libs.chassis.logger.core.LoggingLevel, String) -> Boolean {
 

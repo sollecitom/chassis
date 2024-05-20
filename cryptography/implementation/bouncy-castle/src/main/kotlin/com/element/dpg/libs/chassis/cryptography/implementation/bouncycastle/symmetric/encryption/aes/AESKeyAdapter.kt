@@ -1,14 +1,14 @@
 package com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.symmetric.encryption.aes
 
-import org.sollecitom.chassis.cryptography.domain.key.CryptographicKey
-import org.sollecitom.chassis.cryptography.domain.symmetric.EncryptionMode
-import org.sollecitom.chassis.cryptography.domain.symmetric.SecretKeyFactory
-import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricKey
-import org.sollecitom.chassis.cryptography.domain.symmetric.encryption.aes.AES
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.BC_PROVIDER
+import com.element.dpg.libs.chassis.cryptography.domain.key.CryptographicKey
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.EncryptionMode
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.SecretKeyFactory
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.SymmetricKey
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.encryption.aes.AES
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.BC_PROVIDER
 import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric.create
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.key.CryptographicKeyAdapter
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.key.CryptographicKeyAdapter
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.SecureRandom
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec

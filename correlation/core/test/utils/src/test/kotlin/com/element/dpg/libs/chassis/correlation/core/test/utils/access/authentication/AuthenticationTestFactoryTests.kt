@@ -2,20 +2,20 @@ package com.element.dpg.libs.chassis.correlation.core.test.utils.access.authenti
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
-import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
-import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
-import org.sollecitom.chassis.correlation.core.domain.access.session.Session
-import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authentication.Authentication
+import com.element.dpg.libs.chassis.correlation.core.domain.access.customer.Customer
+import com.element.dpg.libs.chassis.correlation.core.domain.access.session.Session
+import com.element.dpg.libs.chassis.correlation.core.domain.tenancy.Tenant
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.session.federated
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.session.simple
 import com.element.dpg.libs.chassis.correlation.core.test.utils.customer.create
 import com.element.dpg.libs.chassis.correlation.core.test.utils.tenancy.create
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 

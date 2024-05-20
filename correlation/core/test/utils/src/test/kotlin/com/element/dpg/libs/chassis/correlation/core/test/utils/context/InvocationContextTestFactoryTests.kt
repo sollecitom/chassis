@@ -4,30 +4,29 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.isNull
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
-import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
-import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
-import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
-import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
-import org.sollecitom.chassis.correlation.core.domain.toggles.invoke
-import org.sollecitom.chassis.correlation.core.domain.toggles.standard.invocation.visibility.InvocationVisibility
-import org.sollecitom.chassis.correlation.core.domain.toggles.withDefaultValue
-import org.sollecitom.chassis.correlation.core.domain.toggles.withToggle
-import org.sollecitom.chassis.correlation.core.domain.trace.ExternalInvocationTrace
-import org.sollecitom.chassis.correlation.core.domain.trace.Trace
+import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.Actor
+import com.element.dpg.libs.chassis.correlation.core.domain.access.customer.Customer
+import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
+import com.element.dpg.libs.chassis.correlation.core.domain.tenancy.Tenant
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.Toggles
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.invoke
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.standard.invocation.visibility.InvocationVisibility
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.withDefaultValue
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.withToggle
+import com.element.dpg.libs.chassis.correlation.core.domain.trace.ExternalInvocationTrace
+import com.element.dpg.libs.chassis.correlation.core.domain.trace.Trace
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.actor.direct
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.actor.user
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.authenticated
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.unauthenticated
 import com.element.dpg.libs.chassis.correlation.core.test.utils.toggles.create
 import com.element.dpg.libs.chassis.correlation.core.test.utils.trace.create
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 
 @TestInstance(PER_CLASS)
 private class InvocationContextTestFactoryTests : CoreDataGenerator by CoreDataGenerator.testProvider {

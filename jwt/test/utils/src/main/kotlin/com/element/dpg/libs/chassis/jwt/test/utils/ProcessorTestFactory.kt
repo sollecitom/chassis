@@ -1,16 +1,16 @@
 package com.element.dpg.libs.chassis.jwt.test.utils
 
+import com.element.dpg.libs.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.jwt.domain.JwtAudience
+import com.element.dpg.libs.chassis.jwt.domain.JwtContentEncryptionAlgorithm
+import com.element.dpg.libs.chassis.jwt.domain.JwtProcessor
+import com.element.dpg.libs.chassis.jwt.jose4j.processor.JoseJwtProcessor
 import org.jose4j.jwa.AlgorithmConstraints
 import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers
 import org.jose4j.jwk.HttpsJwks
 import org.jose4j.jws.AlgorithmIdentifiers
 import org.jose4j.jwt.consumer.JwtConsumerBuilder
 import org.jose4j.keys.resolvers.HttpsJwksVerificationKeyResolver
-import org.sollecitom.chassis.core.domain.naming.Name
-import com.element.dpg.libs.chassis.jwt.domain.JwtAudience
-import com.element.dpg.libs.chassis.jwt.domain.JwtContentEncryptionAlgorithm
-import com.element.dpg.libs.chassis.jwt.domain.JwtProcessor
-import com.element.dpg.libs.chassis.jwt.jose4j.processor.JoseJwtProcessor
 import java.net.URI
 import java.security.PublicKey
 

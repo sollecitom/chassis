@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.ddd.domain
 
+import com.element.dpg.libs.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.versioning.IntVersion
 import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.core.domain.versioning.IntVersion
 
 sealed class CommandWasReceived<out COMMAND : Command<*, *>>(val command: COMMAND, override val id: Id, override val timestamp: Instant, override val context: Event.Context) : Event {
 

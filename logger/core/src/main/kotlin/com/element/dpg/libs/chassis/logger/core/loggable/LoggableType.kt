@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.logger.core.loggable
 
-import org.sollecitom.chassis.logger.core.Logger
+import com.element.dpg.libs.chassis.logger.core.Logger
 
 interface LoggableType {
 

@@ -1,11 +1,11 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.autorization
 
-import org.json.JSONObject
-import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.correlation.core.domain.access.authorization.Role
+import com.element.dpg.libs.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authorization.Role
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
+import org.json.JSONObject
 
 private object RoleJsonSerde : JsonSerde.SchemaAware<Role> {
 

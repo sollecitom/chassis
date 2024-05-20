@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.key
 
-import org.sollecitom.chassis.cryptography.domain.key.CryptographicKey
+import com.element.dpg.libs.chassis.cryptography.domain.key.CryptographicKey
 import com.element.dpg.libs.chassis.hashing.utils.xxh.Xxh3
 import java.security.Key
 import java.util.*

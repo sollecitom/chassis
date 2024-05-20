@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.core.domain.identity
 
-import org.sollecitom.chassis.core.domain.traits.DataSerializable
-import org.sollecitom.chassis.core.domain.traits.StringSerializable
+import com.element.dpg.libs.chassis.core.domain.traits.DataSerializable
+import com.element.dpg.libs.chassis.core.domain.traits.StringSerializable
 
 sealed interface Id : StringSerializable, DataSerializable {
 

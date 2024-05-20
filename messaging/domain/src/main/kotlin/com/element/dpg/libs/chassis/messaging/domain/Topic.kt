@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.messaging.domain
 
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import java.util.regex.Pattern
 
 sealed class Topic(val persistent: Boolean, val namespace: Namespace?, val name: Name) {

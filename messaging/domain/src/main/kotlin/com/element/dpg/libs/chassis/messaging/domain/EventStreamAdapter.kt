@@ -1,8 +1,8 @@
 package com.element.dpg.libs.chassis.messaging.domain
 
-import org.sollecitom.chassis.ddd.domain.Event
+import com.element.dpg.libs.chassis.ddd.domain.Event
 import com.element.dpg.libs.chassis.ddd.logging.utils.log
-import org.sollecitom.chassis.logger.core.loggable.Loggable
+import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
 
 private class EventStreamAdapter<EVENT : Event>(private val delegate: MessageStream<EVENT>, private val messageKey: (EVENT) -> String, private val messageProperties: (EVENT) -> Map<String, String>) : EventStream<EVENT>, MessageStream<EVENT> by delegate {
 

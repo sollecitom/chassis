@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.core.domain.identity.factory.tsid
 
-import org.sollecitom.chassis.core.domain.identity.InstanceInfo
-import org.sollecitom.chassis.core.domain.identity.TSID
-import org.sollecitom.chassis.core.domain.identity.factory.SortableTimestampedUniqueIdentifierFactory
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.identity.InstanceInfo
+import com.element.dpg.libs.chassis.core.domain.identity.TSID
+import com.element.dpg.libs.chassis.core.domain.identity.factory.SortableTimestampedUniqueIdentifierFactory
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 
 interface TsidVariantSelector {
 

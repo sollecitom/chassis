@@ -1,5 +1,15 @@
 package com.element.dpg.libs.chassis.web.api.utils.endpoint
 
+import com.element.dpg.libs.chassis.core.domain.versioning.IntVersion
+import com.element.dpg.libs.chassis.correlation.logging.utils.log
+import com.element.dpg.libs.chassis.ddd.application.dispatching.Application
+import com.element.dpg.libs.chassis.ddd.domain.Command
+import com.element.dpg.libs.chassis.ddd.domain.Happening
+import com.element.dpg.libs.chassis.ddd.domain.ifInvalid
+import com.element.dpg.libs.chassis.http4k.utils.lens.composite
+import com.element.dpg.libs.chassis.lens.core.extensions.naming.name
+import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
+import com.element.dpg.libs.chassis.web.api.utils.command.handler.HttpCommandHandler
 import org.http4k.core.Method
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.BAD_REQUEST
@@ -9,16 +19,6 @@ import org.http4k.lens.Path
 import org.http4k.lens.int
 import org.http4k.routing.bind
 import org.http4k.routing.routes
-import org.sollecitom.chassis.core.domain.versioning.IntVersion
-import com.element.dpg.libs.chassis.correlation.logging.utils.log
-import com.element.dpg.libs.chassis.ddd.application.dispatching.Application
-import org.sollecitom.chassis.ddd.domain.Command
-import org.sollecitom.chassis.ddd.domain.Happening
-import org.sollecitom.chassis.ddd.domain.ifInvalid
-import com.element.dpg.libs.chassis.http4k.utils.lens.composite
-import com.element.dpg.libs.chassis.lens.core.extensions.naming.name
-import org.sollecitom.chassis.logger.core.loggable.Loggable
-import org.sollecitom.chassis.web.api.utils.command.handler.HttpCommandHandler
 
 class CommandsEndpoint(private val application: Application, handlers: Set<HttpCommandHandler<*, *>>) : Endpoint {
 

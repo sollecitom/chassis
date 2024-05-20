@@ -1,7 +1,6 @@
 package com.element.dpg.libs.chassis.ddd.domain
 
-import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
+import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
 
 interface Command<out RESULT, out ACCESS : _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access> : Instruction { // TODO remove access from here?
 

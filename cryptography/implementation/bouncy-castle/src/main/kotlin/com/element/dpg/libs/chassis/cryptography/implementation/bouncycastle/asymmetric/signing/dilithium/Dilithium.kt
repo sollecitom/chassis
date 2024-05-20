@@ -2,13 +2,13 @@ package com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.as
 
 import org.bouncycastle.pqc.jcajce.spec.DilithiumParameterSpec
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.KeyPairGenerationOperations
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.dilithium.Dilithium
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.SigningAlgorithm
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.SigningKeyPairFactory
+import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
+import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
+import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing.dilithium.Dilithium
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.SigningAlgorithm
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.SigningKeyPairFactory
 import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.SigningPrivateKeyFactory
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.VerifyingPublicKeyFactory
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.VerifyingPublicKeyFactory
 import java.security.SecureRandom
 
 object Dilithium : SigningAlgorithm<Dilithium.KeyPairArguments> {

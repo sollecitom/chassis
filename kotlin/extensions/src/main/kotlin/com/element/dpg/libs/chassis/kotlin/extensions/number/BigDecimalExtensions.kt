@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.kotlin.extensions.number
 
-import org.sollecitom.chassis.kotlin.extensions.text.indexOfOrNull
+import com.element.dpg.libs.chassis.kotlin.extensions.text.indexOfOrNull
 import java.math.BigDecimal
 
 fun BigDecimal.withPrecision(precision: Int): BigDecimal {

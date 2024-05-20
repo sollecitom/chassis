@@ -1,8 +1,8 @@
 package com.element.dpg.libs.chassis.cryptography.domain.symmetric.encryption.aes
 
-import org.sollecitom.chassis.cryptography.domain.symmetric.SecretKeyFactory
-import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricKey
-import org.sollecitom.chassis.cryptography.domain.symmetric.encryption.EncryptionAlgorithm
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.SecretKeyFactory
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.SymmetricKey
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.encryption.EncryptionAlgorithm
 
 object AES : EncryptionAlgorithm<AES.KeyArguments> {
 

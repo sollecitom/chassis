@@ -1,17 +1,17 @@
 package com.element.dpg.libs.chassis.ddd.serialization.json.event
 
-import kotlinx.datetime.Instant
-import org.json.JSONObject
-import org.sollecitom.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.identity.Id
 import com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde
-import org.sollecitom.chassis.ddd.domain.EntityEvent
-import org.sollecitom.chassis.ddd.domain.Event
-import org.sollecitom.chassis.ddd.domain.Happening
+import com.element.dpg.libs.chassis.ddd.domain.EntityEvent
+import com.element.dpg.libs.chassis.ddd.domain.Event
+import com.element.dpg.libs.chassis.ddd.domain.Happening
 import com.element.dpg.libs.chassis.ddd.serialization.json.happening.jsonSerde
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredInstant
 import com.element.dpg.libs.chassis.json.utils.serde.putInstant
 import com.element.dpg.libs.chassis.json.utils.serde.serde.getValue
 import com.element.dpg.libs.chassis.json.utils.serde.serde.setValue
+import kotlinx.datetime.Instant
+import org.json.JSONObject
 
 interface EventJsonSerdeSupport<EVENT : Event> {
 

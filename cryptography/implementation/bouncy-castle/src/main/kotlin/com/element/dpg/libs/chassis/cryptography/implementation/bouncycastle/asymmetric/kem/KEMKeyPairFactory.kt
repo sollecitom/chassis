@@ -4,7 +4,7 @@ import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.AsymmetricKey
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.KeyPair
 import java.security.PrivateKey
 import java.security.PublicKey

@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.core.domain.email
 
-import org.sollecitom.chassis.kotlin.extensions.text.withoutWhitespace
+import com.element.dpg.libs.chassis.kotlin.extensions.text.withoutWhitespace
 
 @JvmInline
 value class EmailAddress(val value: String) : Comparable<EmailAddress> {

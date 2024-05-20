@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.openapi.checking.checker.sets
 
-import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
+import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
 
 object StandardTracingHeadersOpenApiRules : OpenApiRuleSet {
 

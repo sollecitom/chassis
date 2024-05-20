@@ -4,11 +4,11 @@ import com.element.dpg.libs.chassis.messaging.domain.*
 import kotlinx.coroutines.flow.Flow
 import org.apache.pulsar.client.api.PulsarClient
 import org.apache.pulsar.client.api.Schema
-import org.sollecitom.chassis.core.domain.identity.InstanceInfo
-import org.sollecitom.chassis.core.domain.lifecycle.Startable
-import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
-import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.messaging.domain.*
+import com.element.dpg.libs.chassis.core.domain.identity.InstanceInfo
+import com.element.dpg.libs.chassis.core.domain.lifecycle.Startable
+import com.element.dpg.libs.chassis.core.domain.lifecycle.Stoppable
+import com.element.dpg.libs.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.messaging.domain.*
 
 internal class PulsarMessageStream<VALUE>(private val instanceInfo: InstanceInfo, private val topic: Topic, private val schema: Schema<VALUE>, clientSupplier: () -> PulsarClient) : MessageStream<VALUE>, Startable, Stoppable {
 

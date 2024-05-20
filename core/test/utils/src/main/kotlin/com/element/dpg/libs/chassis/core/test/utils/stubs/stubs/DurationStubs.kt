@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.core.test.utils.stubs.stubs
 
-import kotlinx.datetime.Instant
 import com.element.dpg.libs.chassis.core.utils.TimeGenerator
+import kotlinx.datetime.Instant
 import kotlin.time.Duration
 
 context(TimeGenerator)

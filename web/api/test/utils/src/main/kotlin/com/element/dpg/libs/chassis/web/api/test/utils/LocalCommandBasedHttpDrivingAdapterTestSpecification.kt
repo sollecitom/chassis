@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.web.api.test.utils
 
-import org.http4k.core.HttpHandler
 import com.element.dpg.libs.chassis.ddd.application.dispatching.Application
+import org.http4k.core.HttpHandler
 
 interface LocalCommandBasedHttpDrivingAdapterTestSpecification : LocalHttpDrivingAdapterTestSpecification {
 

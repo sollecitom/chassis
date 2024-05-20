@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.messaging.domain
 
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import java.util.regex.Pattern
 
 data class TenantAgnosticTopic(val name: Name, val namespaceName: Name, val persistent: Boolean) {

@@ -1,17 +1,16 @@
 package com.element.dpg.libs.chassis.correlation.core.domain.context
 
-import org.sollecitom.chassis.core.domain.naming.Name
-import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
-import org.sollecitom.chassis.correlation.core.domain.access.actor.customer
-import org.sollecitom.chassis.correlation.core.domain.access.actor.tenant
-import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
+import com.element.dpg.libs.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.Actor
+import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.customer
+import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.tenant
+import com.element.dpg.libs.chassis.correlation.core.domain.access.customer.Customer
 import com.element.dpg.libs.chassis.correlation.core.domain.access.tenantOrNull
-import org.sollecitom.chassis.correlation.core.domain.idempotency.IdempotencyContext
-import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
-import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
-import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
-import org.sollecitom.chassis.correlation.core.domain.trace.Trace
+import com.element.dpg.libs.chassis.correlation.core.domain.idempotency.IdempotencyContext
+import com.element.dpg.libs.chassis.correlation.core.domain.tenancy.Tenant
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.Toggles
+import com.element.dpg.libs.chassis.correlation.core.domain.trace.InvocationTrace
+import com.element.dpg.libs.chassis.correlation.core.domain.trace.Trace
 
 data class InvocationContext<out ACCESS : _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access>(val access: ACCESS, val trace: Trace, val toggles: Toggles, val specifiedTargetTenant: Tenant?) {
 

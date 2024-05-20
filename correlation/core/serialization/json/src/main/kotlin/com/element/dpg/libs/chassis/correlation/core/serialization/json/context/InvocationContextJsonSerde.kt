@@ -1,17 +1,16 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.context
 
-import org.json.JSONObject
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
-import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
-import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
-import org.sollecitom.chassis.correlation.core.domain.trace.Trace
+import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
+import com.element.dpg.libs.chassis.correlation.core.domain.tenancy.Tenant
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.Toggles
+import com.element.dpg.libs.chassis.correlation.core.domain.trace.Trace
 import com.element.dpg.libs.chassis.correlation.core.serialization.json.access.jsonSerde
-import org.sollecitom.chassis.correlation.core.serialization.json.tenancy.jsonSerde
-import org.sollecitom.chassis.correlation.core.serialization.json.toggles.jsonSerde
-import org.sollecitom.chassis.correlation.core.serialization.json.trace.jsonSerde
-import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
+import com.element.dpg.libs.chassis.correlation.core.serialization.json.tenancy.jsonSerde
+import com.element.dpg.libs.chassis.correlation.core.serialization.json.toggles.jsonSerde
+import com.element.dpg.libs.chassis.correlation.core.serialization.json.trace.jsonSerde
+import com.element.dpg.libs.chassis.json.utils.serde.*
 import com.element.dpg.libs.chassis.json.utils.serde.serde.*
-import org.sollecitom.chassis.json.utils.serde.*
+import org.json.JSONObject
 
 private object InvocationContextJsonSerde : JsonSerde.SchemaAware<InvocationContext<*>> {
 

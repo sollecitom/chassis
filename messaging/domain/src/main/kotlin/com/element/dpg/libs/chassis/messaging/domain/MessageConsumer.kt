@@ -1,12 +1,12 @@
 package com.element.dpg.libs.chassis.messaging.domain
 
+import com.element.dpg.libs.chassis.core.domain.lifecycle.Startable
+import com.element.dpg.libs.chassis.core.domain.lifecycle.Stoppable
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
-import org.sollecitom.chassis.core.domain.lifecycle.Startable
-import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
-import org.sollecitom.chassis.core.domain.naming.Name
 
 interface MessageConsumer<out VALUE> : Startable, Stoppable, AutoCloseable {
 

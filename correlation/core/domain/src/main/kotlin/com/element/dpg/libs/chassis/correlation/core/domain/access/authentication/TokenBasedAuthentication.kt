@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.correlation.core.domain.access.authentication
 
-import org.sollecitom.chassis.correlation.core.domain.access.session.Session
+import com.element.dpg.libs.chassis.correlation.core.domain.access.session.Session
 
 sealed interface TokenBasedAuthentication : Authentication {
 

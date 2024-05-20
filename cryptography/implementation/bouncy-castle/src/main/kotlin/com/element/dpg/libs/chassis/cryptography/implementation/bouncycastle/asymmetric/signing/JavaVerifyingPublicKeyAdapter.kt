@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric.signing
 
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
-import org.sollecitom.chassis.cryptography.domain.key.CryptographicKey
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.BC_PROVIDER
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.key.CryptographicKeyAdapter
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
+import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
+import com.element.dpg.libs.chassis.cryptography.domain.key.CryptographicKey
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.BC_PROVIDER
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.key.CryptographicKeyAdapter
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.PublicKey
 import java.security.SecureRandom
 

@@ -1,13 +1,13 @@
 package com.element.dpg.libs.chassis.logger.slf4j.example
 
 import kotlinx.coroutines.runBlocking
-import org.sollecitom.chassis.logger.core.JvmLoggerFactory
+import com.element.dpg.libs.chassis.logger.core.JvmLoggerFactory
 import com.element.dpg.libs.chassis.logger.core.LoggingLevel.*
-import org.sollecitom.chassis.logger.core.appender.PrintStreamAppender
-import org.sollecitom.chassis.logger.core.defaults.DefaultFormatToString
-import org.sollecitom.chassis.logger.core.loggingFunction
-import org.sollecitom.chassis.logger.core.loggingLevelEnabler
-import org.sollecitom.chassis.logger.core.withCoroutineLoggingContext
+import com.element.dpg.libs.chassis.logger.core.appender.PrintStreamAppender
+import com.element.dpg.libs.chassis.logger.core.defaults.DefaultFormatToString
+import com.element.dpg.libs.chassis.logger.core.loggingFunction
+import com.element.dpg.libs.chassis.logger.core.loggingLevelEnabler
+import com.element.dpg.libs.chassis.logger.core.withCoroutineLoggingContext
 
 fun main(): Unit = runBlocking {
 
@@ -17,10 +17,10 @@ fun main(): Unit = runBlocking {
             addAppender(PrintStreamAppender(minimumLevel = ERROR, stream = System::err, format = DefaultFormatToString))
         }
         isEnabledForLoggerName = loggingLevelEnabler(defaultMinimumLoggingLevel = TRACE) {
-            "org.sollecitom.chassis.logger.slf4j" withMinimumLoggingLevel INFO
-            "org.sollecitom.chassis.logger.slf4j.example" withMinimumLoggingLevel ERROR
-            "org.sollecitom.chassis.logger.slf4j.abc" withMinimumLoggingLevel INFO
-            "org.sollecitom.chassis.logger.slf4j.sl" withMinimumLoggingLevel INFO
+            "com.element.dpg.libs.chassis.logger.slf4j" withMinimumLoggingLevel INFO
+            "com.element.dpg.libs.chassis.logger.slf4j.example" withMinimumLoggingLevel ERROR
+            "com.element.dpg.libs.chassis.logger.slf4j.abc" withMinimumLoggingLevel INFO
+            "com.element.dpg.libs.chassis.logger.slf4j.sl" withMinimumLoggingLevel INFO
         }
     }
 

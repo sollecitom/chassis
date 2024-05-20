@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.jwt.jose4j.processor
 
+import com.element.dpg.libs.chassis.jwt.domain.JWT
+import com.element.dpg.libs.chassis.jwt.domain.JwtProcessor
 import org.jose4j.jwt.JwtClaims
 import org.jose4j.jwt.consumer.JwtConsumer
 import org.jose4j.jwt.consumer.JwtConsumerBuilder
-import com.element.dpg.libs.chassis.jwt.domain.JWT
-import com.element.dpg.libs.chassis.jwt.domain.JwtProcessor
 
 class JoseJwtProcessor(private val consumer: JwtConsumer) : JwtProcessor {
 

@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.origin.client.info
 
-import org.json.JSONObject
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredInt
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
 import com.element.dpg.libs.chassis.web.client.info.domain.Version
+import org.json.JSONObject
 
 internal object SemanticVersionJsonSerde : JsonSerde.SchemaAware<Version.Semantic> {
 

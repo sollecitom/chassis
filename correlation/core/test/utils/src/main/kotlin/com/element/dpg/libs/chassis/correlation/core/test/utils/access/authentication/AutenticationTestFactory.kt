@@ -1,22 +1,22 @@
 package com.element.dpg.libs.chassis.correlation.core.test.utils.access.authentication
 
-import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.identity.Id
 import com.element.dpg.libs.chassis.core.utils.TimeGenerator
 import com.element.dpg.libs.chassis.core.utils.UniqueIdGenerator
-import org.sollecitom.chassis.correlation.core.domain.access.authentication.Authentication
-import org.sollecitom.chassis.correlation.core.domain.access.authentication.CredentialsBasedAuthentication
-import org.sollecitom.chassis.correlation.core.domain.access.authentication.FederatedAuthentication
-import org.sollecitom.chassis.correlation.core.domain.access.authentication.StatelessAuthentication
-import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
-import org.sollecitom.chassis.correlation.core.domain.access.session.FederatedSession
-import org.sollecitom.chassis.correlation.core.domain.access.session.Session
-import org.sollecitom.chassis.correlation.core.domain.access.session.SimpleSession
-import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authentication.Authentication
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authentication.CredentialsBasedAuthentication
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authentication.FederatedAuthentication
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authentication.StatelessAuthentication
+import com.element.dpg.libs.chassis.correlation.core.domain.access.customer.Customer
+import com.element.dpg.libs.chassis.correlation.core.domain.access.session.FederatedSession
+import com.element.dpg.libs.chassis.correlation.core.domain.access.session.Session
+import com.element.dpg.libs.chassis.correlation.core.domain.access.session.SimpleSession
+import com.element.dpg.libs.chassis.correlation.core.domain.tenancy.Tenant
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.session.federated
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.session.simple
 import com.element.dpg.libs.chassis.correlation.core.test.utils.customer.create
 import com.element.dpg.libs.chassis.correlation.core.test.utils.tenancy.create
+import kotlinx.datetime.Instant
 import kotlin.time.Duration.Companion.minutes
 
 context(UniqueIdGenerator)

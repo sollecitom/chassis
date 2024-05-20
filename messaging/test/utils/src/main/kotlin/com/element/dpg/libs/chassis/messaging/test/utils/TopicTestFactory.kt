@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.messaging.test.utils
 
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.core.test.utils.stubs.random
 import com.element.dpg.libs.chassis.core.utils.RandomGenerator
 import com.element.dpg.libs.chassis.messaging.domain.TenantAgnosticTopic

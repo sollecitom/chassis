@@ -1,12 +1,11 @@
 package com.element.dpg.libs.chassis.ddd.domain
 
+import com.element.dpg.libs.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.traits.Identifiable
+import com.element.dpg.libs.chassis.core.domain.traits.Timestamped
+import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
+import com.element.dpg.libs.chassis.correlation.core.domain.trace.InvocationTrace
 import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.traits.Identifiable
-import org.sollecitom.chassis.core.domain.traits.Timestamped
-import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
-import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
 
 interface Event : Happening, Identifiable, Timestamped {
 

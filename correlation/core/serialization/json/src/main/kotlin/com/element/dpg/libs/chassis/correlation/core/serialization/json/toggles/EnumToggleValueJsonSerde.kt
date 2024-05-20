@@ -1,14 +1,14 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.toggles
 
-import org.json.JSONObject
-import org.sollecitom.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.identity.Id
 import com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde
-import org.sollecitom.chassis.correlation.core.domain.toggles.EnumToggleValue
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.EnumToggleValue
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
 import com.element.dpg.libs.chassis.json.utils.serde.serde.getValue
 import com.element.dpg.libs.chassis.json.utils.serde.serde.setValue
+import org.json.JSONObject
 
 internal object EnumToggleValueJsonSerde : JsonSerde.SchemaAware<EnumToggleValue> {
 

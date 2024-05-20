@@ -1,11 +1,11 @@
 package com.element.dpg.libs.chassis.logger.core.defaults
 
-import org.sollecitom.chassis.logger.core.Log
-import org.sollecitom.chassis.logger.core.Logger
+import com.element.dpg.libs.chassis.logger.core.Log
+import com.element.dpg.libs.chassis.logger.core.Logger
 import com.element.dpg.libs.chassis.logger.core.LoggerFactory
 import com.element.dpg.libs.chassis.logger.core.LoggingLevel
-import org.sollecitom.chassis.logger.core.implementation.FunctionalLogger
-import org.sollecitom.chassis.logger.core.implementation.LoggingNameResolver
+import com.element.dpg.libs.chassis.logger.core.implementation.FunctionalLogger
+import com.element.dpg.libs.chassis.logger.core.implementation.LoggingNameResolver
 import java.time.Instant
 
 class DefaultLoggerFactory(defaultLoggingFunction: Log = com.element.dpg.libs.chassis.logger.core.defaults.DefaultLogToConsole) : com.element.dpg.libs.chassis.logger.core.LoggerFactory {

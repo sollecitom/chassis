@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.http4k.utils.lens.body
-import org.sollecitom.chassis.logger.core.loggable.Loggable
+import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
 import com.element.dpg.libs.chassis.openapi.parser.OpenApiReader
 import com.element.dpg.libs.chassis.openapi.validation.http4k.validator.implementation.invoke
 import com.element.dpg.libs.chassis.openapi.validation.request.validator.ValidationReportError

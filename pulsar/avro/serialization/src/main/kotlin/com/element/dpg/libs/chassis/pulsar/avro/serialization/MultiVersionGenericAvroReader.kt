@@ -7,7 +7,7 @@ import org.apache.pulsar.client.impl.schema.SchemaUtils
 import org.apache.pulsar.client.impl.schema.generic.GenericAvroSchema
 import org.apache.pulsar.client.impl.schema.util.SchemaUtil
 import org.apache.pulsar.common.protocol.schema.BytesSchemaVersion
-import org.sollecitom.chassis.logger.core.loggable.Loggable
+import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
 
 // copied from Pulsar and lightly modified (refactor)
 internal class MultiVersionGenericAvroReader(useProvidedSchemaAsReaderSchema: Boolean, readerSchema: Schema) : AbstractMultiVersionGenericReader(useProvidedSchemaAsReaderSchema, GenericAvroReader(readerSchema), readerSchema) {

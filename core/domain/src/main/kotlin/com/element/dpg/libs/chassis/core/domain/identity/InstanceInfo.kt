@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.core.domain.identity
 
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 
 data class InstanceInfo(val id: Int, val maximumInstancesCount: Int, val groupName: Name) {
 

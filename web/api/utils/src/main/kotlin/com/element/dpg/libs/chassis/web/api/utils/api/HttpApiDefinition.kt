@@ -1,9 +1,8 @@
 package com.element.dpg.libs.chassis.web.api.utils.api
 
+import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
+import com.element.dpg.libs.chassis.correlation.core.serialization.json.context.jsonSerde
 import org.http4k.core.Request
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
-import org.sollecitom.chassis.correlation.core.serialization.json.context.jsonSerde
-import com.element.dpg.libs.chassis.web.api.utils.headers.HttpHeaderNames
 
 interface HttpApiDefinition {
 

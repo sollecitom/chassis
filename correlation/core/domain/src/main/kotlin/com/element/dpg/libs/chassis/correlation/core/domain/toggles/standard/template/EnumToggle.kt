@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.correlation.core.domain.toggles.standard.template
 
-import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.correlation.core.domain.toggles.EnumToggleValue
-import org.sollecitom.chassis.correlation.core.domain.toggles.Toggle
-import org.sollecitom.chassis.correlation.core.domain.toggles.ToggleValue
-import org.sollecitom.chassis.correlation.core.domain.toggles.Toggles
+import com.element.dpg.libs.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.EnumToggleValue
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.Toggle
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.ToggleValue
+import com.element.dpg.libs.chassis.correlation.core.domain.toggles.Toggles
 
 internal class EnumToggle<VALUE : Enum<VALUE>>(override val id: Id, private val deserializeValue: (String) -> VALUE) : Toggle<VALUE, String> {
 

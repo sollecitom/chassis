@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.logger.core
 
-import org.sollecitom.chassis.logger.core.implementation.ImmutableLoggingContext
+import com.element.dpg.libs.chassis.logger.core.implementation.ImmutableLoggingContext
 
 interface LoggingContext : Collection<Pair<String, String>> {
 

@@ -1,8 +1,7 @@
 package com.element.dpg.libs.chassis.correlation.core.test.utils.access.origin
 
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.web.client.info.domain.*
-import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.web.client.info.domain.*
 
 fun ClientInfo.Companion.create(device: Device = Device.create(), operatingSystem: OperatingSystem = com.element.dpg.libs.chassis.web.client.info.domain.OperatingSystem.create(), layoutEngine: LayoutEngine = com.element.dpg.libs.chassis.web.client.info.domain.LayoutEngine.create(), agent: Agent = com.element.dpg.libs.chassis.web.client.info.domain.Agent.create()): ClientInfo = ClientInfo(device, operatingSystem, layoutEngine, agent)
 

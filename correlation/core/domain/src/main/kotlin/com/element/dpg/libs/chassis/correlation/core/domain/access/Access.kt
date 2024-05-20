@@ -1,13 +1,13 @@
 package com.element.dpg.libs.chassis.correlation.core.domain.access
 
-import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
-import org.sollecitom.chassis.correlation.core.domain.access.actor.customer
-import org.sollecitom.chassis.correlation.core.domain.access.actor.tenant
-import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
-import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
-import org.sollecitom.chassis.correlation.core.domain.access.origin.Origin
-import org.sollecitom.chassis.correlation.core.domain.access.scope.AccessScope
-import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
+import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.Actor
+import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.customer
+import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.tenant
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
+import com.element.dpg.libs.chassis.correlation.core.domain.access.customer.Customer
+import com.element.dpg.libs.chassis.correlation.core.domain.access.origin.Origin
+import com.element.dpg.libs.chassis.correlation.core.domain.access.scope.AccessScope
+import com.element.dpg.libs.chassis.correlation.core.domain.tenancy.Tenant
 
 sealed interface Access {
 

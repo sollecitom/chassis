@@ -1,15 +1,15 @@
 package com.element.dpg.libs.chassis.jwt.jose4j.issuer
 
+import com.element.dpg.libs.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.jwt.domain.JwtAudience
+import com.element.dpg.libs.chassis.jwt.domain.JwtContentEncryptionAlgorithm
+import com.element.dpg.libs.chassis.jwt.domain.JwtIssuer
 import org.jose4j.jwe.JsonWebEncryption
 import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers
 import org.jose4j.jwk.OctetKeyPairJsonWebKey
 import org.jose4j.jws.AlgorithmIdentifiers
 import org.jose4j.jws.JsonWebSignature
 import org.json.JSONObject
-import org.sollecitom.chassis.core.domain.naming.Name
-import com.element.dpg.libs.chassis.jwt.domain.JwtAudience
-import com.element.dpg.libs.chassis.jwt.domain.JwtContentEncryptionAlgorithm
-import com.element.dpg.libs.chassis.jwt.domain.JwtIssuer
 import java.security.KeyPair
 import java.security.PublicKey
 

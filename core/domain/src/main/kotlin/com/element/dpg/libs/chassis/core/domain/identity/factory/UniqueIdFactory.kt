@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.core.domain.identity.factory
 
-import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.domain.identity.factory.ksuid.KsuidVariantSelector
-import org.sollecitom.chassis.core.domain.identity.factory.tsid.TsidVariantSelector
-import org.sollecitom.chassis.core.domain.identity.factory.ulid.UlidVariantSelector
+import com.element.dpg.libs.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.core.domain.identity.factory.ksuid.KsuidVariantSelector
+import com.element.dpg.libs.chassis.core.domain.identity.factory.tsid.TsidVariantSelector
+import com.element.dpg.libs.chassis.core.domain.identity.factory.ulid.UlidVariantSelector
 
 interface UniqueIdFactory {
 

@@ -6,10 +6,10 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
-import org.sollecitom.chassis.logging.standard.configuration.configureLogging
+import com.element.dpg.libs.chassis.logging.standard.configuration.configureLogging
 import com.element.dpg.libs.chassis.messaging.domain.MessageConsumer
 import com.element.dpg.libs.chassis.messaging.domain.MessageProducer
 import com.element.dpg.libs.chassis.messaging.domain.Topic

@@ -1,15 +1,15 @@
 package com.element.dpg.libs.chassis.web.api.utils.filters
 
+import com.element.dpg.libs.chassis.http4k.utils.lens.AddContentLength
+import com.element.dpg.libs.chassis.web.api.utils.api.HttpApiDefinition
+import com.element.dpg.libs.chassis.web.api.utils.filters.correlation.InvocationContextFilter
+import com.element.dpg.libs.chassis.web.api.utils.filters.correlation.addInvocationContextToLoggingStack
+import com.element.dpg.libs.chassis.web.api.utils.filters.correlation.parseInvocationContextFromGatewayHeader
+import com.element.dpg.libs.chassis.web.api.utils.filters.correlation.parseInvocationContextFromRequest
 import org.http4k.core.Filter
 import org.http4k.core.NoOp
 import org.http4k.core.then
 import org.http4k.filter.*
-import com.element.dpg.libs.chassis.http4k.utils.lens.AddContentLength
-import org.sollecitom.chassis.web.api.utils.api.HttpApiDefinition
-import org.sollecitom.chassis.web.api.utils.filters.correlation.InvocationContextFilter
-import org.sollecitom.chassis.web.api.utils.filters.correlation.addInvocationContextToLoggingStack
-import org.sollecitom.chassis.web.api.utils.filters.correlation.parseInvocationContextFromGatewayHeader
-import org.sollecitom.chassis.web.api.utils.filters.correlation.parseInvocationContextFromRequest
 
 object StandardHttpFilter { // TODO add metrics
 

@@ -11,7 +11,7 @@ import org.apache.pulsar.client.api.schema.Field
 import org.apache.pulsar.client.api.schema.SchemaReader
 import org.apache.pulsar.client.impl.schema.generic.GenericAvroRecord
 import org.apache.pulsar.client.impl.schema.generic.GenericAvroSchema
-import org.sollecitom.chassis.logger.core.loggable.Loggable
+import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream

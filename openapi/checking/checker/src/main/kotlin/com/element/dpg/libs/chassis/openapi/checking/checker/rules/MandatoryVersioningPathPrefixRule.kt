@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.openapi.checking.checker.rules
 
 import io.swagger.v3.oas.models.OpenAPI
-import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
+import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
 
 
 class MandatoryVersioningPathPrefixRule(private val minimumAllowedVersion: Int = 1) : OpenApiRule {

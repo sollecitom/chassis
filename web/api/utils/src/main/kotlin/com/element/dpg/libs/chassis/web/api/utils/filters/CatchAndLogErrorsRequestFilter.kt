@@ -1,12 +1,12 @@
 package com.element.dpg.libs.chassis.web.api.utils.filters
 
+import com.element.dpg.libs.chassis.http4k.utils.lens.contentType
+import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
 import org.http4k.core.ContentType
 import org.http4k.core.Filter
 import org.http4k.core.Response
 import org.http4k.core.Status
 import org.http4k.filter.ServerFilters
-import com.element.dpg.libs.chassis.http4k.utils.lens.contentType
-import org.sollecitom.chassis.logger.core.loggable.Loggable
 
 private object CatchAndLogErrorsRequestFilter : Loggable() {
 

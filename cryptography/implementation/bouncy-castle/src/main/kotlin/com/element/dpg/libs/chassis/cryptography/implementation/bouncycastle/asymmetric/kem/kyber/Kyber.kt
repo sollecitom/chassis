@@ -5,10 +5,10 @@ import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.KeyPairGenera
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.kyber.Kyber
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.KEMAlgorithm
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.KEMKeyPairFactory
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.KEMPrivateKeyFactory
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.KEMPublicKeyFactory
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.KEMAlgorithm
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.KEMKeyPairFactory
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.KEMPrivateKeyFactory
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric.kem.KEMPublicKeyFactory
 import java.security.SecureRandom
 
 object Kyber : KEMAlgorithm<_root_ide_package_.com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.kyber.Kyber.KeyPairArguments> {

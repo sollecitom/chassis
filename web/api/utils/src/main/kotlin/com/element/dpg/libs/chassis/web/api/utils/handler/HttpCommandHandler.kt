@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.web.api.utils.handler
 
+import com.element.dpg.libs.chassis.ddd.domain.Command
+import com.element.dpg.libs.chassis.ddd.domain.Happening
 import org.http4k.core.Request
 import org.http4k.core.Response
-import org.sollecitom.chassis.ddd.domain.Command
-import org.sollecitom.chassis.ddd.domain.Happening
 
 interface HttpCommandHandler<out COMMAND : Command<RESULT, *>, RESULT> {
 

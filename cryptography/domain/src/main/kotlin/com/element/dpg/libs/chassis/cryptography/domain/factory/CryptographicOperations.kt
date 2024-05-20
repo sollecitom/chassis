@@ -1,7 +1,6 @@
 package com.element.dpg.libs.chassis.cryptography.domain.factory
 
-import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.AsymmetricAlgorithmFamilySelector
-import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricAlgorithmFamilySelector
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.SymmetricAlgorithmFamilySelector
 
 interface CryptographicOperations {
 

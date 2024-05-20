@@ -4,7 +4,7 @@ package com.element.dpg.libs.chassis.logger.slf4j.adapter
 
 import org.slf4j.Marker
 import org.slf4j.helpers.MessageFormatter
-import org.sollecitom.chassis.logger.core.Logger
+import com.element.dpg.libs.chassis.logger.core.Logger
 import com.element.dpg.libs.chassis.logger.core.LoggingLevel
 import org.slf4j.Logger as Slf4jLogger
 

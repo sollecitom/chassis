@@ -1,12 +1,12 @@
 package com.element.dpg.libs.chassis.ddd.test.utils
 
+import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
+import com.element.dpg.libs.chassis.ddd.domain.Command
+import com.element.dpg.libs.chassis.ddd.domain.CommandResultSubscriber
+import com.element.dpg.libs.chassis.ddd.domain.CommandWasReceived
+import com.element.dpg.libs.chassis.ddd.domain.ReceivedCommandPublisher
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
-import org.sollecitom.chassis.ddd.domain.Command
-import org.sollecitom.chassis.ddd.domain.CommandResultSubscriber
-import org.sollecitom.chassis.ddd.domain.CommandWasReceived
-import org.sollecitom.chassis.ddd.domain.ReceivedCommandPublisher
 
 class InMemoryCommandProcessor<in COMMAND : Command<RESULT, ACCESS>, out RESULT : Any, out ACCESS : _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access>(private val process: suspend context(InvocationContext<ACCESS>)(CommandWasReceived<COMMAND>) -> RESULT) : ReceivedCommandPublisher<COMMAND, ACCESS>, CommandResultSubscriber {
 

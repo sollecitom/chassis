@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.logger.core.implementation
 
-import org.sollecitom.chassis.logger.core.LoggingContext
+import com.element.dpg.libs.chassis.logger.core.LoggingContext
 
 internal class ImmutableLoggingContext(private val entries: Map<String, String> = mutableMapOf()) : LoggingContext {
 

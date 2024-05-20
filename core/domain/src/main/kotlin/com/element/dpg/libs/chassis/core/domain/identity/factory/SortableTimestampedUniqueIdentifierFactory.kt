@@ -1,8 +1,8 @@
 package com.element.dpg.libs.chassis.core.domain.identity.factory
 
+import com.element.dpg.libs.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toKotlinInstant
-import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
 import java.time.Instant as JavaInstant
 
 interface SortableTimestampedUniqueIdentifierFactory<ID : SortableTimestampedUniqueIdentifier<ID>> {

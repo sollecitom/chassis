@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.openapi.checking.checker.rules
 
 import io.swagger.v3.oas.models.OpenAPI
-import org.sollecitom.chassis.openapi.checking.checker.model.OperationWithContext
-import org.sollecitom.chassis.openapi.checking.checker.model.allOperations
-import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
+import com.element.dpg.libs.chassis.openapi.checking.checker.model.OperationWithContext
+import com.element.dpg.libs.chassis.openapi.checking.checker.model.allOperations
+import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
 
 object EnforceOperationDescriptionDifferentFromSummaryRule : OpenApiRule {
 

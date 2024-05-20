@@ -1,8 +1,8 @@
 package com.element.dpg.libs.chassis.correlation.core.test.utils.access.authorization
 
-import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.correlation.core.domain.access.authorization.Role
-import org.sollecitom.chassis.correlation.core.domain.access.authorization.Roles
+import com.element.dpg.libs.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authorization.Role
+import com.element.dpg.libs.chassis.correlation.core.domain.access.authorization.Roles
 
 object TestRoles {
     val admin = "admin".let(::Name).let(::Role)

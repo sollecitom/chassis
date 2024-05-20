@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.ddd.stubs.serialization.json.event
 
-import org.json.JSONObject
 import com.element.dpg.libs.chassis.ddd.serialization.json.event.EventJsonSerdeSupport
 import com.element.dpg.libs.chassis.ddd.test.stubs.TestEntityEvent
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
+import org.json.JSONObject
 
 private object TestEntityEventJsonSerde : JsonSerde.SchemaAware<TestEntityEvent>, EventJsonSerdeSupport.EntitySpecific<TestEntityEvent> {
 

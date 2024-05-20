@@ -3,10 +3,10 @@ package com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.pqc.jcajce.provider.BouncyCastlePQCProvider
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.AsymmetricAlgorithmFamilySelector
-import org.sollecitom.chassis.cryptography.domain.factory.CryptographicOperations
-import org.sollecitom.chassis.cryptography.domain.symmetric.SymmetricAlgorithmFamilySelector
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.asymmetric.AsymmetricAlgorithmFamilyCustomizer
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.symmetric.SymmetricAlgorithmFamilyCustomizer
+import com.element.dpg.libs.chassis.cryptography.domain.factory.CryptographicOperations
+import com.element.dpg.libs.chassis.cryptography.domain.symmetric.SymmetricAlgorithmFamilySelector
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric.AsymmetricAlgorithmFamilyCustomizer
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.symmetric.SymmetricAlgorithmFamilyCustomizer
 import java.security.SecureRandom
 import java.security.Security
 

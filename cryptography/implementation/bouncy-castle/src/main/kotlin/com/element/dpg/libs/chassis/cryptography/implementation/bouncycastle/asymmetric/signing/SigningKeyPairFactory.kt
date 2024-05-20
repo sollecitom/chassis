@@ -3,9 +3,9 @@ package com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.as
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.AsymmetricKeyPair
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.KeyPair
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
-import org.sollecitom.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
-import org.sollecitom.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
+import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing.SigningPrivateKey
+import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing.VerifyingPublicKey
+import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.utils.BouncyCastleUtils
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.SecureRandom

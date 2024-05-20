@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.openapi.checking.checker.rule.field
 
 import io.swagger.v3.oas.models.Operation
-import org.sollecitom.chassis.openapi.checking.checker.model.OpenApiField
-import org.sollecitom.chassis.openapi.checking.checker.model.OperationWithContext
-import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
+import com.element.dpg.libs.chassis.openapi.checking.checker.model.OpenApiField
+import com.element.dpg.libs.chassis.openapi.checking.checker.model.OperationWithContext
+import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
 
 data class FieldRulesViolation<VALUE : Any>(val operation: OperationWithContext, val field: OpenApiField<Operation, VALUE?>, val rules: Set<FieldRule<*, *>>, val fieldViolations: Set<OpenApiRule.Result.Violation>) : OpenApiRule.Result.Violation {
 

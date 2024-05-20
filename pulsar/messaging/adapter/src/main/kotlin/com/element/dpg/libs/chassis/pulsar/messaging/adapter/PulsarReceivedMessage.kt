@@ -4,9 +4,9 @@ import kotlinx.datetime.Instant
 import org.apache.pulsar.client.api.Consumer
 import org.apache.pulsar.client.api.Message
 import org.apache.pulsar.client.api.MessageIdAdv
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.kotlin.extensions.async.await
-import org.sollecitom.chassis.kotlin.extensions.text.removeFromLast
+import com.element.dpg.libs.chassis.kotlin.extensions.text.removeFromLast
 import com.element.dpg.libs.chassis.messaging.domain.ReceivedMessage
 import com.element.dpg.libs.chassis.messaging.domain.Topic
 

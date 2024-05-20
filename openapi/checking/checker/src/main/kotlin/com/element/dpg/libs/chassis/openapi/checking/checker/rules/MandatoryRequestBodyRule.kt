@@ -2,10 +2,10 @@ package com.element.dpg.libs.chassis.openapi.checking.checker.rules
 
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.PathItem.HttpMethod
-import org.sollecitom.chassis.openapi.checking.checker.model.OperationWithContext
-import org.sollecitom.chassis.openapi.checking.checker.model.allOperations
-import org.sollecitom.chassis.openapi.checking.checker.model.isRequired
-import org.sollecitom.chassis.openapi.checking.checker.rule.OpenApiRule
+import com.element.dpg.libs.chassis.openapi.checking.checker.model.OperationWithContext
+import com.element.dpg.libs.chassis.openapi.checking.checker.model.allOperations
+import com.element.dpg.libs.chassis.openapi.checking.checker.model.isRequired
+import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
 
 
 class MandatoryRequestBodyRule(methods: Set<Pair<HttpMethod, Boolean>>) : OpenApiRule {

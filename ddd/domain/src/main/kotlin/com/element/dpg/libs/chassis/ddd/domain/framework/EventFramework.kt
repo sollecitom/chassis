@@ -1,10 +1,9 @@
 package com.element.dpg.libs.chassis.ddd.domain.framework
 
+import com.element.dpg.libs.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.ddd.domain.EntityEvent
+import com.element.dpg.libs.chassis.ddd.domain.Event
 import kotlinx.coroutines.Deferred
-import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.ddd.domain.EntityEvent
-import org.sollecitom.chassis.ddd.domain.Event
-import com.element.dpg.libs.chassis.ddd.domain.store.EventStore
 
 interface EventFramework : com.element.dpg.libs.chassis.ddd.domain.store.EventStore { // TODO remove this
 

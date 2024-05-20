@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.core.domain.identity.utils
 
+import com.element.dpg.libs.chassis.core.domain.identity.InstanceInfo
+import com.element.dpg.libs.chassis.core.domain.identity.factory.UniqueIdFactory
+import com.element.dpg.libs.chassis.core.domain.identity.factory.invoke
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import kotlinx.datetime.Clock
-import org.sollecitom.chassis.core.domain.identity.InstanceInfo
-import org.sollecitom.chassis.core.domain.identity.factory.UniqueIdFactory
-import org.sollecitom.chassis.core.domain.identity.factory.invoke
-import org.sollecitom.chassis.core.domain.naming.Name
 import kotlin.random.Random
 
 operator fun UniqueIdFactory.Companion.invoke(random: Random = Random, clock: Clock = Clock.System, instanceInfo: InstanceInfo = testInstanceInfo): UniqueIdFactory = UniqueIdFactory.invoke(random, clock, instanceInfo)

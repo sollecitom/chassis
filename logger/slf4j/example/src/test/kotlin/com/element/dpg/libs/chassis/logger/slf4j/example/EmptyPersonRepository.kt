@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.logger.slf4j.example
 
-import org.sollecitom.chassis.logger.core.loggable.Loggable
+import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
 
 class EmptyPersonRepository : PersonRepository {
 

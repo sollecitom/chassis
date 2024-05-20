@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.nats.client
 
+import com.element.dpg.libs.chassis.core.domain.lifecycle.Stoppable
 import io.nats.client.Message
-import org.sollecitom.chassis.core.domain.lifecycle.Stoppable
 
 interface NatsPublisher : Stoppable {
 

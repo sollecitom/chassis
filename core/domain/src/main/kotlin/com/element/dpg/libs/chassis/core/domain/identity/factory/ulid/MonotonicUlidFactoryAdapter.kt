@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.core.domain.identity.factory.ulid
 
+import com.element.dpg.libs.chassis.core.domain.identity.ULID
+import com.element.dpg.libs.chassis.core.domain.identity.factory.SortableTimestampedUniqueIdentifierFactory
 import com.github.f4b6a3.ulid.UlidFactory
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.domain.identity.ULID
-import org.sollecitom.chassis.core.domain.identity.factory.SortableTimestampedUniqueIdentifierFactory
 import kotlin.random.Random
 import kotlin.random.asJavaRandom
 

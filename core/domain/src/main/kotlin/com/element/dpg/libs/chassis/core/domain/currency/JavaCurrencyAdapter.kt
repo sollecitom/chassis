@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.core.domain.currency
 
-import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.core.domain.quantity.Count
+import com.element.dpg.libs.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.quantity.Count
 import java.util.*
 import java.util.Currency as JavaCurrency
 

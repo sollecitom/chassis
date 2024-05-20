@@ -1,13 +1,13 @@
 package com.element.dpg.libs.chassis.web.api.utils.filters.correlation
 
+import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
+import com.element.dpg.libs.chassis.correlation.core.serialization.json.context.jsonSerde
+import com.element.dpg.libs.chassis.logger.core.withCoroutineLoggingContext
 import kotlinx.coroutines.runBlocking
 import org.http4k.core.Filter
 import org.http4k.core.HttpHandler
 import org.http4k.core.Request
 import org.json.JSONObject
-import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
-import org.sollecitom.chassis.correlation.core.serialization.json.context.jsonSerde
-import org.sollecitom.chassis.logger.core.withCoroutineLoggingContext
 
 fun InvocationContextFilter.addInvocationContextToLoggingStack(): Filter = InvocationContextLoggingFilter()
 

@@ -1,8 +1,8 @@
 package com.element.dpg.libs.chassis.jwt.jose4j.utils
 
-import org.jose4j.jwk.OctetKeyPairJsonWebKey
-import org.sollecitom.chassis.core.domain.naming.Name
+import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.jwt.domain.JwtAudience
+import org.jose4j.jwk.OctetKeyPairJsonWebKey
 import java.security.KeyPair
 import java.security.PrivateKey
 import java.security.PublicKey
