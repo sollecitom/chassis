@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
+import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.kyber.Kyber
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.kyber.Kyber.Variant.KYBER_1024
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.kyber.invoke
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing.dilithium.Dilithium
@@ -55,7 +56,7 @@ interface CryptographyTestSpecification {
     @Test
     fun `sending Kyber keys over the wire`() {
 
-        val keyPair = kyber.keyPair(arguments = _root_ide_package_.com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.kyber.Kyber.KeyPairArguments(variant = KYBER_1024))
+        val keyPair = kyber.keyPair(arguments = Kyber.KeyPairArguments(variant = KYBER_1024))
 
         val decodedPublicKey = kyber.publicKey.from(bytes = keyPair.public.encoded)
         val decodedPrivateKey = kyber.privateKey.from(bytes = keyPair.private.encoded)

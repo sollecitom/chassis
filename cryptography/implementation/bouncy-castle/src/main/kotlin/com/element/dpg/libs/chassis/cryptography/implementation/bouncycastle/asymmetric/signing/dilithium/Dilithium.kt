@@ -15,13 +15,13 @@ object Dilithium : SigningAlgorithm<Dilithium.KeyPairArguments> {
 
     override val name: String get() = Dilithium.name
 
-    override fun keyPairGenerationOperations(random: SecureRandom): com.element.dpg.libs.chassis.cryptography.domain.asymmetric.KeyPairGenerationOperations<Dilithium.KeyPairArguments, SigningPrivateKey, VerifyingPublicKey> = DilithiumAlgorithmOperationCustomizer(random)
+    override fun keyPairGenerationOperations(random: SecureRandom): KeyPairGenerationOperations<Dilithium.KeyPairArguments, SigningPrivateKey, VerifyingPublicKey> = DilithiumAlgorithmOperationCustomizer(random)
 }
 
-private class DilithiumAlgorithmOperationCustomizer(private val random: SecureRandom) : com.element.dpg.libs.chassis.cryptography.domain.asymmetric.KeyPairGenerationOperations<Dilithium.KeyPairArguments, SigningPrivateKey, VerifyingPublicKey> {
+private class DilithiumAlgorithmOperationCustomizer(private val random: SecureRandom) : KeyPairGenerationOperations<Dilithium.KeyPairArguments, SigningPrivateKey, VerifyingPublicKey> {
 
     override val keyPair by lazy { SigningKeyPairFactory<Dilithium.KeyPairArguments>(Dilithium.name, random) { variant.spec } }
-    override val privateKey by lazy { com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric.signing.SigningPrivateKeyFactory(Dilithium.name, random) }
+    override val privateKey by lazy { SigningPrivateKeyFactory(Dilithium.name, random) }
     override val publicKey by lazy { VerifyingPublicKeyFactory(Dilithium.name, random) }
 
     private val Dilithium.Variant.spec: DilithiumParameterSpec

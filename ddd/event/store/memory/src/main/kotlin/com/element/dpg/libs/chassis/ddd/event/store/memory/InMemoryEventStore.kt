@@ -4,6 +4,7 @@ import com.element.dpg.libs.chassis.core.domain.identity.Id
 import com.element.dpg.libs.chassis.ddd.domain.EntityEvent
 import com.element.dpg.libs.chassis.ddd.domain.Event
 import com.element.dpg.libs.chassis.ddd.domain.filterIsForEntityId
+import com.element.dpg.libs.chassis.ddd.domain.store.EventStore
 import kotlinx.coroutines.*
 import kotlinx.coroutines.CoroutineStart.LAZY
 import kotlinx.coroutines.flow.*
@@ -12,7 +13,7 @@ import kotlin.reflect.KClass
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory.WithoutCustomQueries, private val pollingPeriod: Duration = 100.milliseconds, private val scope: CoroutineScope = CoroutineScope(SupervisorJob())) : _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.Mutable {
+class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory.WithoutCustomQueries, private val pollingPeriod: Duration = 100.milliseconds, private val scope: CoroutineScope = CoroutineScope(SupervisorJob())) : EventStore.Mutable {
 
     private val historical = mutableListOf<Event>()
 
@@ -23,7 +24,6 @@ class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory
 
     override fun awaitForEvent(id: Id) = scope.async(start = LAZY) { // for the SQL event store, use polling or Debezium
         awaitEventPersistence(id, pollingPeriod)
-        Unit
     }
 
     private suspend fun awaitEventPersistence(id: Id, pollingPeriod: Duration) {
@@ -39,15 +39,15 @@ class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory
 
     override fun all() = historical.asFlow()
 
-    override fun <QUERY : _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.Query<EVENT>, EVENT : Event> all(query: QUERY) = all().selectedBy(query)
+    override fun <QUERY : EventStore.Query<EVENT>, EVENT : Event> all(query: QUERY) = all().selectedBy(query)
 
     override suspend fun firstOrNull() = all().firstOrNull()
 
-    override suspend fun <QUERY : _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.Query<EVENT>, EVENT : Event> firstOrNull(query: QUERY) = all(query).firstOrNull()
+    override suspend fun <QUERY : EventStore.Query<EVENT>, EVENT : Event> firstOrNull(query: QUERY) = all(query).firstOrNull()
 
     override suspend fun lastOrNull() = all().lastOrNull()
 
-    override suspend fun <QUERY : _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.Query<EVENT>, EVENT : Event> lastOrNull(query: QUERY) = all(query).lastOrNull()
+    override suspend fun <QUERY : EventStore.Query<EVENT>, EVENT : Event> lastOrNull(query: QUERY) = all(query).lastOrNull()
 
     override suspend fun start() {
         // nothing here
@@ -57,9 +57,9 @@ class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory
         // nothing here
     }
 
-    override fun forEntityId(entityId: Id): _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.EntitySpecific.Mutable = EntitySpecific(entityId)
+    override fun forEntityId(entityId: Id): EventStore.EntitySpecific.Mutable = EntitySpecific(entityId)
 
-    private inner class EntitySpecific(override val entityId: Id) : _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.EntitySpecific.Mutable {
+    private inner class EntitySpecific(override val entityId: Id) : EventStore.EntitySpecific.Mutable {
 
         override suspend fun store(event: EntityEvent) {
 
@@ -69,24 +69,24 @@ class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory
 
         override fun all() = this@InMemoryEventStore.all().filterIsForEntityId(entityId)
 
-        override fun <QUERY : _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.Query<EVENT>, EVENT : EntityEvent> all(query: QUERY) = all().selectedBy(query)
+        override fun <QUERY : EventStore.Query<EVENT>, EVENT : EntityEvent> all(query: QUERY) = all().selectedBy(query)
 
         override suspend fun firstOrNull() = all().firstOrNull()
 
-        override suspend fun <QUERY : _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.Query<EVENT>, EVENT : EntityEvent> firstOrNull(query: QUERY) = all(query).firstOrNull()
+        override suspend fun <QUERY : EventStore.Query<EVENT>, EVENT : EntityEvent> firstOrNull(query: QUERY) = all(query).firstOrNull()
 
         override suspend fun lastOrNull() = all().lastOrNull()
 
-        override suspend fun <QUERY : _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.Query<EVENT>, EVENT : EntityEvent> lastOrNull(query: QUERY) = all(query).lastOrNull()
+        override suspend fun <QUERY : EventStore.Query<EVENT>, EVENT : EntityEvent> lastOrNull(query: QUERY) = all(query).lastOrNull()
     }
 
-    private val <QUERY : _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.Query<EVENT>, EVENT : Event> QUERY.inMemory: Query<EVENT> get() = queryFactory(query = this)
+    private val <QUERY : EventStore.Query<EVENT>, EVENT : Event> QUERY.inMemory: Query<EVENT> get() = queryFactory(query = this)
 
     private fun <EVENT : Event> Flow<Event>.selectedBy(query: Query<EVENT>): Flow<EVENT> = filterIsInstance(query.eventType).filter { event -> query.invoke(event) }
 
-    private fun <EVENT : Event> Flow<Event>.selectedBy(query: _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.Query<EVENT>): Flow<EVENT> = selectedBy(query.inMemory)
+    private fun <EVENT : Event> Flow<Event>.selectedBy(query: EventStore.Query<EVENT>): Flow<EVENT> = selectedBy(query.inMemory)
 
-    interface Query<EVENT : Event> : _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.Query<EVENT> {
+    interface Query<EVENT : Event> : EventStore.Query<EVENT> {
 
         val eventType: KClass<EVENT>
 
@@ -94,11 +94,11 @@ class InMemoryEventStore(private val queryFactory: Query.Factory = Query.Factory
 
         interface Factory {
 
-            operator fun <QUERY : _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.Query<EVENT>, EVENT : Event> invoke(query: QUERY): Query<EVENT>
+            operator fun <QUERY : EventStore.Query<EVENT>, EVENT : Event> invoke(query: QUERY): Query<EVENT>
 
             object WithoutCustomQueries : Factory {
 
-                override fun <QUERY : _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.Query<EVENT>, EVENT : Event> invoke(query: QUERY) = error("Unsupported query $query")
+                override fun <QUERY : EventStore.Query<EVENT>, EVENT : Event> invoke(query: QUERY) = error("Unsupported query $query")
             }
         }
     }

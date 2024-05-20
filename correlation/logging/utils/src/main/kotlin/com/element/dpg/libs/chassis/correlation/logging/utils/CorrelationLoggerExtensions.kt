@@ -13,7 +13,7 @@ fun Logger.log(error: Throwable? = null, evaluateMessage: () -> String) {
     log(logLevel, error, evaluateMessage)
 }
 
-val InvocationContext<*>.logLevel: com.element.dpg.libs.chassis.logger.core.LoggingLevel
+val InvocationContext<*>.logLevel: LoggingLevel
     get() = when (Toggles.InvocationVisibility(this)) {
         null -> LoggingLevel.DEBUG
         InvocationVisibility.HIGH -> LoggingLevel.INFO

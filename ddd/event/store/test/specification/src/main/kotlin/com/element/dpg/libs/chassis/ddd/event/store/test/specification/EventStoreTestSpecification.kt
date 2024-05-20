@@ -4,6 +4,7 @@ package com.element.dpg.libs.chassis.ddd.event.store.test.specification
 
 import assertk.assertThat
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
+import com.element.dpg.libs.chassis.ddd.domain.store.EventStore
 import com.element.dpg.libs.chassis.ddd.test.stubs.testEntityEvent
 import com.element.dpg.libs.chassis.ddd.test.stubs.testEntityEvents
 import com.element.dpg.libs.chassis.ddd.test.stubs.testEvent
@@ -22,7 +23,7 @@ interface EventStoreTestSpecification : CoreDataGenerator {
     val timeout: Duration get() = 10.seconds
 
     context(CoroutineScope)
-    fun candidate(): _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.Mutable
+    fun candidate(): EventStore.Mutable
 
     @Test
     fun `consuming the history`() = runTest(timeout = timeout) {

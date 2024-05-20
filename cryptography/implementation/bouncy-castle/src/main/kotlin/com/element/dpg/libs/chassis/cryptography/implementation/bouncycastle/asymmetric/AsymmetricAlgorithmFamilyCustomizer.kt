@@ -4,7 +4,7 @@ import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.AsymmetricAlg
 import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.CrystalsAlgorithmSelector
 import java.security.SecureRandom
 
-internal class AsymmetricAlgorithmFamilyCustomizer(private val random: SecureRandom) : com.element.dpg.libs.chassis.cryptography.domain.asymmetric.AsymmetricAlgorithmFamilySelector {
+internal class AsymmetricAlgorithmFamilyCustomizer(private val random: SecureRandom) : AsymmetricAlgorithmFamilySelector {
 
-    override val crystals: com.element.dpg.libs.chassis.cryptography.domain.asymmetric.CrystalsAlgorithmSelector by lazy { com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric.CrystalsAlgorithmCustomizer(random) }
+    override val crystals: CrystalsAlgorithmSelector by lazy { CrystalsAlgorithmCustomizer(random) }
 }

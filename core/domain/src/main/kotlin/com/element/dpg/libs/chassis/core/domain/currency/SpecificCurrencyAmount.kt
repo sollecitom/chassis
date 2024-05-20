@@ -2,9 +2,9 @@ package com.element.dpg.libs.chassis.core.domain.currency
 
 import java.math.BigInteger
 
-interface SpecificCurrencyAmount<SELF : SpecificCurrencyAmount<SELF>> : com.element.dpg.libs.chassis.core.domain.currency.CurrencyAmount {
+interface SpecificCurrencyAmount<SELF : SpecificCurrencyAmount<SELF>> : CurrencyAmount {
 
-    override val currency: com.element.dpg.libs.chassis.core.domain.currency.Currency<SELF>
+    override val currency: Currency<SELF>
 
     operator fun plus(other: SELF): SELF
 

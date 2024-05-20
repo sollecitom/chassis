@@ -4,7 +4,7 @@ import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.core.domain.quantity.Count
 import java.util.*
 
-interface Currency<AMOUNT : com.element.dpg.libs.chassis.core.domain.currency.SpecificCurrencyAmount<AMOUNT>> {
+interface Currency<AMOUNT : SpecificCurrencyAmount<AMOUNT>> {
 
     val textualCode: Name
     val numericCode: Name

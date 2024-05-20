@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.kyber
 
-object Kyber : com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.KEMAlgorithm<com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.kyber.Kyber.KeyPairArguments> {
+object Kyber : com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.KEMAlgorithm<Kyber.KeyPairArguments> {
 
     override val name = "KYBER"
 
@@ -10,7 +10,7 @@ object Kyber : com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.K
         KYBER_1024(1024, "KYBER1024")
     }
 
-    data class KeyPairArguments(val variant: _root_ide_package_.com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.kyber.Kyber.Variant)
+    data class KeyPairArguments(val variant: Variant)
 }
 
-operator fun com.element.dpg.libs.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory<_root_ide_package_.com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.kyber.Kyber.KeyPairArguments, com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey, com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey>.invoke(variant: _root_ide_package_.com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.kyber.Kyber.Variant) = invoke(arguments = _root_ide_package_.com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.kyber.Kyber.KeyPairArguments(variant = variant))
+operator fun com.element.dpg.libs.chassis.cryptography.domain.asymmetric.factory.KeyPairFactory<Kyber.KeyPairArguments, com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey, com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.KEMPublicKey>.invoke(variant: Kyber.Variant) = invoke(arguments = Kyber.KeyPairArguments(variant = variant))

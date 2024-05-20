@@ -3,7 +3,7 @@ package com.element.dpg.libs.chassis.core.domain.currency
 import java.math.BigDecimal
 import java.math.BigInteger
 
-data class GenericCurrencyAmount(override val units: BigInteger, override val currency: com.element.dpg.libs.chassis.core.domain.currency.Currency<*>) : com.element.dpg.libs.chassis.core.domain.currency.CurrencyAmount {
+data class GenericCurrencyAmount(override val units: BigInteger, override val currency: Currency<*>) : CurrencyAmount {
 
     init {
         require(units >= BigInteger.ZERO) { "Units cannot be less than zero" }

@@ -2,23 +2,19 @@ package com.element.dpg.libs.chassis.web.api.utils.headers
 
 interface HttpHeaderNames {
 
-    val correlation: com.element.dpg.libs.chassis.web.api.utils.headers.HttpHeaderNames.Correlation
-    val gateway: com.element.dpg.libs.chassis.web.api.utils.headers.HttpHeaderNames.Gateway
+    val correlation: Correlation
+    val gateway: Gateway
 
     interface Correlation {
 
         val invocationContext: String
     }
 
-    interface Gateway {
-
-    }
+    interface Gateway
 
     companion object
 }
 
-fun com.element.dpg.libs.chassis.web.api.utils.headers.HttpHeaderNames.Companion.of(companyName: String): _root_ide_package_.com.element.dpg.libs.chassis.web.api.utils.headers.HttpHeaderNames = _root_ide_package_.com.element.dpg.libs.chassis.web.api.utils.headers.CompanySpecificHttpHeaderNames(companyName = companyName, gateway = _root_ide_package_.com.element.dpg.libs.chassis.web.api.utils.headers.StandardGatewayHeaderNames)
+fun HttpHeaderNames.Companion.of(companyName: String): HttpHeaderNames = CompanySpecificHttpHeaderNames(companyName = companyName, gateway = StandardGatewayHeaderNames)
 
-private object StandardGatewayHeaderNames : _root_ide_package_.com.element.dpg.libs.chassis.web.api.utils.headers.HttpHeaderNames.Gateway {
-
-}
+private object StandardGatewayHeaderNames : HttpHeaderNames.Gateway

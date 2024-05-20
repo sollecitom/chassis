@@ -2,7 +2,7 @@ package com.element.dpg.libs.chassis.logger.core
 
 import java.time.Instant
 
-data class LogEntry(val loggerName: String, val message: String, val threadName: String, val timestamp: Instant, val error: Throwable?, val level: com.element.dpg.libs.chassis.logger.core.LoggingLevel, val context: LoggingContext) {
+data class LogEntry(val loggerName: String, val message: String, val threadName: String, val timestamp: Instant, val error: Throwable?, val level: LoggingLevel, val context: LoggingContext) {
 
     companion object
 }

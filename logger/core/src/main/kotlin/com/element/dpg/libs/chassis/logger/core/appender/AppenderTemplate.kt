@@ -2,7 +2,7 @@ package com.element.dpg.libs.chassis.logger.core.appender
 
 import com.element.dpg.libs.chassis.logger.core.LogEntry
 
-abstract class AppenderTemplate<FORMAT : Any> : com.element.dpg.libs.chassis.logger.core.appender.AppendLogEntry {
+abstract class AppenderTemplate<FORMAT : Any> : AppendLogEntry {
 
     final override fun invoke(entry: LogEntry) {
 

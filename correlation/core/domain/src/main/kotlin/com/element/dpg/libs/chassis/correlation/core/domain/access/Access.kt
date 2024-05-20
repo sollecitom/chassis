@@ -16,11 +16,11 @@ sealed interface Access {
     val scope: AccessScope
     val isAuthenticated: Boolean
 
-    fun authenticatedOrNull(): com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Authenticated? = takeIf(_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access::isAuthenticated)?.let { it as com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Authenticated }
+    fun authenticatedOrNull(): Authenticated? = takeIf(Access::isAuthenticated)?.let { it as Authenticated }
 
-    fun unauthenticatedOrNull(): com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Unauthenticated? = takeUnless(_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access::isAuthenticated)?.let { it as com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Unauthenticated }
+    fun unauthenticatedOrNull(): Unauthenticated? = takeUnless(Access::isAuthenticated)?.let { it as Unauthenticated }
 
-    data class Unauthenticated(override val origin: Origin, override val authorization: AuthorizationPrincipal, override val scope: AccessScope) : com.element.dpg.libs.chassis.correlation.core.domain.access.Access {
+    data class Unauthenticated(override val origin: Origin, override val authorization: AuthorizationPrincipal, override val scope: AccessScope) : Access {
 
         override val isAuthenticated: Boolean
             get() = false
@@ -28,7 +28,7 @@ sealed interface Access {
         companion object
     }
 
-    data class Authenticated(val actor: Actor, override val origin: Origin, override val authorization: AuthorizationPrincipal, override val scope: AccessScope) : com.element.dpg.libs.chassis.correlation.core.domain.access.Access {
+    data class Authenticated(val actor: Actor, override val origin: Origin, override val authorization: AuthorizationPrincipal, override val scope: AccessScope) : Access {
 
         override val isAuthenticated: Boolean
             get() = true
@@ -39,13 +39,13 @@ sealed interface Access {
     companion object
 }
 
-val com.element.dpg.libs.chassis.correlation.core.domain.access.Access.customerOrNull: Customer? get() = authenticatedOrNull()?.actor?.customer
-val com.element.dpg.libs.chassis.correlation.core.domain.access.Access.tenantOrNull: Tenant? get() = authenticatedOrNull()?.actor?.tenant
+val Access.customerOrNull: Customer? get() = authenticatedOrNull()?.actor?.customer
+val Access.tenantOrNull: Tenant? get() = authenticatedOrNull()?.actor?.tenant
 
-fun com.element.dpg.libs.chassis.correlation.core.domain.access.Access.authenticatedOrThrow(): com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Authenticated = authenticatedOrNull() ?: error("Access is unauthenticated")
+fun Access.authenticatedOrThrow(): Access.Authenticated = authenticatedOrNull() ?: error("Access is unauthenticated")
 
-fun _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.unauthenticatedOrThrow(): _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Unauthenticated = unauthenticatedOrNull() ?: error("Access is authenticated")
+fun Access.unauthenticatedOrThrow(): Access.Unauthenticated = unauthenticatedOrNull() ?: error("Access is authenticated")
 
-fun _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.authenticatedOrFailure(): Result<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Authenticated> = runCatching { authenticatedOrThrow() }
+fun Access.authenticatedOrFailure(): Result<Access.Authenticated> = runCatching { authenticatedOrThrow() }
 
-fun _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.unauthenticatedOrFailure(): Result<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Unauthenticated> = runCatching { unauthenticatedOrThrow() }
+fun Access.unauthenticatedOrFailure(): Result<Access.Unauthenticated> = runCatching { unauthenticatedOrThrow() }

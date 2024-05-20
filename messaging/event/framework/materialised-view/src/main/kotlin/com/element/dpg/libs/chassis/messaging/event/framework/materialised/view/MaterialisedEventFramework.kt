@@ -6,6 +6,7 @@ import com.element.dpg.libs.chassis.core.domain.lifecycle.Stoppable
 import com.element.dpg.libs.chassis.ddd.domain.EntityEvent
 import com.element.dpg.libs.chassis.ddd.domain.Event
 import com.element.dpg.libs.chassis.ddd.domain.framework.EventFramework
+import com.element.dpg.libs.chassis.ddd.domain.store.EventStore
 import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
 import com.element.dpg.libs.chassis.messaging.domain.*
 import kotlinx.coroutines.*
@@ -14,7 +15,7 @@ import kotlinx.coroutines.flow.onEach
 
 // TODO make this generic with the event type?
 // TODO create the outbox variant in another module
-class MaterialisedEventFramework(private val store: _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.Mutable, private val stream: EventStream<Event>) : EventFramework.Mutable, _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.Mutable by store, Startable, Stoppable {
+class MaterialisedEventFramework(private val store: EventStore.Mutable, private val stream: EventStream<Event>) : EventFramework.Mutable, EventStore.Mutable by store, Startable, Stoppable {
 
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob())
 
@@ -42,7 +43,7 @@ class MaterialisedEventFramework(private val store: _root_ide_package_.com.eleme
 
     override fun forEntityId(entityId: Id): EventFramework.EntitySpecific.Mutable = EntitySpecific(entityId)
 
-    private inner class EntitySpecific(override val entityId: Id) : EventFramework.EntitySpecific.Mutable, _root_ide_package_.com.element.dpg.libs.chassis.ddd.domain.store.EventStore.EntitySpecific.Mutable by store.forEntityId(entityId) {
+    private inner class EntitySpecific(override val entityId: Id) : EventFramework.EntitySpecific.Mutable, EventStore.EntitySpecific.Mutable by store.forEntityId(entityId) {
 
         override suspend fun publish(event: EntityEvent): Deferred<Unit> {
 

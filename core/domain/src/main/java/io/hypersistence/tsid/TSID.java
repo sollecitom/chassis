@@ -285,7 +285,7 @@ public final class TSID implements Serializable, Comparable<TSID> {
             final char placeholder = format.charAt(i + 1);
             switch (placeholder) {
                 case 'S': // canonical string in upper case
-                    return head + toString() + tail;
+                    return head + this + tail;
                 case 's': // canonical string in lower case
                     return head + toLowerCase() + tail;
                 case 'X': // hexadecimal in upper case
@@ -417,7 +417,7 @@ public final class TSID implements Serializable, Comparable<TSID> {
                 throw new IllegalArgumentException(String.format("Invalid base-%d length: %s", base, string.length()));
             }
             for (int i = 0; i < string.length(); i++) {
-                final long plus = (int) ALPHABET.indexOf(string.charAt(i));
+                final long plus = ALPHABET.indexOf(string.charAt(i));
                 if (plus < 0 || plus >= base) {
                     throw new IllegalArgumentException(
                             String.format("Invalid base-%d character: %s", base, string.charAt(i)));

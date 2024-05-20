@@ -1,6 +1,7 @@
 package com.element.dpg.libs.chassis.correlation.core.domain.toggles
 
 import com.element.dpg.libs.chassis.core.domain.identity.Id
+import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
 import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
 
 data class Toggles(val values: Set<ToggleValue<*>> = emptySet()) {
@@ -19,9 +20,9 @@ operator fun <VALUE : Any> Toggles.get(toggle: ToggleValueExtractor<VALUE>): VAL
     return rawValue?.let { it as VALUE }
 }
 
-fun <ACCESS : _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access, VALUE : Any> InvocationContext<ACCESS>.withToggle(toggle: Toggle<VALUE, VALUE>, value: VALUE) = copy(toggles = toggles.withToggle(toggle, value))
+fun <ACCESS : Access, VALUE : Any> InvocationContext<ACCESS>.withToggle(toggle: Toggle<VALUE, VALUE>, value: VALUE) = copy(toggles = toggles.withToggle(toggle, value))
 
-fun <ACCESS : _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access, VALUE : Enum<VALUE>> InvocationContext<ACCESS>.withToggle(toggle: Toggle<VALUE, *>, value: VALUE) = copy(toggles = toggles.withToggle(toggle, value))
+fun <ACCESS : Access, VALUE : Enum<VALUE>> InvocationContext<ACCESS>.withToggle(toggle: Toggle<VALUE, *>, value: VALUE) = copy(toggles = toggles.withToggle(toggle, value))
 
 fun <VALUE : Enum<VALUE>> Toggles.withToggle(toggle: Toggle<VALUE, *>, value: VALUE): Toggles = copy(values = values + toggle(value))
 

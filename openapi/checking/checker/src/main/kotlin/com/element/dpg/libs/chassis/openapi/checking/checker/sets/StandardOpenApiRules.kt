@@ -31,7 +31,7 @@ object StandardOpenApiRules : OpenApiRuleSet {
     private val mandatoryRequestBodyContentMediaTypeRule by lazy { MandatoryRequestBodyContentMediaTypesRule(methodsToCheck = setOf(POST, PUT, PATCH)) }
     private val mandatoryRequestBodyDescriptionRule by lazy { MandatoryRequestBodyDescriptionRule(methods = setOf(POST, PUT, PATCH)) }
     private val mandatoryRequestBodyExampleRule by lazy { MandatoryRequestBodyExampleRule(methods = setOf(POST, PUT, PATCH), mediaTypesThatShouldHaveAnExample = mediaTypesForRequestsThatMustHaveAnExample) }
-    private val mandatoryResponseBodyExampleRule by lazy { com.element.dpg.libs.chassis.openapi.checking.checker.rules.MandatoryResponseBodyExampleRule(methods = setOf(POST, PUT, PATCH), mediaTypesThatShouldHaveAnExample = mediaTypesForResponsesThatMustHaveAnExample) }
+    private val mandatoryResponseBodyExampleRule by lazy { MandatoryResponseBodyExampleRule(methods = setOf(POST, PUT, PATCH), mediaTypesThatShouldHaveAnExample = mediaTypesForResponsesThatMustHaveAnExample) }
     private val whitelistedOpenApiVersionFieldRule by lazy { WhitelistedOpenApiVersionFieldRule(whitelistedOpenApiVersions = whitelistedOpenApiVersions) }
     private val mandatoryInfoFieldsRule by lazy { MandatoryInfoFieldsRule(requiredFields = setOf(OpenApiFields.Info.title, OpenApiFields.Info.description)) }
 

@@ -3,7 +3,7 @@ package com.element.dpg.libs.chassis.correlation.core.test.utils.access.origin
 import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.web.client.info.domain.*
 
-fun ClientInfo.Companion.create(device: Device = Device.create(), operatingSystem: OperatingSystem = com.element.dpg.libs.chassis.web.client.info.domain.OperatingSystem.create(), layoutEngine: LayoutEngine = com.element.dpg.libs.chassis.web.client.info.domain.LayoutEngine.create(), agent: Agent = com.element.dpg.libs.chassis.web.client.info.domain.Agent.create()): ClientInfo = ClientInfo(device, operatingSystem, layoutEngine, agent)
+fun ClientInfo.Companion.create(device: Device = Device.create(), operatingSystem: OperatingSystem = OperatingSystem.create(), layoutEngine: LayoutEngine = LayoutEngine.create(), agent: Agent = Agent.create()): ClientInfo = ClientInfo(device, operatingSystem, layoutEngine, agent)
 
 fun Device.Companion.create(className: String? = "Mobile", name: String? = "Pixel 8", brand: String? = "Google"): Device = Device(className?.let(::Name), name?.let(::Name), brand?.let(::Name))
 

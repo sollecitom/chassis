@@ -12,7 +12,7 @@ import java.security.Security
 
 private class BouncyCastleCryptographicOperations(private val random: SecureRandom) : CryptographicOperations {
 
-    override val asymmetric: com.element.dpg.libs.chassis.cryptography.domain.asymmetric.AsymmetricAlgorithmFamilySelector by lazy { AsymmetricAlgorithmFamilyCustomizer(random) }
+    override val asymmetric: AsymmetricAlgorithmFamilySelector by lazy { AsymmetricAlgorithmFamilyCustomizer(random) }
     override val symmetric: SymmetricAlgorithmFamilySelector by lazy { SymmetricAlgorithmFamilyCustomizer(random) }
 
     companion object {

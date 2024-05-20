@@ -9,7 +9,7 @@ import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.uti
 import java.security.SecureRandom
 import java.security.PrivateKey as JavaPrivateKey
 
-internal data class JavaKEMPrivateKeyAdapter(private val key: JavaPrivateKey, private val random: SecureRandom) : com.element.dpg.libs.chassis.cryptography.domain.asymmetric.kem.KEMPrivateKey, CryptographicKey by CryptographicKeyAdapter(key) {
+internal data class JavaKEMPrivateKeyAdapter(private val key: JavaPrivateKey, private val random: SecureRandom) : KEMPrivateKey, CryptographicKey by CryptographicKeyAdapter(key) {
 
     private val keyFactory = AESKeyAdapter.Factory(random)
 

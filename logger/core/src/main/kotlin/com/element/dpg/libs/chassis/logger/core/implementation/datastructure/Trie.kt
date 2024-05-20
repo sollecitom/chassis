@@ -22,7 +22,7 @@ internal interface Trie {
      */
     fun searchWithPrefix(prefix: String): Boolean
 
-    interface Mutable : com.element.dpg.libs.chassis.logger.core.implementation.datastructure.Trie {
+    interface Mutable : Trie {
 
         /**
          * Inserts a word into the trie.
@@ -31,21 +31,21 @@ internal interface Trie {
     }
 }
 
-internal fun trieOf(vararg words: String): com.element.dpg.libs.chassis.logger.core.implementation.datastructure.Trie = _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.TrieNodeTree().apply { words.forEach { insert(it) } }
+internal fun trieOf(vararg words: String): Trie = TrieNodeTree().apply { words.forEach { insert(it) } }
 
-internal fun mutableTrieOf(vararg words: String): com.element.dpg.libs.chassis.logger.core.implementation.datastructure.Trie.Mutable = _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.TrieNodeTree().apply { words.forEach { insert(it) } }
-internal fun mutableTrieOf(words: Iterable<String>): _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.Trie.Mutable = _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.TrieNodeTree().apply { words.forEach { insert(it) } }
+internal fun mutableTrieOf(vararg words: String): Trie.Mutable = TrieNodeTree().apply { words.forEach { insert(it) } }
+internal fun mutableTrieOf(words: Iterable<String>): Trie.Mutable = TrieNodeTree().apply { words.forEach { insert(it) } }
 
-private class TrieNodeTree : _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.Trie.Mutable {
+private class TrieNodeTree : Trie.Mutable {
 
-    private val root: _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.TrieNode = _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.TrieNode()
+    private val root: TrieNode = TrieNode()
 
     override fun insert(word: String) {
 
-        var node: _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.TrieNode = root
+        var node: TrieNode = root
         for (element in word) {
             if (!node.containsKey(element)) {
-                node.put(element, _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.TrieNode())
+                node.put(element, TrieNode())
             }
             node = node[element]!!
         }
@@ -99,8 +99,8 @@ private class TrieNodeTree : _root_ide_package_.com.element.dpg.libs.chassis.log
         return node != null
     }
 
-    private fun searchPrefix(word: String): _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.TrieNode? {
-        var node: _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.TrieNode? = root
+    private fun searchPrefix(word: String): TrieNode? {
+        var node: TrieNode? = root
         for (element in word) {
             node = if (node!!.containsKey(element)) {
                 node[element]
@@ -112,7 +112,7 @@ private class TrieNodeTree : _root_ide_package_.com.element.dpg.libs.chassis.log
     }
 }
 
-private class TrieNode private constructor(val links: MutableMap<Char, _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.TrieNode> = mutableMapOf(), isEnd: Boolean = false) {
+private class TrieNode private constructor(val links: MutableMap<Char, TrieNode> = mutableMapOf(), isEnd: Boolean = false) {
 
     constructor() : this(mutableMapOf(), false)
 
@@ -121,9 +121,9 @@ private class TrieNode private constructor(val links: MutableMap<Char, _root_ide
 
     fun containsKey(ch: Char): Boolean = links[ch] != null
 
-    operator fun get(ch: Char): _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.TrieNode? = links[ch]
+    operator fun get(ch: Char): TrieNode? = links[ch]
 
-    fun put(ch: Char, node: _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.TrieNode) {
+    fun put(ch: Char, node: TrieNode) {
         links[ch] = node
     }
 
@@ -131,5 +131,5 @@ private class TrieNode private constructor(val links: MutableMap<Char, _root_ide
         isEnd = true
     }
 
-    fun clone(): _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.TrieNode = _root_ide_package_.com.element.dpg.libs.chassis.logger.core.implementation.datastructure.TrieNode(links.mapValues { it.value.clone() }.toMutableMap(), isEnd)
+    fun clone(): TrieNode = TrieNode(links.mapValues { it.value.clone() }.toMutableMap(), isEnd)
 }

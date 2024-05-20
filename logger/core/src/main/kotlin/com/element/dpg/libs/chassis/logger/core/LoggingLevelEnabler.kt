@@ -2,11 +2,11 @@ package com.element.dpg.libs.chassis.logger.core
 
 import com.element.dpg.libs.chassis.logger.core.implementation.LongestPrefixMatchLoggingLevelEnabler
 
-fun loggingLevelEnabler(defaultMinimumLoggingLevel: com.element.dpg.libs.chassis.logger.core.LoggingLevel, customize: LoggingLevelEnablerCustomizer.() -> Unit): (com.element.dpg.libs.chassis.logger.core.LoggingLevel, String) -> Boolean {
+fun loggingLevelEnabler(defaultMinimumLoggingLevel: LoggingLevel, customize: LoggingLevelEnablerCustomizer.() -> Unit): (LoggingLevel, String) -> Boolean {
 
-    val prefixMap = mutableMapOf<String, com.element.dpg.libs.chassis.logger.core.LoggingLevel>()
+    val prefixMap = mutableMapOf<String, LoggingLevel>()
     val customizer = object : LoggingLevelEnablerCustomizer {
-        override fun String.withMinimumLoggingLevel(level: com.element.dpg.libs.chassis.logger.core.LoggingLevel) {
+        override fun String.withMinimumLoggingLevel(level: LoggingLevel) {
             prefixMap[this] = level
         }
     }

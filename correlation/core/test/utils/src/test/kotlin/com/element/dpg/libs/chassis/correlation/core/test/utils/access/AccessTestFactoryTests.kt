@@ -5,6 +5,7 @@ import assertk.assertions.*
 import com.element.dpg.libs.chassis.core.domain.networking.IpAddress
 import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
+import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
 import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.Actor
 import com.element.dpg.libs.chassis.correlation.core.domain.access.authenticatedOrFailure
 import com.element.dpg.libs.chassis.correlation.core.domain.access.authenticatedOrThrow
@@ -38,7 +39,7 @@ private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testPr
             val authorization = AuthorizationPrincipal.create()
             val scope = AccessScope.withContainerStack(AccessContainer.create())
 
-            val access = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.authenticated(actor, origin, authorization, scope)
+            val access = Access.authenticated(actor, origin, authorization, scope)
 
             assertThat(access.actor).isEqualTo(actor)
             assertThat(access.origin).isEqualTo(origin)
@@ -49,7 +50,7 @@ private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testPr
         @Test
         fun `returns correctly whether it's authenticated`() {
 
-            val access: _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.authenticated()
+            val access: Access = Access.authenticated()
 
             assertThat(access.isAuthenticated).isEqualTo(true)
         }
@@ -57,7 +58,7 @@ private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testPr
         @Test
         fun `fluent handling`() {
 
-            val access: _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.authenticated()
+            val access: Access = Access.authenticated()
 
             val authenticated = access.authenticatedOrNull()
 
@@ -67,7 +68,7 @@ private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testPr
         @Test
         fun `fluent handling with error`() {
 
-            val access: _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.authenticated()
+            val access: Access = Access.authenticated()
 
             val attempt = runCatching { access.authenticatedOrThrow() }
 
@@ -77,7 +78,7 @@ private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testPr
         @Test
         fun `fluent handling with result`() {
 
-            val access: _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.authenticated()
+            val access: Access = Access.authenticated()
 
             val result = access.authenticatedOrFailure()
 
@@ -91,7 +92,7 @@ private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testPr
         @Test
         fun `with default arguments`() {
 
-            val access = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.unauthenticated()
+            val access = Access.unauthenticated()
 
             assertThat(access.origin.ipAddress).isEqualTo(IpAddress.V4.localhost)
             assertThat(access.authorization.roles).isEmpty()
@@ -102,7 +103,7 @@ private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testPr
 
             val origin = Origin.create(ipAddress = IpAddress.create("2001:db8:3333:4444:5555:6666:7777:8888"))
 
-            val access = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.unauthenticated(origin = origin)
+            val access = Access.unauthenticated(origin = origin)
 
             assertThat(access.origin).isEqualTo(origin)
         }
@@ -112,7 +113,7 @@ private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testPr
 
             val authorization = AuthorizationPrincipal.create()
 
-            val access = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.unauthenticated(authorization = authorization)
+            val access = Access.unauthenticated(authorization = authorization)
 
             assertThat(access.authorization).isEqualTo(authorization)
         }
@@ -124,7 +125,7 @@ private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testPr
             val container2 = AccessContainer.create()
             val scope = AccessScope.withContainerStack(container1, container2)
 
-            val access = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.unauthenticated(scope = scope)
+            val access = Access.unauthenticated(scope = scope)
 
             assertThat(access.scope).isEqualTo(scope)
         }
@@ -132,7 +133,7 @@ private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testPr
         @Test
         fun `returns correctly whether it's authenticated`() {
 
-            val access: _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.unauthenticated()
+            val access: Access = Access.unauthenticated()
 
             assertThat(access.isAuthenticated).isEqualTo(false)
         }
@@ -140,7 +141,7 @@ private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testPr
         @Test
         fun `fluent handling`() {
 
-            val access: _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.unauthenticated()
+            val access: Access = Access.unauthenticated()
 
             val authenticated = access.authenticatedOrNull()
 
@@ -150,7 +151,7 @@ private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testPr
         @Test
         fun `fluent handling with error`() {
 
-            val access: _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.unauthenticated()
+            val access: Access = Access.unauthenticated()
 
             val attempt = runCatching { access.authenticatedOrThrow() }
 
@@ -160,7 +161,7 @@ private class AccessExampleTests : CoreDataGenerator by CoreDataGenerator.testPr
         @Test
         fun `fluent handling with result`() {
 
-            val access: _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.unauthenticated()
+            val access: Access = Access.unauthenticated()
 
             val result = access.authenticatedOrFailure()
 

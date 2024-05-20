@@ -7,6 +7,7 @@ import assertk.assertions.isNull
 import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
+import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
 import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.Actor
 import com.element.dpg.libs.chassis.correlation.core.domain.access.customer.Customer
 import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
@@ -45,7 +46,7 @@ private class InvocationContextTestFactoryTests : CoreDataGenerator by CoreDataG
     @Test
     fun `customizing the access`() {
 
-        val access = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.unauthenticated()
+        val access = Access.unauthenticated()
 
         val context = InvocationContext.create(access = { access })
 
@@ -90,7 +91,7 @@ private class InvocationContextTestFactoryTests : CoreDataGenerator by CoreDataG
         val customerId = newId.internal()
         val tenantId = newId.internal()
         val trace = Trace.create(externalInvocationTrace = ExternalInvocationTrace.create(invocationId = invocationId))
-        val access = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.authenticated(actor = Actor.direct(account = Actor.Account.user(id = actorId, customer = Customer(id = customerId), tenant = Tenant(id = tenantId))))
+        val access = Access.authenticated(actor = Actor.direct(account = Actor.Account.user(id = actorId, customer = Customer(id = customerId), tenant = Tenant(id = tenantId))))
         val toggles = Toggles.create()
         val context = InvocationContext(access = access, trace = trace, toggles = toggles, specifiedTargetTenant = null)
 

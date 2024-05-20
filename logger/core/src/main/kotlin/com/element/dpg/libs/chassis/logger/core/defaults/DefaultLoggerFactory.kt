@@ -6,7 +6,7 @@ import com.element.dpg.libs.chassis.logger.core.implementation.FunctionalLogger
 import com.element.dpg.libs.chassis.logger.core.implementation.LoggingNameResolver
 import java.time.Instant
 
-class DefaultLoggerFactory(defaultLoggingFunction: Log = com.element.dpg.libs.chassis.logger.core.defaults.DefaultLogToConsole) : com.element.dpg.libs.chassis.logger.core.LoggerFactory {
+class DefaultLoggerFactory(defaultLoggingFunction: Log = DefaultLogToConsole) : com.element.dpg.libs.chassis.logger.core.LoggerFactory {
 
     private var alreadyConfigured = false
     override var loggingFunction: Log = defaultLoggingFunction

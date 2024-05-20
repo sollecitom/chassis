@@ -21,7 +21,7 @@ class MandatoryResponseBodyExampleRule(private val methods: Set<HttpMethod>, pri
         return OpenApiRule.Result.withViolations(violations)
     }
 
-    private fun check(operation: OperationWithContext): com.element.dpg.libs.chassis.openapi.checking.checker.rules.MandatoryResponseBodyExampleRule.Violation? {
+    private fun check(operation: OperationWithContext): Violation? {
 
         val responses = operation.responses?.takeUnless { it.isEmpty() } ?: return null
         val responsesWithoutAMandatoryExample = responses.mapNotNull { (status, response) ->
@@ -36,7 +36,7 @@ class MandatoryResponseBodyExampleRule(private val methods: Set<HttpMethod>, pri
     private fun MediaType?.isCompliant(): Boolean = this == null || hasAnExample()
     private fun MediaType.hasAnExample(): Boolean = (examples?.isNotEmpty() ?: false) || example != null
 
-    private fun OperationWithContext.violation(responsesWithoutAMandatoryExample: Map<String, Set<String>>) = com.element.dpg.libs.chassis.openapi.checking.checker.rules.MandatoryResponseBodyExampleRule.Violation(this, mediaTypesThatShouldHaveAnExample, responsesWithoutAMandatoryExample)
+    private fun OperationWithContext.violation(responsesWithoutAMandatoryExample: Map<String, Set<String>>) = Violation(this, mediaTypesThatShouldHaveAnExample, responsesWithoutAMandatoryExample)
 
     class Violation(val operation: OperationWithContext, val mediaTypesThatShouldHaveAnExample: Set<String>, val responsesWithoutAMandatoryExample: Map<String, Set<String>>) : OpenApiRule.Result.Violation {
 

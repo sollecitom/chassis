@@ -1,5 +1,6 @@
 package com.element.dpg.libs.chassis.ddd.application.dispatching.dispatching
 
+import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
 import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
 import com.element.dpg.libs.chassis.ddd.application.dispatching.Application
 import com.element.dpg.libs.chassis.ddd.application.dispatching.LoggingApplicationAdapter
@@ -11,14 +12,14 @@ private class DispatchingApplication(handlers: Set<CommandHandler<*, *, *>>) : A
     private val handlerByType = handlers.associateBy(CommandHandler<*, *, *>::commandType)
 
     context(InvocationContext<ACCESS>)
-    override suspend fun <RESULT, ACCESS : _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access> invoke(command: Command<RESULT, ACCESS>): RESULT {
+    override suspend fun <RESULT, ACCESS : Access> invoke(command: Command<RESULT, ACCESS>): RESULT {
 
         val handler = handlerFor(command)
         return with(this@InvocationContext) { handler.process(command) }
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun <ACCESS : _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access, RESULT> handlerFor(command: Command<RESULT, ACCESS>) = handlerByType[command.type]?.let { it as CommandHandler<Command<RESULT, ACCESS>, RESULT, ACCESS> } ?: error("No handler for command with type ${command.type}. This should never happen.")
+    private fun <ACCESS : Access, RESULT> handlerFor(command: Command<RESULT, ACCESS>) = handlerByType[command.type]?.let { it as CommandHandler<Command<RESULT, ACCESS>, RESULT, ACCESS> } ?: error("No handler for command with type ${command.type}. This should never happen.")
 
     companion object : Loggable()
 }

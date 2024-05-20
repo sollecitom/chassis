@@ -27,8 +27,7 @@ class MandatoryVersioningPathPrefixRule(private val minimumAllowedVersion: Int =
         regex.find(this) ?: return true
         val prefixMatch = prefixRegex.find(this)!!
         val version = prefixMatch.groupValues.drop(1).single().toInt()
-        if (version < minimumAllowedVersion) return true
-        return false
+        return version < minimumAllowedVersion
     }
 
     data class Violation(val pathName: String, val minimumAllowedVersion: Int) : OpenApiRule.Result.Violation {

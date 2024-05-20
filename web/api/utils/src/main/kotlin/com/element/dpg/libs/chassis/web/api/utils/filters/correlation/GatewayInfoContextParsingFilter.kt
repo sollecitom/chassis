@@ -1,5 +1,6 @@
 package com.element.dpg.libs.chassis.web.api.utils.filters.correlation
 
+import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
 import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
 import com.element.dpg.libs.chassis.correlation.core.serialization.json.context.jsonSerde
 import com.element.dpg.libs.chassis.web.api.utils.api.HttpApiDefinition
@@ -33,14 +34,14 @@ internal class GatewayInfoContextParsingFilter(private val key: InvocationContex
     private fun Request.with(context: InvocationContext<*>?): Request {
         if (context == null) return this
         return when {
-            context.access.isAuthenticated -> with(key.generic of context, key.optional of context, key.authenticated of (context as InvocationContext<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Authenticated>))
-            else -> with(key.generic of context, key.optional of context, key.unauthenticated of (context as InvocationContext<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Unauthenticated>))
+            context.access.isAuthenticated -> with(key.generic of context, key.optional of context, key.authenticated of (context as InvocationContext<Access.Authenticated>))
+            else -> with(key.generic of context, key.optional of context, key.unauthenticated of (context as InvocationContext<Access.Unauthenticated>))
         }
     }
 
     private fun Throwable.asResponse() = Response(Status.BAD_REQUEST.description("Error while parsing the invocation context: $message"))
 
-    private fun invocationContext(request: Request, headerNames: com.element.dpg.libs.chassis.web.api.utils.headers.HttpHeaderNames.Correlation): InvocationContext<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access>? {
+    private fun invocationContext(request: Request, headerNames: com.element.dpg.libs.chassis.web.api.utils.headers.HttpHeaderNames.Correlation): InvocationContext<Access>? {
 
         val rawValue = request.rawInvocationContextValue(headerNames) ?: return null
         val jsonValue = runCatching { JSONObject(rawValue) }.getOrElse { error("Invalid value for header ${headerNames.invocationContext}. Must be a JSON object.") }
@@ -65,7 +66,7 @@ internal class GatewayInvocationContextFilter(override val headerNames: com.elem
         }
     }
 
-    private fun invocationContext(request: Request, gatewayHeaderNames: com.element.dpg.libs.chassis.web.api.utils.headers.HttpHeaderNames.Gateway): InvocationContext<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access> {
+    private fun invocationContext(request: Request, gatewayHeaderNames: com.element.dpg.libs.chassis.web.api.utils.headers.HttpHeaderNames.Gateway): InvocationContext<Access> {
 
         val host = request.uri.host
         val authority = request.uri.authority

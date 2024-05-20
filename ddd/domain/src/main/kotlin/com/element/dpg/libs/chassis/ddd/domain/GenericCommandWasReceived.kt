@@ -3,6 +3,7 @@ package com.element.dpg.libs.chassis.ddd.domain
 import com.element.dpg.libs.chassis.core.domain.identity.Id
 import com.element.dpg.libs.chassis.core.utils.TimeGenerator
 import com.element.dpg.libs.chassis.core.utils.UniqueIdGenerator
+import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
 import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
 import kotlinx.datetime.Instant
 
@@ -22,7 +23,7 @@ class GenericCommandWasReceived<out COMMAND : Command<*, *>>(command: COMMAND, i
     override fun toString() = "GenericCommandWasReceived(command=$command, id=$id, timestamp=$timestamp, context=$context)"
 }
 
-context(InvocationContext<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access>, UniqueIdGenerator, TimeGenerator)
+context(InvocationContext<Access>, UniqueIdGenerator, TimeGenerator)
 fun <COMMAND : Command<*, *>> COMMAND.wasReceived(): GenericCommandWasReceived<COMMAND> {
 
     val id = newId.forEntities()

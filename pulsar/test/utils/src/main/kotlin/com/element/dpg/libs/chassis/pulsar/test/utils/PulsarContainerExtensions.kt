@@ -23,7 +23,7 @@ fun newPulsarContainer(version: String = DEFAULT_PULSAR_DOCKER_IMAGE_VERSION, st
     return PulsarContainer(pulsarDockerImageName(version)).withStartupAttempts(startupAttempts).withStartupTimeout(startupTimeout.toJavaDuration()).apply { setWaitStrategy(waitStrategy) }
 }
 
-fun PulsarContainer.withBrokerEnv(propertyName: String, propertyValue: String) = withEnv("PULSAR_PREFIX_$propertyName", propertyValue);
+fun PulsarContainer.withBrokerEnv(propertyName: String, propertyValue: String) = withEnv("PULSAR_PREFIX_$propertyName", propertyValue)
 
 fun PulsarContainer.withBrokerEnv(variables: Map<String, String>): PulsarContainer {
 

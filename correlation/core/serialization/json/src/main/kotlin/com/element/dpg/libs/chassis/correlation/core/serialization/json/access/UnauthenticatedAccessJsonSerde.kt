@@ -1,5 +1,6 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access
 
+import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
 import com.element.dpg.libs.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
 import com.element.dpg.libs.chassis.correlation.core.domain.access.origin.Origin
 import com.element.dpg.libs.chassis.correlation.core.domain.access.scope.AccessScope
@@ -13,27 +14,27 @@ import com.element.dpg.libs.chassis.json.utils.serde.serde.getValue
 import com.element.dpg.libs.chassis.json.utils.serde.serde.setValue
 import org.json.JSONObject
 
-internal object UnauthenticatedAccessJsonSerde : JsonSerde.SchemaAware<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Unauthenticated> {
+internal object UnauthenticatedAccessJsonSerde : JsonSerde.SchemaAware<Access.Unauthenticated> {
 
     const val TYPE_VALUE = "unauthenticated"
     private const val SCHEMA_LOCATION = "correlation/access/UnauthenticatedAccess.json"
     override val schema by lazy { jsonSchemaAt(SCHEMA_LOCATION) }
 
-    override fun serialize(value: _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Unauthenticated) = JSONObject().apply {
+    override fun serialize(value: Access.Unauthenticated) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)
         setValue(Fields.ORIGIN, value.origin, Origin.jsonSerde)
         setValue(Fields.AUTHORIZATION, value.authorization, AuthorizationPrincipal.jsonSerde)
         setValue(Fields.SCOPE, value.scope, AccessScope.jsonSerde)
     }
 
-    override fun deserialize(json: JSONObject): _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Unauthenticated {
+    override fun deserialize(json: JSONObject): Access.Unauthenticated {
 
         val type = json.getRequiredString(Fields.TYPE)
         check(type == TYPE_VALUE) { "Invalid type '$type'. Must be '$TYPE_VALUE'" }
         val origin = json.getValue(Fields.ORIGIN, Origin.jsonSerde)
         val authorization = json.getValue(Fields.AUTHORIZATION, AuthorizationPrincipal.jsonSerde)
         val scope = json.getValue(Fields.SCOPE, AccessScope.jsonSerde)
-        return _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Unauthenticated(origin = origin, authorization = authorization, scope = scope)
+        return Access.Unauthenticated(origin = origin, authorization = authorization, scope = scope)
     }
 
     private object Fields {
@@ -44,4 +45,4 @@ internal object UnauthenticatedAccessJsonSerde : JsonSerde.SchemaAware<_root_ide
     }
 }
 
-val _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Unauthenticated.Companion.jsonSerde: JsonSerde.SchemaAware<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Unauthenticated> get() = UnauthenticatedAccessJsonSerde
+val Access.Unauthenticated.Companion.jsonSerde: JsonSerde.SchemaAware<Access.Unauthenticated> get() = UnauthenticatedAccessJsonSerde

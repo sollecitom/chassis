@@ -12,10 +12,10 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 @TestInstance(PER_CLASS)
 private class AccessJsonSerializationTests : JsonSerdeTestSpecification<Access>, CoreDataGenerator by CoreDataGenerator.testProvider {
 
-    override val jsonSerde get() = _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.jsonSerde
+    override val jsonSerde get() = Access.jsonSerde
 
     override fun parameterizedArguments() = listOf(
-        "authenticated" to _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.authenticated(),
-        "unauthenticated" to _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.unauthenticated()
+        "authenticated" to Access.authenticated(),
+        "unauthenticated" to Access.unauthenticated()
     )
 }

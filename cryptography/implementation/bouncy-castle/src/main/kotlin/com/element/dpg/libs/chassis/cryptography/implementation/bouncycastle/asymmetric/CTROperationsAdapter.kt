@@ -6,7 +6,7 @@ import com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.uti
 import java.security.SecureRandom
 import javax.crypto.SecretKey
 
-private class CTROperationsAdapter(private val key: SecretKey, private val random: SecureRandom, private val randomSeedLength: Int = com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric.CTROperationsAdapter.Companion.DEFAULT_RANDOM_IV_LENGTH) : EncryptionMode.CTR.Operations {
+private class CTROperationsAdapter(private val key: SecretKey, private val random: SecureRandom, private val randomSeedLength: Int = DEFAULT_RANDOM_IV_LENGTH) : EncryptionMode.CTR.Operations {
 
     override fun encryptWithRandomIV(bytes: ByteArray) = encrypt(bytes = bytes, iv = newIv())
 
@@ -24,7 +24,7 @@ private class CTROperationsAdapter(private val key: SecretKey, private val rando
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as com.element.dpg.libs.chassis.cryptography.implementation.bouncycastle.asymmetric.CTROperationsAdapter
+        other as CTROperationsAdapter
 
         return key == other.key
     }

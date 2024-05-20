@@ -56,9 +56,9 @@ private class SomeCommandHandler(private val stubbedResult: SomeCommand.Result) 
     override val commandType: Happening.Type get() = SomeCommand.type
 
     private lateinit var capturedCommand: SomeCommand
-    private lateinit var capturedInvocationContext: InvocationContext<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Unauthenticated>
+    private lateinit var capturedInvocationContext: InvocationContext<Access.Unauthenticated>
 
-    context(InvocationContext<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Unauthenticated>)
+    context(InvocationContext<Access.Unauthenticated>)
     override suspend fun process(command: SomeCommand): SomeCommand.Result {
 
         this.capturedCommand = command
@@ -70,7 +70,7 @@ private class SomeCommandHandler(private val stubbedResult: SomeCommand.Result) 
     fun capturedInvocationContext() = capturedInvocationContext
 }
 
-private data class SomeCommand(val intensity: Int) : Command<SomeCommand.Result, _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access.Unauthenticated> {
+private data class SomeCommand(val intensity: Int) : Command<SomeCommand.Result, Access.Unauthenticated> {
 
     override val accessRequirements get() = Command.AccessRequirements.None
     override val type: Happening.Type get() = Companion.type

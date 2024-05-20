@@ -3,6 +3,7 @@ package com.element.dpg.libs.chassis.ddd.domain
 import com.element.dpg.libs.chassis.core.domain.identity.Id
 import com.element.dpg.libs.chassis.core.domain.traits.Identifiable
 import com.element.dpg.libs.chassis.core.domain.traits.Timestamped
+import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
 import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
 import com.element.dpg.libs.chassis.correlation.core.domain.trace.InvocationTrace
 import kotlinx.datetime.Instant
@@ -19,7 +20,7 @@ interface Event : Happening, Identifiable, Timestamped {
         companion object
     }
 
-    data class Context(val invocation: InvocationContext<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access>, val parent: Reference? = null, val originating: Reference? = null) {
+    data class Context(val invocation: InvocationContext<Access>, val parent: Reference? = null, val originating: Reference? = null) {
 
         init {
             require(parent == null && originating == null || parent != null && originating != null) { "Parent and originating event references must both be either specified or omitted" }

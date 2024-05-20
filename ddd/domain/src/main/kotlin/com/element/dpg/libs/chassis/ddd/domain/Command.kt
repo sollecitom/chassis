@@ -1,22 +1,23 @@
 package com.element.dpg.libs.chassis.ddd.domain
 
+import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
 import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
 
-interface Command<out RESULT, out ACCESS : _root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access> : Instruction { // TODO remove access from here?
+interface Command<out RESULT, out ACCESS : Access> : Instruction { // TODO remove access from here?
 
     val accessRequirements: AccessRequirements
 
     sealed class AccessRequirements {
 
-        abstract fun check(context: InvocationContext<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access>): Result
+        abstract fun check(context: InvocationContext<Access>): Result
 
         data object None : AccessRequirements() {
-            override fun check(context: InvocationContext<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access>) = Result.Valid
+            override fun check(context: InvocationContext<Access>) = Result.Valid
         }
 
         data object UnauthenticatedAccessOnly : AccessRequirements() {
 
-            override fun check(context: InvocationContext<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access>) = when {
+            override fun check(context: InvocationContext<Access>) = when {
                 context.access.isAuthenticated -> Result.Invalid.Authenticated
                 else -> Result.Valid
             }
@@ -24,7 +25,7 @@ interface Command<out RESULT, out ACCESS : _root_ide_package_.com.element.dpg.li
 
         data object AuthenticatedAccessOnly : AccessRequirements() {
 
-            override fun check(context: InvocationContext<_root_ide_package_.com.element.dpg.libs.chassis.correlation.core.domain.access.Access>) = when {
+            override fun check(context: InvocationContext<Access>) = when {
                 !context.access.isAuthenticated -> Result.Invalid.Unauthenticated
                 else -> Result.Valid
             }
