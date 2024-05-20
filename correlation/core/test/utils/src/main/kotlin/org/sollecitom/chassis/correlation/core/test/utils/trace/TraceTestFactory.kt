@@ -3,8 +3,8 @@ package org.sollecitom.chassis.correlation.core.test.utils.trace
 import kotlinx.datetime.Instant
 import org.sollecitom.chassis.core.domain.identity.Id
 import org.sollecitom.chassis.core.domain.identity.SortableTimestampedUniqueIdentifier
-import org.sollecitom.chassis.core.utils.TimeGenerator
-import org.sollecitom.chassis.core.utils.UniqueIdGenerator
+import com.element.dpg.libs.chassis.core.utils.TimeGenerator
+import com.element.dpg.libs.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.correlation.core.domain.trace.ExternalInvocationTrace
 import org.sollecitom.chassis.correlation.core.domain.trace.InvocationTrace
 import org.sollecitom.chassis.correlation.core.domain.trace.Trace

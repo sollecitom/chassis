@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.core.test.utils.testProvider
-import org.sollecitom.chassis.core.utils.CoreDataGenerator
+import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.Role
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.Roles

@@ -9,8 +9,8 @@ import org.sollecitom.chassis.core.domain.identity.InstanceInfo
 import org.sollecitom.chassis.core.domain.lifecycle.startBlocking
 import org.sollecitom.chassis.core.domain.lifecycle.stopBlocking
 import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.core.test.utils.testProvider
-import org.sollecitom.chassis.core.utils.CoreDataGenerator
+import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.event.framework.test.specification.EventFrameworkTestSpecification
 import org.sollecitom.chassis.ddd.event.store.memory.InMemoryEventStore

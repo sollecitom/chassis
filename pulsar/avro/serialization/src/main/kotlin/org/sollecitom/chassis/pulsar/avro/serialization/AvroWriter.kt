@@ -3,7 +3,7 @@ package org.sollecitom.chassis.pulsar.avro.serialization
 import org.apache.avro.Schema
 import org.apache.avro.generic.GenericRecord
 import org.apache.pulsar.client.api.schema.SchemaWriter
-import org.sollecitom.chassis.avro.serialization.utils.RecordSerializer
+import com.element.dpg.libs.chassis.avro.serialization.utils.RecordSerializer
 
 internal class AvroWriter<VALUE>(originalAvroSchema: Schema, private val serialize: (VALUE) -> GenericRecord) : SchemaWriter<VALUE> {
 

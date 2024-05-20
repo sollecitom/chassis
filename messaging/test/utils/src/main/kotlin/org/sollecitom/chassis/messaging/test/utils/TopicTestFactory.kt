@@ -1,8 +1,8 @@
 package org.sollecitom.chassis.messaging.test.utils
 
 import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.core.test.utils.random
-import org.sollecitom.chassis.core.utils.RandomGenerator
+import com.element.dpg.libs.chassis.core.test.utils.stubs.random
+import com.element.dpg.libs.chassis.core.utils.RandomGenerator
 import org.sollecitom.chassis.messaging.domain.TenantAgnosticTopic
 import org.sollecitom.chassis.messaging.domain.Topic
 

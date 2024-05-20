@@ -7,8 +7,8 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.core.test.utils.testProvider
-import org.sollecitom.chassis.core.utils.CoreDataGenerator
+import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.logger.core.LoggingLevel
 import org.sollecitom.chassis.logging.standard.configuration.configureLogging
 import org.sollecitom.chassis.messaging.domain.MessageConsumer

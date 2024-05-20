@@ -3,7 +3,7 @@ package org.sollecitom.chassis.ddd.serialization.json.event
 import kotlinx.datetime.Instant
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.serialization.json.identity.jsonSerde
+import com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde
 import org.sollecitom.chassis.ddd.domain.EntityEvent
 import org.sollecitom.chassis.ddd.domain.Event
 import org.sollecitom.chassis.ddd.domain.Happening
@@ -19,7 +19,7 @@ interface EventJsonSerdeSupport<EVENT : Event> {
 
         setValue(Fields.ID, event.id, Id.jsonSerde)
         putInstant(Fields.TIMESTAMP, event.timestamp)
-        setValue(Fields.TYPE, event.type, Happening.Type.jsonSerde)
+        setValue(Fields.TYPE, event.type, com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde)
         setValue(Fields.CONTEXT, event.context, Event.Context.jsonSerde)
     }
 
@@ -27,7 +27,7 @@ interface EventJsonSerdeSupport<EVENT : Event> {
 
         val id = getValue(Fields.ID, Id.jsonSerde)
         val timestamp = getRequiredInstant(Fields.TIMESTAMP)
-        val type = getValue(Fields.TYPE, Happening.Type.jsonSerde)
+        val type = getValue(Fields.TYPE, com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde)
         val context = getValue(Fields.CONTEXT, Event.Context.jsonSerde)
         return EventFields(id, timestamp, type, context)
     }
@@ -46,7 +46,7 @@ interface EventJsonSerdeSupport<EVENT : Event> {
 
             setValue(EventJsonSerdeSupport.Fields.ID, event.id, Id.jsonSerde)
             putInstant(EventJsonSerdeSupport.Fields.TIMESTAMP, event.timestamp)
-            setValue(EventJsonSerdeSupport.Fields.TYPE, event.type, Happening.Type.jsonSerde)
+            setValue(EventJsonSerdeSupport.Fields.TYPE, event.type, com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde)
             setValue(EventJsonSerdeSupport.Fields.CONTEXT, event.context, Event.Context.jsonSerde)
             setValue(Fields.ENTITY_ID, event.entityId, Id.jsonSerde)
         }
@@ -55,7 +55,7 @@ interface EventJsonSerdeSupport<EVENT : Event> {
 
             val id = getValue(EventJsonSerdeSupport.Fields.ID, Id.jsonSerde)
             val timestamp = getRequiredInstant(EventJsonSerdeSupport.Fields.TIMESTAMP)
-            val type = getValue(EventJsonSerdeSupport.Fields.TYPE, Happening.Type.jsonSerde)
+            val type = getValue(EventJsonSerdeSupport.Fields.TYPE, com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde)
             val context = getValue(EventJsonSerdeSupport.Fields.CONTEXT, Event.Context.jsonSerde)
             val entityId = getValue(Fields.ENTITY_ID, Id.jsonSerde)
             return EventFields(id, timestamp, type, context, entityId)

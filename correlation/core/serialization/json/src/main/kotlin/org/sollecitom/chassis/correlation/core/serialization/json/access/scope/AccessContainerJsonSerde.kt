@@ -2,7 +2,7 @@ package org.sollecitom.chassis.correlation.core.serialization.json.access.scope
 
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.serialization.json.identity.jsonSerde
+import com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde
 import org.sollecitom.chassis.correlation.core.domain.access.scope.AccessContainer
 import org.sollecitom.chassis.json.utils.jsonSchemaAt
 import org.sollecitom.chassis.json.utils.serde.JsonSerde

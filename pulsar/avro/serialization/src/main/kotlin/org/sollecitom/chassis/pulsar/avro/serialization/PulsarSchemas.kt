@@ -3,7 +3,7 @@ package org.sollecitom.chassis.pulsar.avro.serialization
 import org.apache.pulsar.client.api.Schema
 import org.apache.pulsar.client.api.schema.SchemaDefinition
 import org.apache.pulsar.client.impl.schema.AvroSchema
-import org.sollecitom.chassis.avro.serialization.utils.RecordSerde
+import com.element.dpg.libs.chassis.avro.serialization.utils.RecordSerde
 
 fun <VALUE : Any> RecordSerde<VALUE>.asPulsarSchema(): AvroSchema<VALUE> = PulsarSchemas.forSerde(this)
 

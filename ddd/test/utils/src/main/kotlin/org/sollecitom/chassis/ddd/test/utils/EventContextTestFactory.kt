@@ -1,7 +1,7 @@
 package org.sollecitom.chassis.ddd.test.utils
 
-import org.sollecitom.chassis.core.utils.TimeGenerator
-import org.sollecitom.chassis.core.utils.UniqueIdGenerator
+import com.element.dpg.libs.chassis.core.utils.TimeGenerator
+import com.element.dpg.libs.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.correlation.core.domain.context.InvocationContext
 import org.sollecitom.chassis.correlation.core.test.utils.context.create
 import org.sollecitom.chassis.ddd.domain.Event

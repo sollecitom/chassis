@@ -1,7 +1,7 @@
 package org.sollecitom.chassis.jwt.test.utils
 
 import org.jose4j.jwk.OkpJwkGenerator
-import org.sollecitom.chassis.core.utils.RandomGenerator
+import com.element.dpg.libs.chassis.core.utils.RandomGenerator
 import java.security.KeyPair
 
 context(RandomGenerator)

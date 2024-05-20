@@ -1,8 +1,8 @@
 package org.sollecitom.chassis.correlation.core.test.utils.context
 
 import kotlinx.datetime.Instant
-import org.sollecitom.chassis.core.utils.TimeGenerator
-import org.sollecitom.chassis.core.utils.UniqueIdGenerator
+import com.element.dpg.libs.chassis.core.utils.TimeGenerator
+import com.element.dpg.libs.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.Access
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
 import org.sollecitom.chassis.correlation.core.domain.access.authorization.AuthorizationPrincipal

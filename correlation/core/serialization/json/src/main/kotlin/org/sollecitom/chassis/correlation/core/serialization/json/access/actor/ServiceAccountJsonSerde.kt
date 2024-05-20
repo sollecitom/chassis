@@ -2,10 +2,8 @@ package org.sollecitom.chassis.correlation.core.serialization.json.access.actor
 
 import org.json.JSONObject
 import org.sollecitom.chassis.core.domain.identity.Id
-import org.sollecitom.chassis.core.serialization.json.identity.jsonSerde
+import com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde
 import org.sollecitom.chassis.correlation.core.domain.access.actor.Actor
-import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
-import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant
 import org.sollecitom.chassis.correlation.core.serialization.json.customer.jsonSerde
 import org.sollecitom.chassis.correlation.core.serialization.json.tenancy.jsonSerde
 import org.sollecitom.chassis.json.utils.getRequiredString
@@ -23,8 +21,8 @@ internal object ServiceAccountJsonSerde : JsonSerde.SchemaAware<Actor.ServiceAcc
     override fun serialize(value: Actor.ServiceAccount) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)
         setValue(Fields.ID, value.id, Id.jsonSerde)
-        setValue(Fields.CUSTOMER, value.customer, Customer.jsonSerde)
-        setValue(Fields.TENANT, value.tenant, Tenant.jsonSerde)
+        setValue(Fields.CUSTOMER, value.customer, com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde)
+        setValue(Fields.TENANT, value.tenant, com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde)
     }
 
     override fun deserialize(json: JSONObject): Actor.ServiceAccount {
@@ -32,8 +30,8 @@ internal object ServiceAccountJsonSerde : JsonSerde.SchemaAware<Actor.ServiceAcc
         val type = json.getRequiredString(Fields.TYPE)
         check(type == TYPE_VALUE) { "Invalid type '$type'. Must be '$TYPE_VALUE'" }
         val id = json.getValue(Fields.ID, Id.jsonSerde)
-        val customer = json.getValue(Fields.CUSTOMER, Customer.jsonSerde)
-        val tenant = json.getValue(Fields.TENANT, Tenant.jsonSerde)
+        val customer = json.getValue(Fields.CUSTOMER, com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde)
+        val tenant = json.getValue(Fields.TENANT, com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde)
         return Actor.ServiceAccount(id = id, customer = customer, tenant = tenant)
     }
 

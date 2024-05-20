@@ -1,7 +1,7 @@
 package org.sollecitom.chassis.correlation.core.test.utils.access.idp
 
 import org.sollecitom.chassis.core.domain.naming.Name
-import org.sollecitom.chassis.core.utils.UniqueIdGenerator
+import com.element.dpg.libs.chassis.core.utils.UniqueIdGenerator
 import org.sollecitom.chassis.correlation.core.domain.access.customer.Customer
 import org.sollecitom.chassis.correlation.core.domain.access.idp.IdentityProvider
 import org.sollecitom.chassis.correlation.core.domain.tenancy.Tenant

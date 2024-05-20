@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.sollecitom.chassis.core.utils.CoreDataGenerator
+import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.messaging.domain.*
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds

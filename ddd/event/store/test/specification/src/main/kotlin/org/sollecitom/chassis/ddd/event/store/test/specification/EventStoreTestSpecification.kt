@@ -7,7 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
-import org.sollecitom.chassis.core.utils.CoreDataGenerator
+import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import org.sollecitom.chassis.ddd.domain.store.EventStore
 import org.sollecitom.chassis.ddd.test.stubs.testEntityEvent
 import org.sollecitom.chassis.ddd.test.stubs.testEntityEvents
