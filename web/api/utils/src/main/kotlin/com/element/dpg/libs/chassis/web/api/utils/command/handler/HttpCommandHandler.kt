@@ -1,4 +1,4 @@
-package com.element.dpg.libs.chassis.web.api.utils.handler
+package com.element.dpg.libs.chassis.web.api.utils.command.handler
 
 import com.element.dpg.libs.chassis.ddd.domain.Command
 import com.element.dpg.libs.chassis.ddd.domain.Happening

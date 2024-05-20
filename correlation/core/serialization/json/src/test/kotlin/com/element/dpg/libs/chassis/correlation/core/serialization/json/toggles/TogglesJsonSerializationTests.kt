@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.toggles
 
-import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.test.utils.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import com.element.dpg.libs.chassis.correlation.core.domain.toggles.ToggleValue
 import com.element.dpg.libs.chassis.correlation.core.domain.toggles.Toggles

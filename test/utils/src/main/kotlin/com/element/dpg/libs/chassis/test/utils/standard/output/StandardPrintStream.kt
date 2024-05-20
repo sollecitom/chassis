@@ -1,4 +1,4 @@
-package com.element.dpg.libs.chassis.test.utils.output
+package com.element.dpg.libs.chassis.test.utils.standard.output
 
 import java.io.PrintStream
 

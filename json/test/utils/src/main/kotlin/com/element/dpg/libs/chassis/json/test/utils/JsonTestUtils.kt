@@ -5,7 +5,7 @@ import assertk.assertions.containsAtLeast
 import assertk.assertions.containsOnly
 import assertk.assertions.support.expected
 import assertk.assertions.support.show
-import com.element.dpg.libs.chassis.json.utils.serde.Schema
+import com.element.dpg.libs.chassis.json.utils.Schema
 import com.element.dpg.libs.chassis.test.utils.assertions.containsSameEntriesAs
 import org.json.JSONObject
 

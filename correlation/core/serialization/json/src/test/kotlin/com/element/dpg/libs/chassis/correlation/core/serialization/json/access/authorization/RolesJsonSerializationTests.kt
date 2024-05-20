@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.authorization
 
-import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.test.utils.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import com.element.dpg.libs.chassis.correlation.core.domain.access.authorization.Roles
 import com.element.dpg.libs.chassis.correlation.core.serialization.json.access.autorization.jsonSerde

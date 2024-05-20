@@ -6,7 +6,7 @@ import assertk.assertions.isFalse
 import assertk.assertions.isInstanceOf
 import assertk.assertions.isTrue
 import com.element.dpg.libs.chassis.core.domain.naming.Name
-import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.test.utils.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance

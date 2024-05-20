@@ -3,7 +3,7 @@ package com.element.dpg.libs.chassis.correlation.core.test.utils.access.origin
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.element.dpg.libs.chassis.core.domain.networking.IpAddress
-import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.test.utils.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import com.element.dpg.libs.chassis.correlation.core.domain.access.origin.Origin
 import org.junit.jupiter.api.Test

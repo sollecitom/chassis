@@ -3,10 +3,10 @@ package com.element.dpg.libs.chassis.correlation.core.serialization.json.trace
 import com.element.dpg.libs.chassis.correlation.core.domain.trace.ExternalInvocationTrace
 import com.element.dpg.libs.chassis.correlation.core.domain.trace.InvocationTrace
 import com.element.dpg.libs.chassis.correlation.core.domain.trace.Trace
-import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
-import com.element.dpg.libs.chassis.json.utils.serde.serde.getValue
-import com.element.dpg.libs.chassis.json.utils.serde.serde.setValue
+import com.element.dpg.libs.chassis.json.utils.jsonSchemaAt
+import com.element.dpg.libs.chassis.json.utils.serde.JsonSerde
+import com.element.dpg.libs.chassis.json.utils.serde.getValue
+import com.element.dpg.libs.chassis.json.utils.serde.setValue
 import org.json.JSONObject
 
 private object TraceJsonSerde : JsonSerde.SchemaAware<Trace> {

@@ -5,9 +5,9 @@ import com.element.dpg.libs.chassis.ddd.domain.Happening
 import com.element.dpg.libs.chassis.ddd.serialization.json.happening.jsonSerde
 import com.element.dpg.libs.chassis.ddd.test.stubs.TestEntityEvent
 import com.element.dpg.libs.chassis.ddd.test.stubs.TestEvent
-import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
-import com.element.dpg.libs.chassis.json.utils.serde.serde.getValue
+import com.element.dpg.libs.chassis.json.utils.jsonSchemaAt
+import com.element.dpg.libs.chassis.json.utils.serde.JsonSerde
+import com.element.dpg.libs.chassis.json.utils.serde.getValue
 import org.json.JSONObject
 
 private object StubTestEventJsonSerde : JsonSerde.SchemaAware<Event> {

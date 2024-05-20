@@ -9,8 +9,8 @@ import com.element.dpg.libs.chassis.correlation.core.serialization.json.access.j
 import com.element.dpg.libs.chassis.correlation.core.serialization.json.tenancy.jsonSerde
 import com.element.dpg.libs.chassis.correlation.core.serialization.json.toggles.jsonSerde
 import com.element.dpg.libs.chassis.correlation.core.serialization.json.trace.jsonSerde
-import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
-import com.element.dpg.libs.chassis.json.utils.serde.serde.*
+import com.element.dpg.libs.chassis.json.utils.jsonSchemaAt
+import com.element.dpg.libs.chassis.json.utils.serde.*
 import org.json.JSONObject
 
 private object InvocationContextJsonSerde : JsonSerde.SchemaAware<InvocationContext<*>> {

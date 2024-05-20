@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.ddd.event.store.memory
 
-import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.test.utils.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import com.element.dpg.libs.chassis.ddd.event.store.test.specification.EventStoreTestSpecification
 import kotlinx.coroutines.CoroutineScope

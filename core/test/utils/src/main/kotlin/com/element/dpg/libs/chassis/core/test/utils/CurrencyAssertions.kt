@@ -1,4 +1,4 @@
-package com.element.dpg.libs.chassis.core.test.utils.stubs
+package com.element.dpg.libs.chassis.core.test.utils
 
 import assertk.Assert
 import assertk.assertions.isNotZero

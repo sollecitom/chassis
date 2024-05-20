@@ -1,9 +1,9 @@
-package com.element.dpg.libs.chassis.ddd.application.dispatching.dispatching
+package com.element.dpg.libs.chassis.ddd.application.dispatching
 
 import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
 import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
-import com.element.dpg.libs.chassis.ddd.application.dispatching.Application
-import com.element.dpg.libs.chassis.ddd.application.dispatching.LoggingApplicationAdapter
+import com.element.dpg.libs.chassis.ddd.application.Application
+import com.element.dpg.libs.chassis.ddd.application.LoggingApplicationAdapter
 import com.element.dpg.libs.chassis.ddd.domain.Command
 import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
 

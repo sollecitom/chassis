@@ -4,11 +4,11 @@ import com.element.dpg.libs.chassis.correlation.core.domain.access.authenticatio
 import com.element.dpg.libs.chassis.correlation.core.domain.access.authentication.FederatedAuthentication
 import com.element.dpg.libs.chassis.correlation.core.domain.access.session.FederatedSession
 import com.element.dpg.libs.chassis.correlation.core.serialization.json.access.session.jsonSerde
-import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
-import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
-import com.element.dpg.libs.chassis.json.utils.serde.serde.getValue
-import com.element.dpg.libs.chassis.json.utils.serde.serde.setValue
+import com.element.dpg.libs.chassis.json.utils.getRequiredString
+import com.element.dpg.libs.chassis.json.utils.jsonSchemaAt
+import com.element.dpg.libs.chassis.json.utils.serde.JsonSerde
+import com.element.dpg.libs.chassis.json.utils.serde.getValue
+import com.element.dpg.libs.chassis.json.utils.serde.setValue
 import org.json.JSONObject
 
 internal object FederatedAuthenticationJsonSerde : JsonSerde.SchemaAware<FederatedAuthentication> {

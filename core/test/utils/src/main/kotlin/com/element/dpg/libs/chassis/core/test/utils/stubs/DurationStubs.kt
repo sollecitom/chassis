@@ -1,4 +1,4 @@
-package com.element.dpg.libs.chassis.core.test.utils.stubs.stubs
+package com.element.dpg.libs.chassis.core.test.utils.stubs
 
 import com.element.dpg.libs.chassis.core.utils.TimeGenerator
 import kotlinx.datetime.Instant

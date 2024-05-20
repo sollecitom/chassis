@@ -6,7 +6,7 @@ import assertk.assertions.isNotEmpty
 import assertk.assertions.isNotNull
 import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
 import com.element.dpg.libs.chassis.correlation.core.serialization.json.context.jsonSerde
-import com.element.dpg.libs.chassis.json.utils.serde.getJSONObjectOrNull
+import com.element.dpg.libs.chassis.json.utils.getJSONObjectOrNull
 import com.element.dpg.libs.chassis.kotlin.extensions.text.removeFromLast
 import org.json.JSONObject
 

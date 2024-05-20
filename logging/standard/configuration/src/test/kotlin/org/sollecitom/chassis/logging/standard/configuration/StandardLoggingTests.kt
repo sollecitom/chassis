@@ -8,7 +8,7 @@ import com.element.dpg.libs.chassis.logger.core.LogEntry
 import com.element.dpg.libs.chassis.logger.json.formatter.jsonSchema
 import com.element.dpg.libs.chassis.logging.standard.configuration.LogFormat.JSON
 import com.element.dpg.libs.chassis.logging.standard.configuration.LogFormat.PLAIN
-import com.element.dpg.libs.chassis.test.utils.output.withCapturedStandardOutput
+import com.element.dpg.libs.chassis.test.utils.standard.output.withCapturedStandardOutput
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance

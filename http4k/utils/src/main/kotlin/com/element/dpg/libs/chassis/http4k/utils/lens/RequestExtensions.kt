@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.http4k.utils.lens
 
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerializer
+import com.element.dpg.libs.chassis.json.utils.serde.JsonSerializer
 import org.http4k.core.ContentType
 import org.http4k.core.Request
 import org.http4k.lens.Header

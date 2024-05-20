@@ -2,10 +2,10 @@ package com.element.dpg.libs.chassis.correlation.core.serialization.json.toggles
 
 import com.element.dpg.libs.chassis.correlation.core.domain.toggles.ToggleValue
 import com.element.dpg.libs.chassis.correlation.core.domain.toggles.Toggles
-import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
-import com.element.dpg.libs.chassis.json.utils.serde.serde.getValues
-import com.element.dpg.libs.chassis.json.utils.serde.serde.setValues
+import com.element.dpg.libs.chassis.json.utils.jsonSchemaAt
+import com.element.dpg.libs.chassis.json.utils.serde.JsonSerde
+import com.element.dpg.libs.chassis.json.utils.serde.getValues
+import com.element.dpg.libs.chassis.json.utils.serde.setValues
 import org.json.JSONObject
 
 private object TogglesJsonSerde : JsonSerde.SchemaAware<Toggles> {

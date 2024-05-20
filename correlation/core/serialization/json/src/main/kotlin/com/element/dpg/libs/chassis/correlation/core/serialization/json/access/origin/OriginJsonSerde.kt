@@ -3,11 +3,11 @@ package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.
 import com.element.dpg.libs.chassis.core.domain.networking.IpAddress
 import com.element.dpg.libs.chassis.correlation.core.domain.access.origin.Origin
 import com.element.dpg.libs.chassis.correlation.core.serialization.json.access.origin.client.info.jsonSerde
-import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
-import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
-import com.element.dpg.libs.chassis.json.utils.serde.serde.getValue
-import com.element.dpg.libs.chassis.json.utils.serde.serde.setValue
+import com.element.dpg.libs.chassis.json.utils.getRequiredString
+import com.element.dpg.libs.chassis.json.utils.jsonSchemaAt
+import com.element.dpg.libs.chassis.json.utils.serde.JsonSerde
+import com.element.dpg.libs.chassis.json.utils.serde.getValue
+import com.element.dpg.libs.chassis.json.utils.serde.setValue
 import com.element.dpg.libs.chassis.web.client.info.domain.ClientInfo
 import org.json.JSONObject
 

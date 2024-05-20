@@ -3,11 +3,11 @@ package com.element.dpg.libs.chassis.ddd.serialization.json.event
 import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
 import com.element.dpg.libs.chassis.correlation.core.serialization.json.context.jsonSerde
 import com.element.dpg.libs.chassis.ddd.domain.Event
-import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
-import com.element.dpg.libs.chassis.json.utils.serde.serde.getValue
-import com.element.dpg.libs.chassis.json.utils.serde.serde.getValueOrNull
-import com.element.dpg.libs.chassis.json.utils.serde.serde.setValue
+import com.element.dpg.libs.chassis.json.utils.jsonSchemaAt
+import com.element.dpg.libs.chassis.json.utils.serde.JsonSerde
+import com.element.dpg.libs.chassis.json.utils.serde.getValue
+import com.element.dpg.libs.chassis.json.utils.serde.getValueOrNull
+import com.element.dpg.libs.chassis.json.utils.serde.setValue
 import org.json.JSONObject
 
 internal object EventContextJsonSerde : JsonSerde.SchemaAware<Event.Context> {

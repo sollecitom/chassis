@@ -1,11 +1,11 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.origin.client.info
 
 import com.element.dpg.libs.chassis.core.domain.naming.Name
-import com.element.dpg.libs.chassis.json.utils.serde.getStringOrNull
-import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
-import com.element.dpg.libs.chassis.json.utils.serde.serde.getValueOrNull
-import com.element.dpg.libs.chassis.json.utils.serde.serde.setValue
+import com.element.dpg.libs.chassis.json.utils.getStringOrNull
+import com.element.dpg.libs.chassis.json.utils.jsonSchemaAt
+import com.element.dpg.libs.chassis.json.utils.serde.JsonSerde
+import com.element.dpg.libs.chassis.json.utils.serde.getValueOrNull
+import com.element.dpg.libs.chassis.json.utils.serde.setValue
 import com.element.dpg.libs.chassis.web.client.info.domain.LayoutEngine
 import com.element.dpg.libs.chassis.web.client.info.domain.Version
 import org.json.JSONObject

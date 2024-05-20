@@ -1,4 +1,4 @@
-package com.element.dpg.libs.chassis.core.test.utils.stubs
+package com.element.dpg.libs.chassis.core.test.utils
 
 import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.core.utils.RandomGenerator

@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.jwt.test.utils
 
 import com.element.dpg.libs.chassis.core.domain.naming.Name
-import com.element.dpg.libs.chassis.core.test.utils.stubs.random
+import com.element.dpg.libs.chassis.core.test.utils.random
 import com.element.dpg.libs.chassis.core.utils.RandomGenerator
 import com.element.dpg.libs.chassis.jwt.domain.JwtAudience
 import com.element.dpg.libs.chassis.jwt.jose4j.utils.X25519JoseAudienceAdapter

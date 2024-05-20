@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.origin
 
 import com.element.dpg.libs.chassis.core.domain.networking.IpAddress
-import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.test.utils.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import com.element.dpg.libs.chassis.correlation.core.domain.access.origin.Origin
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.origin.create

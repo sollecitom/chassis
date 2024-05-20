@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.scope
 
-import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.test.utils.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import com.element.dpg.libs.chassis.correlation.core.domain.access.scope.AccessContainer
 import com.element.dpg.libs.chassis.correlation.core.domain.access.scope.AccessScope

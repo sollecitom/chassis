@@ -4,13 +4,13 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.core.domain.versioning.IntVersion
-import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.test.utils.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
 import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
 import com.element.dpg.libs.chassis.correlation.core.test.utils.context.unauthenticated
-import com.element.dpg.libs.chassis.ddd.application.dispatching.dispatching.CommandHandler
-import com.element.dpg.libs.chassis.ddd.application.dispatching.dispatching.invoke
+import com.element.dpg.libs.chassis.ddd.application.Application
+import com.element.dpg.libs.chassis.ddd.application.dispatching.invoke
 import com.element.dpg.libs.chassis.ddd.domain.Command
 import com.element.dpg.libs.chassis.ddd.domain.Happening
 import com.element.dpg.libs.chassis.test.utils.assertions.failedThrowing

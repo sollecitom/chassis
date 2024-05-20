@@ -1,4 +1,4 @@
-package com.element.dpg.libs.chassis.json.utils.serde.serde
+package com.element.dpg.libs.chassis.json.utils.serde
 
 import org.json.JSONObject
 

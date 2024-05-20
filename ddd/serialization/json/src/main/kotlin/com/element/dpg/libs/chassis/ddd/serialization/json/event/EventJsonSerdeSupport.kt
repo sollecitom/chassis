@@ -6,10 +6,10 @@ import com.element.dpg.libs.chassis.ddd.domain.EntityEvent
 import com.element.dpg.libs.chassis.ddd.domain.Event
 import com.element.dpg.libs.chassis.ddd.domain.Happening
 import com.element.dpg.libs.chassis.ddd.serialization.json.happening.jsonSerde
-import com.element.dpg.libs.chassis.json.utils.serde.getRequiredInstant
-import com.element.dpg.libs.chassis.json.utils.serde.putInstant
-import com.element.dpg.libs.chassis.json.utils.serde.serde.getValue
-import com.element.dpg.libs.chassis.json.utils.serde.serde.setValue
+import com.element.dpg.libs.chassis.json.utils.getRequiredInstant
+import com.element.dpg.libs.chassis.json.utils.putInstant
+import com.element.dpg.libs.chassis.json.utils.serde.getValue
+import com.element.dpg.libs.chassis.json.utils.serde.setValue
 import kotlinx.datetime.Instant
 import org.json.JSONObject
 

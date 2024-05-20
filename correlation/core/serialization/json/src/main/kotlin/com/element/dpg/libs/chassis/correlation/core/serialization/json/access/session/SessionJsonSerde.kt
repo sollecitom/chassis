@@ -3,9 +3,9 @@ package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.
 import com.element.dpg.libs.chassis.correlation.core.domain.access.session.FederatedSession
 import com.element.dpg.libs.chassis.correlation.core.domain.access.session.Session
 import com.element.dpg.libs.chassis.correlation.core.domain.access.session.SimpleSession
-import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
-import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
+import com.element.dpg.libs.chassis.json.utils.getRequiredString
+import com.element.dpg.libs.chassis.json.utils.jsonSchemaAt
+import com.element.dpg.libs.chassis.json.utils.serde.JsonSerde
 import org.json.JSONObject
 
 private object SessionJsonSerde : JsonSerde.SchemaAware<Session> {

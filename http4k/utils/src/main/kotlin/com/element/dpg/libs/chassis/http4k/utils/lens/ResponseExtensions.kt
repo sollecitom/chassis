@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.http4k.utils.lens
 
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonDeserializer
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerializer
+import com.element.dpg.libs.chassis.json.utils.serde.JsonDeserializer
+import com.element.dpg.libs.chassis.json.utils.serde.JsonSerializer
 import org.http4k.core.ContentType
 import org.http4k.core.Response
 import org.http4k.filter.ResponseFilters

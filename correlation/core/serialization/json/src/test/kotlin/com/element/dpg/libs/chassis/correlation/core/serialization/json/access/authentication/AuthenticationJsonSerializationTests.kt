@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.authentication
 
-import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.test.utils.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import com.element.dpg.libs.chassis.correlation.core.domain.access.authentication.Authentication
 import com.element.dpg.libs.chassis.correlation.core.test.utils.access.authentication.credentialsBased

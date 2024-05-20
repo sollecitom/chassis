@@ -1,8 +1,8 @@
-package com.element.dpg.libs.chassis.json.utils.serde.serde
+package com.element.dpg.libs.chassis.json.utils.serde
 
-import com.element.dpg.libs.chassis.json.utils.serde.getJSONObjectOrNull
-import com.element.dpg.libs.chassis.json.utils.serde.getRequiredJSONArray
-import com.element.dpg.libs.chassis.json.utils.serde.getRequiredJSONObject
+import com.element.dpg.libs.chassis.json.utils.getJSONObjectOrNull
+import com.element.dpg.libs.chassis.json.utils.getRequiredJSONArray
+import com.element.dpg.libs.chassis.json.utils.getRequiredJSONObject
 import org.json.JSONArray
 import org.json.JSONObject
 

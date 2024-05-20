@@ -1,4 +1,4 @@
-package com.element.dpg.libs.chassis.json.utils.serde
+package com.element.dpg.libs.chassis.json.utils
 
 import com.github.erosb.jsonsKema.IJsonValue
 import com.github.erosb.jsonsKema.JsonParser

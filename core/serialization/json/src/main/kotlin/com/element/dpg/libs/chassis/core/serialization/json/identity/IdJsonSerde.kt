@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.core.serialization.json.identity
 
 import com.element.dpg.libs.chassis.core.domain.identity.*
-import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
-import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
+import com.element.dpg.libs.chassis.json.utils.getRequiredString
+import com.element.dpg.libs.chassis.json.utils.jsonSchemaAt
+import com.element.dpg.libs.chassis.json.utils.serde.JsonSerde
 import org.json.JSONObject
 
 private object IdJsonSerde : JsonSerde.SchemaAware<Id> {

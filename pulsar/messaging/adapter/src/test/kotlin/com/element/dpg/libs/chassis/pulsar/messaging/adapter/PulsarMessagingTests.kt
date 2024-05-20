@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.pulsar.messaging.adapter
 
 import com.element.dpg.libs.chassis.core.domain.naming.Name
-import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.test.utils.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import com.element.dpg.libs.chassis.logging.standard.configuration.configureLogging
 import com.element.dpg.libs.chassis.messaging.domain.MessageConsumer

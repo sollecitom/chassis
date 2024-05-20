@@ -1,6 +1,6 @@
 package com.element.dpg.libs.chassis.correlation.core.serialization.json.context
 
-import com.element.dpg.libs.chassis.core.test.utils.stubs.testProvider
+import com.element.dpg.libs.chassis.core.test.utils.testProvider
 import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
 import com.element.dpg.libs.chassis.correlation.core.domain.tenancy.Tenant

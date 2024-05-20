@@ -3,10 +3,10 @@ package com.element.dpg.libs.chassis.ddd.serialization.json.happening
 import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.core.domain.versioning.IntVersion
 import com.element.dpg.libs.chassis.ddd.domain.Happening
-import com.element.dpg.libs.chassis.json.utils.serde.getRequiredInt
-import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
-import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
+import com.element.dpg.libs.chassis.json.utils.getRequiredInt
+import com.element.dpg.libs.chassis.json.utils.getRequiredString
+import com.element.dpg.libs.chassis.json.utils.jsonSchemaAt
+import com.element.dpg.libs.chassis.json.utils.serde.JsonSerde
 import org.json.JSONObject
 
 internal object HappeningTypeJsonSerde : JsonSerde.SchemaAware<Happening.Type> {

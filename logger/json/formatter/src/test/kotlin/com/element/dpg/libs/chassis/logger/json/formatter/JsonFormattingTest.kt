@@ -3,7 +3,7 @@ package com.element.dpg.libs.chassis.logger.json.formatter
 import assertk.assertThat
 import com.element.dpg.libs.chassis.json.test.utils.compliesWith
 import com.element.dpg.libs.chassis.json.test.utils.containsSameEntriesAs
-import com.element.dpg.libs.chassis.json.utils.serde.getRequiredJSONObject
+import com.element.dpg.libs.chassis.json.utils.getRequiredJSONObject
 import com.element.dpg.libs.chassis.logger.core.LogEntry
 import com.element.dpg.libs.chassis.logger.core.LoggingContext
 import com.element.dpg.libs.chassis.logger.core.withEntries

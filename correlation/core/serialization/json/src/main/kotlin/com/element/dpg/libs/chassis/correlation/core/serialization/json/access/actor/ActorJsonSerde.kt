@@ -4,9 +4,9 @@ import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.Actor
 import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.ActorOnBehalf
 import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.DirectActor
 import com.element.dpg.libs.chassis.correlation.core.domain.access.actor.ImpersonatingActor
-import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
-import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
+import com.element.dpg.libs.chassis.json.utils.getRequiredString
+import com.element.dpg.libs.chassis.json.utils.jsonSchemaAt
+import com.element.dpg.libs.chassis.json.utils.serde.JsonSerde
 import org.json.JSONObject
 
 private object ActorJsonSerde : JsonSerde.SchemaAware<Actor> {

@@ -2,8 +2,8 @@ package com.element.dpg.libs.chassis.ddd.stubs.serialization.json.event
 
 import com.element.dpg.libs.chassis.ddd.serialization.json.event.EventJsonSerdeSupport
 import com.element.dpg.libs.chassis.ddd.test.stubs.TestEvent
-import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
+import com.element.dpg.libs.chassis.json.utils.jsonSchemaAt
+import com.element.dpg.libs.chassis.json.utils.serde.JsonSerde
 import org.json.JSONObject
 
 private object TestEventJsonSerde : JsonSerde.SchemaAware<TestEvent>, EventJsonSerdeSupport<TestEvent> {

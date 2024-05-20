@@ -2,7 +2,7 @@ package com.element.dpg.libs.chassis.json.test.utils
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde
+import com.element.dpg.libs.chassis.json.utils.serde.JsonSerde
 import com.element.dpg.libs.chassis.test.utils.params.ParameterizedTestSupport
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
