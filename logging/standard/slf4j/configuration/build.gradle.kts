@@ -3,5 +3,5 @@ dependencies {
     runtimeOnly(projects.chassisLoggerSlf4jAdapter)
 
     testImplementation(projects.chassisTestUtils)
-    testImplementation(projects.chassis.chassisJsonTestUtils)
+    testImplementation(projects.chassisJsonTestUtils)
 }
