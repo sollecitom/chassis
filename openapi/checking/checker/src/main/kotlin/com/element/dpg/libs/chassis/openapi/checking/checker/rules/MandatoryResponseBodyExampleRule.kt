@@ -1,11 +1,11 @@
 package com.element.dpg.libs.chassis.openapi.checking.checker.rules
 
-import io.swagger.v3.oas.models.OpenAPI
-import io.swagger.v3.oas.models.PathItem.HttpMethod
-import io.swagger.v3.oas.models.media.MediaType
 import com.element.dpg.libs.chassis.openapi.checking.checker.model.OperationWithContext
 import com.element.dpg.libs.chassis.openapi.checking.checker.model.allOperations
 import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
+import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.PathItem.HttpMethod
+import io.swagger.v3.oas.models.media.MediaType
 
 
 class MandatoryResponseBodyExampleRule(private val methods: Set<HttpMethod>, private val mediaTypesThatShouldHaveAnExample: Set<String>) : OpenApiRule {

@@ -4,11 +4,11 @@ import com.atlassian.oai.validator.interaction.request.CustomRequestValidator
 import com.atlassian.oai.validator.model.ApiOperation
 import com.atlassian.oai.validator.model.Request
 import com.atlassian.oai.validator.report.ValidationReport
-import io.swagger.v3.oas.models.parameters.Parameter
 import com.element.dpg.libs.chassis.http4k.utils.lens.HttpHeaders
 import com.element.dpg.libs.chassis.openapi.validation.http4k.validator.utils.inHeader
 import com.element.dpg.libs.chassis.openapi.validation.http4k.validator.utils.parameters
 import com.element.dpg.libs.chassis.openapi.validation.request.validator.ValidationReportError
+import io.swagger.v3.oas.models.parameters.Parameter
 
 internal object UnknownHeadersRejectingRequestValidator : CustomRequestValidator {
 

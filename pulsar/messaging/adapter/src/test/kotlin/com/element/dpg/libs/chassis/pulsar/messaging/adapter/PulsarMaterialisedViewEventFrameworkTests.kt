@@ -1,10 +1,5 @@
 package com.element.dpg.libs.chassis.pulsar.messaging.adapter
 
-import kotlinx.coroutines.CoroutineScope
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import com.element.dpg.libs.chassis.core.domain.identity.InstanceInfo
 import com.element.dpg.libs.chassis.core.domain.lifecycle.startBlocking
 import com.element.dpg.libs.chassis.core.domain.lifecycle.stopBlocking
@@ -24,6 +19,11 @@ import com.element.dpg.libs.chassis.pulsar.json.serialization.asPulsarSchema
 import com.element.dpg.libs.chassis.pulsar.test.utils.admin
 import com.element.dpg.libs.chassis.pulsar.test.utils.client
 import com.element.dpg.libs.chassis.pulsar.test.utils.newPulsarContainer
+import kotlinx.coroutines.CoroutineScope
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import kotlin.time.Duration.Companion.seconds
 
 @TestInstance(PER_CLASS)

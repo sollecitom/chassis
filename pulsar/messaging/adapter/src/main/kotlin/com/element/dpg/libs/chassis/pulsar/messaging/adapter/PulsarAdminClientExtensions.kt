@@ -1,10 +1,10 @@
 package com.element.dpg.libs.chassis.pulsar.messaging.adapter
 
-import org.apache.pulsar.client.admin.PulsarAdmin
-import org.apache.pulsar.common.policies.data.SchemaCompatibilityStrategy
 import com.element.dpg.libs.chassis.messaging.domain.Topic
 import com.element.dpg.libs.chassis.pulsar.utils.ensureTenantAndNamespaceExist
 import com.element.dpg.libs.chassis.pulsar.utils.ensureTopicExists
+import org.apache.pulsar.client.admin.PulsarAdmin
+import org.apache.pulsar.common.policies.data.SchemaCompatibilityStrategy
 
 fun PulsarAdmin.ensureTopicExists(topic: Topic, numberOfPartitions: Int = 1, allowTopicCreation: Boolean = false, isAllowAutoUpdateSchema: Boolean = false, schemaValidationEnforced: Boolean = true, schemaCompatibilityStrategy: SchemaCompatibilityStrategy = SchemaCompatibilityStrategy.FULL_TRANSITIVE) {
 

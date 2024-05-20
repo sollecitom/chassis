@@ -4,9 +4,9 @@ import assertk.Assert
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotEqualTo
-import org.junit.jupiter.api.Test
 import com.element.dpg.libs.chassis.kotlin.extensions.text.string
 import com.element.dpg.libs.chassis.kotlin.extensions.text.strings
+import org.junit.jupiter.api.Test
 import kotlin.random.Random
 
 interface HashFunctionTestSpecification<RESULT : Any> {

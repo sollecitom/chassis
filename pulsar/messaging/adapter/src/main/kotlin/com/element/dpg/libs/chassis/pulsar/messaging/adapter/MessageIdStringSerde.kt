@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.pulsar.messaging.adapter
 
-import org.apache.pulsar.client.api.MessageId
-import org.apache.pulsar.client.api.MessageIdAdv
 import com.element.dpg.libs.chassis.messaging.domain.Message
 import com.element.dpg.libs.chassis.messaging.domain.Topic
+import org.apache.pulsar.client.api.MessageId
+import org.apache.pulsar.client.api.MessageIdAdv
 
 @OptIn(ExperimentalStdlibApi::class)
 internal object MessageIdStringSerde { // TODO revisit

@@ -1,10 +1,9 @@
 package com.element.dpg.libs.chassis.openapi.checking.checker
 
-import io.swagger.v3.oas.models.OpenAPI
 import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
-
 import com.element.dpg.libs.chassis.openapi.parser.OpenApiReader
 import com.element.dpg.libs.chassis.openapi.parser.parse
+import io.swagger.v3.oas.models.OpenAPI
 import java.net.URL
 
 internal class ConfigurableOpenApiComplianceChecker(private val rules: Set<OpenApiRule>) : OpenApiComplianceChecker {

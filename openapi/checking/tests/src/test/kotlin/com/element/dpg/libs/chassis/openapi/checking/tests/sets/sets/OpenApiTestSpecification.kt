@@ -1,13 +1,13 @@
 package com.element.dpg.libs.chassis.openapi.checking.tests.sets.sets
 
-import io.swagger.v3.oas.models.OpenAPI
-import io.swagger.v3.oas.models.Operation
-import io.swagger.v3.oas.models.media.StringSchema
-import io.swagger.v3.oas.models.parameters.RequestBody
 import com.element.dpg.libs.chassis.openapi.builder.OpenApiBuilder
 import com.element.dpg.libs.chassis.openapi.builder.content
 import com.element.dpg.libs.chassis.openapi.builder.mediaTypes
 import com.element.dpg.libs.chassis.openapi.builder.requestBody
+import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.Operation
+import io.swagger.v3.oas.models.media.StringSchema
+import io.swagger.v3.oas.models.parameters.RequestBody
 
 interface OpenApiTestSpecification {
 

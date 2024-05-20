@@ -1,7 +1,5 @@
 package com.element.dpg.libs.chassis.openapi.checking.checker.sets
 
-import io.swagger.v3.oas.models.Operation
-import io.swagger.v3.oas.models.PathItem.HttpMethod.*
 import com.element.dpg.libs.chassis.kotlin.extensions.text.CharacterGroups.letters
 import com.element.dpg.libs.chassis.kotlin.extensions.text.CharacterGroups.lowercaseCaseLetters
 import com.element.dpg.libs.chassis.openapi.checking.checker.model.OpenApiField
@@ -9,6 +7,8 @@ import com.element.dpg.libs.chassis.openapi.checking.checker.model.OpenApiFields
 import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
 import com.element.dpg.libs.chassis.openapi.checking.checker.rules.*
 import com.element.dpg.libs.chassis.openapi.checking.checker.rules.field.MandatorySuffixTextFieldRule
+import io.swagger.v3.oas.models.Operation
+import io.swagger.v3.oas.models.PathItem.HttpMethod.*
 
 object StandardOpenApiRules : OpenApiRuleSet {
 

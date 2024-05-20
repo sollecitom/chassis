@@ -1,7 +1,5 @@
 package com.element.dpg.libs.chassis.logger.core
 
-import com.element.dpg.libs.chassis.logger.core.appender.AppendLogEntry
-
 fun loggingFunction(customize: LoggingFunctionCustomizer.() -> Unit): Log {
 
     val appenders = mutableSetOf<com.element.dpg.libs.chassis.logger.core.appender.AppendLogEntry>()

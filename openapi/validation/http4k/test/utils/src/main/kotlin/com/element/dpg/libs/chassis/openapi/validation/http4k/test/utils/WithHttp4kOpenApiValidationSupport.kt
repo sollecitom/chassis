@@ -2,16 +2,16 @@ package com.element.dpg.libs.chassis.openapi.validation.http4k.test.utils
 
 import assertk.Assert
 import assertk.assertThat
-import org.http4k.core.ContentType
-import org.http4k.core.Method
-import org.http4k.core.Request
-import org.http4k.core.Response
 import com.element.dpg.libs.chassis.http4k.utils.lens.contentType
 import com.element.dpg.libs.chassis.openapi.validation.http4k.validator.Http4kOpenApiValidator
 import com.element.dpg.libs.chassis.openapi.validation.request.validator.ValidationReportError
 import com.element.dpg.libs.chassis.openapi.validation.request.validator.test.utils.containsOnly
 import com.element.dpg.libs.chassis.openapi.validation.request.validator.test.utils.hasErrors
 import com.element.dpg.libs.chassis.openapi.validation.request.validator.test.utils.hasNoErrors
+import org.http4k.core.ContentType
+import org.http4k.core.Method
+import org.http4k.core.Request
+import org.http4k.core.Response
 
 interface WithHttp4kOpenApiValidationSupport {
 

@@ -1,13 +1,6 @@
 package com.element.dpg.libs.chassis.openapi.validation.http4k.validator
 
 import assertk.assertThat
-import org.http4k.core.*
-import org.json.JSONArray
-import org.json.JSONObject
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.http4k.utils.lens.body
 import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
@@ -16,6 +9,13 @@ import com.element.dpg.libs.chassis.openapi.validation.http4k.validator.implemen
 import com.element.dpg.libs.chassis.openapi.validation.request.validator.ValidationReportError
 import com.element.dpg.libs.chassis.openapi.validation.request.validator.test.utils.containsOnly
 import com.element.dpg.libs.chassis.openapi.validation.request.validator.test.utils.hasNoErrors
+import org.http4k.core.*
+import org.json.JSONArray
+import org.json.JSONObject
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 
 @TestInstance(PER_CLASS)
 private class Http4kRequestOpenApiValidationTests {

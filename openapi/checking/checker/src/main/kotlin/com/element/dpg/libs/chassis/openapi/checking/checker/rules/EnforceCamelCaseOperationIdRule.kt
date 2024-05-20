@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.openapi.checking.checker.rules
 
-import io.swagger.v3.oas.models.OpenAPI
 import com.element.dpg.libs.chassis.openapi.checking.checker.model.OperationWithContext
 import com.element.dpg.libs.chassis.openapi.checking.checker.model.allOperations
 import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
+import io.swagger.v3.oas.models.OpenAPI
 
 object EnforceCamelCaseOperationIdRule : OpenApiRule {
 

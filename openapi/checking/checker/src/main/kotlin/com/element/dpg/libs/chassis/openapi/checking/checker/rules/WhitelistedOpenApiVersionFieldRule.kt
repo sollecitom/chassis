@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.openapi.checking.checker.rules
 
-import io.swagger.v3.oas.models.OpenAPI
 import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
+import io.swagger.v3.oas.models.OpenAPI
 
 
 class WhitelistedOpenApiVersionFieldRule(val whitelistedOpenApiVersions: Set<String>) : OpenApiRule {

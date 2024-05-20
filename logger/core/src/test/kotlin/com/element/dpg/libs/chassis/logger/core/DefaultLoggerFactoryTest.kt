@@ -3,10 +3,10 @@ package com.element.dpg.libs.chassis.logger.core
 import assertk.assertThat
 import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
+import com.element.dpg.libs.chassis.logger.core.defaults.DefaultLoggerFactory
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import com.element.dpg.libs.chassis.logger.core.defaults.DefaultLoggerFactory
 import java.time.Instant
 
 @TestInstance(PER_CLASS)

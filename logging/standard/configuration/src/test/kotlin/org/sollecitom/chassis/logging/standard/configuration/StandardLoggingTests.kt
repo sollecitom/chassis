@@ -2,10 +2,6 @@ package com.element.dpg.libs.chassis.logging.standard.configuration
 
 import assertk.assertThat
 import assertk.assertions.hasSize
-import org.json.JSONObject
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import com.element.dpg.libs.chassis.json.test.utils.compliesWith
 import com.element.dpg.libs.chassis.logger.core.JvmLoggerFactory
 import com.element.dpg.libs.chassis.logger.core.LogEntry
@@ -13,6 +9,10 @@ import com.element.dpg.libs.chassis.logger.json.formatter.jsonSchema
 import com.element.dpg.libs.chassis.logging.standard.configuration.LogFormat.JSON
 import com.element.dpg.libs.chassis.logging.standard.configuration.LogFormat.PLAIN
 import com.element.dpg.libs.chassis.test.utils.output.withCapturedStandardOutput
+import org.json.JSONObject
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 
 @TestInstance(PER_CLASS)
 private class StandardLoggingTests {

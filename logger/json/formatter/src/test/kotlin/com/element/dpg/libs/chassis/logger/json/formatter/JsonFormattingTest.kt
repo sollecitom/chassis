@@ -1,17 +1,17 @@
 package com.element.dpg.libs.chassis.logger.json.formatter
 
 import assertk.assertThat
-import kotlinx.coroutines.runBlocking
-import org.json.JSONObject
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import com.element.dpg.libs.chassis.json.test.utils.compliesWith
 import com.element.dpg.libs.chassis.json.test.utils.containsSameEntriesAs
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredJSONObject
 import com.element.dpg.libs.chassis.logger.core.LogEntry
 import com.element.dpg.libs.chassis.logger.core.LoggingContext
 import com.element.dpg.libs.chassis.logger.core.withEntries
+import kotlinx.coroutines.runBlocking
+import org.json.JSONObject
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import java.time.Instant
 
 @TestInstance(PER_CLASS)

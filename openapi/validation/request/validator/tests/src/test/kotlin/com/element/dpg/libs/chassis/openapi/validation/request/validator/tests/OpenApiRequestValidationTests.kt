@@ -4,11 +4,11 @@ import assertk.assertThat
 import com.atlassian.oai.validator.OpenApiInteractionValidator
 import com.atlassian.oai.validator.model.SimpleRequest
 import com.element.dpg.libs.chassis.openapi.builder.*
+import com.element.dpg.libs.chassis.openapi.builder.OpenApiBuilder.OpenApiVersion.V3_1_0
+import com.element.dpg.libs.chassis.openapi.validation.request.validator.test.utils.hasNoErrors
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import com.element.dpg.libs.chassis.openapi.builder.OpenApiBuilder.OpenApiVersion.V3_1_0
-import com.element.dpg.libs.chassis.openapi.validation.request.validator.test.utils.hasNoErrors
 
 @TestInstance(PER_CLASS)
 private class OpenApiRequestValidationTests {

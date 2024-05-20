@@ -1,10 +1,9 @@
 package com.element.dpg.libs.chassis.logger.core.defaults
 
-import org.json.JSONObject
 import com.element.dpg.libs.chassis.logger.core.FormatLogEntry
 import com.element.dpg.libs.chassis.logger.core.LogEntry
 import com.element.dpg.libs.chassis.logger.core.LoggingContext
-import com.element.dpg.libs.chassis.logger.core.LoggingLevel
+import org.json.JSONObject
 
 @Suppress("DEPRECATION")
 object DefaultFormatToString : FormatLogEntry<String> {

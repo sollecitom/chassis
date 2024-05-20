@@ -1,14 +1,13 @@
 package com.element.dpg.libs.chassis.pulsar.messaging.adapter
 
-import com.element.dpg.libs.chassis.messaging.domain.*
-import kotlinx.coroutines.flow.Flow
-import org.apache.pulsar.client.api.PulsarClient
-import org.apache.pulsar.client.api.Schema
 import com.element.dpg.libs.chassis.core.domain.identity.InstanceInfo
 import com.element.dpg.libs.chassis.core.domain.lifecycle.Startable
 import com.element.dpg.libs.chassis.core.domain.lifecycle.Stoppable
 import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.messaging.domain.*
+import kotlinx.coroutines.flow.Flow
+import org.apache.pulsar.client.api.PulsarClient
+import org.apache.pulsar.client.api.Schema
 
 internal class PulsarMessageStream<VALUE>(private val instanceInfo: InstanceInfo, private val topic: Topic, private val schema: Schema<VALUE>, clientSupplier: () -> PulsarClient) : MessageStream<VALUE>, Startable, Stoppable {
 

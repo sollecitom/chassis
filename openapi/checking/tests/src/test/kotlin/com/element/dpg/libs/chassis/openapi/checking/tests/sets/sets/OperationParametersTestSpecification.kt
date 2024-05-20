@@ -2,8 +2,6 @@ package com.element.dpg.libs.chassis.openapi.checking.tests.sets.sets
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import io.swagger.v3.oas.models.PathItem
-import org.junit.jupiter.api.Test
 import com.element.dpg.libs.chassis.openapi.builder.get
 import com.element.dpg.libs.chassis.openapi.builder.parameters
 import com.element.dpg.libs.chassis.openapi.builder.post
@@ -14,6 +12,8 @@ import com.element.dpg.libs.chassis.openapi.checking.checker.sets.StandardOpenAp
 import com.element.dpg.libs.chassis.openapi.checking.checker.sets.checkAgainstRules
 import com.element.dpg.libs.chassis.openapi.checking.test.utils.isCompliant
 import com.element.dpg.libs.chassis.openapi.checking.test.utils.isNotCompliantWithOnlyViolation
+import io.swagger.v3.oas.models.PathItem
+import org.junit.jupiter.api.Test
 
 interface OperationParametersTestSpecification : OpenApiTestSpecification {
 

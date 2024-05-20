@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.logger.json.formatter
 
-import org.json.JSONObject
 import com.element.dpg.libs.chassis.logger.core.FormatLogEntry
 import com.element.dpg.libs.chassis.logger.core.LogEntry
 import com.element.dpg.libs.chassis.logger.core.LoggingContext
+import org.json.JSONObject
 
 object DefaultFormatToJson : FormatLogEntry<String> {
 

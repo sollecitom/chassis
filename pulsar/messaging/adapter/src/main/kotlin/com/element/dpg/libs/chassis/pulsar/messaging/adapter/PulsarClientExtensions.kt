@@ -1,14 +1,14 @@
 package com.element.dpg.libs.chassis.pulsar.messaging.adapter
 
+import com.element.dpg.libs.chassis.messaging.domain.Message
+import com.element.dpg.libs.chassis.messaging.domain.ReceivedMessage
+import com.element.dpg.libs.chassis.messaging.domain.Topic
+import com.element.dpg.libs.chassis.pulsar.utils.produce
 import kotlinx.coroutines.future.await
 import org.apache.pulsar.client.api.Consumer
 import org.apache.pulsar.client.api.ConsumerBuilder
 import org.apache.pulsar.client.api.Producer
 import org.apache.pulsar.client.api.ProducerBuilder
-import com.element.dpg.libs.chassis.messaging.domain.Message
-import com.element.dpg.libs.chassis.messaging.domain.ReceivedMessage
-import com.element.dpg.libs.chassis.messaging.domain.Topic
-import com.element.dpg.libs.chassis.pulsar.utils.produce
 import org.apache.pulsar.client.api.Message as PulsarMessage
 
 fun <V> ConsumerBuilder<V>.topics(vararg topics: Topic): ConsumerBuilder<V> = topic(*topics.map { it.fullName.value }.toTypedArray())

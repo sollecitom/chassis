@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.logger.slf4j.adapter
 
-import org.slf4j.ILoggerFactory
 import com.element.dpg.libs.chassis.logger.core.JvmLoggerFactory
+import org.slf4j.ILoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 import org.slf4j.Logger as Slf4jLogger
 

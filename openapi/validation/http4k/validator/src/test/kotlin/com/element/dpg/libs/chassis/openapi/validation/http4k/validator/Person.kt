@@ -1,7 +1,7 @@
 package com.element.dpg.libs.chassis.openapi.validation.http4k.validator
 
-import org.json.JSONObject
 import com.element.dpg.libs.chassis.core.domain.naming.Name
+import org.json.JSONObject
 
 data class Person(val firstName: Name, val lastName: Name, val age: Int) {
 

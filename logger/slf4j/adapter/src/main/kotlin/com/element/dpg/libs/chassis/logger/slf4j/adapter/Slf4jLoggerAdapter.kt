@@ -2,10 +2,9 @@
 
 package com.element.dpg.libs.chassis.logger.slf4j.adapter
 
+import com.element.dpg.libs.chassis.logger.core.Logger
 import org.slf4j.Marker
 import org.slf4j.helpers.MessageFormatter
-import com.element.dpg.libs.chassis.logger.core.Logger
-import com.element.dpg.libs.chassis.logger.core.LoggingLevel
 import org.slf4j.Logger as Slf4jLogger
 
 class Slf4jLoggerAdapter(private val logger: Logger) : Slf4jLogger {

@@ -2,7 +2,6 @@ package com.element.dpg.libs.chassis.logger.core.loggable
 
 import com.element.dpg.libs.chassis.logger.core.JvmLoggerFactory
 import com.element.dpg.libs.chassis.logger.core.Logger
-import com.element.dpg.libs.chassis.logger.core.LoggerFactory
 
 open class Loggable(private val loggerFactory: com.element.dpg.libs.chassis.logger.core.LoggerFactory = JvmLoggerFactory) : LoggableType {
 

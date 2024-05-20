@@ -3,13 +3,6 @@ package com.element.dpg.libs.chassis.openapi.checking.tests.sets.sets
 import assertk.assertThat
 import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
-import io.swagger.v3.oas.models.OpenAPI
-import io.swagger.v3.oas.models.PathItem.HttpMethod.*
-import io.swagger.v3.oas.models.SpecVersion
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import com.element.dpg.libs.chassis.logger.core.JvmLoggerFactory
 import com.element.dpg.libs.chassis.logging.standard.configuration.StandardLoggingConfiguration
 import com.element.dpg.libs.chassis.logging.standard.configuration.applyTo
@@ -25,6 +18,13 @@ import com.element.dpg.libs.chassis.openapi.checking.checker.sets.StandardOpenAp
 import com.element.dpg.libs.chassis.openapi.checking.checker.sets.checkAgainstRules
 import com.element.dpg.libs.chassis.openapi.checking.test.utils.isCompliant
 import com.element.dpg.libs.chassis.openapi.checking.test.utils.isNotCompliantWithOnlyViolation
+import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.PathItem.HttpMethod.*
+import io.swagger.v3.oas.models.SpecVersion
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 
 @TestInstance(PER_CLASS)
 private class StandardOpenApiRulesTest : OpenApiTestSpecification {

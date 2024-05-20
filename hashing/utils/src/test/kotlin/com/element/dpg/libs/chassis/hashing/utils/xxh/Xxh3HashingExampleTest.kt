@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.hashing.utils.xxh
 
+import com.element.dpg.libs.chassis.hashing.utils.HashFunctionTestSpecification
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import com.element.dpg.libs.chassis.hashing.utils.HashFunctionTestSpecification
 
 @TestInstance(PER_CLASS)
 private class Xxh3HashingExampleTest {

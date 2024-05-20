@@ -2,8 +2,6 @@ package com.element.dpg.libs.chassis.openapi.checking.tests.sets.sets
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import io.swagger.v3.oas.models.Operation
-import org.junit.jupiter.api.Test
 import com.element.dpg.libs.chassis.openapi.builder.content
 import com.element.dpg.libs.chassis.openapi.builder.operation
 import com.element.dpg.libs.chassis.openapi.builder.requestBody
@@ -17,6 +15,8 @@ import com.element.dpg.libs.chassis.openapi.checking.test.utils.hasSingleFieldVi
 import com.element.dpg.libs.chassis.openapi.checking.test.utils.isCompliant
 import com.element.dpg.libs.chassis.openapi.checking.test.utils.isNotCompliantWithOnlyViolation
 import com.element.dpg.libs.chassis.openapi.checking.test.utils.isNotCompliantWithViolation
+import io.swagger.v3.oas.models.Operation
+import org.junit.jupiter.api.Test
 
 interface MethodTestSpecification : TracingHeadersTestSpecification {
 

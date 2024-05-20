@@ -2,11 +2,11 @@ package com.element.dpg.libs.chassis.hashing.utils.xxh
 
 import assertk.Assert
 import assertk.assertions.isEqualTo
+import com.element.dpg.libs.chassis.hashing.utils.Hash128Result
+import com.element.dpg.libs.chassis.hashing.utils.HashFunctionTestSpecification
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import com.element.dpg.libs.chassis.hashing.utils.Hash128Result
-import com.element.dpg.libs.chassis.hashing.utils.HashFunctionTestSpecification
 
 @TestInstance(PER_CLASS)
 private class XxhHashingExampleTest {

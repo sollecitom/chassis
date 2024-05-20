@@ -1,5 +1,6 @@
 package com.element.dpg.libs.chassis.pulsar.avro.serialization
 
+import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
 import org.apache.avro.Schema
 import org.apache.avro.generic.GenericRecord
 import org.apache.pulsar.client.api.schema.SchemaReader
@@ -7,7 +8,6 @@ import org.apache.pulsar.client.impl.schema.SchemaUtils
 import org.apache.pulsar.client.impl.schema.generic.GenericAvroSchema
 import org.apache.pulsar.client.impl.schema.util.SchemaUtil
 import org.apache.pulsar.common.protocol.schema.BytesSchemaVersion
-import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
 
 // copied from Pulsar and lightly modified (refactor)
 internal class MultiVersionGenericAvroReader(useProvidedSchemaAsReaderSchema: Boolean, readerSchema: Schema) : AbstractMultiVersionGenericReader(useProvidedSchemaAsReaderSchema, GenericAvroReader(readerSchema), readerSchema) {

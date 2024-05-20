@@ -1,11 +1,11 @@
 package com.element.dpg.libs.chassis.hashing.utils.xxh
 
-import net.openhft.hashing.LongHashFunction
-import net.openhft.hashing.LongTupleHashFunction
 import com.element.dpg.libs.chassis.hashing.utils.Hash128Result
 import com.element.dpg.libs.chassis.hashing.utils.HashFunction
 import com.element.dpg.libs.chassis.hashing.utils.LongHashFunctionAdapter
 import com.element.dpg.libs.chassis.hashing.utils.LongTupleHashFunctionAdapter
+import net.openhft.hashing.LongHashFunction
+import net.openhft.hashing.LongTupleHashFunction
 
 object Xxh {
 

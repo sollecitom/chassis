@@ -1,6 +1,5 @@
 package com.element.dpg.libs.chassis.logger.slf4j.example
 
-import kotlinx.coroutines.runBlocking
 import com.element.dpg.libs.chassis.logger.core.JvmLoggerFactory
 import com.element.dpg.libs.chassis.logger.core.LoggingLevel.*
 import com.element.dpg.libs.chassis.logger.core.appender.PrintStreamAppender
@@ -8,6 +7,7 @@ import com.element.dpg.libs.chassis.logger.core.defaults.DefaultFormatToString
 import com.element.dpg.libs.chassis.logger.core.loggingFunction
 import com.element.dpg.libs.chassis.logger.core.loggingLevelEnabler
 import com.element.dpg.libs.chassis.logger.core.withCoroutineLoggingContext
+import kotlinx.coroutines.runBlocking
 
 fun main(): Unit = runBlocking {
 

@@ -2,8 +2,6 @@ package com.element.dpg.libs.chassis.logger.core.defaults
 
 import com.element.dpg.libs.chassis.logger.core.Log
 import com.element.dpg.libs.chassis.logger.core.Logger
-import com.element.dpg.libs.chassis.logger.core.LoggerFactory
-import com.element.dpg.libs.chassis.logger.core.LoggingLevel
 import com.element.dpg.libs.chassis.logger.core.implementation.FunctionalLogger
 import com.element.dpg.libs.chassis.logger.core.implementation.LoggingNameResolver
 import java.time.Instant

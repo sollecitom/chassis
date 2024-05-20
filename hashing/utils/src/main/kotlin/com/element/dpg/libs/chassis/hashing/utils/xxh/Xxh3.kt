@@ -1,8 +1,8 @@
 package com.element.dpg.libs.chassis.hashing.utils.xxh
 
-import net.openhft.hashing.LongHashFunction
 import com.element.dpg.libs.chassis.hashing.utils.HashFunction
 import com.element.dpg.libs.chassis.hashing.utils.LongHashFunctionAdapter
+import net.openhft.hashing.LongHashFunction
 
 object Xxh3 {
 

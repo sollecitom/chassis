@@ -2,10 +2,10 @@ package com.element.dpg.libs.chassis.openapi.parser
 
 import assertk.assertThat
 import assertk.assertions.isSuccess
+import com.element.dpg.libs.chassis.test.utils.assertions.failedThrowing
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import com.element.dpg.libs.chassis.test.utils.assertions.failedThrowing
 
 @TestInstance(PER_CLASS)
 private class OpenApiParserTest {

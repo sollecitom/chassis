@@ -1,8 +1,8 @@
 package com.element.dpg.libs.chassis.pulsar.messaging.adapter
 
-import org.apache.pulsar.client.api.MessageIdAdv
 import com.element.dpg.libs.chassis.messaging.domain.Message
 import com.element.dpg.libs.chassis.messaging.domain.Topic
+import org.apache.pulsar.client.api.MessageIdAdv
 
 internal data class PulsarMessageId(override val topic: Topic, private val delegate: MessageIdAdv) : Message.Id {
 

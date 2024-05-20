@@ -1,15 +1,15 @@
 package com.element.dpg.libs.chassis.pulsar.messaging.adapter
 
-import org.apache.pulsar.client.api.Consumer
-import org.apache.pulsar.client.api.ConsumerBuilder
-import org.apache.pulsar.client.api.PulsarClient
-import org.apache.pulsar.client.api.Schema
 import com.element.dpg.libs.chassis.core.domain.identity.InstanceInfo
 import com.element.dpg.libs.chassis.core.domain.lifecycle.stopBlocking
 import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.kotlin.extensions.async.await
 import com.element.dpg.libs.chassis.messaging.domain.MessageConsumer
 import com.element.dpg.libs.chassis.messaging.domain.Topic
+import org.apache.pulsar.client.api.Consumer
+import org.apache.pulsar.client.api.ConsumerBuilder
+import org.apache.pulsar.client.api.PulsarClient
+import org.apache.pulsar.client.api.Schema
 
 internal class PulsarMessageConsumer<out VALUE>(override val topics: Set<Topic>, initializeConsumer: (Set<Topic>) -> Consumer<VALUE>) : MessageConsumer<VALUE> {
 

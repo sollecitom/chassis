@@ -1,12 +1,12 @@
 package com.element.dpg.libs.chassis.logger.slf4j.provider
 
+import com.element.dpg.libs.chassis.logger.slf4j.adapter.Slf4jLoggerFactory
+import com.element.dpg.libs.chassis.logger.slf4j.adapter.Slf4jMDCAdapter
 import org.slf4j.ILoggerFactory
 import org.slf4j.IMarkerFactory
 import org.slf4j.helpers.BasicMarkerFactory
 import org.slf4j.spi.MDCAdapter
 import org.slf4j.spi.SLF4JServiceProvider
-import com.element.dpg.libs.chassis.logger.slf4j.adapter.Slf4jLoggerFactory
-import com.element.dpg.libs.chassis.logger.slf4j.adapter.Slf4jMDCAdapter
 
 class KLogSlf4jServiceProvider : SLF4JServiceProvider {
 

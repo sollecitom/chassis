@@ -1,8 +1,8 @@
 package com.element.dpg.libs.chassis.openapi.checking.checker.sets
 
-import io.swagger.v3.oas.models.OpenAPI
 import com.element.dpg.libs.chassis.openapi.checking.checker.checkAgainstRules
 import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
+import io.swagger.v3.oas.models.OpenAPI
 
 interface OpenApiRuleSet {
 

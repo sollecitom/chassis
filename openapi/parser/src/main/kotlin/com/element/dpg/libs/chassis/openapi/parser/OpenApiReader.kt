@@ -1,11 +1,11 @@
 package com.element.dpg.libs.chassis.openapi.parser
 
+import com.element.dpg.libs.chassis.openapi.parser.OpenApiValidator.Result.Invalid
+import com.element.dpg.libs.chassis.openapi.parser.OpenApiValidator.Result.Valid
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.parser.OpenAPIV3Parser
 import io.swagger.v3.parser.core.models.ParseOptions
 import io.swagger.v3.parser.core.models.SwaggerParseResult
-import com.element.dpg.libs.chassis.openapi.parser.OpenApiValidator.Result.Invalid
-import com.element.dpg.libs.chassis.openapi.parser.OpenApiValidator.Result.Valid
 
 object OpenApiReader : OpenApiValidator, OpenApiParser {
 

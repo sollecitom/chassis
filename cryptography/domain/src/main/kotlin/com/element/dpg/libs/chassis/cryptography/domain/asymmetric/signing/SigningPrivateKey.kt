@@ -1,6 +1,5 @@
 package com.element.dpg.libs.chassis.cryptography.domain.asymmetric.signing
 
-import com.element.dpg.libs.chassis.cryptography.domain.asymmetric.PrivateKey
 import java.nio.charset.Charset
 
 interface SigningPrivateKey : com.element.dpg.libs.chassis.cryptography.domain.asymmetric.PrivateKey {

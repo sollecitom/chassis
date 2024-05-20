@@ -1,9 +1,5 @@
 package com.element.dpg.libs.chassis.pulsar.messaging.adapter
 
-import org.apache.pulsar.client.api.Producer
-import org.apache.pulsar.client.api.ProducerBuilder
-import org.apache.pulsar.client.api.PulsarClient
-import org.apache.pulsar.client.api.Schema
 import com.element.dpg.libs.chassis.core.domain.identity.InstanceInfo
 import com.element.dpg.libs.chassis.core.domain.lifecycle.stopBlocking
 import com.element.dpg.libs.chassis.core.domain.naming.Name
@@ -11,6 +7,10 @@ import com.element.dpg.libs.chassis.kotlin.extensions.async.await
 import com.element.dpg.libs.chassis.messaging.domain.Message
 import com.element.dpg.libs.chassis.messaging.domain.MessageProducer
 import com.element.dpg.libs.chassis.messaging.domain.Topic
+import org.apache.pulsar.client.api.Producer
+import org.apache.pulsar.client.api.ProducerBuilder
+import org.apache.pulsar.client.api.PulsarClient
+import org.apache.pulsar.client.api.Schema
 import java.util.concurrent.ConcurrentHashMap
 
 internal class PulsarMessageProducer<in VALUE>(override val name: Name, private val initializeProducer: (Topic) -> ProducerBuilder<VALUE>) : MessageProducer<VALUE> {

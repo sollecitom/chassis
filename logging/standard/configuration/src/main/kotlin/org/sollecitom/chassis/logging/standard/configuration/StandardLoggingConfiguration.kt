@@ -1,11 +1,13 @@
 package com.element.dpg.libs.chassis.logging.standard.configuration
 
-import org.http4k.cloudnative.env.Environment
-import org.http4k.cloudnative.env.MapEnvironment
-import com.element.dpg.libs.chassis.logger.core.*
+import com.element.dpg.libs.chassis.logger.core.FormatLogEntry
 import com.element.dpg.libs.chassis.logger.core.appender.PrintStreamAppender
 import com.element.dpg.libs.chassis.logger.core.defaults.DefaultFormatToString
+import com.element.dpg.libs.chassis.logger.core.loggingFunction
+import com.element.dpg.libs.chassis.logger.core.loggingLevelEnabler
 import com.element.dpg.libs.chassis.logger.json.formatter.DefaultFormatToJson
+import org.http4k.cloudnative.env.Environment
+import org.http4k.cloudnative.env.MapEnvironment
 
 object StandardLoggingConfiguration {
 

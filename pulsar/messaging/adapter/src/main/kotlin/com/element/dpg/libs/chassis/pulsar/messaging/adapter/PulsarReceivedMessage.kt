@@ -1,14 +1,14 @@
 package com.element.dpg.libs.chassis.pulsar.messaging.adapter
 
-import kotlinx.datetime.Instant
-import org.apache.pulsar.client.api.Consumer
-import org.apache.pulsar.client.api.Message
-import org.apache.pulsar.client.api.MessageIdAdv
 import com.element.dpg.libs.chassis.core.domain.naming.Name
 import com.element.dpg.libs.chassis.kotlin.extensions.async.await
 import com.element.dpg.libs.chassis.kotlin.extensions.text.removeFromLast
 import com.element.dpg.libs.chassis.messaging.domain.ReceivedMessage
 import com.element.dpg.libs.chassis.messaging.domain.Topic
+import kotlinx.datetime.Instant
+import org.apache.pulsar.client.api.Consumer
+import org.apache.pulsar.client.api.Message
+import org.apache.pulsar.client.api.MessageIdAdv
 
 context (Consumer<VALUE>)
 internal class PulsarReceivedMessage<out VALUE>(private val delegate: Message<VALUE>) : ReceivedMessage<VALUE> {

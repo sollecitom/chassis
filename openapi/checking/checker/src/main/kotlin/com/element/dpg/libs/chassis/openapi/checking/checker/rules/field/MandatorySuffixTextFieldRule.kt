@@ -1,8 +1,8 @@
 package com.element.dpg.libs.chassis.openapi.checking.checker.rules.field
 
-import io.swagger.v3.oas.models.OpenAPI
 import com.element.dpg.libs.chassis.openapi.checking.checker.rule.OpenApiRule
 import com.element.dpg.libs.chassis.openapi.checking.checker.rule.field.FieldRule
+import io.swagger.v3.oas.models.OpenAPI
 
 data class MandatorySuffixTextFieldRule(val suffix: String, val ignoreCase: Boolean) : FieldRule<String, MandatorySuffixTextFieldRule.Violation> {
 

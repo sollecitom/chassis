@@ -2,12 +2,12 @@ package com.element.dpg.libs.chassis.openapi.checking.tests.sets
 
 import assertk.assertThat
 import com.element.dpg.libs.chassis.openapi.builder.*
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import com.element.dpg.libs.chassis.openapi.checking.checker.checkAgainstRules
 import com.element.dpg.libs.chassis.openapi.checking.checker.rules.LowercasePathNameRule
 import com.element.dpg.libs.chassis.openapi.checking.test.utils.isNotCompliantWithOnlyViolation
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 
 @TestInstance(PER_CLASS)
 private class CheckingSwaggerAgainstRulesExampleTest {

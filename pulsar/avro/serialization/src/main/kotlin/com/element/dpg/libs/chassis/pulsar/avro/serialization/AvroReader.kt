@@ -1,9 +1,9 @@
 package com.element.dpg.libs.chassis.pulsar.avro.serialization
 
+import com.element.dpg.libs.chassis.avro.serialization.utils.RecordDeserializer
 import org.apache.avro.Schema
 import org.apache.avro.generic.GenericRecord
 import org.apache.pulsar.client.api.schema.SchemaReader
-import com.element.dpg.libs.chassis.avro.serialization.utils.RecordDeserializer
 import java.io.InputStream
 
 internal class AvroReader<VALUE>(originalAvroSchema: Schema, private val useProvidedSchemaAsReaderSchema: Boolean = true, private val deserialize: (GenericRecord) -> VALUE) : SchemaReader<VALUE> {

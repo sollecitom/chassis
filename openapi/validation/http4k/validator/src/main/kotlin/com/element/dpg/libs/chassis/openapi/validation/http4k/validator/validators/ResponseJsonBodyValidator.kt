@@ -4,15 +4,15 @@ import com.atlassian.oai.validator.interaction.response.CustomResponseValidator
 import com.atlassian.oai.validator.model.ApiOperation
 import com.atlassian.oai.validator.model.Response
 import com.atlassian.oai.validator.report.ValidationReport
+import com.element.dpg.libs.chassis.json.utils.serde.Schema
+import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
+import com.element.dpg.libs.chassis.kotlin.extensions.optional.asNullable
+import com.element.dpg.libs.chassis.openapi.validation.http4k.validator.model.ResponseWithHeadersAdapter
 import io.swagger.v3.oas.models.responses.ApiResponse
 import org.http4k.core.ContentType
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import com.element.dpg.libs.chassis.json.utils.serde.Schema
-import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
-import com.element.dpg.libs.chassis.kotlin.extensions.optional.asNullable
-import com.element.dpg.libs.chassis.openapi.validation.http4k.validator.model.ResponseWithHeadersAdapter
 import java.nio.charset.Charset
 import io.swagger.v3.oas.models.media.Schema as SwaggerSchema
 

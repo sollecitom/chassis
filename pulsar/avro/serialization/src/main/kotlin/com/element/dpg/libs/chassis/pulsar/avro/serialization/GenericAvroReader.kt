@@ -1,5 +1,6 @@
 package com.element.dpg.libs.chassis.pulsar.avro.serialization
 
+import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
 import org.apache.avro.Schema
 import org.apache.avro.generic.GenericDatumReader
 import org.apache.avro.generic.GenericRecord
@@ -11,7 +12,6 @@ import org.apache.pulsar.client.api.schema.Field
 import org.apache.pulsar.client.api.schema.SchemaReader
 import org.apache.pulsar.client.impl.schema.generic.GenericAvroRecord
 import org.apache.pulsar.client.impl.schema.generic.GenericAvroSchema
-import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream

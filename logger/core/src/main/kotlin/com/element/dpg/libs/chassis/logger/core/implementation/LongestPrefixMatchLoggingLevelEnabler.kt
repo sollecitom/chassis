@@ -1,9 +1,5 @@
 package com.element.dpg.libs.chassis.logger.core.implementation
 
-import com.element.dpg.libs.chassis.logger.core.LoggingLevel
-import com.element.dpg.libs.chassis.logger.core.implementation.datastructure.Trie
-import com.element.dpg.libs.chassis.logger.core.implementation.datastructure.mutableTrieOf
-
 internal class LongestPrefixMatchLoggingLevelEnabler(private val prefixMap: Map<String, com.element.dpg.libs.chassis.logger.core.LoggingLevel>, private val defaultMinimumLoggingLevel: com.element.dpg.libs.chassis.logger.core.LoggingLevel) : (com.element.dpg.libs.chassis.logger.core.LoggingLevel, String) -> Boolean {
 
     private val trie: com.element.dpg.libs.chassis.logger.core.implementation.datastructure.Trie = com.element.dpg.libs.chassis.logger.core.implementation.datastructure.mutableTrieOf(prefixMap.keys)

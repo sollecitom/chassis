@@ -2,8 +2,6 @@ package com.element.dpg.libs.chassis.logging.standard.configuration
 
 import com.element.dpg.libs.chassis.logger.core.FormatLogEntry
 import com.element.dpg.libs.chassis.logger.core.Logger
-import com.element.dpg.libs.chassis.logger.core.LoggerFactory
-import com.element.dpg.libs.chassis.logger.core.LoggingLevel
 import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
 
 interface LoggingCustomizer : (com.element.dpg.libs.chassis.logger.core.LoggerFactory.Customizer) -> Unit {
