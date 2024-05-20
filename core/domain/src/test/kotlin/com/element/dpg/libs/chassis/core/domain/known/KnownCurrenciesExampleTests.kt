@@ -5,6 +5,9 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isFailure
 import assertk.assertions.isInstanceOf
 import com.element.dpg.libs.chassis.core.domain.currency.div
+import com.element.dpg.libs.chassis.core.domain.currency.known.cents
+import com.element.dpg.libs.chassis.core.domain.currency.known.dollars
+import com.element.dpg.libs.chassis.core.domain.currency.known.pounds
 import com.element.dpg.libs.chassis.core.domain.currency.times
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance

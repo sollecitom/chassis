@@ -2,6 +2,7 @@ package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.
 
 import com.element.dpg.libs.chassis.core.domain.networking.IpAddress
 import com.element.dpg.libs.chassis.correlation.core.domain.access.origin.Origin
+import com.element.dpg.libs.chassis.correlation.core.serialization.json.access.origin.client.info.jsonSerde
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
 import com.element.dpg.libs.chassis.json.utils.serde.serde.JsonSerde

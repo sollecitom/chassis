@@ -3,6 +3,7 @@ package com.element.dpg.libs.chassis.ddd.serialization.json.event
 import com.element.dpg.libs.chassis.core.domain.identity.Id
 import com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde
 import com.element.dpg.libs.chassis.ddd.domain.Event
+import com.element.dpg.libs.chassis.ddd.domain.Happening
 import com.element.dpg.libs.chassis.ddd.serialization.json.happening.jsonSerde
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredInstant
 import com.element.dpg.libs.chassis.json.utils.serde.jsonSchemaAt
@@ -20,14 +21,14 @@ internal object EventReferenceJsonSerde : JsonSerde.SchemaAware<Event.Reference>
     override fun serialize(value: Event.Reference) = JSONObject().apply {
         setValue(Fields.ID, value.id, Id.jsonSerde)
         putInstant(Fields.TIMESTAMP, value.timestamp)
-        setValue(Fields.TYPE, value.type, com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde)
+        setValue(Fields.TYPE, value.type, Happening.Type.jsonSerde)
     }
 
     override fun deserialize(json: JSONObject): Event.Reference {
 
         val id = json.getValue(Fields.ID, Id.jsonSerde)
         val timestamp = json.getRequiredInstant(Fields.TIMESTAMP)
-        val type = json.getValue(Fields.TYPE, com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde)
+        val type = json.getValue(Fields.TYPE, Happening.Type.jsonSerde)
         return Event.Reference(id, type, timestamp)
     }
 

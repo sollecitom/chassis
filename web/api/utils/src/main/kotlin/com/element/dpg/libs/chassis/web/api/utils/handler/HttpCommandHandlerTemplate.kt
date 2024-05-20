@@ -2,7 +2,7 @@ package com.element.dpg.libs.chassis.web.api.utils.handler
 
 import com.element.dpg.libs.chassis.ddd.domain.Command
 import com.element.dpg.libs.chassis.ddd.domain.Happening
-import com.element.dpg.libs.chassis.web.api.utils.content.negotiation.auto
+import com.element.dpg.libs.chassis.web.api.utils.negotiation.auto
 import org.http4k.core.Request
 import org.http4k.format.AutoContentNegotiator
 import org.http4k.lens.BiDiBodyLensSpec

@@ -2,6 +2,7 @@ package com.element.dpg.libs.chassis.correlation.core.serialization.json.access.
 
 import com.element.dpg.libs.chassis.core.domain.identity.Id
 import com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde
+import com.element.dpg.libs.chassis.correlation.core.domain.access.idp.IdentityProvider
 import com.element.dpg.libs.chassis.correlation.core.domain.access.session.FederatedSession
 import com.element.dpg.libs.chassis.correlation.core.serialization.json.access.idp.jsonSerde
 import com.element.dpg.libs.chassis.json.utils.serde.getRequiredString
@@ -20,7 +21,7 @@ internal object FederatedSessionJsonSerde : JsonSerde.SchemaAware<FederatedSessi
     override fun serialize(value: FederatedSession) = JSONObject().apply {
         put(Fields.TYPE, TYPE_VALUE)
         setValue(Fields.ID, value.id, Id.jsonSerde)
-        setValue(Fields.IDENTITY_PROVIDER, value.identityProvider, com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde)
+        setValue(Fields.IDENTITY_PROVIDER, value.identityProvider, IdentityProvider.jsonSerde)
     }
 
     override fun deserialize(json: JSONObject): FederatedSession {
@@ -28,7 +29,7 @@ internal object FederatedSessionJsonSerde : JsonSerde.SchemaAware<FederatedSessi
         val type = json.getRequiredString(Fields.TYPE)
         check(type == TYPE_VALUE) { "Invalid type '$type'. Must be '${TYPE_VALUE}'" }
         val id = json.getValue(Fields.ID, Id.jsonSerde)
-        val identityProvider = json.getValue(Fields.IDENTITY_PROVIDER, com.element.dpg.libs.chassis.core.serialization.json.identity.jsonSerde)
+        val identityProvider = json.getValue(Fields.IDENTITY_PROVIDER, IdentityProvider.jsonSerde)
         return FederatedSession(id = id, identityProvider = identityProvider)
     }
 

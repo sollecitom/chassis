@@ -9,7 +9,7 @@ import com.element.dpg.libs.chassis.ddd.domain.ifInvalid
 import com.element.dpg.libs.chassis.http4k.utils.lens.composite
 import com.element.dpg.libs.chassis.lens.core.extensions.naming.name
 import com.element.dpg.libs.chassis.logger.core.loggable.Loggable
-import com.element.dpg.libs.chassis.web.api.utils.command.handler.HttpCommandHandler
+import com.element.dpg.libs.chassis.web.api.utils.handler.HttpCommandHandler
 import org.http4k.core.Method
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.BAD_REQUEST

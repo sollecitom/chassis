@@ -9,8 +9,8 @@ import com.element.dpg.libs.chassis.core.utils.CoreDataGenerator
 import com.element.dpg.libs.chassis.correlation.core.domain.access.Access
 import com.element.dpg.libs.chassis.correlation.core.domain.context.InvocationContext
 import com.element.dpg.libs.chassis.correlation.core.test.utils.context.unauthenticated
-import com.element.dpg.libs.chassis.ddd.application.dispatching.Application
 import com.element.dpg.libs.chassis.ddd.application.dispatching.dispatching.CommandHandler
+import com.element.dpg.libs.chassis.ddd.application.dispatching.dispatching.invoke
 import com.element.dpg.libs.chassis.ddd.domain.Command
 import com.element.dpg.libs.chassis.ddd.domain.Happening
 import com.element.dpg.libs.chassis.test.utils.assertions.failedThrowing
