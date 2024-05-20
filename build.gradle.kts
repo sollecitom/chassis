@@ -27,7 +27,6 @@ apply<GitVersionPlugin>()
 
 val parentProject = this
 val currentVersion: String by project
-val versionCatalogName: String by project
 val versionDetails: Closure<VersionDetails> by extra
 val gitVersion = versionDetails()
 
@@ -90,8 +89,6 @@ allprojects {
 }
 
 // TODO turn this whole dependency update thing into a plugin (then remove the lines below)
-
-fun String.toVersionNumber() = Semver(this)
 
 val ComponentSelectionWithCurrent.currentSemanticVersion: DependencyVersion get() = DependencyVersion(currentVersion)
 val ComponentSelectionWithCurrent.candidateSemanticVersion: DependencyVersion get() = DependencyVersion(candidate.version)
